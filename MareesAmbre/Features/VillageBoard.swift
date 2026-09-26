@@ -71,24 +71,6 @@ struct VillageBoard: View {
             }
             .frame(width: viewSize.width, height: viewSize.height, alignment: .topLeading)
             .clipped()
-            .overlay(alignment: .topLeading) {
-                HStack(spacing: 7) {
-                    Circle()
-                        .fill(Color(red: 0.48, green: 0.88, blue: 0.70))
-                        .frame(width: 8, height: 8)
-                    Text(mode == .resourceFields ? "CHAMPS DE PORT D’AMBRE" : "CENTRE-VILLE")
-                        .tracking(2)
-                    Spacer()
-                    Label(mode.title, systemImage: mode.symbol)
-                }
-                .font(.caption.bold())
-                .foregroundStyle(Palette.paper)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 10)
-                .background(.black.opacity(0.48), in: .capsule)
-                .padding(12)
-                .allowsHitTesting(false)
-            }
             .overlay(alignment: .bottomLeading) {
                 HStack {
                     Label("Glissez pour parcourir", systemImage: "hand.draw")
