@@ -7,12 +7,12 @@ struct VillageBoard: View {
     @State private var pan = CGSize.zero
     @GestureState private var dragTranslation = CGSize.zero
 
-    private let mapZoom: CGFloat = 1.10
+    private let mapZoom: CGFloat = 0.95
 
     var body: some View {
         GeometryReader { viewport in
             let viewSize = viewport.size
-            let zoom = viewSize.width > 600 ? 1.05 : mapZoom
+            let zoom = viewSize.width > 600 ? 1.00 : mapZoom
             let mapSide = max(viewSize.width, viewSize.height) * zoom
             let mapSize = CGSize(width: mapSide, height: mapSide)
             let focusX = 0.50 + CGFloat(mode.focus.east) * 0.36
