@@ -12,71 +12,94 @@ struct GameView: View {
         Group {
             if session.state.people == nil {
                 PrologueView(onChoose: session.choosePeople)
+            } else if showsWorld {
+                worldScreen
             } else {
-                gameInterface
+                villageScreen
             }
         }
         .preferredColorScheme(.dark)
     }
 
-    private var gameInterface: some View {
+    private var villageScreen: some View {
         GeometryReader { geometry in
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    header
-                    ResourcesView(
-                        resources: session.state.resources,
-                        hourlyProduction: session.state.production,
-                        storageCapacity: session.state.storageCapacity
-                    )
-                    navigation
+            ZStack {
+                Palette.ocean.ignoresSafeArea()
+                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding)
+                    .id(villageMap)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
 
-                    if showsWorld {
-                        WorldPanel()
-                    } else {
-                        villageMapPicker
-                        if geometry.size.width > 760 && !typeSize.isAccessibilitySize {
-                            HStack(alignment: .top, spacing: 18) {
-                                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding)
-                                    .id(villageMap)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 460)
-                                ConstructionPanel(mode: villageMap).frame(width: 340)
-                            }
-                        } else {
-                            VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding)
-                                .id(villageMap)
-                                .frame(height: 310)
+                VStack(spacing: 10) {
+                    topControls
+                        .frame(maxWidth: 560)
+                    Spacer(minLength: 4)
+                    ScrollView(.vertical) {
+                        VStack(spacing: 9) {
                             ConstructionPanel(mode: villageMap)
+                            WorldClockStatus()
                         }
+                        .padding(.bottom, 4)
                     }
-
-                    WorldClockStatus()
+                    .scrollIndicators(.hidden)
+                    .frame(maxHeight: min(370, max(210, geometry.size.height * 0.48)))
+                    .frame(maxWidth: 620)
                 }
-                .padding(.horizontal, 18)
-                .padding(.top, 12)
-                .padding(.bottom, 28)
-                .frame(maxWidth: 1120)
-                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 12)
+                .padding(.top, 7)
+                .padding(.bottom, 5)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+        }
+    }
+
+    private var worldScreen: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 10) {
+                topControls
+                    .frame(maxWidth: 560)
+                ScrollView {
+                    WorldPanel()
+                        .frame(maxWidth: 720)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 16)
+                }
+                .scrollIndicators(.hidden)
+            }
+            .padding(.horizontal, 12)
+            .padding(.top, 7)
+            .frame(width: geometry.size.width, height: geometry.size.height)
             .background(Palette.ocean.ignoresSafeArea())
         }
     }
 
+    private var topControls: some View {
+        VStack(spacing: 8) {
+            header
+            ResourcesView(
+                resources: session.state.resources,
+                hourlyProduction: session.state.production,
+                storageCapacity: session.state.storageCapacity
+            )
+            navigation
+        }
+    }
+
     private var header: some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("LES MARÉES D’AMBRE")
-                    .font(.caption.bold()).tracking(2).foregroundStyle(Palette.amber)
+                    .font(.caption2.bold()).tracking(1.5).foregroundStyle(Palette.amber)
                 Text(showsWorld ? "L’archipel" : "Port d’Ambre")
-                    .font(.largeTitle.bold()).fontDesign(.serif)
+                    .font(.title2.bold()).fontDesign(.serif)
                     .contentTransition(.opacity)
             }
-            Spacer(minLength: 4)
+            Spacer(minLength: 2)
             Label(session.state.people?.name ?? "Veilleurs", systemImage: "sailboat.fill")
-                .font(.subheadline.bold())
+                .font(.caption.bold())
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
                 .foregroundStyle(Palette.muted)
-                .padding(.horizontal, 12).padding(.vertical, 10)
+                .padding(.horizontal, 10).padding(.vertical, 9)
                 .background(Palette.panel, in: .capsule)
         }
         .foregroundStyle(Palette.paper)
@@ -84,50 +107,28 @@ struct GameView: View {
     }
 
     private var navigation: some View {
-        HStack(spacing: 8) {
-            navigationButton("Mon village", symbol: "house.fill", selected: !showsWorld) { showsWorld = false }
-            navigationButton("Explorer", symbol: "safari.fill", selected: showsWorld) { showsWorld = true }
-        }
-        .padding(5)
-        .background(Palette.panel, in: .capsule)
-    }
-
-    private var villageMapPicker: some View {
-        HStack(spacing: 8) {
-            ForEach(VillageMapMode.allCases) { mode in
-                let selected = villageMap == mode
-                Button {
-                    guard villageMap != mode else { return }
-                    villageMap = mode
-                    session.plot = mode == .resourceFields ? selectedResourcePlot : selectedTownPlot
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: mode.symbol)
-                        Text(mode.title)
-                        Text("\(mode.slots.count)")
-                            .font(.caption.monospacedDigit())
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 3)
-                            .background(selected ? Palette.ocean.opacity(0.16) : .white.opacity(0.07), in: .capsule)
-                    }
-                    .font(.subheadline.bold())
-                    .foregroundStyle(selected ? Palette.ocean : Palette.muted)
-                    .frame(maxWidth: .infinity, minHeight: 46)
-                    .background(selected ? Palette.amber : Palette.panel, in: .capsule)
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(selected ? .isSelected : [])
+        HStack(spacing: 5) {
+            navigationButton("Champs", symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
+                selectVillageMap(.resourceFields)
+            }
+            navigationButton("Centre", symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
+                selectVillageMap(.townCenter)
+            }
+            navigationButton("Monde", symbol: "map.fill", selected: showsWorld) {
+                showsWorld = true
             }
         }
         .padding(4)
-        .background(Palette.panel, in: .capsule)
+        .background(Palette.panel.opacity(0.96), in: .capsule)
     }
 
     private func navigationButton(_ title: String, symbol: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Label(title, systemImage: symbol)
                 .font(.subheadline.bold())
-                .frame(maxWidth: .infinity, minHeight: 44)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity, minHeight: 42)
                 .foregroundStyle(selected ? Palette.ocean : Palette.muted)
                 .background {
                     if selected { Capsule().fill(Palette.amber) }
@@ -135,6 +136,13 @@ struct GameView: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+
+    private func selectVillageMap(_ mode: VillageMapMode) {
+        showsWorld = false
+        guard villageMap != mode else { return }
+        villageMap = mode
+        session.plot = mode == .resourceFields ? selectedResourcePlot : selectedTownPlot
     }
 
     private var selectedPlotBinding: Binding<Int> {
