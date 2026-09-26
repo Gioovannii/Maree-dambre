@@ -64,11 +64,11 @@ struct ConstructionPanel: View {
                 .accessibilityLabel("Annuler le déplacement du bâtiment")
                 .accessibilityHint("Le bâtiment reste sur la case \(source + 1)")
             } else if !mode.contains(session.plot) || siteBuildings.isEmpty {
-                Label(VillageState.ground(at: session.plot).name, systemImage: terrainSymbol)
+                Label("Emplacement indisponible", systemImage: "lock.fill")
                     .font(.headline)
                     .foregroundStyle(Palette.muted)
                     .frame(maxWidth: .infinity, minHeight: 58, alignment: .leading)
-                Text(mode == .resourceFields ? "Ce terrain n’accueille pas de champ de production." : "Choisissez un emplacement libre du centre-ville.")
+                Text("Aucun bâtiment du district ne convient à ce terrain (\(VillageState.ground(at: session.plot).name.lowercased())).")
                     .font(.subheadline).foregroundStyle(Palette.muted)
             } else {
                 Text(mode == .resourceFields ? "Chaque champ produit en continu." : "Développez les défenses et les réserves du village.")
@@ -96,14 +96,6 @@ struct ConstructionPanel: View {
         return mode == .resourceFields ? "Champ de \(VillageState.ground(at: session.plot).name.lowercased())" : "Emplacement urbain"
     }
 
-    private var terrainSymbol: String {
-        switch VillageState.ground(at: session.plot) {
-        case .sea: "water.waves"
-        case .forest: "tree.fill"
-        case .amber: "sparkles"
-        case .meadow: "plus"
-        }
-    }
 
     private func buildingCard(_ kind: BuildingKind) -> some View {
         let canBuild = session.state.canBuild(kind, at: session.plot)

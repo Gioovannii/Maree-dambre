@@ -89,6 +89,7 @@ struct VillageBoard: View {
         let building = session.state.buildings[plot]
         let selected = session.plot == plot
         let terrain = VillageState.ground(at: plot)
+        let isUnavailable = building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
 
         return Button {
             session.selectPlot(plot)
@@ -112,14 +113,14 @@ struct VillageBoard: View {
 
                 if building == nil {
                     Circle()
-                        .fill(.black.opacity(mode == .resourceFields ? 0.68 : 0.54))
+                        .fill(.black.opacity(isUnavailable ? 0.70 : 0.38))
                         .frame(width: 30, height: 30)
                     Circle()
-                        .strokeBorder(.white.opacity(0.65), lineWidth: 1)
+                        .strokeBorder(isUnavailable ? Palette.muted.opacity(0.45) : Palette.paper.opacity(0.45), lineWidth: 1)
                         .frame(width: 30, height: 30)
-                    Image(systemName: slotSymbol(for: plot, terrain: terrain))
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundStyle(mode == .resourceFields ? resourceColor(for: terrain) : Palette.amber)
+                    Image(systemName: isUnavailable ? "lock.fill" : slotSymbol(for: plot, terrain: terrain))
+                        .font(.system(size: isUnavailable ? 10 : 12, weight: .bold))
+                        .foregroundStyle(isUnavailable ? Palette.muted : (mode == .resourceFields ? resourceColor(for: terrain) : Palette.amber))
                 }
 
                 if session.moveSourcePlot == plot {
@@ -152,7 +153,7 @@ struct VillageBoard: View {
             .contentShape(Circle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(mode == .resourceFields ? "Champ" : "Emplacement") \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)")
+        .accessibilityLabel("\(mode == .resourceFields ? "Champ" : "Emplacement") \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible dans ce district" : "")")
         .accessibilityValue(selected ? "Sélectionné" : "")
         .accessibilityHint(session.moveSourcePlot == nil
             ? "Afficher les détails ou construire sur cet emplacement"

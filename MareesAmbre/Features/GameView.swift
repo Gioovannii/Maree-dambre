@@ -66,13 +66,15 @@ struct GameView: View {
 
     private var selectedSettlementAction: some View {
         let building = session.state.buildings[session.plot]
-        let title = building?.name ?? "Construire sur cette case"
+        let terrain = VillageState.ground(at: session.plot)
+        let isUnavailable = building == nil && !BuildingKind.constructible(in: villageMap).contains { $0.suits(terrain) }
+        let title = building?.name ?? (isUnavailable ? "Emplacement indisponible" : "Choisir un bâtiment")
 
         return Button {
             showsVillageDetails = true
         } label: {
             HStack(spacing: 10) {
-                Image(systemName: building?.symbol ?? "hammer.fill")
+                Image(systemName: building?.symbol ?? (isUnavailable ? "lock.fill" : "hammer.fill"))
                     .font(.subheadline.bold())
                     .foregroundStyle(Palette.ocean)
                     .frame(width: 32, height: 32)
@@ -93,7 +95,7 @@ struct GameView: View {
             .overlay { Capsule().strokeBorder(.white.opacity(0.1), lineWidth: 1) }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(building.map { "Détails de \($0.name)" } ?? "Construire sur la case sélectionnée")
+        .accessibilityLabel(building.map { "Détails de \($0.name)" } ?? (isUnavailable ? "Emplacement indisponible" : "Choisir un bâtiment pour cette case"))
         .accessibilityHint("Ouvrir les détails du terrain, les constructions et la production")
     }
 
