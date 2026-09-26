@@ -6,6 +6,13 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var id: Self { self }
 
+    var assetName: String {
+        switch self {
+        case .resourceFields: "ChampsDuPort"
+        case .townCenter: "CentreVille"
+        }
+    }
+
     var title: String {
         switch self {
         case .resourceFields: "Champs du Port"

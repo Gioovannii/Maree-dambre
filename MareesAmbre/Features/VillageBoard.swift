@@ -32,12 +32,16 @@ struct VillageBoard: View {
 
             ZStack(alignment: .topLeading) {
                 ZStack {
-                    Image("PortDAmbre")
+                    Image(mode.assetName)
                         .resizable()
                         .interpolation(.high)
                         .scaledToFill()
                         .frame(width: mapSide, height: mapSide)
                         .clipped()
+                        .accessibilityHidden(true)
+
+                    VillageAmbience(mode: mode)
+                        .frame(width: mapSide, height: mapSide)
                         .accessibilityHidden(true)
 
                     ForEach(mode.slots, id: \.self) { plot in
