@@ -5,16 +5,8 @@ struct PrologueView: View {
     @State private var selected: People = .sauniers
 
     var body: some View {
-        ZStack {
-            LinearGradient(colors: [Palette.ocean, Color(red: 0.025, green: 0.09, blue: 0.13)], startPoint: .topLeading, endPoint: .bottomTrailing)
-                .ignoresSafeArea()
-            Circle()
-                .fill(Palette.amber.opacity(0.08))
-                .frame(width: 300, height: 300)
-                .blur(radius: 60)
-                .offset(x: 170, y: -300)
-                .accessibilityHidden(true)
-            ScrollView {
+        GeometryReader { viewport in
+            ScrollView(.vertical) {
                 VStack(alignment: .leading, spacing: 22) {
                     VStack(alignment: .leading, spacing: 7) {
                         Text("LES MARÉES D’AMBRE")
@@ -57,6 +49,22 @@ struct PrologueView: View {
                 .padding(.horizontal, 20)
                 .frame(maxWidth: 720)
                 .frame(maxWidth: .infinity)
+            }
+            .scrollIndicators(.visible)
+            .scrollBounceBehavior(.always)
+            .frame(width: viewport.size.width, height: viewport.size.height)
+            .background {
+                ZStack {
+                    LinearGradient(colors: [Palette.ocean, Color(red: 0.025, green: 0.09, blue: 0.13)], startPoint: .topLeading, endPoint: .bottomTrailing)
+                        .ignoresSafeArea()
+                    Circle()
+                        .fill(Palette.amber.opacity(0.08))
+                        .frame(width: 300, height: 300)
+                        .blur(radius: 60)
+                        .offset(x: 170, y: -300)
+                        .accessibilityHidden(true)
+                }
+                .allowsHitTesting(false)
             }
         }
     }
