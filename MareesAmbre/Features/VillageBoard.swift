@@ -71,20 +71,6 @@ struct VillageBoard: View {
             }
             .frame(width: viewSize.width, height: viewSize.height, alignment: .topLeading)
             .clipped()
-            .overlay(alignment: .bottomLeading) {
-                HStack {
-                    Label("Glissez pour parcourir", systemImage: "hand.draw")
-                    Spacer()
-                    Image(systemName: "arrow.up.left.and.arrow.down.right")
-                }
-                .font(.caption.weight(.medium))
-                .foregroundStyle(Palette.paper.opacity(0.9))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 9)
-                .background(.black.opacity(0.55), in: .capsule)
-                .padding(12)
-                .allowsHitTesting(false)
-            }
             .clipShape(.rect(cornerRadius: 24))
             .overlay {
                 RoundedRectangle(cornerRadius: 24)

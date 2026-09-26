@@ -4,6 +4,7 @@ struct GameView: View {
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var showsWorld = false
+    @State private var showsVillageDetails = false
     @State private var villageMap: VillageMapMode = .townCenter
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
     @State private var selectedTownPlot = VillageMapMode.townCenter.initialPlot
@@ -29,27 +30,80 @@ struct GameView: View {
                     .id(villageMap)
                     .frame(width: geometry.size.width, height: geometry.size.height)
 
-                VStack(spacing: 10) {
+                VStack(spacing: 0) {
                     topControls
                         .frame(maxWidth: 560)
                     Spacer(minLength: 4)
-                    ScrollView(.vertical) {
-                        VStack(spacing: 9) {
-                            ConstructionPanel(mode: villageMap)
-                            WorldClockStatus()
-                        }
-                        .padding(.bottom, 4)
-                    }
-                    .scrollIndicators(.hidden)
-                    .frame(maxHeight: min(370, max(210, geometry.size.height * 0.48)))
-                    .frame(maxWidth: 620)
+                    selectedSettlementAction
+                        .frame(maxWidth: 560)
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 7)
-                .padding(.bottom, 5)
+                .padding(.bottom, 12)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
+            .sheet(isPresented: $showsVillageDetails) {
+                ScrollView(.vertical) {
+                    VStack(spacing: 10) {
+                        ConstructionPanel(mode: villageMap)
+                        WorldClockStatus()
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.top, 16)
+                    .padding(.bottom, 20)
+                    .frame(maxWidth: 600)
+                    .frame(maxWidth: .infinity)
+                }
+                .scrollIndicators(.hidden)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+                .presentationBackground(Palette.ocean)
+            }
         }
+    }
+
+    private var selectedSettlementAction: some View {
+        let building = session.state.buildings[session.plot]
+        let detail = building == nil ? "Voir le terrain et les constructions" : "Ouvrir les détails du bâtiment"
+
+        return Button {
+            showsVillageDetails = true
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: building?.symbol ?? "hammer.fill")
+                    .font(.headline)
+                    .foregroundStyle(Palette.ocean)
+                    .frame(width: 38, height: 38)
+                    .background(Palette.amber, in: Circle())
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(building?.name ?? "Emplacement sélectionné")
+                        .font(.subheadline.bold())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(Palette.muted)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
+                Spacer(minLength: 4)
+                Image(systemName: "chevron.up")
+                    .font(.caption.bold())
+                    .foregroundStyle(Palette.amber)
+            }
+            .foregroundStyle(Palette.paper)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity, minHeight: 58)
+            .background(Palette.panel.opacity(0.97), in: .rect(cornerRadius: 20))
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(.white.opacity(0.12), lineWidth: 1)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Ouvrir les détails, les options de construction et l’état de la production")
     }
 
     private var worldScreen: some View {
