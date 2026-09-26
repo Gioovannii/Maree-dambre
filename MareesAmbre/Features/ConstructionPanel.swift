@@ -29,9 +29,40 @@ struct ConstructionPanel: View {
                             .font(.subheadline).foregroundStyle(Palette.amber)
                     }
                     Spacer(minLength: 0)
+                    if building != .hall {
+                        Button {
+                            if session.moveSourcePlot == session.plot {
+                                session.cancelMovingBuilding()
+                            } else {
+                                session.beginMovingSelectedBuilding()
+                            }
+                        } label: {
+                            Label(session.moveSourcePlot == session.plot ? "Annuler" : "Déplacer",
+                                  systemImage: session.moveSourcePlot == session.plot ? "xmark" : "arrow.up.and.down.and.arrow.left.and.right")
+                                .font(.caption.bold())
+                                .labelStyle(.titleAndIcon)
+                                .multilineTextAlignment(.center)
+                                .frame(minWidth: 72, minHeight: 44)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(Palette.amber)
+                        .accessibilityHint("Choisir une case compatible sur la carte pour réorganiser le village")
+                    }
                 }
                 .padding(16)
                 .background(Palette.ocean, in: .rect(cornerRadius: 18))
+            } else if let source = session.moveSourcePlot {
+                Label(session.message, systemImage: "hand.tap")
+                    .font(.subheadline)
+                    .foregroundStyle(Palette.amber)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button("Annuler le déplacement", systemImage: "xmark") {
+                    session.cancelMovingBuilding()
+                }
+                .font(.subheadline.bold())
+                .tint(Palette.muted)
+                .accessibilityLabel("Annuler le déplacement du bâtiment")
+                .accessibilityHint("Le bâtiment reste sur la case \(source + 1)")
             } else if !mode.contains(session.plot) || siteBuildings.isEmpty {
                 Label(VillageState.ground(at: session.plot).name, systemImage: terrainSymbol)
                     .font(.headline)

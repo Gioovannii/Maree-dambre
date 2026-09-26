@@ -8,6 +8,7 @@ final class VillageSession {
     var plot = 12
     var selectedTile = TileCoordinate.home
     private(set) var message = "Choisissez un emplacement libre pour construire."
+    private(set) var moveSourcePlot: Int?
     private(set) var elapsedSeconds = 0
     private let storage = VillageStorage()
     private var productionTask: Task<Void, Never>?
@@ -41,6 +42,32 @@ final class VillageSession {
         refreshWorld()
         guard state.build(kind, at: plot) else { return }
         persist("\(kind.name) construite. La production commence maintenant.")
+    }
+
+    func beginMovingSelectedBuilding() {
+        guard let kind = state.buildings[plot], kind != .hall else { return }
+        moveSourcePlot = plot
+        message = "Touchez une case libre compatible pour déplacer \(kind.name.lowercased())."
+    }
+
+    func cancelMovingBuilding() {
+        moveSourcePlot = nil
+        message = "Déplacement annulé."
+    }
+
+    func selectPlot(_ destination: Int) {
+        if let source = moveSourcePlot {
+            guard state.moveBuilding(from: source, to: destination),
+                  let kind = state.buildings[destination] else {
+                message = "Cette case ne peut pas accueillir ce bâtiment."
+                return
+            }
+            plot = destination
+            moveSourcePlot = nil
+            persist("\(kind.name) déplacée. Sa production continue.")
+            return
+        }
+        plot = destination
     }
 
     func refreshWorld() {

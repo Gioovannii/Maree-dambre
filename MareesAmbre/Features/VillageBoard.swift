@@ -119,8 +119,8 @@ struct VillageBoard: View {
         let terrain = VillageState.ground(at: plot)
 
         return Button {
-            session.plot = plot
-            selectedPlot = plot
+            session.selectPlot(plot)
+            selectedPlot = session.plot
         } label: {
             ZStack {
                 if let building, building != .hall {
@@ -150,6 +150,19 @@ struct VillageBoard: View {
                         .foregroundStyle(mode == .resourceFields ? resourceColor(for: terrain) : Palette.amber)
                 }
 
+                if session.moveSourcePlot == plot {
+                    Circle()
+                        .strokeBorder(Palette.amber, lineWidth: 3)
+                        .frame(width: 48, height: 48)
+                        .shadow(color: Palette.amber.opacity(0.8), radius: 10)
+                } else if let source = session.moveSourcePlot, building == nil,
+                          session.state.canMoveBuilding(from: source, to: plot) {
+                    Circle()
+                        .strokeBorder(Color.green.opacity(0.95), lineWidth: 3)
+                        .frame(width: 46, height: 46)
+                        .shadow(color: .green.opacity(0.75), radius: 8)
+                }
+
                 if selected {
                     Circle()
                         .fill(.black.opacity(0.58))
@@ -169,7 +182,9 @@ struct VillageBoard: View {
         .buttonStyle(.plain)
         .accessibilityLabel("\(mode == .resourceFields ? "Champ" : "Emplacement") \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)")
         .accessibilityValue(selected ? "Sélectionné" : "")
-        .accessibilityHint("Afficher les détails ou construire sur cet emplacement")
+        .accessibilityHint(session.moveSourcePlot == nil
+            ? "Afficher les détails ou construire sur cet emplacement"
+            : "Déplacer le bâtiment sélectionné vers cette case si elle est compatible")
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 

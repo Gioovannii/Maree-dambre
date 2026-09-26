@@ -75,6 +75,21 @@ struct VillageState: Codable, Equatable {
         return kind.suits(ground(at: plot))
     }
 
+    func canMoveBuilding(from source: Int, to destination: Int) -> Bool {
+        guard let kind = buildings[source], kind != .hall,
+              buildings[destination] == nil,
+              Self.canPlace(kind, at: destination) else { return false }
+        return true
+    }
+
+    @discardableResult
+    mutating func moveBuilding(from source: Int, to destination: Int) -> Bool {
+        guard canMoveBuilding(from: source, to: destination),
+              let kind = buildings.removeValue(forKey: source) else { return false }
+        buildings[destination] = kind
+        return true
+    }
+
     static func canLoad(_ kind: BuildingKind, at plot: Int) -> Bool {
         canPlace(kind, at: plot)
             || (kind.area == .resourceFields && VillageMapMode.townCenter.contains(plot)

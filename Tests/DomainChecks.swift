@@ -49,6 +49,16 @@ struct DomainChecks {
         precondition(village.resources == Resources(wood: 55, amber: 30, provisions: 50))
         let afterBuild = village
         precondition(!village.build(.farm, at: 0) && village == afterBuild)
+        let beforeMove = village
+        precondition(village.canMoveBuilding(from: 0, to: 5))
+        precondition(village.moveBuilding(from: 0, to: 5))
+        precondition(village.buildings[0] == nil && village.buildings[5] == .lumbermill)
+        precondition(village.resources == beforeMove.resources && village.production == beforeMove.production)
+        let afterMove = village
+        precondition(!village.moveBuilding(from: 12, to: 13) && village == afterMove, "The hall cannot be moved")
+        precondition(!village.moveBuilding(from: 5, to: 2) && village == afterMove, "A building cannot move to incompatible terrain")
+        precondition(!village.moveBuilding(from: 5, to: 6) && village == afterMove, "Resource buildings stay in their district")
+        precondition(!village.moveBuilding(from: 5, to: 12) && village == afterMove, "Cannot move onto an occupied plot")
         let epoch = Date(timeIntervalSince1970: 1_800_000_000)
         village.lastProductionAt = epoch
         village.lastBotExpansionAt = epoch
