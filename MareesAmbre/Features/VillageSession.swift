@@ -5,7 +5,7 @@ import Observation
 final class VillageSession {
     private(set) var state: VillageState
     let world: WorldMap
-    var plot = 12
+    var plot = VillageMapMode.townCenter.initialPlot
     var selectedTile = TileCoordinate.home
     private(set) var message = "Choisissez un emplacement libre pour construire."
     private(set) var moveSourcePlot: Int?

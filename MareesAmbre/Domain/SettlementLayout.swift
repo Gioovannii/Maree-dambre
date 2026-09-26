@@ -37,7 +37,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
     var initialPlot: Int {
         switch self {
         case .resourceFields: 2
-        case .townCenter: 12
+        case .townCenter: 11
         }
     }
 

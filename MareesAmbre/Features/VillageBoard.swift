@@ -113,14 +113,17 @@ struct VillageBoard: View {
 
                 if building == nil {
                     Circle()
-                        .fill(.black.opacity(isUnavailable ? 0.70 : 0.38))
-                        .frame(width: 30, height: 30)
+                        .fill(isUnavailable ? .black.opacity(0.72) : Palette.paper.opacity(0.96))
+                        .frame(width: 32, height: 32)
                     Circle()
-                        .strokeBorder(isUnavailable ? Palette.muted.opacity(0.45) : Palette.paper.opacity(0.45), lineWidth: 1)
-                        .frame(width: 30, height: 30)
-                    Image(systemName: isUnavailable ? "lock.fill" : slotSymbol(for: plot, terrain: terrain))
-                        .font(.system(size: isUnavailable ? 10 : 12, weight: .bold))
-                        .foregroundStyle(isUnavailable ? Palette.muted : (mode == .resourceFields ? resourceColor(for: terrain) : Palette.amber))
+                        .strokeBorder(
+                            isUnavailable ? Palette.muted.opacity(0.48) : Color(red: 0.27, green: 0.68, blue: 0.38),
+                            lineWidth: isUnavailable ? 1 : 2
+                        )
+                        .frame(width: 32, height: 32)
+                    Image(systemName: isUnavailable ? "lock.fill" : "plus")
+                        .font(.system(size: isUnavailable ? 10 : 14, weight: .bold))
+                        .foregroundStyle(isUnavailable ? Palette.muted : Palette.ocean)
                 }
 
                 if session.moveSourcePlot == plot {
@@ -176,23 +179,4 @@ struct VillageBoard: View {
         )
     }
 
-    private func slotSymbol(for plot: Int, terrain: Terrain) -> String {
-        if mode == .townCenter { return "plus" }
-        if let building = session.state.buildings[plot] { return building.symbol }
-        return switch terrain {
-        case .forest: "tree.fill"
-        case .amber: "sparkles"
-        case .meadow: "leaf.fill"
-        case .sea: "water.waves"
-        }
-    }
-
-    private func resourceColor(for terrain: Terrain) -> Color {
-        switch terrain {
-        case .forest: Color(red: 0.59, green: 0.88, blue: 0.61)
-        case .amber: Palette.amber
-        case .meadow: Color(red: 0.94, green: 0.84, blue: 0.49)
-        case .sea: Palette.muted
-        }
-    }
 }

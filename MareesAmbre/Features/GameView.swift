@@ -68,7 +68,7 @@ struct GameView: View {
         let building = session.state.buildings[session.plot]
         let terrain = VillageState.ground(at: session.plot)
         let isUnavailable = building == nil && !BuildingKind.constructible(in: villageMap).contains { $0.suits(terrain) }
-        let title = building?.name ?? (isUnavailable ? "Emplacement indisponible" : "Choisir un bâtiment")
+        let title = building?.name ?? (isUnavailable ? "Emplacement indisponible" : "Construire ici")
 
         return Button {
             showsVillageDetails = true
@@ -95,7 +95,7 @@ struct GameView: View {
             .overlay { Capsule().strokeBorder(.white.opacity(0.1), lineWidth: 1) }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(building.map { "Détails de \($0.name)" } ?? (isUnavailable ? "Emplacement indisponible" : "Choisir un bâtiment pour cette case"))
+        .accessibilityLabel(building.map { "Détails de \($0.name)" } ?? (isUnavailable ? "Emplacement indisponible" : "Construire sur cette parcelle"))
         .accessibilityHint("Ouvrir les détails du terrain, les constructions et la production")
     }
 
