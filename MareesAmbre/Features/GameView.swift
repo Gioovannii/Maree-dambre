@@ -132,7 +132,7 @@ struct GameView: View {
 
     private var header: some View {
         HStack(alignment: .center, spacing: 8) {
-            Text(showsWorld ? "L’archipel" : "Port d’Ambre")
+            Text(showsWorld ? "L’archipel" : villageMap.title)
                 .font(.headline.bold()).fontDesign(.serif)
                 .contentTransition(.opacity)
             Spacer(minLength: 2)

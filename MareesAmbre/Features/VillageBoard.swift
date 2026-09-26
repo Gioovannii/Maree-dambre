@@ -78,7 +78,7 @@ struct VillageBoard: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Vue illustrée du village de Port d’Ambre. Faites glisser pour explorer.")
+        .accessibilityLabel("Carte du district : \(mode.title). Faites glisser pour explorer.")
     }
 
     private func plotButton(_ plot: Int) -> some View {
