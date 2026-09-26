@@ -30,16 +30,18 @@ struct GameView: View {
                     .id(villageMap)
                     .frame(width: geometry.size.width, height: geometry.size.height)
 
-                VStack(spacing: 0) {
+                VStack(spacing: 8) {
                     topControls
                         .frame(maxWidth: 560)
                     Spacer(minLength: 4)
                     selectedSettlementAction
                         .frame(maxWidth: 560)
+                    navigation
+                        .frame(maxWidth: 560)
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 7)
-                .padding(.bottom, 12)
+                .padding(.bottom, 6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .sheet(isPresented: $showsVillageDetails) {
@@ -64,46 +66,35 @@ struct GameView: View {
 
     private var selectedSettlementAction: some View {
         let building = session.state.buildings[session.plot]
-        let detail = building == nil ? "Voir le terrain et les constructions" : "Ouvrir les détails du bâtiment"
+        let title = building?.name ?? "Construire sur cette case"
 
         return Button {
             showsVillageDetails = true
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 Image(systemName: building?.symbol ?? "hammer.fill")
-                    .font(.headline)
+                    .font(.subheadline.bold())
                     .foregroundStyle(Palette.ocean)
-                    .frame(width: 38, height: 38)
+                    .frame(width: 32, height: 32)
                     .background(Palette.amber, in: Circle())
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(building?.name ?? "Emplacement sélectionné")
-                        .font(.subheadline.bold())
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                    Text(detail)
-                        .font(.caption)
-                        .foregroundStyle(Palette.muted)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                }
+                Text(title)
+                    .font(.subheadline.bold())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
                 Spacer(minLength: 4)
                 Image(systemName: "chevron.up")
                     .font(.caption.bold())
                     .foregroundStyle(Palette.amber)
             }
             .foregroundStyle(Palette.paper)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
-            .frame(maxWidth: .infinity, minHeight: 58)
-            .background(Palette.panel.opacity(0.97), in: .rect(cornerRadius: 20))
-            .overlay {
-                RoundedRectangle(cornerRadius: 20)
-                    .strokeBorder(.white.opacity(0.12), lineWidth: 1)
-            }
+            .padding(.horizontal, 12)
+            .frame(maxWidth: .infinity, minHeight: 48)
+            .background(Palette.panel.opacity(0.94), in: .capsule)
+            .overlay { Capsule().strokeBorder(.white.opacity(0.1), lineWidth: 1) }
         }
         .buttonStyle(.plain)
-        .accessibilityHint("Ouvrir les détails, les options de construction et l’état de la production")
+        .accessibilityLabel(building.map { "Détails de \($0.name)" } ?? "Construire sur la case sélectionnée")
+        .accessibilityHint("Ouvrir les détails du terrain, les constructions et la production")
     }
 
     private var worldScreen: some View {
@@ -118,6 +109,8 @@ struct GameView: View {
                         .padding(.bottom, 16)
                 }
                 .scrollIndicators(.hidden)
+                navigation
+                    .frame(maxWidth: 560)
             }
             .padding(.horizontal, 12)
             .padding(.top, 7)
@@ -127,26 +120,21 @@ struct GameView: View {
     }
 
     private var topControls: some View {
-        VStack(spacing: 8) {
-            header
+        VStack(spacing: 6) {
             ResourcesView(
                 resources: session.state.resources,
                 hourlyProduction: session.state.production,
                 storageCapacity: session.state.storageCapacity
             )
-            navigation
+            header
         }
     }
 
     private var header: some View {
         HStack(alignment: .center, spacing: 8) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("LES MARÉES D’AMBRE")
-                    .font(.caption2.bold()).tracking(1.5).foregroundStyle(Palette.amber)
-                Text(showsWorld ? "L’archipel" : "Port d’Ambre")
-                    .font(.title2.bold()).fontDesign(.serif)
-                    .contentTransition(.opacity)
-            }
+            Text(showsWorld ? "L’archipel" : "Port d’Ambre")
+                .font(.headline.bold()).fontDesign(.serif)
+                .contentTransition(.opacity)
             Spacer(minLength: 2)
             Label(session.state.people?.name ?? "Veilleurs", systemImage: "sailboat.fill")
                 .font(.caption.bold())
@@ -179,16 +167,17 @@ struct GameView: View {
     private func navigationButton(_ title: String, symbol: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Label(title, systemImage: symbol)
-                .font(.subheadline.bold())
+                .font(.caption.bold())
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
-                .frame(maxWidth: .infinity, minHeight: 42)
+                .frame(maxWidth: .infinity, minHeight: 50)
                 .foregroundStyle(selected ? Palette.ocean : Palette.muted)
                 .background {
                     if selected { Capsule().fill(Palette.amber) }
                 }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(title)
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
