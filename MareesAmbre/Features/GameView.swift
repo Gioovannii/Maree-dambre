@@ -5,7 +5,8 @@ struct GameView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var showsWorld = false
     @State private var showsVillageDetails = false
-    @State private var villageMap: VillageMapMode = .resourceFields
+    @State private var villageMap: VillageMapMode = ProcessInfo.processInfo.arguments.contains("--snapshot-center")
+        ? .townCenter : .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
     @State private var selectedTownPlot = VillageMapMode.townCenter.initialPlot
 
@@ -45,6 +46,11 @@ struct GameView: View {
                 .padding(.top, 7)
                 .padding(.bottom, 6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .task {
+                if ProcessInfo.processInfo.arguments.contains("--snapshot-center") {
+                    session.plot = selectedTownPlot
+                }
             }
             .sheet(isPresented: $showsVillageDetails) {
                 ScrollView(.vertical) {

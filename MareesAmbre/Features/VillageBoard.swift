@@ -6,51 +6,41 @@ struct VillageBoard: View {
     let onPlotSelected: () -> Void
     let onTownSelected: () -> Void
     @Environment(VillageSession.self) private var session
-    @State private var pan = CGSize.zero
-    @GestureState private var dragTranslation = CGSize.zero
-
-    private let mapZoom: CGFloat = 0.95
 
     var body: some View {
         GeometryReader { viewport in
             let viewSize = viewport.size
-            let zoom = viewSize.width > 600 ? 1.00 : mapZoom
-            let mapSide = max(viewSize.width, viewSize.height) * zoom
-            let mapSize = CGSize(width: mapSide, height: mapSide)
-            let focusX = 0.50 + CGFloat(mode.focus.east) * 0.36
-            let focusY = 0.35 - CGFloat(mode.focus.north) * 0.27
-            let focusedOffset = CGSize(
-                width: (viewSize.width - mapSide) / 2 + (0.50 - focusX) * mapSide,
-                height: (viewSize.height - mapSide) / 2 + (0.50 - focusY) * mapSide
-            )
-            let mapOffset = limitedOffset(
-                CGSize(
-                    width: focusedOffset.width + pan.width + dragTranslation.width,
-                    height: focusedOffset.height + pan.height + dragTranslation.height
-                ),
-                viewport: viewSize,
-                map: mapSize
+            let mapSize = CGSize(
+                width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.52) : viewSize.width,
+                height: viewSize.height
             )
 
-            ZStack(alignment: .topLeading) {
+            ZStack {
+                if viewSize.width > viewSize.height {
+                    Image(mode.assetName)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: viewSize.width, height: viewSize.height)
+                        .blur(radius: 24)
+                        .overlay(Palette.ocean.opacity(0.25))
+                        .clipped()
+                        .accessibilityHidden(true)
+                }
+
                 ZStack {
                     Image(mode.assetName)
                         .resizable()
                         .interpolation(.high)
-                        .scaledToFill()
-                        .frame(width: mapSide, height: mapSide)
-                        .saturation(mode == .resourceFields ? 0.82 : 1)
-                        .contrast(mode == .resourceFields ? 0.88 : 1)
-                        .blur(radius: mode == .resourceFields ? 1.3 : 0)
+                        .frame(width: mapSize.width, height: mapSize.height)
                         .clipped()
                         .accessibilityHidden(true)
 
                     VillageAmbience(mode: mode)
-                        .frame(width: mapSide, height: mapSide)
+                        .frame(width: mapSize.width, height: mapSize.height)
                         .accessibilityHidden(true)
 
                     ForEach(mode.slots, id: \.self) { plot in
-                        plotButton(plot, mapSide: mapSide)
+                        plotButton(plot, mapWidth: mapSize.width)
                             .position(position(for: plot, in: mapSize))
                             .zIndex(Double(plot / 5 + plot % 5))
                     }
@@ -66,35 +56,14 @@ struct VillageBoard: View {
                                 .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
                         }
                         .buttonStyle(.plain)
-                        .position(x: mapSide * 0.50, y: mapSide * 0.54)
+                        .position(x: mapSize.width * 0.50, y: mapSize.height * 0.39)
                         .zIndex(100)
                         .accessibilityHint("Ouvrir le port et les bâtiments du Centre-ville")
                     }
                 }
-                .frame(width: mapSide, height: mapSide)
-                .offset(mapOffset)
-                .simultaneousGesture(
-                    DragGesture(minimumDistance: 10)
-                        .updating($dragTranslation) { value, state, _ in
-                            state = value.translation
-                        }
-                        .onEnded { value in
-                            let finalOffset = limitedOffset(
-                                CGSize(
-                                    width: focusedOffset.width + pan.width + value.translation.width,
-                                    height: focusedOffset.height + pan.height + value.translation.height
-                                ),
-                                viewport: viewSize,
-                                map: mapSize
-                            )
-                            pan = CGSize(
-                                width: finalOffset.width - focusedOffset.width,
-                                height: finalOffset.height - focusedOffset.height
-                            )
-                        }
-                )
+                .frame(width: mapSize.width, height: mapSize.height)
             }
-            .frame(width: viewSize.width, height: viewSize.height, alignment: .topLeading)
+            .frame(width: viewSize.width, height: viewSize.height)
             .clipped()
             .clipShape(.rect(cornerRadius: 24))
             .overlay {
@@ -103,17 +72,19 @@ struct VillageBoard: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Carte du district : \(mode.title). Faites glisser pour explorer.")
+        .accessibilityLabel("Carte entière du district : \(mode.title).")
     }
 
-    private func plotButton(_ plot: Int, mapSide: CGFloat) -> some View {
+    private func plotButton(_ plot: Int, mapWidth: CGFloat) -> some View {
         let building = session.state.buildings[plot]
         let selected = session.plot == plot
         let terrain = VillageState.ground(at: plot)
         let site = mode == .resourceFields ? ResourceSiteKind.at(plot) : nil
         let siteLevel = session.state.resourceLevel(at: plot)
         let isUnavailable = mode == .townCenter && building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
-        let size = min(180, max(96, mapSide * 0.20))
+        // Equal, compact footprints keep the Centre readable and leave room
+        // for several buildings without making one lot dominate the map.
+        let size = min(88, max(52, mapWidth * 0.17))
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
         let canReceiveMovingBuilding = session.moveSourcePlot.map {
@@ -131,7 +102,7 @@ struct VillageBoard: View {
                     TideLevelBadge(level: siteLevel, symbol: site.symbol)
                         .overlay {
                             if selected {
-                                RoundedRectangle(cornerRadius: 9)
+                                Capsule()
                                     .strokeBorder(Palette.amber, lineWidth: 2.5)
                             }
                         }
@@ -146,6 +117,12 @@ struct VillageBoard: View {
                         .frame(width: size, height: size)
                         .overlay(alignment: .bottom) {
                             TideLevelBadge(level: 1)
+                                .overlay {
+                                    if selected {
+                                        Capsule().strokeBorder(Palette.amber, lineWidth: 2.5)
+                                    }
+                                }
+                                .shadow(color: selected ? Palette.amber.opacity(0.55) : .clear, radius: 5)
                                 .offset(y: -size * 0.01)
                                 .accessibilityHidden(true)
                         }
@@ -172,15 +149,15 @@ struct VillageBoard: View {
                 }
 
                 if selected || session.moveSourcePlot == plot || canReceiveMovingBuilding {
-                    if site == nil {
-                        Ellipse()
+                    if site == nil && (building == nil || session.moveSourcePlot == plot || canReceiveMovingBuilding) {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
                             .strokeBorder(
                                 canReceiveMovingBuilding ? .green : Palette.amber,
                                 lineWidth: selected || session.moveSourcePlot == plot ? 3 : 2
                             )
-                            .frame(width: footprintWidth, height: footprintHeight)
+                            .frame(width: size * 0.68, height: size * 0.30)
                             .shadow(color: (canReceiveMovingBuilding ? Color.green : Palette.amber).opacity(0.7), radius: 8)
-                            .offset(y: size * (building == nil ? 0.14 : 0.30))
+                            .offset(y: size * (building == nil ? 0.14 : 0.22))
                     }
                 }
             }
@@ -200,13 +177,6 @@ struct VillageBoard: View {
     private func position(for plot: Int, in size: CGSize) -> CGPoint {
         let point = mode.mapPoint(for: plot)
         return CGPoint(x: size.width * point.x, y: size.height * point.y)
-    }
-
-    private func limitedOffset(_ offset: CGSize, viewport: CGSize, map: CGSize) -> CGSize {
-        CGSize(
-            width: min(0, max(viewport.width - map.width, offset.width)),
-            height: min(0, max(viewport.height - map.height, offset.height))
-        )
     }
 
 }

@@ -12,11 +12,24 @@ final class VillageSession {
     private(set) var elapsedSeconds = 0
     private let storage = VillageStorage()
     private var productionTask: Task<Void, Never>?
+    private let isUISnapshot: Bool
 
     init() {
-        let seed = WeeklyChallenge.seed(for: .now)
+        isUISnapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
+        let seed = isUISnapshot ? 42 : WeeklyChallenge.seed(for: .now)
         world = WorldMap(seed: seed)
         state = VillageState(seed: seed)
+        if isUISnapshot {
+            state.people = .sauniers
+            state.resources = Resources(wood: 180, amber: 40, provisions: 240)
+            state.buildings = [
+                12: .hall, 10: .lumbermill, 11: .watchtower,
+                13: .farm, 15: .amberWorks, 16: .warehouse,
+                18: .watchtower, 23: .farm
+            ]
+            state.resourceLevels = [0: 1, 1: 0, 2: 1, 3: 1, 4: 0, 5: 1, 6: 1, 7: 0, 8: 0, 9: 0]
+            return
+        }
         do {
             if let saved = try storage.load(seed: seed) { state = saved }
         } catch {
@@ -77,6 +90,7 @@ final class VillageSession {
     }
 
     func refreshWorld() {
+        guard !isUISnapshot else { return }
         let seconds = state.updateInRealTime(on: world)
         guard seconds > 0 else { return }
         save()
@@ -103,6 +117,7 @@ final class VillageSession {
         save()
     }
     private func save() {
+        guard !isUISnapshot else { return }
         do {
             try storage.save(state)
         } catch {

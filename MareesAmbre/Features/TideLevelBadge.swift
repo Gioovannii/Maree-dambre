@@ -12,7 +12,10 @@ struct TideLevelBadge: View {
                 Image(systemName: symbol)
                     .font(.caption.bold())
             }
-            Text("N\(level)")
+            // The number alone stays legible at small sizes; the capsule already
+            // communicates that this is a level marker and avoids “N0” reading
+            // like the word “NO” on compact screens.
+            Text("\(level)")
                 .font(.subheadline.bold())
                 .monospacedDigit()
         }

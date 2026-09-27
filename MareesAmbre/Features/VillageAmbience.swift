@@ -24,7 +24,7 @@ struct VillageAmbience: View {
 
     @ViewBuilder
     private func smoke(in size: CGSize, diameter: CGFloat, x: CGFloat, y: CGFloat, delay: Double) -> some View {
-        if reduceMotion {
+        if reduceMotion || ProcessInfo.processInfo.arguments.contains("--ui-snapshot") {
             Circle()
                 .fill(Palette.paper.opacity(0.24))
                 .frame(width: diameter, height: diameter)
@@ -47,7 +47,7 @@ struct VillageAmbience: View {
 
     @ViewBuilder
     private func walker(in size: CGSize, start: CGFloat, y: CGFloat, delay: Double) -> some View {
-        if reduceMotion {
+        if reduceMotion || ProcessInfo.processInfo.arguments.contains("--ui-snapshot") {
             Image(systemName: "figure.walk")
                 .font(.system(size: 22, weight: .medium))
                 .foregroundStyle(Palette.ocean.opacity(0.92))
