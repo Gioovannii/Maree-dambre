@@ -165,11 +165,8 @@ struct VillageBoard: View {
     }
 
     private func position(for plot: Int, in size: CGSize) -> CGPoint {
-        let position = SettlementLayout.position(for: plot)
-        return CGPoint(
-            x: size.width * (0.50 + CGFloat(position.east) * 0.36),
-            y: size.height * (0.35 - CGFloat(position.north) * 0.27)
-        )
+        let point = mode.mapPoint(for: plot)
+        return CGPoint(x: size.width * point.x, y: size.height * point.y)
     }
 
     private func limitedOffset(_ offset: CGSize, viewport: CGSize, map: CGSize) -> CGSize {

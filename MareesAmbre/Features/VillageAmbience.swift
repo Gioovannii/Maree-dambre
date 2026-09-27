@@ -14,14 +14,6 @@ struct VillageAmbience: View {
                     smoke(in: geometry.size, diameter: 7, x: 0.55, y: 0.28, delay: 0.7)
                     walker(in: geometry.size, start: 0.45, y: 0.56, delay: 0)
                     walker(in: geometry.size, start: 0.57, y: 0.61, delay: 1.8)
-                } else {
-                    ForEach(0..<4, id: \.self) { index in
-                        swayingLeaf(
-                            at: CGPoint(x: [0.34, 0.45, 0.62, 0.70][index], y: [0.28, 0.40, 0.34, 0.48][index]),
-                            size: geometry.size,
-                            delay: Double(index) * 0.45
-                        )
-                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -74,23 +66,4 @@ struct VillageAmbience: View {
         }
     }
 
-    @ViewBuilder
-    private func swayingLeaf(at point: CGPoint, size: CGSize, delay: Double) -> some View {
-        if reduceMotion {
-            Image(systemName: "leaf.fill")
-                .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Color(red: 0.47, green: 0.68, blue: 0.32).opacity(0.9))
-                .position(x: size.width * point.x, y: size.height * point.y)
-        } else {
-            Image(systemName: "leaf.fill")
-                .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(Color(red: 0.47, green: 0.68, blue: 0.32).opacity(0.9))
-                .phaseAnimator([false, true]) { content, phase in
-                    content.rotationEffect(.degrees(phase ? 8 : -8), anchor: .bottom)
-                } animation: { _ in
-                    .easeInOut(duration: 1.9).repeatForever(autoreverses: true).delay(delay)
-                }
-                .position(x: size.width * point.x, y: size.height * point.y)
-        }
-    }
 }

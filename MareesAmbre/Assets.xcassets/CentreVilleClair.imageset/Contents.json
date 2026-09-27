@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "centre-ville-clair.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
