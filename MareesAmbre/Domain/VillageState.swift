@@ -13,7 +13,7 @@ struct VillageState: Codable, Equatable {
     var lastBotExpansionAt: Date?
 
     init(seed: Int) {
-        version = 7
+        version = 8
         self.seed = seed
         resources = Resources()
         buildings = [12: .hall]
@@ -76,6 +76,17 @@ struct VillageState: Codable, Equatable {
         if version < 7 {
             version = 7
         }
+        if version < 8 {
+            var seen = Set<BuildingKind>()
+            for (plot, kind) in buildings.sorted(by: { $0.key < $1.key }) {
+                if seen.insert(kind).inserted { continue }
+                buildings.removeValue(forKey: plot)
+                resources.wood = min(999_999, resources.wood + kind.cost.wood)
+                resources.amber = min(999_999, resources.amber + kind.cost.amber)
+                resources.provisions = min(999_999, resources.provisions + kind.cost.provisions)
+            }
+            version = 8
+        }
     }
 
     static func ground(at plot: Int) -> Terrain {
@@ -88,10 +99,12 @@ struct VillageState: Codable, Equatable {
     }
 
     func canBuild(_ kind: BuildingKind, at plot: Int) -> Bool {
-        Self.canPlace(kind, at: plot) && buildings[plot] == nil
+        Self.canPlace(kind, at: plot) && buildings[plot] == nil && !hasBuilding(kind)
             && resources.wood >= kind.cost.wood && resources.amber >= kind.cost.amber
             && resources.provisions >= kind.cost.provisions
     }
+
+    func hasBuilding(_ kind: BuildingKind) -> Bool { buildings.values.contains(kind) }
 
     static func canPlace(_ kind: BuildingKind, at plot: Int) -> Bool {
         guard kind != .hall, kind.area.contains(plot), (0..<25).contains(plot) else { return false }

@@ -94,8 +94,12 @@ struct GameView: View {
         let building = session.state.buildings[session.plot]
         let site = villageMap == .resourceFields ? ResourceSiteKind.at(session.plot) : nil
         let level = session.state.resourceLevel(at: session.plot)
+        let canConstructHere = villageMap == .townCenter && VillageMapMode.townCenter.contains(session.plot)
+            && BuildingKind.constructible(in: .townCenter).contains {
+                $0.suits(VillageState.ground(at: session.plot)) && !session.state.hasBuilding($0)
+            }
         let title = site.map { level == 0 ? "Développer : \($0.name)" : "\($0.name) · niveau \(level)" }
-            ?? building?.name ?? "Construire ici"
+            ?? building?.name ?? (canConstructHere ? "Construire ici" : "Emplacement libre")
         let symbol = site?.symbol ?? building?.symbol ?? "hammer.fill"
 
         return Button {

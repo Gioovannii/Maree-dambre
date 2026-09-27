@@ -46,6 +46,10 @@ struct DomainChecks {
         precondition(village.resources == Resources(wood: 55, amber: 30, provisions: 50))
         precondition(village.build(.lumbermill, at: 11))
         precondition(village.buildings[0] == nil && village.buildings[11] == .lumbermill)
+        let stockAfterMill = village.resources
+        precondition(!village.canBuild(.lumbermill, at: 16))
+        precondition(!village.build(.lumbermill, at: 16) && village.resources == stockAfterMill,
+                     "A building type can be built only once")
         precondition(village.production == Resources(wood: 18, amber: 1, provisions: 2))
         precondition(village.canMoveBuilding(from: 11, to: 16))
         precondition(village.moveBuilding(from: 11, to: 16))
@@ -85,7 +89,7 @@ struct DomainChecks {
         let oldData = try JSONEncoder().encode(oldSave)
         var restoredOldSave = try JSONDecoder().decode(VillageState.self, from: oldData)
         restoredOldSave.migrateIfNeeded(now: epoch)
-        precondition(restoredOldSave.version == 7)
+        precondition(restoredOldSave.version == 8)
         precondition(restoredOldSave.buildings[0] == nil && restoredOldSave.buildings[2] == nil)
         precondition(restoredOldSave.resourceLevel(at: 0) == 1 && restoredOldSave.resourceLevel(at: 2) == 1)
         precondition(restoredOldSave.production == oldProduction, "Migration preserves hourly production")
@@ -94,8 +98,22 @@ struct DomainChecks {
         legacyVillage.resourceLevels = nil
         legacyVillage.buildings[13] = .farm
         legacyVillage.migrateIfNeeded(now: epoch)
-        precondition(legacyVillage.version == 7 && legacyVillage.resourceLevel(at: 2) == 1)
+        precondition(legacyVillage.version == 8 && legacyVillage.resourceLevel(at: 2) == 1)
         precondition(legacyVillage.buildings[12] == .hall && legacyVillage.buildings[13] == nil)
+
+        var duplicatedVillage = VillageState(seed: seed)
+        duplicatedVillage.version = 7
+        duplicatedVillage.resources = Resources(wood: 100, amber: 50, provisions: 60)
+        duplicatedVillage.buildings = [10: .watchtower, 11: .watchtower, 12: .hall, 13: .farm, 14: .farm]
+        duplicatedVillage.migrateIfNeeded(now: epoch)
+        precondition(duplicatedVillage.version == 8)
+        precondition(duplicatedVillage.buildings[10] == .watchtower && duplicatedVillage.buildings[11] == nil)
+        precondition(duplicatedVillage.buildings[13] == .farm && duplicatedVillage.buildings[14] == nil)
+        precondition(duplicatedVillage.resources == Resources(wood: 155, amber: 58, provisions: 85),
+                     "Removed duplicates refund their construction cost")
+        precondition(!duplicatedVillage.canBuild(.watchtower, at: 16))
+        precondition(duplicatedVillage.canMoveBuilding(from: 10, to: 16),
+                     "A unique building can still be moved")
 
         var city = VillageState(seed: seed)
         precondition(city.build(.warehouse, at: 11) && city.storageCapacity == 800)
@@ -104,7 +122,7 @@ struct DomainChecks {
         nacre.people = .nacre
         precondition(nacre.automaticDefense == 1)
         precondition(nacre.build(.watchtower, at: 13) && nacre.automaticDefense == 3)
-        print("PASS: 40,000 tiles, city-only buildings, resource sites, offline production and legacy migration")
+        print("PASS: 40,000 tiles, unique city buildings, resource sites, offline production and legacy migration")
         print("PASS: deterministic start, legal actions, costs, cap, serialization, UTC week boundaries")
     }
 }

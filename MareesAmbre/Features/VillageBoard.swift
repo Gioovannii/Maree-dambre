@@ -81,7 +81,10 @@ struct VillageBoard: View {
         let terrain = VillageState.ground(at: plot)
         let site = mode == .resourceFields ? ResourceSiteKind.at(plot) : nil
         let siteLevel = session.state.resourceLevel(at: plot)
-        let isUnavailable = mode == .townCenter && building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
+        let isUnavailable = mode == .townCenter && building == nil
+            && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
+        let hasAvailableBuilding = mode == .townCenter && building == nil
+            && BuildingKind.constructible(in: mode).contains { $0.suits(terrain) && !session.state.hasBuilding($0) }
         // Equal, compact footprints keep the Centre readable and leave room
         // for several buildings without making one lot dominate the map.
         let size = min(88, max(52, mapWidth * 0.17))
@@ -128,7 +131,7 @@ struct VillageBoard: View {
                         }
                         .offset(y: -size * 0.20)
                         .accessibilityHidden(true)
-                } else if building == nil && site == nil {
+                } else if building == nil && site == nil && (isUnavailable || hasAvailableBuilding) {
                     Ellipse()
                         .fill(isUnavailable ? .black.opacity(0.28) : Palette.paper.opacity(0.17))
                         .frame(width: footprintWidth, height: footprintHeight)

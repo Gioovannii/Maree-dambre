@@ -10,6 +10,9 @@ struct ConstructionPanel: View {
     private var siteBuildings: [BuildingKind] {
         BuildingKind.constructible(in: mode).filter { $0.suits(terrain) }
     }
+    private var availableBuildings: [BuildingKind] {
+        siteBuildings.filter { !session.state.hasBuilding($0) }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -48,11 +51,17 @@ struct ConstructionPanel: View {
                     .font(.headline).foregroundStyle(Palette.muted)
                 Text("Ce terrain n’accueille aucun bâtiment de ce district.")
                     .font(.subheadline).foregroundStyle(Palette.muted)
+            } else if availableBuildings.isEmpty {
+                Label("Tous les bâtiments sont déjà présents", systemImage: "checkmark.seal.fill")
+                    .font(.headline).foregroundStyle(Palette.amber)
+                Text("Chaque type de bâtiment se construit une seule fois dans ce village. Les autres lots accueilleront de nouveaux bâtiments plus tard.")
+                    .font(.subheadline).foregroundStyle(Palette.muted)
+                    .fixedSize(horizontal: false, vertical: true)
             } else {
                 Text("Choisissez un bâtiment pour cet emplacement. Sa production ou son effet commence dès sa construction et continue hors ligne.")
                     .font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
-                ForEach(siteBuildings) { kind in
+                ForEach(availableBuildings) { kind in
                     buildingCard(kind)
                 }
             }

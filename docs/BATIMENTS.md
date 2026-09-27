@@ -1,6 +1,6 @@
 # Bâtiments du Centre-ville
 
-Les bâtiments se placent uniquement sur les lots du Centre-ville. La vue Ressources montre les forêts, cultures et veines d’ambre autour du village : on améliore ces terrains de niveau 0 à 3, sans y poser de bâtiment.
+Les bâtiments se placent uniquement sur les lots du Centre-ville, à raison d’un exemplaire par type et par village. La vue Ressources montre les forêts, cultures et veines d’ambre autour du village : on améliore ces terrains de niveau 0 à 3, sans y poser de bâtiment. Les copies construites avant cette règle sont retirées de façon déterministe et leur coût est remboursé.
 
 ## Jouables dans le prototype
 
