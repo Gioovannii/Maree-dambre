@@ -26,9 +26,11 @@ struct GameView: View {
         GeometryReader { geometry in
             ZStack {
                 Palette.ocean.ignoresSafeArea()
-                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding)
-                    .id(villageMap)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
+                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding) {
+                    showsVillageDetails = true
+                }
+                .id(villageMap)
+                .frame(width: geometry.size.width, height: geometry.size.height)
 
                 VStack(spacing: 8) {
                     topControls
@@ -47,6 +49,20 @@ struct GameView: View {
             .sheet(isPresented: $showsVillageDetails) {
                 ScrollView(.vertical) {
                     VStack(spacing: 10) {
+                        HStack {
+                            Text("Détails de la parcelle")
+                                .font(.headline)
+                                .foregroundStyle(Palette.paper)
+                            Spacer()
+                            Button("Fermer", systemImage: "xmark") {
+                                showsVillageDetails = false
+                            }
+                            .labelStyle(.iconOnly)
+                            .buttonStyle(.bordered)
+                            .tint(Palette.paper)
+                            .accessibilityLabel("Fermer les détails de la parcelle")
+                        }
+                        .padding(.horizontal, 6)
                         ConstructionPanel(mode: villageMap)
                         WorldClockStatus()
                     }
@@ -57,7 +73,7 @@ struct GameView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .scrollIndicators(.hidden)
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
                 .presentationBackground(Palette.ocean)
             }

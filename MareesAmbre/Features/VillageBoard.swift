@@ -3,6 +3,7 @@ import SwiftUI
 struct VillageBoard: View {
     let mode: VillageMapMode
     @Binding var selectedPlot: Int
+    let onPlotSelected: () -> Void
     @Environment(VillageSession.self) private var session
     @State private var pan = CGSize.zero
     @GestureState private var dragTranslation = CGSize.zero
@@ -92,8 +93,10 @@ struct VillageBoard: View {
         let isUnavailable = building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
 
         return Button {
+            let isMoving = session.moveSourcePlot != nil
             session.selectPlot(plot)
             selectedPlot = session.plot
+            if !isMoving { onPlotSelected() }
         } label: {
             ZStack {
                 if let building, building != .hall {

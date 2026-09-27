@@ -32,6 +32,17 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .warehouse: "Entrepôt"
         }
     }
+    var purpose: String {
+        switch self {
+        case .hall: "Cœur du village : elle assure les premières ressources sans interruption."
+        case .lumbermill: "Transforme le bois de la forêt en réserves pour les chantiers."
+        case .farm: "Cultive des vivres pour soutenir la croissance du village."
+        case .amberWorks: "Extrait et travaille l’ambre présent dans ce gisement."
+        case .watchtower: "Renforce la défense automatique du village."
+        case .warehouse: "Augmente la quantité de ressources que le village peut conserver."
+        }
+    }
+
     var symbol: String {
         switch self {
         case .hall: "building.2.fill"
@@ -67,7 +78,7 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .lumbermill: "+8 bois / h"
         case .farm: "+8 vivres / h"
         case .amberWorks: "+4 ambre / h"
-        case .watchtower: "Veille et défense automatique"
+        case .watchtower: "+2 défense automatique"
         case .warehouse: "+500 de capacité de réserve"
         }
     }
