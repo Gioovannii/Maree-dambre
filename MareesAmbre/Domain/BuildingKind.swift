@@ -8,18 +8,14 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
 
     var area: VillageMapMode {
         switch self {
-        case .lumbermill, .farm, .amberWorks: .resourceFields
-        case .hall, .watchtower, .warehouse: .townCenter
+        case .hall, .lumbermill, .farm, .amberWorks, .watchtower, .warehouse: .townCenter
         }
     }
 
     func suits(_ terrain: Terrain) -> Bool {
         switch self {
         case .hall: false
-        case .lumbermill: terrain == .forest
-        case .farm: terrain == .meadow
-        case .amberWorks: terrain == .amber
-        case .watchtower, .warehouse: terrain == .meadow
+        case .lumbermill, .farm, .amberWorks, .watchtower, .warehouse: terrain == .meadow
         }
     }
     var name: String {
@@ -40,6 +36,17 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .amberWorks: "Extrait et travaille l’ambre présent dans ce gisement."
         case .watchtower: "Renforce la défense automatique du village."
         case .warehouse: "Augmente la quantité de ressources que le village peut conserver."
+        }
+    }
+
+    var imageAssetName: String? {
+        switch self {
+        case .hall: nil
+        case .lumbermill: "Scierie"
+        case .farm: "Ferme"
+        case .amberWorks: "AtelierAmbre"
+        case .watchtower: "TourDeGarde"
+        case .warehouse: "Entrepot"
         }
     }
 

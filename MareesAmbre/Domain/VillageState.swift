@@ -5,6 +5,7 @@ struct VillageState: Codable, Equatable {
     let seed: Int
     var resources: Resources
     var buildings: [Int: BuildingKind]
+    var resourceLevels: [Int: Int]?
     var bots: [BotFaction]
     var people: People?
     var lastProductionAt: Date?
@@ -12,10 +13,11 @@ struct VillageState: Codable, Equatable {
     var lastBotExpansionAt: Date?
 
     init(seed: Int) {
-        version = 6
+        version = 7
         self.seed = seed
         resources = Resources()
         buildings = [12: .hall]
+        resourceLevels = [:]
         bots = BotFaction.starting
         people = nil
         lastProductionAt = .now
@@ -24,6 +26,24 @@ struct VillageState: Codable, Equatable {
     }
 
     mutating func migrateIfNeeded(now: Date = .now) {
+        if version < 7 {
+            var levels = resourceLevels ?? [:]
+            for (plot, kind) in buildings.sorted(by: { $0.key < $1.key }) {
+                let siteKind: ResourceSiteKind? = switch kind {
+                case .lumbermill: .woodland
+                case .farm: .cropland
+                case .amberWorks: .amberVein
+                case .hall, .watchtower, .warehouse: nil
+                }
+                guard let siteKind else { continue }
+                let candidates = VillageMapMode.resourceFields.slots.filter { ResourceSiteKind.at($0) == siteKind }
+                if let destination = candidates.min(by: { levels[$0, default: 0] < levels[$1, default: 0] }) {
+                    levels[destination, default: 0] += 1
+                    buildings.removeValue(forKey: plot)
+                }
+            }
+            resourceLevels = levels
+        }
         if version < 4 {
             let oldProductionDate = lastProductionAt
             lastProductionAt = oldProductionDate ?? now
@@ -52,6 +72,9 @@ struct VillageState: Codable, Equatable {
         }
         if version < 6 {
             version = 6
+        }
+        if version < 7 {
+            version = 7
         }
     }
 
@@ -92,8 +115,31 @@ struct VillageState: Codable, Equatable {
 
     static func canLoad(_ kind: BuildingKind, at plot: Int) -> Bool {
         canPlace(kind, at: plot)
-            || (kind.area == .resourceFields && VillageMapMode.townCenter.contains(plot)
-                && ground(at: plot) == .meadow)
+    }
+
+    func resourceLevel(at plot: Int) -> Int { resourceLevels?[plot] ?? 0 }
+
+    func canDevelopResource(at plot: Int) -> Bool {
+        guard let kind = ResourceSiteKind.at(plot) else { return false }
+        let nextLevel = resourceLevel(at: plot) + 1
+        guard nextLevel <= 3 else { return false }
+        let cost = kind.cost(for: nextLevel)
+        return resources.wood >= cost.wood && resources.amber >= cost.amber
+            && resources.provisions >= cost.provisions
+    }
+
+    @discardableResult
+    mutating func developResource(at plot: Int) -> Bool {
+        guard canDevelopResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return false }
+        let nextLevel = resourceLevel(at: plot) + 1
+        let cost = kind.cost(for: nextLevel)
+        resources.wood -= cost.wood
+        resources.amber -= cost.amber
+        resources.provisions -= cost.provisions
+        var levels = resourceLevels ?? [:]
+        levels[plot] = nextLevel
+        resourceLevels = levels
+        return true
     }
 
     @discardableResult
@@ -112,6 +158,14 @@ struct VillageState: Codable, Equatable {
             total.wood += building.yield.wood
             total.amber += building.yield.amber
             total.provisions += building.yield.provisions
+        }
+        for plot in VillageMapMode.resourceFields.slots {
+            guard let kind = ResourceSiteKind.at(plot) else { continue }
+            let yield = kind.yieldPerLevel
+            let level = resourceLevel(at: plot)
+            total.wood += yield.wood * level
+            total.amber += yield.amber * level
+            total.provisions += yield.provisions * level
         }
         return people?.adjustedProduction(total) ?? total
     }

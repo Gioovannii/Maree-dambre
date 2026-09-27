@@ -10,6 +10,19 @@ struct BuildingArt: View {
     private let darkRoof = Color(red: 0.39, green: 0.22, blue: 0.19)
 
     var body: some View {
+        Group {
+            if let imageAssetName = kind.imageAssetName {
+                Image(imageAssetName)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                canvasArt
+            }
+        }
+        .accessibilityHidden(true)
+    }
+
+    private var canvasArt: some View {
         Canvas { context, size in
             let w = size.width
             let h = size.height

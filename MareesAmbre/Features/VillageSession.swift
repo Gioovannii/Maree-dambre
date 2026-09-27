@@ -5,7 +5,7 @@ import Observation
 final class VillageSession {
     private(set) var state: VillageState
     let world: WorldMap
-    var plot = VillageMapMode.townCenter.initialPlot
+    var plot = VillageMapMode.resourceFields.initialPlot
     var selectedTile = TileCoordinate.home
     private(set) var message = "Choisissez un emplacement libre pour construire."
     private(set) var moveSourcePlot: Int?
@@ -36,6 +36,12 @@ final class VillageSession {
         guard state.people == nil else { return }
         state.people = people
         persist("\(people.name) veille désormais sur Port d’Ambre.")
+    }
+
+    func developSelectedResource() {
+        refreshWorld()
+        guard state.developResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return }
+        persist("\(kind.name) développée. Sa production continue même hors ligne.")
     }
 
     func build(_ kind: BuildingKind) {

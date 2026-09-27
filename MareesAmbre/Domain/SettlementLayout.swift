@@ -8,14 +8,14 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var assetName: String {
         switch self {
-        case .resourceFields: "ChampsDuPortClair"
+        case .resourceFields: "RessourcesAutourVillage"
         case .townCenter: "CentreVilleClair"
         }
     }
 
     var title: String {
         switch self {
-        case .resourceFields: "Champs du Port"
+        case .resourceFields: "Ressources"
         case .townCenter: "Centre-ville"
         }
     }
@@ -44,22 +44,36 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
     func mapPoint(for plot: Int) -> CGPoint {
         switch self {
         case .resourceFields:
-            let x: [CGFloat] = [0.13, 0.34, 0.55, 0.77, 0.92]
-            return CGPoint(x: x[plot % 5], y: plot < 5 ? 0.36 : 0.65)
+            return switch plot {
+            case 0: CGPoint(x: 0.16, y: 0.17)
+            case 1: CGPoint(x: 0.13, y: 0.34)
+            case 2: CGPoint(x: 0.45, y: 0.20)
+            case 3: CGPoint(x: 0.73, y: 0.30)
+            case 4: CGPoint(x: 0.88, y: 0.41)
+            case 5: CGPoint(x: 0.14, y: 0.50)
+            case 6: CGPoint(x: 0.17, y: 0.68)
+            case 7: CGPoint(x: 0.42, y: 0.78)
+            case 8: CGPoint(x: 0.64, y: 0.80)
+            case 9: CGPoint(x: 0.87, y: 0.56)
+            default: CGPoint(x: 0.50, y: 0.50)
+            }
         case .townCenter:
             return switch plot {
-            case 10: CGPoint(x: 0.07, y: 0.27)
-            case 11: CGPoint(x: 0.25, y: 0.27)
-            case 12: CGPoint(x: 0.50, y: 0.35)
-            case 13: CGPoint(x: 0.75, y: 0.27)
-            case 14: CGPoint(x: 0.94, y: 0.34)
-            case 15: CGPoint(x: 0.13, y: 0.53)
-            case 16: CGPoint(x: 0.37, y: 0.57)
-            case 17: CGPoint(x: 0.63, y: 0.57)
-            case 18: CGPoint(x: 0.87, y: 0.53)
-            case 19: CGPoint(x: 0.95, y: 0.68)
-            case 22: CGPoint(x: 0.22, y: 0.78)
-            case 23: CGPoint(x: 0.78, y: 0.78)
+            // Equal-size lots form a clear ring around the central hall.
+            // Keeping these anchors regular makes every future building feel
+            // like it owns the same amount of space.
+            case 10: CGPoint(x: 0.14, y: 0.24)
+            case 11: CGPoint(x: 0.37, y: 0.20)
+            case 12: CGPoint(x: 0.50, y: 0.50)
+            case 13: CGPoint(x: 0.63, y: 0.20)
+            case 14: CGPoint(x: 0.86, y: 0.24)
+            case 15: CGPoint(x: 0.12, y: 0.45)
+            case 16: CGPoint(x: 0.12, y: 0.66)
+            case 17: CGPoint(x: 0.88, y: 0.45)
+            case 18: CGPoint(x: 0.88, y: 0.66)
+            case 19: CGPoint(x: 0.14, y: 0.80)
+            case 22: CGPoint(x: 0.37, y: 0.82)
+            case 23: CGPoint(x: 0.63, y: 0.82)
             default: CGPoint(x: 0.50, y: 0.50)
             }
         }
@@ -67,7 +81,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var focus: SettlementPosition {
         switch self {
-        case .resourceFields: SettlementPosition(east: 0, north: 0.75)
+        case .resourceFields: SettlementPosition(east: 0, north: 0)
         case .townCenter: SettlementPosition(east: 1.0 / 6.0, north: 0)
         }
     }

@@ -4,6 +4,7 @@ struct VillageBoard: View {
     let mode: VillageMapMode
     @Binding var selectedPlot: Int
     let onPlotSelected: () -> Void
+    let onTownSelected: () -> Void
     @Environment(VillageSession.self) private var session
     @State private var pan = CGSize.zero
     @GestureState private var dragTranslation = CGSize.zero
@@ -38,6 +39,9 @@ struct VillageBoard: View {
                         .interpolation(.high)
                         .scaledToFill()
                         .frame(width: mapSide, height: mapSide)
+                        .saturation(mode == .resourceFields ? 0.82 : 1)
+                        .contrast(mode == .resourceFields ? 0.88 : 1)
+                        .blur(radius: mode == .resourceFields ? 1.3 : 0)
                         .clipped()
                         .accessibilityHidden(true)
 
@@ -46,9 +50,25 @@ struct VillageBoard: View {
                         .accessibilityHidden(true)
 
                     ForEach(mode.slots, id: \.self) { plot in
-                        plotButton(plot)
+                        plotButton(plot, mapSide: mapSide)
                             .position(position(for: plot, in: mapSize))
                             .zIndex(Double(plot / 5 + plot % 5))
+                    }
+
+                    if mode == .resourceFields {
+                        Button(action: onTownSelected) {
+                            Label("Centre-ville", systemImage: "building.2.fill")
+                                .font(.caption.bold())
+                                .foregroundStyle(Palette.paper)
+                                .padding(.horizontal, 11)
+                                .frame(minHeight: 38)
+                                .background(Palette.panel.opacity(0.92), in: .capsule)
+                                .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
+                        }
+                        .buttonStyle(.plain)
+                        .position(x: mapSide * 0.50, y: mapSide * 0.54)
+                        .zIndex(100)
+                        .accessibilityHint("Ouvrir la carte du Centre-ville et ses bâtiments")
                     }
                 }
                 .frame(width: mapSide, height: mapSide)
@@ -86,11 +106,19 @@ struct VillageBoard: View {
         .accessibilityLabel("Carte du district : \(mode.title). Faites glisser pour explorer.")
     }
 
-    private func plotButton(_ plot: Int) -> some View {
+    private func plotButton(_ plot: Int, mapSide: CGFloat) -> some View {
         let building = session.state.buildings[plot]
         let selected = session.plot == plot
         let terrain = VillageState.ground(at: plot)
-        let isUnavailable = building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
+        let site = mode == .resourceFields ? ResourceSiteKind.at(plot) : nil
+        let siteLevel = session.state.resourceLevel(at: plot)
+        let isUnavailable = mode == .townCenter && building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
+        let size = min(180, max(96, mapSide * 0.20))
+        let footprintWidth = size * 0.82
+        let footprintHeight = size * 0.34
+        let canReceiveMovingBuilding = session.moveSourcePlot.map {
+            building == nil && session.state.canMoveBuilding(from: $0, to: plot)
+        } ?? false
 
         return Button {
             let isMoving = session.moveSourcePlot != nil
@@ -99,70 +127,72 @@ struct VillageBoard: View {
             if !isMoving { onPlotSelected() }
         } label: {
             ZStack {
-                if let building, building != .hall {
-                    BuildingArt(kind: building)
-                        .frame(width: 68, height: 70)
-                        .offset(y: -16)
-                        .overlay(alignment: .topTrailing) {
-                            Image(systemName: building.symbol)
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundStyle(Palette.ocean)
-                                .padding(5)
-                                .background(Palette.amber, in: Circle())
-                                .offset(x: 3, y: -6)
+                if let site {
+                    WoodLevelBadge(level: siteLevel, symbol: site.symbol)
+                        .overlay {
+                            if selected {
+                                RoundedRectangle(cornerRadius: 9)
+                                    .strokeBorder(Palette.amber, lineWidth: 2.5)
+                            }
                         }
-                        .allowsHitTesting(false)
-                }
-
-                if building == nil {
-                    Circle()
-                        .fill(isUnavailable ? .black.opacity(0.72) : Palette.paper.opacity(0.96))
-                        .frame(width: 32, height: 32)
-                    Circle()
-                        .strokeBorder(
-                            isUnavailable ? Palette.muted.opacity(0.48) : Color(red: 0.27, green: 0.68, blue: 0.38),
-                            lineWidth: isUnavailable ? 1 : 2
-                        )
-                        .frame(width: 32, height: 32)
+                        .shadow(color: selected ? Palette.amber.opacity(0.6) : .clear, radius: 6)
+                        .accessibilityHidden(true)
+                } else if let building, building != .hall {
+                    Ellipse()
+                        .fill(.black.opacity(0.20))
+                        .frame(width: footprintWidth, height: footprintHeight)
+                        .offset(y: size * 0.30)
+                    BuildingArt(kind: building)
+                        .frame(width: size, height: size)
+                        .overlay(alignment: .bottom) {
+                            WoodLevelBadge(level: 1)
+                                .offset(y: -size * 0.01)
+                                .accessibilityHidden(true)
+                        }
+                        .offset(y: -size * 0.20)
+                        .accessibilityHidden(true)
+                } else if building == nil && site == nil {
+                    Ellipse()
+                        .fill(isUnavailable ? .black.opacity(0.28) : Palette.paper.opacity(0.17))
+                        .frame(width: footprintWidth, height: footprintHeight)
+                        .overlay {
+                            Ellipse()
+                                .strokeBorder(
+                                    isUnavailable ? Palette.muted.opacity(0.45) : Palette.paper.opacity(0.82),
+                                    style: StrokeStyle(lineWidth: 2, dash: [6, 5])
+                                )
+                        }
+                        .offset(y: size * 0.14)
                     Image(systemName: isUnavailable ? "lock.fill" : "plus")
-                        .font(.system(size: isUnavailable ? 10 : 14, weight: .bold))
+                        .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(isUnavailable ? Palette.muted : Palette.ocean)
+                        .frame(width: 40, height: 40)
+                        .background(isUnavailable ? Palette.panel : Palette.paper, in: Circle())
+                        .offset(y: size * 0.14)
                 }
 
-                if session.moveSourcePlot == plot {
-                    Circle()
-                        .strokeBorder(Palette.amber, lineWidth: 3)
-                        .frame(width: 48, height: 48)
-                        .shadow(color: Palette.amber.opacity(0.8), radius: 10)
-                } else if let source = session.moveSourcePlot, building == nil,
-                          session.state.canMoveBuilding(from: source, to: plot) {
-                    Circle()
-                        .strokeBorder(Color.green.opacity(0.95), lineWidth: 3)
-                        .frame(width: 46, height: 46)
-                        .shadow(color: .green.opacity(0.75), radius: 8)
-                }
-
-                if selected {
-                    Circle()
-                        .fill(.black.opacity(0.58))
-                        .frame(width: 36, height: 36)
-                    Circle()
-                        .strokeBorder(Palette.amber, lineWidth: 2.5)
-                        .frame(width: 42, height: 42)
-                        .shadow(color: Palette.amber.opacity(0.65), radius: 8)
-                    Image(systemName: building?.symbol ?? "plus")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(Palette.amber)
+                if selected || session.moveSourcePlot == plot || canReceiveMovingBuilding {
+                    if site == nil {
+                        Ellipse()
+                            .strokeBorder(
+                                canReceiveMovingBuilding ? .green : Palette.amber,
+                                lineWidth: selected || session.moveSourcePlot == plot ? 3 : 2
+                            )
+                            .frame(width: footprintWidth, height: footprintHeight)
+                            .shadow(color: (canReceiveMovingBuilding ? Color.green : Palette.amber).opacity(0.7), radius: 8)
+                            .offset(y: size * (building == nil ? 0.14 : 0.30))
+                    }
                 }
             }
-            .frame(width: 44, height: 44)
-            .contentShape(Circle())
+            .frame(width: size, height: size)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(mode == .resourceFields ? "Champ" : "Emplacement") \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible dans ce district" : "")")
+        .accessibilityLabel(site.map { "Zone \(mode.slotNumber(for: plot) ?? 0), \($0.name), niveau \(siteLevel)" }
+            ?? "Emplacement \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible" : "")")
         .accessibilityValue(selected ? "Sélectionné" : "")
         .accessibilityHint(session.moveSourcePlot == nil
-            ? "Afficher les détails ou construire sur cet emplacement"
+            ? (site == nil ? "Afficher les détails ou construire sur cet emplacement" : "Afficher la production et améliorer cette zone")
             : "Déplacer le bâtiment sélectionné vers cette case si elle est compatible")
         .accessibilityAddTraits(selected ? .isSelected : [])
     }

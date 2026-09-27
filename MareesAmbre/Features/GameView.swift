@@ -5,7 +5,7 @@ struct GameView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var showsWorld = false
     @State private var showsVillageDetails = false
-    @State private var villageMap: VillageMapMode = .townCenter
+    @State private var villageMap: VillageMapMode = .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
     @State private var selectedTownPlot = VillageMapMode.townCenter.initialPlot
 
@@ -26,9 +26,9 @@ struct GameView: View {
         GeometryReader { geometry in
             ZStack {
                 Palette.ocean.ignoresSafeArea()
-                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding) {
-                    showsVillageDetails = true
-                }
+                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                             onPlotSelected: { showsVillageDetails = true },
+                             onTownSelected: { selectVillageMap(.townCenter) })
                 .id(villageMap)
                 .frame(width: geometry.size.width, height: geometry.size.height)
 
@@ -63,7 +63,11 @@ struct GameView: View {
                             .accessibilityLabel("Fermer les détails de la parcelle")
                         }
                         .padding(.horizontal, 6)
-                        ConstructionPanel(mode: villageMap)
+                        if villageMap == .resourceFields {
+                            ResourceSitePanel()
+                        } else {
+                            ConstructionPanel(mode: villageMap)
+                        }
                         WorldClockStatus()
                     }
                     .padding(.horizontal, 12)
@@ -82,15 +86,17 @@ struct GameView: View {
 
     private var selectedSettlementAction: some View {
         let building = session.state.buildings[session.plot]
-        let terrain = VillageState.ground(at: session.plot)
-        let isUnavailable = building == nil && !BuildingKind.constructible(in: villageMap).contains { $0.suits(terrain) }
-        let title = building?.name ?? (isUnavailable ? "Emplacement indisponible" : "Construire ici")
+        let site = villageMap == .resourceFields ? ResourceSiteKind.at(session.plot) : nil
+        let level = session.state.resourceLevel(at: session.plot)
+        let title = site.map { level == 0 ? "Développer : \($0.name)" : "\($0.name) · niveau \(level)" }
+            ?? building?.name ?? "Construire ici"
+        let symbol = site?.symbol ?? building?.symbol ?? "hammer.fill"
 
         return Button {
             showsVillageDetails = true
         } label: {
             HStack(spacing: 10) {
-                Image(systemName: building?.symbol ?? (isUnavailable ? "lock.fill" : "hammer.fill"))
+                Image(systemName: symbol)
                     .font(.subheadline.bold())
                     .foregroundStyle(Palette.ocean)
                     .frame(width: 32, height: 32)
@@ -111,8 +117,8 @@ struct GameView: View {
             .overlay { Capsule().strokeBorder(.white.opacity(0.1), lineWidth: 1) }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(building.map { "Détails de \($0.name)" } ?? (isUnavailable ? "Emplacement indisponible" : "Construire sur cette parcelle"))
-        .accessibilityHint("Ouvrir les détails du terrain, les constructions et la production")
+        .accessibilityLabel("Détails de \(title)")
+        .accessibilityHint("Ouvrir les informations de la zone et ses actions")
     }
 
     private var worldScreen: some View {
@@ -168,7 +174,7 @@ struct GameView: View {
 
     private var navigation: some View {
         HStack(spacing: 5) {
-            navigationButton("Champs", symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
+            navigationButton("Ressources", symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
                 selectVillageMap(.resourceFields)
             }
             navigationButton("Centre", symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
