@@ -57,7 +57,7 @@ struct VillageBoard: View {
 
                     if mode == .resourceFields {
                         Button(action: onTownSelected) {
-                            Label("Centre-ville", systemImage: "building.2.fill")
+                            Label("Quais & Centre", systemImage: "sailboat.fill")
                                 .font(.caption.bold())
                                 .foregroundStyle(Palette.paper)
                                 .padding(.horizontal, 11)
@@ -68,7 +68,7 @@ struct VillageBoard: View {
                         .buttonStyle(.plain)
                         .position(x: mapSide * 0.50, y: mapSide * 0.54)
                         .zIndex(100)
-                        .accessibilityHint("Ouvrir la carte du Centre-ville et ses bâtiments")
+                        .accessibilityHint("Ouvrir le port et les bâtiments du Centre-ville")
                     }
                 }
                 .frame(width: mapSide, height: mapSide)
@@ -128,7 +128,7 @@ struct VillageBoard: View {
         } label: {
             ZStack {
                 if let site {
-                    WoodLevelBadge(level: siteLevel, symbol: site.symbol)
+                    TideLevelBadge(level: siteLevel, symbol: site.symbol)
                         .overlay {
                             if selected {
                                 RoundedRectangle(cornerRadius: 9)
@@ -145,7 +145,7 @@ struct VillageBoard: View {
                     BuildingArt(kind: building)
                         .frame(width: size, height: size)
                         .overlay(alignment: .bottom) {
-                            WoodLevelBadge(level: 1)
+                            TideLevelBadge(level: 1)
                                 .offset(y: -size * 0.01)
                                 .accessibilityHidden(true)
                         }

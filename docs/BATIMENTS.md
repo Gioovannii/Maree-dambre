@@ -13,7 +13,7 @@ Les bâtiments se placent uniquement sur les lots du Centre-ville. La vue Ressou
 | Tour de garde | Protège le village automatiquement | +2 défense |
 | Entrepôt | Agrandit les réserves | +500 de capacité pour chaque ressource |
 
-Ces bâtiments sont au niveau 1 dans le prototype. Le cartouche en bois indique ce niveau ; l’amélioration des bâtiments urbains viendra avec les mécaniques correspondantes.
+Ces bâtiments sont au niveau 1 dans le prototype. Le marqueur « N1 » en verre de mer et ambre indique ce niveau ; l’amélioration des bâtiments urbains viendra avec les mécaniques correspondantes.
 
 ## Suite prévue, à construire quand leur mécanique sera jouable
 

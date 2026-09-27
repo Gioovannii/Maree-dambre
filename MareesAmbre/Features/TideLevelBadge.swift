@@ -1,6 +1,8 @@
 import SwiftUI
 
-struct WoodLevelBadge: View {
+/// Level marker for Ambre's coastal resource sites and city buildings.
+/// Its sea-glass and amber palette gives the game its own visual language.
+struct TideLevelBadge: View {
     let level: Int
     var symbol: String? = nil
 
@@ -10,26 +12,26 @@ struct WoodLevelBadge: View {
                 Image(systemName: symbol)
                     .font(.caption.bold())
             }
-            Text("\(level)")
+            Text("N\(level)")
                 .font(.subheadline.bold())
                 .monospacedDigit()
         }
-        .foregroundStyle(Color(red: 1, green: 0.94, blue: 0.76))
+        .foregroundStyle(Palette.paper)
         .padding(.horizontal, symbol == nil ? 12 : 10)
         .frame(minHeight: symbol == nil ? 29 : 38)
         .background {
-            RoundedRectangle(cornerRadius: 9)
+            Capsule()
                 .fill(LinearGradient(
-                    colors: [Color(red: 0.50, green: 0.32, blue: 0.18),
-                             Color(red: 0.29, green: 0.17, blue: 0.10)],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
+                    colors: [Palette.panel, Color(red: 0.02, green: 0.34, blue: 0.40)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 ))
         }
         .overlay {
-            RoundedRectangle(cornerRadius: 9)
-                .strokeBorder(Color(red: 0.82, green: 0.59, blue: 0.34), lineWidth: 1.5)
+            Capsule()
+                .strokeBorder(Palette.amber, lineWidth: 1.5)
         }
-        .shadow(color: .black.opacity(0.4), radius: 3, y: 2)
+        .shadow(color: Palette.ocean.opacity(0.55), radius: 3, y: 2)
         .accessibilityLabel("Niveau \(level)")
     }
 }

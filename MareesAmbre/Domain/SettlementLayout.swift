@@ -15,8 +15,8 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .resourceFields: "Ressources"
-        case .townCenter: "Centre-ville"
+        case .resourceFields: "Ressources côtières"
+        case .townCenter: "Centre-ville d’Ambre"
         }
     }
 
