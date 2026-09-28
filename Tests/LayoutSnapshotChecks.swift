@@ -25,6 +25,15 @@ struct LayoutSnapshotChecks {
 
         let resource = VillageMapMode.resourceFields
         precondition(resource.slots.count == 10, "Resource snapshot changed its slot count")
+        let resourcePoints = resource.slots.map(resource.mapPoint(for:))
+        precondition(resourcePoints.allSatisfy { (0.15...0.85).contains($0.x) && (0.22...0.70).contains($0.y) },
+                     "Resource clearings must remain grouped above the bottom controls")
+        for (index, a) in resourcePoints.enumerated() {
+            for b in resourcePoints.dropFirst(index + 1) {
+                precondition(hypot((a.x - b.x) * 320, (a.y - b.y) * 568) >= 54,
+                             "Resource touch targets overlap on a compact portrait screen")
+            }
+        }
         print("PASS: settlement layout snapshot — \(town.slots.count) equal centre slots, hall centred")
     }
 }

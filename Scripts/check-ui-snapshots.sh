@@ -32,10 +32,18 @@ simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi \
     --batteryState charged --batteryLevel 100
 trap 'simctl status_bar "$simulator_id" clear' EXIT
 
-for district in resources centre; do
+DEVELOPER_DIR="$developer_dir" /usr/bin/xcrun swiftc -O \
+    -module-cache-path /tmp/MareesAmbreSwiftModuleCache \
+    "$project_root/Scripts/compare-snapshot.swift" -o "$output_dir/compare-snapshot"
+
+for district in resources centre upgrade world; do
     simctl terminate "$simulator_id" com.prototype.mareesambre >/dev/null 2>&1 || true
     if [[ "$district" == centre ]]; then
         simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot --snapshot-center >/dev/null
+    elif [[ "$district" == upgrade ]]; then
+        simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot --snapshot-upgrade >/dev/null
+    elif [[ "$district" == world ]]; then
+        simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot --snapshot-world >/dev/null
     else
         simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot >/dev/null
     fi
@@ -46,7 +54,7 @@ for district in resources centre; do
         mkdir -p "$reference_dir"
         cp "$output_dir/$district.png" "$reference_dir/$district.png"
         print "RECORDED: $district"
-    elif cmp -s "$reference_dir/$district.png" "$output_dir/$district.png"; then
+    elif "$output_dir/compare-snapshot" "$reference_dir/$district.png" "$output_dir/$district.png"; then
         print "PASS: $district matches its iPhone 18 Pro snapshot"
     else
         print -u2 "FAIL: $district differs from $reference_dir/$district.png"

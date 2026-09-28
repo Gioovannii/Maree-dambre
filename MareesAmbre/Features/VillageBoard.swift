@@ -56,7 +56,7 @@ struct VillageBoard: View {
                                 .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
                         }
                         .buttonStyle(.plain)
-                        .position(x: mapSize.width * 0.50, y: mapSize.height * 0.39)
+                        .position(x: mapSize.width * 0.50, y: mapSize.height * 0.46)
                         .zIndex(100)
                         .accessibilityHint("Ouvrir le port et les bâtiments du Centre-ville")
                     }

@@ -8,7 +8,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var assetName: String {
         switch self {
-        case .resourceFields: "RessourcesPortrait"
+        case .resourceFields: "RessourcesBaie"
         case .townCenter: "CentreVillePortrait"
         }
     }
@@ -45,16 +45,16 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .resourceFields:
             return switch plot {
-            case 0: CGPoint(x: 0.18, y: 0.18)
-            case 1: CGPoint(x: 0.16, y: 0.60)
-            case 2: CGPoint(x: 0.75, y: 0.27)
-            case 3: CGPoint(x: 0.22, y: 0.45)
-            case 4: CGPoint(x: 0.76, y: 0.43)
-            case 5: CGPoint(x: 0.17, y: 0.30)
-            case 6: CGPoint(x: 0.70, y: 0.57)
-            case 7: CGPoint(x: 0.72, y: 0.80)
-            case 8: CGPoint(x: 0.30, y: 0.52)
-            case 9: CGPoint(x: 0.21, y: 0.80)
+            case 0: CGPoint(x: 0.210, y: 0.270)
+            case 1: CGPoint(x: 0.180, y: 0.400)
+            case 2: CGPoint(x: 0.500, y: 0.245)
+            case 3: CGPoint(x: 0.820, y: 0.400)
+            case 4: CGPoint(x: 0.800, y: 0.275)
+            case 5: CGPoint(x: 0.190, y: 0.535)
+            case 6: CGPoint(x: 0.200, y: 0.655)
+            case 7: CGPoint(x: 0.500, y: 0.645)
+            case 8: CGPoint(x: 0.800, y: 0.660)
+            case 9: CGPoint(x: 0.800, y: 0.540)
             default: CGPoint(x: 0.50, y: 0.50)
             }
         case .townCenter:

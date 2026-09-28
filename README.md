@@ -2,6 +2,15 @@
 
 ## Prototype actuel
 
+### Ajustements visuels — septembre 2026
+
+- Ressources : dix clairières regroupées autour d’une baie, nouveau décor `RessourcesBaie`, repères recalés sur les trois forêts, cinq cultures et deux veines d’ambre.
+- Détails et amélioration : écran complet avec fermeture fixe, stocks et contenu défilant.
+- Monde : dessin continu des côtes, courants marins et balises des capitales. La grille logique et les sauvegardes restent inchangées ; les contours sont lissés pour l’illustration.
+- `Scripts/check-ui-snapshots.sh record` capture Ressources, Centre, Amélioration et Monde ; `verify` les compare aux références. Les tests métier et le contrôle de disposition restent disponibles dans `Scripts`.
+- Prompt et provenance du décor : `Tests/ResourceArt.md`.
+
+
 - Prologue et peuples : histoire d’introduction, puis choix entre les Sauniers (+10 % de bois), la Garde de Nacre (+1 défense automatique de base) et le Pacte des Roseaux (+10 % d’ambre). Aucun malus ; les sauvegardes existantes gardent leur village et découvrent le choix au prochain lancement.
 
 Ouvrir `MareesAmbre.xcodeproj` et choisir le schéma **MareesAmbre**, iOS 27. Un seul simulateur à la fois est conseillé sur le Mac de développement de 8 Go ; les vérifications précédentes ont rencontré de longs délais CoreSimulator.

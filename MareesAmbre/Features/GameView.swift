@@ -3,8 +3,8 @@ import SwiftUI
 struct GameView: View {
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
-    @State private var showsWorld = false
-    @State private var showsVillageDetails = false
+    @State private var showsWorld = ProcessInfo.processInfo.arguments.contains("--snapshot-world")
+    @State private var showsVillageDetails = ProcessInfo.processInfo.arguments.contains("--snapshot-upgrade")
     @State private var villageMap: VillageMapMode = ProcessInfo.processInfo.arguments.contains("--snapshot-center")
         ? .townCenter : .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
@@ -52,40 +52,8 @@ struct GameView: View {
                     session.plot = selectedTownPlot
                 }
             }
-            .sheet(isPresented: $showsVillageDetails) {
-                ScrollView(.vertical) {
-                    VStack(spacing: 10) {
-                        HStack {
-                            Text("Détails de la parcelle")
-                                .font(.headline)
-                                .foregroundStyle(Palette.paper)
-                            Spacer()
-                            Button("Fermer", systemImage: "xmark") {
-                                showsVillageDetails = false
-                            }
-                            .labelStyle(.iconOnly)
-                            .buttonStyle(.bordered)
-                            .tint(Palette.paper)
-                            .accessibilityLabel("Fermer les détails de la parcelle")
-                        }
-                        .padding(.horizontal, 6)
-                        if villageMap == .resourceFields {
-                            ResourceSitePanel()
-                        } else {
-                            ConstructionPanel(mode: villageMap)
-                        }
-                        WorldClockStatus()
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.top, 16)
-                    .padding(.bottom, 20)
-                    .frame(maxWidth: 600)
-                    .frame(maxWidth: .infinity)
-                }
-                .scrollIndicators(.hidden)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-                .presentationBackground(Palette.ocean)
+            .fullScreenCover(isPresented: $showsVillageDetails) {
+                PlotDetailScreen(mode: villageMap)
             }
         }
     }

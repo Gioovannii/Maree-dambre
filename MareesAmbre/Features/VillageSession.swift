@@ -104,7 +104,7 @@ final class VillageSession {
         let fractions = [remainder.wood, remainder.amber, remainder.provisions]
         for index in hourlyRates.indices where hourlyRates[index] > 0 {
             let secondsPerUnit = (1 - fractions[index]) * 3600 / Double(hourlyRates[index])
-            let remaining = secondsPerUnit - now.timeIntervalSince(previous)
+            let remaining = secondsPerUnit - (isUISnapshot ? 0 : now.timeIntervalSince(previous))
             candidates.append(Int(ceil(max(0, remaining))))
         }
         guard let seconds = candidates.min() else { return "—" }
