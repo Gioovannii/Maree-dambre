@@ -1,8 +1,27 @@
 import Foundation
 
 struct VillageStorage {
+    var defaults: UserDefaults = .standard
+
+    func activeSeed(now: Date = .now) -> Int {
+        if defaults.object(forKey: "village.activeSeed") != nil {
+            return defaults.integer(forKey: "village.activeSeed")
+        }
+        // Adopt the most recently played legacy village without deleting any save.
+        let latest = defaults.dictionaryRepresentation().keys
+            .filter { $0.hasPrefix("village.v2.") }
+            .compactMap { key -> VillageState? in
+                guard let data = defaults.data(forKey: key) else { return nil }
+                return try? JSONDecoder().decode(VillageState.self, from: data)
+            }
+            .max { ($0.lastProductionAt ?? .distantPast) < ($1.lastProductionAt ?? .distantPast) }
+        let seed = latest?.seed ?? WeeklyChallenge.seed(for: now)
+        defaults.set(seed, forKey: "village.activeSeed")
+        return seed
+    }
+
     func load(seed: Int, world: WorldMap, now: Date = .now) throws -> VillageState? {
-        guard let data = UserDefaults.standard.data(forKey: "village.v2.\(seed)") else { return nil }
+        guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
         guard (2...9).contains(state.version), state.seed == seed,
               state.army?.isValid ?? true,
@@ -30,6 +49,7 @@ struct VillageStorage {
         return migrated
     }
     func save(_ state: VillageState) throws {
-        UserDefaults.standard.set(try JSONEncoder().encode(state), forKey: "village.v2.\(state.seed)")
+        defaults.set(try JSONEncoder().encode(state), forKey: "village.v2.\(state.seed)")
+        defaults.set(state.seed, forKey: "village.activeSeed")
     }
 }

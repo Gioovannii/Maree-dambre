@@ -20,12 +20,13 @@ enum ConstructionActivityController {
             endsAt: job.endsAt
         )
         let state = ConstructionActivityAttributes.ContentState(progress: 0)
-        try? Activity.request(attributes: attributes, content: ActivityContent(state: state, staleDate: job.endsAt), pushType: nil)
+        _ = try? Activity.request(attributes: attributes, content: ActivityContent(state: state, staleDate: job.endsAt), pushType: nil)
     }
 
     static func end() {
+        let activities = Activity<ConstructionActivityAttributes>.activities
         Task {
-            for activity in Activity<ConstructionActivityAttributes>.activities {
+            for activity in activities {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
         }

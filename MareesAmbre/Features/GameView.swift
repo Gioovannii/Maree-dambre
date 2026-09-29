@@ -9,6 +9,8 @@ struct GameView: View {
         ? .townCenter : .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
     @State private var selectedTownPlot = VillageMapMode.townCenter.initialPlot
+    @State private var showsGuide = false
+    @State private var opensGuidedPlot = false
 
     var body: some View {
         Group {
@@ -21,6 +23,40 @@ struct GameView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .onChange(of: session.state.people) { previous, current in
+            if previous == nil, current != nil { showsGuide = true }
+        }
+        .sheet(isPresented: $showsGuide, onDismiss: {
+            if opensGuidedPlot {
+                opensGuidedPlot = false
+                showsVillageDetails = true
+            }
+        }) {
+            NavigationStack {
+                List {
+                    Section("Votre prochaine étape") {
+                        Text(guideStep.title).font(.headline)
+                        Text(guideStep.detail)
+                        Button("Voir où agir", action: followGuide)
+                    }
+                    Section("Votre première expédition") {
+                        Text("1. Développez une forêt, un champ et un gisement pour produire les trois ressources.")
+                        Text("2. Construisez la Maison des savoirs et recherchez une unité.")
+                        Text("3. Construisez la Cour des armes et entraînez vos troupes.")
+                        Text("4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir.")
+                    }
+                    Section("À savoir") {
+                        Text("La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum.")
+                        Text("Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter.")
+                        Text("Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées.")
+                    }
+                }
+                .navigationTitle("Premiers pas")
+                .toolbar { ToolbarItem(placement: .confirmationAction) {
+                    Button("Fermer") { showsGuide = false }
+                } }
+            }
+        }
     }
 
     private var villageScreen: some View {
@@ -130,6 +166,11 @@ struct GameView: View {
                 .font(.headline.bold()).fontDesign(.serif)
                 .contentTransition(.opacity)
             Spacer(minLength: 2)
+            Button { showsGuide = true } label: {
+                Image(systemName: "book.closed.fill")
+                    .frame(minWidth: 44, minHeight: 44)
+            }
+            .accessibilityLabel("Premiers pas : \(guideStep.title)")
             Label(session.state.people?.name ?? "Veilleurs", systemImage: "sailboat.fill")
                 .font(.caption.bold())
                 .lineLimit(1)
@@ -188,6 +229,41 @@ struct GameView: View {
         case .resourceFields: $selectedResourcePlot
         case .townCenter: $selectedTownPlot
         }
+    }
+
+    private var guideStep: (title: String, detail: String, kind: BuildingKind?, plot: Int?) {
+        for plot in [0, 2, 4] where session.state.resourceLevel(at: plot) == 0 {
+            return ("Lancez vos trois productions", "Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves.", nil, plot)
+        }
+        if let job = session.state.construction {
+            return ("Votre chantier avance", "Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût.", job.kind, job.plot)
+        }
+        if !session.state.hasBuilding(.academy) {
+            return ("Construisez la Maison des savoirs", "Choisissez ce bâtiment sur un lot libre du Centre.", .academy, nil)
+        }
+        if session.state.unlockedUnits.isEmpty {
+            return ("Découvrez votre première unité", "Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours.", .academy, nil)
+        }
+        if !session.state.hasBuilding(.warCourt) {
+            return ("Construisez la Cour des armes", "Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs.", .warCourt, nil)
+        }
+        if session.state.armyPower == 0 && session.state.army?.raid == nil {
+            return ("Entraînez vos premières troupes", "Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition.", .warCourt, nil)
+        }
+        return ("Explorez les factions voisines", "Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour.", nil, nil)
+    }
+
+    private func followGuide() {
+        let step = guideStep
+        showsGuide = false
+        guard step.kind != nil || step.plot != nil else { showsWorld = true; return }
+        let mode: VillageMapMode = step.kind == nil ? .resourceFields : .townCenter
+        let plot = step.plot ?? session.state.buildings.first(where: { $0.value == step.kind })?.key
+            ?? VillageMapMode.townCenter.slots.first(where: { session.state.buildings[$0] == nil }) ?? 10
+        selectVillageMap(mode)
+        if mode == .resourceFields { selectedResourcePlot = plot } else { selectedTownPlot = plot }
+        session.plot = plot
+        opensGuidedPlot = true
     }
 }
 

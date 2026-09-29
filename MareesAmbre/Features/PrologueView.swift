@@ -41,7 +41,7 @@ struct PrologueView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityHint("Commencer avec \(selected.name)")
-                    Text("Première version jouable : développez les champs, construisez votre village, entraînez vos unités et défendez vos réserves.")
+                    Text("Première version jouable : développez les champs, construisez votre village, entraînez vos unités et partez en expédition contre les factions voisines.")
                         .font(.footnote).foregroundStyle(Palette.muted)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.bottom, 18)

@@ -16,7 +16,7 @@ final class VillageSession {
 
     init() {
         isUISnapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
-        let seed = isUISnapshot ? 42 : WeeklyChallenge.seed(for: .now)
+        let seed = isUISnapshot ? 42 : storage.activeSeed()
         world = WorldMap(seed: seed)
         state = VillageState(seed: seed)
         if isUISnapshot {
@@ -40,7 +40,7 @@ final class VillageSession {
         refreshWorld()
         productionTask = Task { [weak self] in
             while !Task.isCancelled {
-                let interval: Duration = self?.state.construction == nil ? .seconds(30) : .seconds(1)
+                let interval: Duration = .seconds(1)
                 try? await Task.sleep(for: interval)
                 guard !Task.isCancelled else { return }
                 self?.refreshWorld()

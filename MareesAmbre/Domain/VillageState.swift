@@ -36,7 +36,7 @@ struct VillageState: Codable, Equatable {
     }
 
     init(seed: Int) {
-        version = 8
+        version = 9
         self.seed = seed
         resources = Resources()
         buildings = [12: .hall]
@@ -190,12 +190,12 @@ struct VillageState: Codable, Equatable {
     }
 
     @discardableResult
-    mutating func build(_ kind: BuildingKind, at plot: Int) -> Bool {
+    mutating func build(_ kind: BuildingKind, at plot: Int, now: Date = .now) -> Bool {
         guard canBuild(kind, at: plot), construction == nil else { return false }
         resources.wood -= kind.cost.wood
         resources.amber -= kind.cost.amber
         resources.provisions -= kind.cost.provisions
-        construction = ConstructionJob(plot: plot, kind: kind, startedAt: .now, duration: 60)
+        construction = ConstructionJob(plot: plot, kind: kind, startedAt: now, duration: 60)
         return true
     }
 
@@ -244,26 +244,18 @@ struct VillageState: Codable, Equatable {
 
     mutating func updateInRealTime(now: Date = .now, on world: WorldMap) -> Int {
         guard world.seed == seed else { return 0 }
-        updateConstruction(now: now)
         let prior = lastProductionAt ?? now
         let elapsed = max(0, now.timeIntervalSince(prior))
-        var remainder = productionRemainder ?? .zero
-        if elapsed > 0 {
-            let rates = production
-            let wood = remainder.wood + Double(rates.wood) * elapsed / 3600
-            let amber = remainder.amber + Double(rates.amber) * elapsed / 3600
-            let provisions = remainder.provisions + Double(rates.provisions) * elapsed / 3600
-            resources.wood = Self.adding(wood, to: resources.wood, capacity: storageCapacity)
-            resources.amber = Self.adding(amber, to: resources.amber, capacity: storageCapacity)
-            resources.provisions = Self.adding(provisions, to: resources.provisions, capacity: storageCapacity)
-            remainder.wood = wood.truncatingRemainder(dividingBy: 1)
-            remainder.amber = amber.truncatingRemainder(dividingBy: 1)
-            remainder.provisions = provisions.truncatingRemainder(dividingBy: 1)
-            lastProductionAt = now
-            productionRemainder = remainder
+        guard now >= prior else { return 0 }
+        let events = [construction?.endsAt, army?.raid?.returnsAt,
+                      army?.training?.endsAt, army?.research?.endsAt]
+            .compactMap { $0 }.filter { $0 <= now }
+        for date in Set(events.map { max(prior, $0) } + [now]).sorted() {
+            accrueProduction(until: date)
+            updateConstruction(now: date)
+            updateArmy(now: date)
         }
 
-        updateArmy(now: now)
         // Bot territory progresses on six-hour world intervals, including while the app is closed.
         let botDate = lastBotExpansionAt ?? now
         let intervals = max(0, Int(min(86_400_000, now.timeIntervalSince(botDate)) / (6 * 3600)))
@@ -288,8 +280,28 @@ struct VillageState: Codable, Equatable {
         return Int(elapsed)
     }
 
+    private mutating func accrueProduction(until now: Date) {
+        let elapsed = max(0, now.timeIntervalSince(lastProductionAt ?? now))
+        var remainder = productionRemainder ?? .zero
+        if elapsed > 0 {
+            let rates = production
+            let wood = remainder.wood + Double(rates.wood) * elapsed / 3600
+            let amber = remainder.amber + Double(rates.amber) * elapsed / 3600
+            let provisions = remainder.provisions + Double(rates.provisions) * elapsed / 3600
+            resources.wood = Self.adding(wood, to: resources.wood, capacity: storageCapacity)
+            resources.amber = Self.adding(amber, to: resources.amber, capacity: storageCapacity)
+            resources.provisions = Self.adding(provisions, to: resources.provisions, capacity: storageCapacity)
+            remainder.wood = resources.wood >= storageCapacity ? 0 : max(0, wood - floor(wood + 1e-9))
+            remainder.amber = resources.amber >= storageCapacity ? 0 : max(0, amber - floor(amber + 1e-9))
+            remainder.provisions = resources.provisions >= storageCapacity ? 0 : max(0, provisions - floor(provisions + 1e-9))
+            lastProductionAt = now
+            productionRemainder = remainder
+        }
+
+    }
+
     private static func adding(_ amount: Double, to stock: Int, capacity: Int) -> Int {
         let gain = min(Double(max(0, capacity - stock)), max(0, amount))
-        return stock + Int(gain.rounded(.down))
+        return stock + Int(floor(gain + 1e-9))
     }
 }

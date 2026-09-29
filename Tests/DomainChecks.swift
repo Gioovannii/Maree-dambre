@@ -206,14 +206,14 @@ struct DomainChecks {
             _ = freshStart.updateInRealTime(now: playTime, on: world)
         }
         precondition(playTime.timeIntervalSince(playStartedAt) < 6 * 3_600)
-        precondition(freshStart.build(.academy, at: 10))
+        precondition(freshStart.build(.academy, at: 10, now: playTime))
         playTime = playTime.addingTimeInterval(61)
         _ = freshStart.updateInRealTime(now: playTime, on: world)
         while !freshStart.canBuild(.warCourt, at: 11) {
             playTime = playTime.addingTimeInterval(60)
             _ = freshStart.updateInRealTime(now: playTime, on: world)
         }
-        precondition(freshStart.build(.warCourt, at: 11))
+        precondition(freshStart.build(.warCourt, at: 11, now: playTime))
         playTime = playTime.addingTimeInterval(61)
         _ = freshStart.updateInRealTime(now: playTime, on: world)
         while !freshStart.canResearch(.tideguard) {
@@ -238,6 +238,40 @@ struct DomainChecks {
         precondition(!occupiedSite.canMoveBuilding(from: 10, to: 16), "Moving must not overwrite a construction site")
         precondition(playTime.timeIntervalSince(playStartedAt) < 6 * 3_600,
                      "The intended first raid fits within the first faction expansion window")
+        let suite = "MareesAmbreTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        try storage.save(freshStart)
+        precondition(storage.activeSeed(now: playTime.addingTimeInterval(14 * 86400)) == seed)
+        defaults.removeObject(forKey: "village.activeSeed")
+        precondition(storage.activeSeed(now: playTime.addingTimeInterval(14 * 86400)) == seed,
+                     "Legacy villages survive a week change")
+        let loadedRaid = try storage.load(seed: seed, world: world, now: playTime)
+        precondition(loadedRaid?.army?.raid != nil)
+
+        for kind in [BuildingKind.lumbermill, .warehouse] {
+            var offline = VillageState(seed: seed)
+            offline.lastProductionAt = epoch
+            offline.lastBotExpansionAt = epoch
+            offline.resourceLevels = [0: 10, 2: 10, 4: 10]
+            offline.resources = Resources(wood: 290, amber: 290, provisions: 290)
+            offline.construction = ConstructionJob(plot: 10, kind: kind, startedAt: epoch, duration: 1800)
+            offline.army = ArmyState()
+            offline.army?.raid = RaidOrder(targetID: 0, targetName: "Test", units: [.tideguard: 10], defense: 14,
+                                          returnsAt: epoch.addingTimeInterval(900))
+            var online = offline
+            for second in stride(from: 30, through: 3600, by: 30) {
+                _ = online.updateInRealTime(now: epoch.addingTimeInterval(Double(second)), on: world)
+            }
+            _ = offline.updateInRealTime(now: epoch.addingTimeInterval(3600), on: world)
+            precondition(offline.resources == online.resources, "Offline production must match playing through each event")
+            precondition(offline.army == online.army, "Raid loot and reports use capacity at return time")
+            let settledResources = offline.resources
+            _ = offline.updateInRealTime(now: epoch.addingTimeInterval(3600), on: world)
+            precondition(offline.resources == settledResources, "Refreshing twice cannot duplicate rewards")
+        }
+        print("PASS: persistent village across weeks, legacy adoption and chronological offline events")
         print("PASS: training costs, offline completion, raid losses, loot, cooldown, save/resume and no duplicate rewards")
         print("PASS: a new village can develop, research, train and launch its first raid within six hours")
         print("PASS: 40,000 tiles, unique city buildings, resource sites, offline production and legacy migration")

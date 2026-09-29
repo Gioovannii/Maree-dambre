@@ -17,7 +17,7 @@ Les recherches, chantiers, entraînements, productions et expéditions sont enre
 - **Production** : bois, ambre et vivres s’accumulent jusqu’à la capacité de la réserve, 300 au départ et +500 par Entrepôt. Les fractions et l’heure de dernière production sont sauvegardées.
 - **Armée** : Maison des savoirs, Cour des armes, trois doctrines, entraînement et raids contre trois factions bots. Une expédition mobilise l’armée disponible. L’écran annonce les pertes prévues et la défense avant le départ.
 - **Monde** : carte fictive de 200 × 200 cases, déplacements et zoom locaux. Les factions gagnent un niveau et étendent leur territoire toutes les six heures, jusqu’au niveau 10 et 64 cases.
-- **Démarrage** : prologue, choix d’un clan, puis village généré avec une graine hebdomadaire UTC.
+- **Démarrage** : prologue, choix d’un clan, puis guide Premiers pas. La graine initiale dépend de la semaine UTC, mais le village reste le même ensuite, même au changement de semaine.
 - **Live Activity** : les chantiers affichent le temps restant dans la Dynamic Island et sur l’écran verrouillé.
 
 ## Vérifier la base

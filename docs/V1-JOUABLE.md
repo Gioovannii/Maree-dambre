@@ -15,27 +15,17 @@ simulés, pas des joueurs connectés. Firebase n'est pas nécessaire pour cette 
 
 ## À traiter avant une bêta durable
 
-1. **Conserver le village au changement de semaine.** `VillageSession` choisit encore
-   la graine de la semaine courante, et `VillageStorage` charge une sauvegarde par
-   graine. La semaine suivante ouvre donc une autre partie sans accès aux anciennes.
-   Garder un identifiant de partie active et réserver le renouvellement à une action
-   explicite du joueur.
-2. **Calculer les revenus dans l'ordre des événements.** `updateInRealTime` termine
-   le chantier avant de calculer toute la production écoulée. Un bâtiment producteur
-   terminé pendant l'absence peut produire rétroactivement. Découper le calcul à
-   l'heure de fin du chantier et vérifier les plafonds lors du retour des raids.
-3. **Vérifier les activités de construction sur appareil.** Tester fin au premier
-   plan, application suspendue, annulation puis lancement immédiat d'un chantier.
-   L'arrêt asynchrone des Live Activities mérite une vérification de concurrence.
+1. **Continuité du village corrigée.** Une partie active est conservée ; la sauvegarde ancienne la plus récemment jouée est reprise lors de la migration.
+2. **Revenus hors ligne corrigés.** Production, chantier et retour de raid sont traités dans leur ordre chronologique. Les tests comparent absence et mises à jour régulières, y compris aux plafonds.
+3. **Activités de construction : concurrence corrigée.** Un arrêt en attente ne peut plus fermer une activité créée après lui. La vérification sur appareil, application suspendue, reste à faire.
 4. **Faire une vraie partie depuis une installation neuve**, puis fermer et rouvrir
    pendant construction, recherche, entraînement et raid. Les tests automatisés
    ne remplacent pas cette validation sur iPhone ni un test sur plusieurs jours.
 
 ## Pour rendre la première partie compréhensible
 
-- Ajouter un objectif suivant visible : améliorer un champ, construire la Maison
-  des savoirs, rechercher une unité, construire la Cour des armes, mener un raid.
-- Expliquer les ressources plafonnées, les conditions de niveau 10 et les pertes.
+- Guide Premiers pas ajouté : ouverture après le choix du clan, prochaine étape et accès direct au champ ou bâtiment concerné.
+- Le guide explique les plafonds, le niveau 10, le recrutement et les pertes.
 - Définir un premier objectif de session et tester les temps d'attente avec des joueurs.
 - Aligner les textes sur les fonctions réelles : les bots n'attaquent pas le village,
   la défense et les rôles d'exploration annoncés ne constituent pas encore une boucle jouable.
