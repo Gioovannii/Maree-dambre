@@ -5,18 +5,20 @@ struct VillageBoard: View {
     @Binding var selectedPlot: Int
     let onPlotSelected: () -> Void
     let onTownSelected: () -> Void
+    var preservesMapProportions = false
     @Environment(VillageSession.self) private var session
 
     var body: some View {
         GeometryReader { viewport in
             let viewSize = viewport.size
-            let mapSize = CGSize(
+            let fittedWidth = min(viewSize.width, viewSize.height * 0.52)
+            let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.52) : CGSize(
                 width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.52) : viewSize.width,
                 height: viewSize.height
             )
 
             ZStack {
-                if viewSize.width > viewSize.height {
+                if preservesMapProportions || viewSize.width > viewSize.height {
                     Image(mode.assetName)
                         .resizable()
                         .scaledToFill()

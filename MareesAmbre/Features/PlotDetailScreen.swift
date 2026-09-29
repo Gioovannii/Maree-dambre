@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PlotDetailScreen: View {
     let mode: VillageMapMode
+    var isEmbedded = false
     @Environment(\.dismiss) private var dismiss
     @Environment(VillageSession.self) private var session
 
@@ -9,7 +10,8 @@ struct PlotDetailScreen: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    Image(mode.assetName)
+                    if !isEmbedded {
+                        Image(mode.assetName)
                         .resizable()
                         .scaledToFill()
                         .frame(height: 180)
@@ -18,9 +20,12 @@ struct PlotDetailScreen: View {
                             LinearGradient(colors: [.clear, Palette.ocean], startPoint: .top, endPoint: .bottom)
                         }
                         .accessibilityHidden(true)
+                    }
+                    if !isEmbedded {
                     ResourcesView(resources: session.state.resources,
                                   hourlyProduction: session.state.production,
                                   storageCapacity: session.state.storageCapacity)
+                    }
                     if mode == .resourceFields {
                         ResourceSitePanel()
                     } else {
@@ -38,10 +43,11 @@ struct PlotDetailScreen: View {
             .navigationTitle(mode == .resourceFields ? "Amélioration" : "Votre parcelle")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                if !isEmbedded { ToolbarItem(placement: .topBarTrailing) {
                     Button("Fermer", systemImage: "xmark") { dismiss() }
                         .labelStyle(.iconOnly)
                         .tint(Palette.paper)
+                }
                 }
             }
         }

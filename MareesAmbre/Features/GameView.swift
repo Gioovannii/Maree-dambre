@@ -13,9 +13,11 @@ struct GameView: View {
     @State private var opensGuidedPlot = false
 
     var body: some View {
-        Group {
+        GeometryReader { viewport in
             if session.state.people == nil {
                 PrologueView(onChoose: session.choosePeople)
+            } else if viewport.size.width >= 700 && viewport.size.height >= 600 {
+                tabletScreen
             } else if showsWorld {
                 worldScreen
             } else {
@@ -56,6 +58,57 @@ struct GameView: View {
                     Button("Fermer") { showsGuide = false }
                 } }
             }
+        }
+    }
+
+    private var tabletScreen: some View {
+        HStack(spacing: 0) {
+            Group {
+                if showsWorld {
+                    ScrollView {
+                        WorldPanel()
+                            .padding(20)
+                    }
+                } else {
+                    VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                                 onPlotSelected: {},
+                                 onTownSelected: { selectVillageMap(.townCenter) },
+                                 preservesMapProportions: true)
+                        .id(villageMap)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .clipped()
+
+            VStack(spacing: 12) {
+                topControls.padding(.horizontal, 12)
+                navigation.padding(.horizontal, 12)
+                constructionStatus.padding(.horizontal, 12)
+                if showsWorld {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Votre prochaine étape").font(.title2.bold())
+                            Text(guideStep.title).font(.headline)
+                            Text(guideStep.detail)
+                            Button("Ouvrir le guide") { showsGuide = true }
+                            Text("Touchez une faction sur la carte pour consulter sa défense et préparer une expédition.")
+                            WorldClockStatus()
+                        }
+                        .padding(20)
+                    }
+                } else {
+                    PlotDetailScreen(mode: villageMap, isEmbedded: true)
+                        .id(villageMap)
+                }
+            }
+            .padding(.top, 12)
+            .frame(width: 350)
+            .background(Palette.ocean)
+        }
+        .background(Palette.ocean.ignoresSafeArea())
+        .foregroundStyle(Palette.paper)
+        .onAppear {
+            session.plot = villageMap == .resourceFields ? selectedResourcePlot : selectedTownPlot
         }
     }
 
@@ -180,7 +233,7 @@ struct GameView: View {
                 .background(Palette.panel, in: .capsule)
         }
         .foregroundStyle(Palette.paper)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
     }
 
     private var navigation: some View {

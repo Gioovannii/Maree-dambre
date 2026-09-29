@@ -22,6 +22,12 @@ Les recherches, chantiers, entraînements, productions et expéditions sont enre
 
 ## Vérifier la base
 
+Sur iPad, les fenêtres d’au moins 700 × 600 points affichent la carte et les détails
+côte à côte. Les parcelles se sélectionnent sans quitter la carte. La carte garde
+ses proportions ; les fenêtres plus étroites utilisent la présentation compacte.
+Contrôler Ressources, Centre, recherche, recrutement et Monde en portrait et paysage,
+puis en fenêtre réduite, avant de publier une version iPad.
+
 Lancer `sh Scripts/check-domain.sh` pour les règles de ressources, constructions, migration des sauvegardes, entraînement, raids, pertes, butin et reprise hors ligne.
 
 Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les quatre captures iPhone aux références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`.
