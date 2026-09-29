@@ -11,6 +11,29 @@ struct VillageState: Codable, Equatable {
     var lastProductionAt: Date?
     var productionRemainder: ProductionRemainder?
     var lastBotExpansionAt: Date?
+    var construction: ConstructionJob?
+    var army: ArmyState?
+
+    private enum CodingKeys: String, CodingKey {
+        case version, seed, resources, buildings, resourceLevels, bots, people
+        case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        version = try values.decode(Int.self, forKey: .version)
+        seed = try values.decode(Int.self, forKey: .seed)
+        resources = try values.decode(Resources.self, forKey: .resources)
+        buildings = try values.decode([Int: BuildingKind].self, forKey: .buildings)
+        resourceLevels = try values.decodeIfPresent([Int: Int].self, forKey: .resourceLevels)
+        bots = try values.decode([BotFaction].self, forKey: .bots)
+        people = try values.decodeIfPresent(People.self, forKey: .people)
+        lastProductionAt = try values.decodeIfPresent(Date.self, forKey: .lastProductionAt)
+        productionRemainder = try values.decodeIfPresent(ProductionRemainder.self, forKey: .productionRemainder)
+        lastBotExpansionAt = try values.decodeIfPresent(Date.self, forKey: .lastBotExpansionAt)
+        construction = try values.decodeIfPresent(ConstructionJob.self, forKey: .construction)
+        army = try values.decodeIfPresent(ArmyState.self, forKey: .army)
+    }
 
     init(seed: Int) {
         version = 8
@@ -23,6 +46,7 @@ struct VillageState: Codable, Equatable {
         lastProductionAt = .now
         productionRemainder = .zero
         lastBotExpansionAt = .now
+        construction = nil
     }
 
     mutating func migrateIfNeeded(now: Date = .now) {
@@ -33,7 +57,7 @@ struct VillageState: Codable, Equatable {
                 case .lumbermill: .woodland
                 case .farm: .cropland
                 case .amberWorks: .amberVein
-                case .hall, .watchtower, .warehouse: nil
+                case .hall, .watchtower, .warehouse, .warCourt, .academy: nil
                 }
                 guard let siteKind else { continue }
                 let candidates = VillageMapMode.resourceFields.slots.filter { ResourceSiteKind.at($0) == siteKind }
@@ -87,6 +111,7 @@ struct VillageState: Codable, Equatable {
             }
             version = 8
         }
+        if version < 9 { version = 9 }
     }
 
     static func ground(at plot: Int) -> Terrain {
@@ -100,11 +125,19 @@ struct VillageState: Codable, Equatable {
 
     func canBuild(_ kind: BuildingKind, at plot: Int) -> Bool {
         Self.canPlace(kind, at: plot) && buildings[plot] == nil && !hasBuilding(kind)
+            && construction == nil && meetsProductionRequirement(kind)
             && resources.wood >= kind.cost.wood && resources.amber >= kind.cost.amber
             && resources.provisions >= kind.cost.provisions
     }
 
     func hasBuilding(_ kind: BuildingKind) -> Bool { buildings.values.contains(kind) }
+
+    func meetsProductionRequirement(_ kind: BuildingKind) -> Bool {
+        guard let site = kind.requiredResourceSite else { return true }
+        return VillageMapMode.resourceFields.slots.contains {
+            ResourceSiteKind.at($0) == site && resourceLevel(at: $0) >= 10
+        }
+    }
 
     static func canPlace(_ kind: BuildingKind, at plot: Int) -> Bool {
         guard kind != .hall, kind.area.contains(plot), (0..<25).contains(plot) else { return false }
@@ -114,6 +147,7 @@ struct VillageState: Codable, Equatable {
     func canMoveBuilding(from source: Int, to destination: Int) -> Bool {
         guard let kind = buildings[source], kind != .hall,
               buildings[destination] == nil,
+              construction?.plot != destination,
               Self.canPlace(kind, at: destination) else { return false }
         return true
     }
@@ -135,7 +169,7 @@ struct VillageState: Codable, Equatable {
     func canDevelopResource(at plot: Int) -> Bool {
         guard let kind = ResourceSiteKind.at(plot) else { return false }
         let nextLevel = resourceLevel(at: plot) + 1
-        guard nextLevel <= 3 else { return false }
+        guard nextLevel <= ResourceSiteKind.maximumLevel else { return false }
         let cost = kind.cost(for: nextLevel)
         return resources.wood >= cost.wood && resources.amber >= cost.amber
             && resources.provisions >= cost.provisions
@@ -157,17 +191,34 @@ struct VillageState: Codable, Equatable {
 
     @discardableResult
     mutating func build(_ kind: BuildingKind, at plot: Int) -> Bool {
-        guard canBuild(kind, at: plot) else { return false }
+        guard canBuild(kind, at: plot), construction == nil else { return false }
         resources.wood -= kind.cost.wood
         resources.amber -= kind.cost.amber
         resources.provisions -= kind.cost.provisions
-        buildings[plot] = kind
+        construction = ConstructionJob(plot: plot, kind: kind, startedAt: .now, duration: 60)
         return true
+    }
+
+    mutating func updateConstruction(now: Date = .now) {
+        guard let job = construction, now >= job.endsAt else { return }
+        buildings[job.plot] = job.kind
+        construction = nil
+    }
+
+    mutating func cancelConstruction(now: Date = .now) -> ConstructionJob? {
+        updateConstruction(now: now)
+        guard let job = construction else { return nil }
+        construction = nil
+        resources.wood = min(999_999, resources.wood + job.kind.cost.wood / 2)
+        resources.amber = min(999_999, resources.amber + job.kind.cost.amber / 2)
+        resources.provisions = min(999_999, resources.provisions + job.kind.cost.provisions / 2)
+        return job
     }
 
     var production: Resources {
         var total = Resources(wood: 0, amber: 0, provisions: 0)
         for building in buildings.values {
+            guard version < 7 || meetsProductionRequirement(building) else { continue }
             total.wood += building.yield.wood
             total.amber += building.yield.amber
             total.provisions += building.yield.provisions
@@ -193,6 +244,7 @@ struct VillageState: Codable, Equatable {
 
     mutating func updateInRealTime(now: Date = .now, on world: WorldMap) -> Int {
         guard world.seed == seed else { return 0 }
+        updateConstruction(now: now)
         let prior = lastProductionAt ?? now
         let elapsed = max(0, now.timeIntervalSince(prior))
         var remainder = productionRemainder ?? .zero
@@ -211,6 +263,7 @@ struct VillageState: Codable, Equatable {
             productionRemainder = remainder
         }
 
+        updateArmy(now: now)
         // Bot territory progresses on six-hour world intervals, including while the app is closed.
         let botDate = lastBotExpansionAt ?? now
         let intervals = max(0, Int(min(86_400_000, now.timeIntervalSince(botDate)) / (6 * 3600)))

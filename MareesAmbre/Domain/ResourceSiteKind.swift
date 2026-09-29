@@ -1,5 +1,6 @@
 enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
     case woodland, cropland, amberVein
+    static let maximumLevel = 10
 
     var id: Self { self }
 
@@ -47,9 +48,9 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
 
     func cost(for nextLevel: Int) -> Resources {
         switch self {
-        case .woodland: Resources(wood: 25 * nextLevel, amber: 5 * nextLevel, provisions: 10 * nextLevel)
-        case .cropland: Resources(wood: 20 * nextLevel, amber: 0, provisions: 5 * nextLevel)
-        case .amberVein: Resources(wood: 35 * nextLevel, amber: 10 * nextLevel, provisions: 15 * nextLevel)
+        case .woodland: Resources(wood: 5 * nextLevel, amber: 0, provisions: nextLevel / 3)
+        case .cropland: Resources(wood: 4 * nextLevel, amber: 0, provisions: 2 * nextLevel)
+        case .amberVein: Resources(wood: 7 * nextLevel, amber: 2 * nextLevel, provisions: 3 * nextLevel)
         }
     }
 }

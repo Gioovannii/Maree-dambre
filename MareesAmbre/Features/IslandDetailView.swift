@@ -26,7 +26,7 @@ struct IslandDetailView: View {
                     Label("Port au maximum du prototype", systemImage: "checkmark.seal.fill")
                 }
             } else {
-                Text("Une terre encore libre, au-delà de votre port. L’exploration et la conquête ne sont pas encore jouables dans ce prototype.")
+                Text("Une terre encore libre, au-delà de votre port. Les expéditions sur la carte seront ajoutées dans une prochaine version.")
                     .foregroundStyle(Palette.muted)
             }
             Text(session.message).font(.footnote).foregroundStyle(Palette.muted)

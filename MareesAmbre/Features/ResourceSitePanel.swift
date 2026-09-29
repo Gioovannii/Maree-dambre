@@ -21,7 +21,7 @@ struct ResourceSitePanel: View {
                         .font(.caption.bold()).foregroundStyle(Palette.muted)
                 }
 
-                Label("Niveau \(level) sur 3", systemImage: kind.symbol)
+                Label("Niveau \(level) sur \(ResourceSiteKind.maximumLevel)", systemImage: kind.symbol)
                     .font(.headline)
                     .foregroundStyle(Palette.paper)
 
@@ -33,7 +33,9 @@ struct ResourceSitePanel: View {
                     .font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
 
-                if level < 3 {
+                Text("Un seul terrain de ce type au niveau 10 débloque son bâtiment de production au Centre.")
+                    .font(.footnote).foregroundStyle(Palette.amber)
+                if level < ResourceSiteKind.maximumLevel {
                     let nextLevel = level + 1
                     let cost = kind.cost(for: nextLevel)
                     VStack(alignment: .leading, spacing: 8) {

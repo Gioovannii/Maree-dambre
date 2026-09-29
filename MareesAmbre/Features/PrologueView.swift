@@ -41,7 +41,7 @@ struct PrologueView: View {
                     }
                     .buttonStyle(.plain)
                     .accessibilityHint("Commencer avec \(selected.name)")
-                    Text("Prototype en cours de création : les bonus de production et de garde fonctionnent déjà. Les combats et les troupes viendront plus tard.")
+                    Text("Première version jouable : développez les champs, construisez votre village, entraînez vos unités et défendez vos réserves.")
                         .font(.footnote).foregroundStyle(Palette.muted)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.bottom, 18)
@@ -118,4 +118,3 @@ struct PrologueView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
-

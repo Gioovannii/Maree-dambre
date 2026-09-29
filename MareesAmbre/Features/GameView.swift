@@ -31,14 +31,14 @@ struct GameView: View {
                              onPlotSelected: { showsVillageDetails = true },
                              onTownSelected: { selectVillageMap(.townCenter) })
                 .id(villageMap)
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                .ignoresSafeArea()
 
                 VStack(spacing: 8) {
                     topControls
                         .frame(maxWidth: 560)
-                    Spacer(minLength: 4)
-                    selectedSettlementAction
+                    constructionStatus
                         .frame(maxWidth: 560)
+                    Spacer(minLength: 4)
                     navigation
                         .frame(maxWidth: 560)
                 }
@@ -58,45 +58,37 @@ struct GameView: View {
         }
     }
 
-    private var selectedSettlementAction: some View {
-        let building = session.state.buildings[session.plot]
-        let site = villageMap == .resourceFields ? ResourceSiteKind.at(session.plot) : nil
-        let level = session.state.resourceLevel(at: session.plot)
-        let canConstructHere = villageMap == .townCenter && VillageMapMode.townCenter.contains(session.plot)
-            && BuildingKind.constructible(in: .townCenter).contains {
-                $0.suits(VillageState.ground(at: session.plot)) && !session.state.hasBuilding($0)
+    private var constructionStatus: some View {
+        Group {
+            if let job = session.state.construction {
+                TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                    let remaining = max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date))))
+                    HStack(spacing: 9) {
+                        Image(systemName: "hammer.fill")
+                            .foregroundStyle(Palette.ocean)
+                            .frame(width: 28, height: 28)
+                            .background(Palette.amber, in: Circle())
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("CHANTIER · \(job.kind.name.uppercased())")
+                                .font(.caption2.bold()).tracking(1.2)
+                            Text(remaining > 0 ? "Termine dans \(remaining) s" : "Achèvement en cours")
+                                .font(.caption.bold()).foregroundStyle(Palette.amber)
+                        }
+                        Spacer()
+                        ProgressView(value: job.progress(at: timeline.date))
+                            .tint(Palette.amber)
+                            .frame(width: 72)
+                    }
+                    .foregroundStyle(Palette.paper)
+                    .padding(.horizontal, 12)
+                    .frame(minHeight: 45)
+                    .background(.ultraThinMaterial, in: .capsule)
+                    .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.45), lineWidth: 1) }
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Chantier de \(job.kind.name), \(remaining) secondes restantes")
+                }
             }
-        let title = site.map { level == 0 ? "Développer : \($0.name)" : "\($0.name) · niveau \(level)" }
-            ?? building?.name ?? (canConstructHere ? "Construire ici" : "Emplacement libre")
-        let symbol = site?.symbol ?? building?.symbol ?? "hammer.fill"
-
-        return Button {
-            showsVillageDetails = true
-        } label: {
-            HStack(spacing: 10) {
-                Image(systemName: symbol)
-                    .font(.subheadline.bold())
-                    .foregroundStyle(Palette.ocean)
-                    .frame(width: 32, height: 32)
-                    .background(Palette.amber, in: Circle())
-                Text(title)
-                    .font(.subheadline.bold())
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                Spacer(minLength: 4)
-                Image(systemName: "chevron.up")
-                    .font(.caption.bold())
-                    .foregroundStyle(Palette.amber)
-            }
-            .foregroundStyle(Palette.paper)
-            .padding(.horizontal, 12)
-            .frame(maxWidth: .infinity, minHeight: 48)
-            .background(Palette.panel.opacity(0.94), in: .capsule)
-            .overlay { Capsule().strokeBorder(.white.opacity(0.1), lineWidth: 1) }
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Détails de \(title)")
-        .accessibilityHint("Ouvrir les informations de la zone et ses actions")
     }
 
     private var worldScreen: some View {

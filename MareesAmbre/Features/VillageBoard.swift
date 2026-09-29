@@ -65,11 +65,6 @@ struct VillageBoard: View {
             }
             .frame(width: viewSize.width, height: viewSize.height)
             .clipped()
-            .clipShape(.rect(cornerRadius: 24))
-            .overlay {
-                RoundedRectangle(cornerRadius: 24)
-                    .strokeBorder(.white.opacity(0.15), lineWidth: 1)
-            }
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Carte entière du district : \(mode.title).")
@@ -77,6 +72,8 @@ struct VillageBoard: View {
 
     private func plotButton(_ plot: Int, mapWidth: CGFloat) -> some View {
         let building = session.state.buildings[plot]
+        let construction = session.state.construction?.plot == plot ? session.state.construction : nil
+        let constructionProgress = construction?.progress(at: Date()) ?? 0
         let selected = session.plot == plot
         let terrain = VillageState.ground(at: plot)
         let site = mode == .resourceFields ? ResourceSiteKind.at(plot) : nil
@@ -93,6 +90,14 @@ struct VillageBoard: View {
         let canReceiveMovingBuilding = session.moveSourcePlot.map {
             building == nil && session.state.canMoveBuilding(from: $0, to: plot)
         } ?? false
+        let plotAccessibilityLabel: String
+        if let site {
+            plotAccessibilityLabel = "Zone \(mode.slotNumber(for: plot) ?? 0), \(site.name), niveau \(siteLevel)"
+        } else if let construction {
+            plotAccessibilityLabel = "Chantier de \(construction.kind.name), \(Int(constructionProgress * 100)) pour cent terminé"
+        } else {
+            plotAccessibilityLabel = "Emplacement \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible" : "")"
+        }
 
         return Button {
             let isMoving = session.moveSourcePlot != nil
@@ -111,6 +116,19 @@ struct VillageBoard: View {
                         }
                         .shadow(color: selected ? Palette.amber.opacity(0.6) : .clear, radius: 6)
                         .accessibilityHidden(true)
+                } else if let construction {
+                    TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                        ConstructionSiteArt(kind: construction.kind, progress: construction.progress(at: timeline.date))
+                            .frame(width: size, height: size)
+                            .overlay(alignment: .bottom) {
+                                Text(timerInterval: min(timeline.date, construction.endsAt)...construction.endsAt, countsDown: true)
+                                    .font(.caption2.bold()).monospacedDigit()
+                                    .foregroundStyle(Palette.paper)
+                                    .padding(.horizontal, 6).padding(.vertical, 3)
+                                    .background(Palette.ocean, in: .capsule)
+                                    .fixedSize()
+                            }
+                    }
                 } else if let building, building != .hall {
                     Ellipse()
                         .fill(.black.opacity(0.20))
@@ -168,8 +186,7 @@ struct VillageBoard: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(site.map { "Zone \(mode.slotNumber(for: plot) ?? 0), \($0.name), niveau \(siteLevel)" }
-            ?? "Emplacement \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible" : "")")
+        .accessibilityLabel(plotAccessibilityLabel)
         .accessibilityValue(selected ? "Sélectionné" : "")
         .accessibilityHint(session.moveSourcePlot == nil
             ? (site == nil ? "Afficher les détails ou construire sur cet emplacement" : "Afficher la production et améliorer cette zone")

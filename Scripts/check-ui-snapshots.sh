@@ -26,7 +26,9 @@ DEVELOPER_DIR="$developer_dir" "$developer_dir/usr/bin/xcodebuild" \
     }
 
 simctl() { DEVELOPER_DIR="$developer_dir" /usr/bin/xcrun simctl "$@"; }
-simctl install "$simulator_id" "$build_dir/Build/Products/Debug-iphonesimulator/MareesAmbre.app"
+app_path="$build_dir/Build/Products/Debug-iphonesimulator/MareesAmbre.app"
+bundle_id=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app_path/Info.plist")
+simctl install "$simulator_id" "$app_path"
 simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi \
     --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 \
     --batteryState charged --batteryLevel 100
@@ -37,15 +39,15 @@ DEVELOPER_DIR="$developer_dir" /usr/bin/xcrun swiftc -O \
     "$project_root/Scripts/compare-snapshot.swift" -o "$output_dir/compare-snapshot"
 
 for district in resources centre upgrade world; do
-    simctl terminate "$simulator_id" com.prototype.mareesambre >/dev/null 2>&1 || true
+    simctl terminate "$simulator_id" "$bundle_id" >/dev/null 2>&1 || true
     if [[ "$district" == centre ]]; then
-        simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot --snapshot-center >/dev/null
+        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot --snapshot-center >/dev/null
     elif [[ "$district" == upgrade ]]; then
-        simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot --snapshot-upgrade >/dev/null
+        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot --snapshot-upgrade >/dev/null
     elif [[ "$district" == world ]]; then
-        simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot --snapshot-world >/dev/null
+        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot --snapshot-world >/dev/null
     else
-        simctl launch "$simulator_id" com.prototype.mareesambre --ui-snapshot >/dev/null
+        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot >/dev/null
     fi
     sleep 3
     simctl io "$simulator_id" screenshot "$output_dir/$district.png" >/dev/null 2>&1

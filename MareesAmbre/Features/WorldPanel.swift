@@ -7,6 +7,7 @@ struct WorldPanel: View {
             Text("La mer des Échos").font(.title.bold()).fontDesign(.serif)
             Text("Suivez les courants. Retrouvez les autres rivages.").font(.subheadline).foregroundStyle(Palette.muted)
             WorldCanvas()
+            ArmyPanel()
             VStack(alignment: .leading, spacing: 8) {
                 Text("Case \(session.selectedTile.x), \(session.selectedTile.y)").font(.headline)
                 Text(session.world.terrain(at: session.selectedTile).name)
@@ -15,7 +16,7 @@ struct WorldPanel: View {
                 } else if let owner = session.state.bots.first(where: { $0.territory.contains(session.selectedTile) }) {
                     Text("Territoire de \(owner.name) · Niveau \(owner.level)")
                 } else {
-                    Text("Zone libre. Déplacements d’unités et conquête à venir.").foregroundStyle(Palette.muted)
+                    Text("Zone libre. Les expéditions ciblent les factions voisines.").foregroundStyle(Palette.muted)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading).padding(16)
@@ -37,7 +38,7 @@ struct WorldPanel: View {
                 }
                 .buttonStyle(.plain).foregroundStyle(Palette.paper)
             }
-            Text("Les autres peuples étendent leur territoire toutes les six heures, jusqu’à 64 lieux chacun. Votre village reste protégé. Les expéditions et les combats arriveront plus tard.")
+            Text("Les autres peuples étendent leur territoire toutes les six heures, jusqu’à 64 lieux chacun. Votre village reste protégé.")
                 .font(.footnote).foregroundStyle(Palette.muted)
         }
         .padding(.vertical, 12)

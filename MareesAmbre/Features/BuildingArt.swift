@@ -52,6 +52,14 @@ struct BuildingArt: View {
                 drawWatchtower(polygon, context: context, size: size)
             case .warehouse:
                 drawWarehouse(polygon, context: context, size: size)
+            case .warCourt, .academy:
+                if kind == .warCourt {
+                    drawWarehouse(polygon, context: context, size: size)
+                } else {
+                    drawHall(polygon, context: context, size: size)
+                }
+                context.draw(Text(Image(systemName: kind.symbol)).font(.system(size: w * 0.22)).foregroundStyle(Palette.amber),
+                             at: CGPoint(x: w * 0.5, y: h * 0.57))
             }
         }
         .accessibilityHidden(true)

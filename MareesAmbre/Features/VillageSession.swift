@@ -27,6 +27,9 @@ final class VillageSession {
                 13: .farm, 15: .amberWorks, 16: .warehouse
             ]
             state.resourceLevels = [0: 1, 1: 0, 2: 1, 3: 1, 4: 0, 5: 1, 6: 1, 7: 0, 8: 0, 9: 0]
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-construction") {
+                state.construction = ConstructionJob(plot: 14, kind: .academy, startedAt: .now.addingTimeInterval(-30), duration: 60)
+            }
             return
         }
         do {
@@ -37,7 +40,8 @@ final class VillageSession {
         refreshWorld()
         productionTask = Task { [weak self] in
             while !Task.isCancelled {
-                try? await Task.sleep(for: .seconds(30))
+                let interval: Duration = self?.state.construction == nil ? .seconds(30) : .seconds(1)
+                try? await Task.sleep(for: interval)
                 guard !Task.isCancelled else { return }
                 self?.refreshWorld()
             }
@@ -50,6 +54,24 @@ final class VillageSession {
         persist("\(people.name) veille désormais sur Port d’Ambre.")
     }
 
+    func train(_ unit: ArmyUnit, count: Int) {
+        refreshWorld()
+        guard state.train(unit, count: count) else { return }
+        persist("Entraînement de \(count) unité(s) lancé.")
+    }
+
+    func research(_ unit: ArmyUnit) {
+        refreshWorld()
+        guard state.research(unit) else { return }
+        persist("Recherche lancée : \(unit.name). Fin dans une minute.")
+    }
+
+    func raid(_ targetID: Int) {
+        refreshWorld()
+        guard state.raid(targetID: targetID) else { return }
+        persist("Expédition partie. Retour dans deux minutes.")
+    }
+
     func developSelectedResource() {
         refreshWorld()
         guard state.developResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return }
@@ -59,7 +81,20 @@ final class VillageSession {
     func build(_ kind: BuildingKind) {
         refreshWorld()
         guard state.build(kind, at: plot) else { return }
-        persist("\(kind.name) construite. La production commence maintenant.")
+        if let job = state.construction { ConstructionActivityController.start(for: job) }
+        persist("\(kind.name) : chantier lancé. Fin dans une minute.")
+    }
+
+    func cancelConstruction() {
+        refreshWorld()
+        guard let job = state.cancelConstruction() else { return }
+        ConstructionActivityController.end()
+        persist("Chantier annulé. La moitié des ressources a été récupérée.")
+        _ = job
+    }
+
+    func constructionProgress(at date: Date = .now) -> Double? {
+        state.construction?.progress(at: date)
     }
 
     func beginMovingSelectedBuilding() {
@@ -90,8 +125,17 @@ final class VillageSession {
 
     func refreshWorld() {
         guard !isUISnapshot else { return }
+        let previous = state
         let seconds = state.updateInRealTime(on: world)
-        guard seconds > 0 else { return }
+        if let finished = previous.construction,
+           state.construction == nil,
+           state.buildings[finished.plot] == finished.kind {
+            message = "\(finished.kind.name) terminé. Le bâtiment est prêt."
+            ConstructionActivityController.end()
+        } else if state.construction == nil {
+            ConstructionActivityController.end()
+        }
+        guard seconds > 0 || state != previous else { return }
         save()
     }
 
