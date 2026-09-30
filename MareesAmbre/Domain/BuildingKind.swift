@@ -59,7 +59,8 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .amberWorks: "AtelierAmbre"
         case .watchtower: "TourDeGarde"
         case .warehouse: "Entrepot"
-        case .warCourt, .academy: nil
+        case .warCourt: "CourArmes"
+        case .academy: "MaisonSavoirs"
         }
     }
 

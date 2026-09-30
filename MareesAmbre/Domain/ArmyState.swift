@@ -32,23 +32,28 @@ struct ArmyState: Codable, Equatable {
 extension ArmyUnit {
     var researchCost: Resources {
         switch self {
-        case .tideguard: Resources(wood: 5, amber: 5, provisions: 5)
-        case .reedrunner: Resources(wood: 10, amber: 8, provisions: 10)
-        case .amberSentry: Resources(wood: 15, amber: 15, provisions: 15)
+        case .tideguard, .pillager: Resources(wood: 5, amber: 5, provisions: 5)
+        case .reedrunner, .marshArcher: Resources(wood: 10, amber: 8, provisions: 10)
+        case .amberSentry, .tideMage: Resources(wood: 15, amber: 15, provisions: 15)
         }
     }
     var cost: Resources {
         switch self {
-        case .tideguard: Resources(wood: 8, amber: 0, provisions: 10)
-        case .reedrunner: Resources(wood: 5, amber: 0, provisions: 8)
-        case .amberSentry: Resources(wood: 6, amber: 3, provisions: 10)
+        case .tideguard, .pillager: Resources(wood: 8, amber: 0, provisions: 10)
+        case .reedrunner, .marshArcher: Resources(wood: 5, amber: 0, provisions: 8)
+        case .amberSentry, .tideMage: Resources(wood: 6, amber: 3, provisions: 10)
         }
     }
-    var attack: Int { switch self { case .tideguard: 8; case .reedrunner: 5; case .amberSentry: 12 } }
-    var carrying: Int { switch self { case .tideguard: 15; case .reedrunner: 25; case .amberSentry: 12 } }
+    var attack: Int { switch self { case .tideguard: 8; case .reedrunner: 5; case .amberSentry: 12; case .pillager: 6; case .tideMage: 4; case .marshArcher: 10 } }
+    var carrying: Int { switch self { case .tideguard: 15; case .reedrunner: 25; case .amberSentry: 12; case .pillager: 30; case .tideMage: 8; case .marshArcher: 12 } }
 }
 
 extension VillageState {
+    var peopleUnits: [ArmyUnit] { ArmyUnit.allCases.filter { $0.people == (people ?? .sauniers) } }
+    var trainableUnits: [ArmyUnit] { ArmyUnit.allCases.filter { peopleUnits.contains($0) || unlockedUnits.contains($0) } }
+    var raidDuration: TimeInterval { people == .roseaux ? 90 : 120 }
+    var victoryLossRate: Double { availableArmy[.tideMage, default: 0] > 0 ? 0.15 : 0.2 }
+
     var unlockedUnits: Set<ArmyUnit> {
         if let unlocked = army?.unlockedUnits { return unlocked }
         // Preserve access to units already recruited in the previous prototype.
@@ -59,7 +64,7 @@ extension VillageState {
     }
 
     func canResearch(_ unit: ArmyUnit) -> Bool {
-        hasBuilding(.academy) && army?.research == nil && !unlockedUnits.contains(unit)
+        peopleUnits.contains(unit) && hasBuilding(.academy) && army?.research == nil && !unlockedUnits.contains(unit)
             && resources.wood >= unit.researchCost.wood && resources.amber >= unit.researchCost.amber
             && resources.provisions >= unit.researchCost.provisions
     }
@@ -112,9 +117,9 @@ extension VillageState {
         guard let bot = bots.first(where: { $0.id == targetID }), canRaid(bot, now: now) else { return false }
         var troops = army ?? ArmyState()
         troops.raid = RaidOrder(targetID: bot.id, targetName: bot.name, units: troops.units,
-                               defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(120))
+                               defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(raidDuration))
         troops.units = [:]
-        troops.raidedUntil[bot.id] = now.addingTimeInterval(720)
+        troops.raidedUntil[bot.id] = now.addingTimeInterval(raidDuration + 600)
         army = troops
         return true
     }
@@ -136,12 +141,13 @@ extension VillageState {
             var losses = 0
             var capacity = 0
             for (unit, count) in raid.units {
-                let lost = won ? min(count, max(0, Int(Double(count) * 0.2))) : (count + 1) / 2
+                let lost = won ? min(count, max(0, Int(Double(count) * (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)))) : (count + 1) / 2
                 losses += lost
                 troops.units[unit, default: 0] += count - lost
                 capacity += (count - lost) * unit.carrying
             }
-            let share = won ? min(60, capacity / 3) : 0
+            let transport = people == .sauniers ? capacity * 120 / 100 : capacity
+            let share = won ? min(60, transport / 3) : 0
             let wood = min(share, max(0, storageCapacity - resources.wood))
             let amber = min(share, max(0, storageCapacity - resources.amber))
             let provisions = min(share, max(0, storageCapacity - resources.provisions))

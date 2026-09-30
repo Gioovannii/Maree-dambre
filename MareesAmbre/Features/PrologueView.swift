@@ -73,7 +73,7 @@ struct PrologueView: View {
         VStack(alignment: .leading, spacing: 12) {
             Label("LA MÉMOIRE DES MARÉES", systemImage: "sparkles")
                 .font(.caption.bold()).tracking(1.3).foregroundStyle(Palette.amber)
-            Text("Bien avant les royaumes, l’archipel n’était qu’une étendue de brume et d’écueils. Puis la mer se retira, révélant dans ses profondeurs une matière inconnue : l’ambre des marées, une pierre chaude et dorée qui semblait retenir la lumière du jour.\n\nLes premiers habitants bâtirent leurs maisons sur les hauteurs et leurs ports au creux des anses. Ils apprirent à lire les courants, à cultiver les terres salées et à tailler l’ambre pour guider les navires dans la nuit. Pendant des générations, les îles prospérèrent.\n\nMais l’archipel n’est jamais immobile. Les courants changent, de nouvelles terres émergent, et d’anciennes routes disparaissent sous les flots. Chaque marée apporte son lot de découvertes — et réveille des rivalités oubliées.\n\nTu arrives à Port d’Ambre au moment où les cartes cessent d’être fiables. Quelques bâtiments, des réserves modestes et un port à reconstruire : c’est peu, mais c’est un début. Autour de toi, les Sauniers défendent leurs lagunes, la Garde de Nacre veille sur les passes maritimes et le Pacte des Roseaux étend ses villages le long des chenaux.\n\nAucun de ces peuples ne peut dominer seul les marées. Il faudra développer ton village, protéger ses habitants et envoyer des expéditions au-delà des récifs. Ici, une absence ne condamne pas une cité : les gardes tiennent leur poste, les ateliers poursuivent leur ouvrage, et les réserves grandissent au rythme du monde.\n\nCar l’archipel garde la mémoire de chaque marée. Et peut-être, dans ses îles les plus anciennes, l’ambre révèle-t-il pourquoi la mer se retire.")
+            Text("Bien avant les royaumes, l’archipel n’était qu’une étendue de brume et d’écueils. Puis la mer se retira, révélant dans ses profondeurs une matière inconnue : l’ambre des marées, une pierre chaude et dorée qui semblait retenir la lumière du jour.\n\nLes premiers habitants bâtirent leurs maisons sur les hauteurs et leurs ports au creux des anses. Ils apprirent à lire les courants, à cultiver les terres salées et à tailler l’ambre pour guider les navires dans la nuit. Pendant des générations, les îles prospérèrent.\n\nMais l’archipel n’est jamais immobile. Les courants changent, de nouvelles terres émergent, et d’anciennes routes disparaissent sous les flots. Chaque marée apporte son lot de découvertes — et réveille des rivalités oubliées.\n\nTu arrives à Port d’Ambre au moment où les cartes cessent d’être fiables. Quelques bâtiments, des réserves modestes et un port à reconstruire : c’est peu, mais c’est un début. Autour de toi, les Humains défendent leurs ports, le Peuple des récifs veille sur les passes maritimes et les Elfes des marais étendent leurs villages le long des chenaux.\n\nAucun de ces peuples ne peut dominer seul les marées. Il faudra développer ton village, protéger ses habitants et envoyer des expéditions au-delà des récifs. Ici, une absence ne condamne pas une cité : les gardes tiennent leur poste, les ateliers poursuivent leur ouvrage, et les réserves grandissent au rythme du monde.\n\nCar l’archipel garde la mémoire de chaque marée. Et peut-être, dans ses îles les plus anciennes, l’ambre révèle-t-il pourquoi la mer se retire.")
                 .font(.body).foregroundStyle(Palette.paper.opacity(0.9))
                 .lineSpacing(4).fixedSize(horizontal: false, vertical: true)
         }
@@ -95,6 +95,19 @@ struct PrologueView: View {
                     Text(people.name).font(.headline).foregroundStyle(Palette.paper)
                     Spacer()
                     if isSelected { Image(systemName: "checkmark.circle.fill").foregroundStyle(Palette.amber) }
+                }
+                HStack(alignment: .top, spacing: 10) {
+                    ForEach(ArmyUnit.allCases.filter { $0.people == people }) { unit in
+                        VStack(spacing: 5) {
+                            Image(unit.imageAssetName)
+                                .resizable().scaledToFit()
+                                .frame(maxHeight: 150)
+                                .clipShape(.rect(cornerRadius: 12))
+                                .accessibilityHidden(true)
+                            Text(unit.name).font(.caption.bold()).foregroundStyle(Palette.paper)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
                 }
                 Text(people.description).font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)

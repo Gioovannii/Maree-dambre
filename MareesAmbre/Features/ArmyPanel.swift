@@ -14,8 +14,11 @@ struct ArmyPanel: View {
                 .font(.footnote).foregroundStyle(Palette.muted)
             if isTraining {
             Stepper("Recruter : \(count)", value: $count, in: 1...20)
-            ForEach(ArmyUnit.allCases) { unit in
+            ForEach(session.state.trainableUnits) { unit in
                 VStack(alignment: .leading, spacing: 8) {
+                    Image(unit.imageAssetName).resizable().scaledToFit()
+                        .frame(height: 120).clipShape(.rect(cornerRadius: 12))
+                        .accessibilityHidden(true)
                     Label("\(unit.name) · \(session.state.availableArmy[unit, default: 0]) disponible(s)", systemImage: unit.emblem)
                         .font(.headline)
                     Text("Force \(unit.attack) · Transport \(unit.carrying) ressources")
@@ -42,7 +45,7 @@ struct ArmyPanel: View {
                 countdown(raid.returnsAt)
             }
             Text("Force disponible : \(session.state.armyPower)").font(.headline)
-            Text("Chaque départ mobilise toutes les troupes disponibles. Aller-retour : 2 minutes. Une cible se repose 10 minutes après le retour.")
+            Text("Chaque départ mobilise toutes les troupes disponibles. Aller-retour : \(Int(session.state.raidDuration)) secondes. Une cible se repose 10 minutes après le retour.")
                 .font(.footnote).foregroundStyle(Palette.muted)
             ForEach(session.state.bots) { bot in
                 VStack(alignment: .leading, spacing: 6) {
@@ -73,7 +76,7 @@ struct ArmyPanel: View {
             Button("Envoyer toutes les troupes") { session.raid(bot.id); target = nil }
         } message: { bot in
             Text(session.state.armyPower > 10 + min(10, bot.level) * 4
-                 ? "Victoire prévue. Pertes : 20 % arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve."
+                 ? "Victoire prévue. Pertes : \(Int(session.state.victoryLossRate * 100)) % arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve."
                  : "Défaite prévue : la moitié des troupes sera perdue, arrondie au supérieur par type. Aucun butin.")
         }
     }

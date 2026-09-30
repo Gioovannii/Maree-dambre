@@ -9,9 +9,9 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .sauniers: "Les Sauniers"
-        case .nacre: "La Garde de Nacre"
-        case .roseaux: "Le Pacte des Roseaux"
+        case .sauniers: "Humains"
+        case .nacre: "Peuple des récifs"
+        case .roseaux: "Elfes des marais"
         }
     }
 
@@ -25,17 +25,17 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var description: String {
         switch self {
-        case .sauniers: "Bâtisseurs des salines et des forêts côtières, ils savent tirer du bois de chaque rivage."
-        case .nacre: "Gardiens des passes et des cités portuaires, ils préfèrent tenir leurs positions."
-        case .roseaux: "Navigateurs des chenaux, ils recherchent les filons d’ambre cachés sous les eaux."
+        case .sauniers: "Navigateurs, bâtisseurs et commerçants. Leurs expéditions privilégient le transport des ressources."
+        case .nacre: "Un peuple amphibie à la peau nacrée. Ses gardiens et ses mages combattent ensemble."
+        case .roseaux: "Des elfes des lagunes et des mangroves. Leurs expéditions reviennent plus vite."
         }
     }
 
     var strength: String {
         switch self {
-        case .sauniers: "+10 % de production de bois"
-        case .nacre: "+1 défense automatique de base"
-        case .roseaux: "+10 % de production d’ambre"
+        case .sauniers: "+20 % de capacité de transport · +10 % de bois"
+        case .nacre: "Les mages réduisent les pertes lors des victoires"
+        case .roseaux: "Expéditions de 90 s au lieu de 120 s · +10 % d’ambre"
         }
     }
 

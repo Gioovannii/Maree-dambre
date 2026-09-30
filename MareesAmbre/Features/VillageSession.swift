@@ -69,7 +69,7 @@ final class VillageSession {
     func raid(_ targetID: Int) {
         refreshWorld()
         guard state.raid(targetID: targetID) else { return }
-        persist("Expédition partie. Retour dans deux minutes.")
+        persist("Expédition partie. Retour dans \(Int(state.raidDuration)) secondes.")
     }
 
     func developSelectedResource() {

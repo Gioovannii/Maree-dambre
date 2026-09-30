@@ -1,11 +1,22 @@
-# Première base des troupes
+# Peuples et unités — V1
 
-Les unités se débloquent à la Maison des savoirs, puis s'entraînent à la Cour des armes. Chaque type a un rôle lisible :
+Les sept bâtiments constructibles sont communs aux trois peuples. Chaque bâtiment possède trois visuels : fondations, chantier à mi-parcours, bâtiment achevé. Aucun visuel par niveau ou par peuple pour cette version.
 
-| Unité | Rôle | Clan naturellement associé |
+La Maison des savoirs débloque les deux unités du peuple. La Cour des armes les entraîne. Les anciennes unités déjà débloquées restent disponibles dans les sauvegardes existantes.
+
+| Peuple | Unités à pied | Particularité jouable |
 | --- | --- | --- |
-| Garde des passes | Défense lourde des ponts et des quais | Garde de Nacre |
-| Éclaireur des roseaux | Exploration rapide des chenaux | Pacte des Roseaux |
-| Sentinelle d’ambre | Protection des convois d’ambre | Sauniers et ateliers |
+| Humains | Lancier, Pillard | +20 % de transport, bonus de bois existant |
+| Peuple des récifs | Gardien, Mage des marées | Un mage présent réduit les pertes en victoire de 20 % à 15 %, sans cumul |
+| Elfes des marais | Guerrier, Archer | Expéditions de 90 secondes au lieu de 120, bonus d’ambre existant |
 
-Le prochain écran pourra montrer le rôle, le coût, le temps d’entraînement et la capacité de l’unité avant d’activer le recrutement.
+Les pertes sont arrondies à l’entier inférieur pour chaque type d’unité. Le butin reste limité à 60 de chaque ressource et à la capacité de stockage. Les unités ont des valeurs de force et de transport différentes ; la portée et les formations ne sont pas simulées.
+
+## Suite envisagée, non implémentée
+
+- Humains : Comptoir marchand, pour les échanges ; architecture de pierre, bois et tuiles.
+- Peuple des récifs : Sanctuaire des marées, pour la protection ; nacre, coraux et bassins.
+- Elfes des marais : Poste des éclaireurs, pour mieux connaître les cibles ; bois vivant, roseaux et pilotis.
+- Accès à la mer pour tous, avec des ports et navires propres à chaque peuple à concevoir ultérieurement.
+
+L’icône actuelle est conservée : ambre, mer, nacre et roseaux restent cohérents avec ces peuples.

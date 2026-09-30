@@ -301,6 +301,41 @@ struct DomainChecks {
         precondition(!resumedField.cancelResourceUpgrade(now: epoch.addingTimeInterval(3600)))
         precondition(resumedField.resources.wood == field.resources.wood + 9,
                      "The improved field must not produce before its completion")
+        for people in People.allCases {
+            var village = VillageState(seed: seed)
+            village.people = people
+            village.buildings[10] = .academy
+            village.resources = Resources(wood: 300, amber: 300, provisions: 300)
+            precondition(village.peopleUnits.count == 2)
+            for unit in ArmyUnit.allCases {
+                precondition(village.canResearch(unit) == (unit.people == people))
+            }
+            precondition(village.raidDuration == (people == .roseaux ? 90 : 120))
+            let saved = try JSONEncoder().encode(village)
+            let decoded = try JSONDecoder().decode(VillageState.self, from: saved)
+            precondition(decoded.people == people)
+        }
+        var protected = VillageState(seed: seed)
+        protected.people = .nacre
+        protected.resources = Resources(wood: 0, amber: 0, provisions: 0)
+        protected.army = ArmyState()
+        protected.army?.raid = RaidOrder(targetID: 0, targetName: "Test", units: [.amberSentry: 20, .tideMage: 1], defense: 14, returnsAt: epoch)
+        protected.updateArmy(now: epoch)
+        precondition(protected.availableArmy[.amberSentry] == 17)
+        precondition(protected.availableArmy[.tideMage] == 1)
+        var human = VillageState(seed: seed)
+        human.people = .sauniers
+        human.resources = Resources(wood: 0, amber: 0, provisions: 0)
+        human.army = ArmyState()
+        human.army?.raid = RaidOrder(targetID: 0, targetName: "Test", units: [.tideguard: 3], defense: 14, returnsAt: epoch)
+        human.updateArmy(now: epoch)
+        precondition(human.resources.wood == 18, "Human transport adds 20 percent")
+        human.buildings[10] = .warCourt
+        human.resources = Resources(wood: 300, amber: 300, provisions: 300)
+        human.army?.unlockedUnits = [.reedrunner]
+        precondition(human.trainableUnits.contains(.reedrunner), "Preserve legacy foreign troops")
+        precondition(human.canTrain(.reedrunner, count: 1))
+        print("PASS: two units per people, restricted research, legacy troops, reef protection and human transport")
         print("PASS: field timer, shared construction slot, 50% refund, save/resume and delayed production")
         print("PASS: training costs, offline completion, raid losses, loot, cooldown, save/resume and no duplicate rewards")
         print("PASS: a new village can develop, research, train and launch its first raid within six hours")

@@ -5,7 +5,7 @@ struct ResearchPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Doctrines militaires").font(.title2.bold())
+            Text("Unités · \(session.state.people?.name ?? "Humains")").font(.title2.bold())
             Text("Chaque recherche débloque définitivement une unité pour ce village. Entraînez-la ensuite à la Cour des armes.")
                 .font(.subheadline).foregroundStyle(Palette.muted)
             if let research = session.state.army?.research {
@@ -13,9 +13,17 @@ struct ResearchPanel: View {
                 Text(timerInterval: min(Date.now, research.endsAt)...research.endsAt, countsDown: true)
                     .monospacedDigit()
             }
-            ForEach(ArmyUnit.allCases) { unit in
+            ForEach(session.state.peopleUnits) { unit in
                 VStack(alignment: .leading, spacing: 8) {
+                    Image(unit.imageAssetName)
+                        .resizable().scaledToFit()
+                        .frame(maxHeight: 240)
+                        .frame(maxWidth: .infinity)
+                        .clipShape(.rect(cornerRadius: 12))
+                        .accessibilityHidden(true)
                     Label(unit.name, systemImage: unit.emblem).font(.headline)
+                    Text(unit.role).font(.subheadline.bold()).foregroundStyle(Palette.amber)
+                    Text(unit.description).font(.subheadline).foregroundStyle(Palette.muted)
                     Text("Force \(unit.attack) · Transport \(unit.carrying)").font(.subheadline)
                     if session.state.unlockedUnits.contains(unit) {
                         Label("Doctrine acquise", systemImage: "checkmark.seal.fill")
