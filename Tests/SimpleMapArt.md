@@ -9,3 +9,9 @@ Les contours des parcelles sont dessinés dans SwiftUI pour correspondre aux zon
 ## Parcelles de ressources
 
 Assets intégrés : ParcelleBois, ParcelleVivres et ParcelleAmbre. Outil intégré de génération d’images, fond transparent. Consigne commune : parcelle carrée isolée, vue isométrique légèrement plongeante, bordure basse de pierre claire sur quatre côtés, illustration peinte méditerranéenne, sans texte ni personnage. Bois : cinq arbres et une souche. Vivres : terre labourée et quelques jeunes pousses. Ambre : roches calcaires traversées de veines dorées.
+
+## Derniers ajustements
+
+Les lots du centre sont visibles uniquement pendant le placement ou le déplacement. Le bouton Construire est dans les commandes de GameView, au-dessus de la navigation iPhone et dans la colonne iPad.
+
+Images générées avec l’outil intégré et enregistrées dans Assets.xcassets : MaisonVeilleurs (maison principale compacte de pierre claire, bois et tuiles, petite lanterne, bannière dorée, vue isométrique, fond transparent) et ChantierCouvert (échafaudages de bois entourant un bâtiment couvert de toile beige, fondations visibles, même style, fond transparent). ChantierCouvert remplace les étapes progressives.

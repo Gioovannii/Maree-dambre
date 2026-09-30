@@ -53,7 +53,7 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
 
     var imageAssetName: String? {
         switch self {
-        case .hall: nil
+        case .hall: "MaisonVeilleurs"
         case .lumbermill: "Scierie"
         case .farm: "Ferme"
         case .amberWorks: "AtelierAmbre"

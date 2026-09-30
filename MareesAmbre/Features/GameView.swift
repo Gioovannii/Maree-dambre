@@ -84,6 +84,7 @@ struct GameView: View {
                 topControls.padding(.horizontal, 12)
                 navigation.padding(.horizontal, 12)
                 constructionStatus.padding(.horizontal, 12)
+                if !showsWorld && villageMap == .townCenter { townActions.padding(.horizontal, 12) }
                 if showsWorld {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
@@ -128,6 +129,7 @@ struct GameView: View {
                     constructionStatus
                         .frame(maxWidth: 560)
                     Spacer(minLength: 4)
+                    if villageMap == .townCenter { townActions.frame(maxWidth: 560) }
                     navigation
                         .frame(maxWidth: 560)
                 }
@@ -145,6 +147,31 @@ struct GameView: View {
                 PlotDetailScreen(mode: villageMap)
             }
         }
+    }
+
+    private var townActions: some View {
+        VStack(spacing: 8) {
+            if session.pendingBuilding != nil || session.moveSourcePlot != nil {
+                Text(session.message)
+                    .font(.caption.bold()).multilineTextAlignment(.center)
+                    .foregroundStyle(Palette.paper)
+                Button("Annuler", systemImage: "xmark") { session.cancelPlacement() }
+            } else {
+                Button("Construire", systemImage: "hammer.fill") {
+                    if let free = VillageMapMode.townCenter.defaultVisibleSlots.first(where: {
+                        session.state.buildings[$0] == nil && session.state.construction?.plot != $0
+                    }) {
+                        session.selectPlot(free)
+                        selectedTownPlot = free
+                        showsVillageDetails = true
+                    }
+                }
+            }
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(Palette.amber)
+        .padding(10)
+        .background(Palette.ocean.opacity(0.92), in: .rect(cornerRadius: 14))
     }
 
     private var constructionStatus: some View {

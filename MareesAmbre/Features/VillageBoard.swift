@@ -49,30 +49,6 @@ struct VillageBoard: View {
                             .zIndex(Double(plot / 5 + plot % 5))
                     }
 
-                    if mode == .townCenter {
-                        VStack(spacing: 8) {
-                            if session.pendingBuilding != nil || session.moveSourcePlot != nil {
-                                Text(session.message)
-                                    .font(.caption.bold()).multilineTextAlignment(.center)
-                                    .foregroundStyle(Palette.paper)
-                                Button("Annuler", systemImage: "xmark") { session.cancelPlacement() }
-                            } else {
-                                Button("Construire", systemImage: "hammer.fill") {
-                                    if let free = visibleSlots.first(where: { session.state.buildings[$0] == nil && session.state.construction?.plot != $0 }) {
-                                        session.selectPlot(free)
-                                        selectedPlot = free
-                                        onPlotSelected()
-                                    }
-                                }
-                            }
-                        }
-                        .buttonStyle(.borderedProminent).tint(Palette.amber)
-                        .padding(10)
-                        .background(Palette.ocean.opacity(0.92), in: .rect(cornerRadius: 14))
-                        .frame(maxWidth: mapSize.width * 0.85)
-                        .position(x: mapSize.width * 0.5, y: mapSize.height * 0.88)
-                    }
-
                     if mode == .resourceFields {
                         Button(action: onTownSelected) {
                             Label("Quais & Centre", systemImage: "sailboat.fill")
@@ -114,7 +90,7 @@ struct VillageBoard: View {
 
     private var visibleSlots: [Int] {
         mode.slots.filter {
-            mode.defaultVisibleSlots.contains($0) || session.state.buildings[$0] != nil
+            (mode.defaultVisibleSlots.contains($0) && (mode == .resourceFields || session.pendingBuilding != nil || session.moveSourcePlot != nil)) || session.state.buildings[$0] != nil
                 || session.state.construction?.plot == $0
         }
     }
@@ -153,7 +129,7 @@ struct VillageBoard: View {
             if !isMoving && (building != nil || construction != nil || site != nil) { onPlotSelected() }
         } label: {
             ZStack {
-                if site == nil {
+                if site == nil && canReceiveMovingBuilding {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color(red: 0.62, green: 0.49, blue: 0.30).opacity(0.65))
                     .overlay {
@@ -189,7 +165,7 @@ struct VillageBoard: View {
                         .accessibilityHidden(true)
                 } else if let construction {
                     TimelineView(.periodic(from: .now, by: 1)) { timeline in
-                        ConstructionSiteArt(kind: construction.kind, progress: construction.progress(at: timeline.date))
+                        ConstructionSiteArt()
                             .frame(width: size, height: size)
                             .overlay(alignment: .bottom) {
                                 Text(timerInterval: min(timeline.date, construction.endsAt)...construction.endsAt, countsDown: true)
@@ -220,7 +196,7 @@ struct VillageBoard: View {
                         }
                         .offset(y: -size * 0.20)
                         .accessibilityHidden(true)
-                } else if building == nil && site == nil {
+                } else if building == nil && site == nil && canReceiveMovingBuilding {
                     Ellipse()
                         .fill(isUnavailable ? .black.opacity(0.28) : Palette.paper.opacity(0.17))
                         .frame(width: footprintWidth, height: footprintHeight)
@@ -235,7 +211,7 @@ struct VillageBoard: View {
 
                 }
 
-                if selected || session.moveSourcePlot == plot || canReceiveMovingBuilding {
+                if session.moveSourcePlot == plot || canReceiveMovingBuilding {
                     if site == nil && (building == nil || session.moveSourcePlot == plot || canReceiveMovingBuilding) {
                         RoundedRectangle(cornerRadius: 18, style: .continuous)
                             .strokeBorder(

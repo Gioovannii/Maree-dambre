@@ -1,6 +1,6 @@
 # Peuples et unités — V1
 
-Les sept bâtiments constructibles sont communs aux trois peuples. Chaque bâtiment possède trois visuels : fondations, chantier à mi-parcours, bâtiment achevé. Aucun visuel par niveau ou par peuple pour cette version.
+Les sept bâtiments constructibles sont communs aux trois peuples. Un visuel de chantier couvert commun est affiché jusqu’à la fin, puis remplacé par le bâtiment achevé. Aucun visuel par niveau ou par peuple pour cette version.
 
 La Maison des savoirs débloque les deux unités du peuple. La Cour des armes les entraîne. Les anciennes unités déjà débloquées restent disponibles dans les sauvegardes existantes.
 

@@ -129,7 +129,7 @@ struct ConstructionPanel: View {
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
             let progress = job.progress(at: timeline.date)
             VStack(alignment: .leading, spacing: 14) {
-                ConstructionSiteArt(kind: job.kind, progress: progress)
+                ConstructionSiteArt()
                 .aspectRatio(1, contentMode: .fit)
                 .frame(height: 150)
                 .frame(maxWidth: .infinity)
