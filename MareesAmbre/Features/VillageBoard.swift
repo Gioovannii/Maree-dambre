@@ -37,12 +37,6 @@ struct VillageBoard: View {
                         .clipped()
                         .accessibilityHidden(true)
 
-                    if mode == .townCenter {
-                        townPaths
-                            .allowsHitTesting(false)
-                            .accessibilityHidden(true)
-                    }
-
                     ForEach(visibleSlots, id: \.self) { plot in
                         plotButton(plot, mapWidth: mapSize.width)
                             .position(position(for: plot, in: mapSize))
@@ -72,20 +66,6 @@ struct VillageBoard: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Carte entière du district : \(mode.title).")
-    }
-
-    private var townPaths: some View {
-        Canvas { context, size in
-            var path = Path()
-            path.move(to: CGPoint(x: size.width * 0.5, y: size.height * 0.22))
-            path.addLine(to: CGPoint(x: size.width * 0.5, y: size.height * 0.76))
-            for y in [0.38, 0.54, 0.70] {
-                path.move(to: CGPoint(x: size.width * 0.22, y: size.height * y))
-                path.addLine(to: CGPoint(x: size.width * 0.78, y: size.height * y))
-            }
-            context.stroke(path, with: .color(Color(red: 0.66, green: 0.53, blue: 0.34)), style: StrokeStyle(lineWidth: 14, lineCap: .round, lineJoin: .round))
-            context.stroke(path, with: .color(Color(red: 0.86, green: 0.76, blue: 0.55)), style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
-        }
     }
 
     private var visibleSlots: [Int] {

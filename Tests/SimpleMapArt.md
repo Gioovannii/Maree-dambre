@@ -15,3 +15,7 @@ Assets intégrés : ParcelleBois, ParcelleVivres et ParcelleAmbre. Outil intégr
 Les lots du centre sont visibles uniquement pendant le placement ou le déplacement. Le bouton Construire est dans les commandes de GameView, au-dessus de la navigation iPhone et dans la colonne iPad.
 
 Images générées avec l’outil intégré et enregistrées dans Assets.xcassets : MaisonVeilleurs (maison principale compacte de pierre claire, bois et tuiles, petite lanterne, bannière dorée, vue isométrique, fond transparent) et ChantierCouvert (échafaudages de bois entourant un bâtiment couvert de toile beige, fondations visibles, même style, fond transparent). ChantierCouvert remplace les étapes progressives.
+
+## Centre pavé
+
+CentrePave.imageset remplace CentreSobre dans la carte du centre. Image créée avec l’outil intégré à partir du fond précédent : remplacer la prairie par des pavés calcaires clairs, une place circulaire et des terrains de terre tassée bordés de pierre, conserver le littoral et une végétation périphérique discrète, sans bâtiments ni texte. Les points de placement sont alignés sur les terrains dessinés ; le lot sud central se trouve sur la place pavée. Les anciennes lignes de chemins SwiftUI sont retirées.

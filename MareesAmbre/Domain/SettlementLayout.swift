@@ -9,7 +9,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
     var assetName: String {
         switch self {
         case .resourceFields: "ChampsSobres"
-        case .townCenter: "CentreSobre"
+        case .townCenter: "CentrePave"
         }
     }
 
@@ -52,11 +52,16 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
             return CGPoint(x: 0.22 + Double(column) * 0.28, y: 0.28 + Double(plot / 3) * 0.13)
         }
         if plot == 12 { return CGPoint(x: 0.5, y: 0.22) }
-        if plot == 22 { return CGPoint(x: 0.35, y: 0.81) }
-        if plot == 23 { return CGPoint(x: 0.65, y: 0.81) }
+        if plot == 22 { return CGPoint(x: 0.35, y: 0.72) }
+        if plot == 23 { return CGPoint(x: 0.65, y: 0.72) }
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19]
         guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
-        return CGPoint(x: 0.22 + Double(index % 3) * 0.28, y: 0.38 + Double(index / 3) * 0.16)
+        let points: [CGPoint] = [
+            CGPoint(x: 0.20, y: 0.32), CGPoint(x: 0.50, y: 0.37), CGPoint(x: 0.80, y: 0.32),
+            CGPoint(x: 0.20, y: 0.46), CGPoint(x: 0.50, y: 0.50), CGPoint(x: 0.80, y: 0.46),
+            CGPoint(x: 0.20, y: 0.61), CGPoint(x: 0.50, y: 0.66), CGPoint(x: 0.80, y: 0.61)
+        ]
+        return points[index]
     }
 
     var focus: SettlementPosition {
