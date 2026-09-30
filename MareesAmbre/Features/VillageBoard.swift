@@ -70,7 +70,7 @@ struct VillageBoard: View {
 
     private var visibleSlots: [Int] {
         mode.slots.filter {
-            (mode.defaultVisibleSlots.contains($0) && (mode == .resourceFields || session.pendingBuilding != nil || session.moveSourcePlot != nil)) || session.state.buildings[$0] != nil
+            mode.defaultVisibleSlots.contains($0) || session.state.buildings[$0] != nil
                 || session.state.construction?.plot == $0
         }
     }
@@ -106,7 +106,7 @@ struct VillageBoard: View {
             let isMoving = session.moveSourcePlot != nil || session.pendingBuilding != nil
             session.selectPlot(plot)
             selectedPlot = session.plot
-            if !isMoving && (building != nil || construction != nil || site != nil) { onPlotSelected() }
+            if !isMoving { onPlotSelected() }
         } label: {
             ZStack {
                 if site == nil && canReceiveMovingBuilding {
