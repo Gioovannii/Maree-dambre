@@ -42,7 +42,10 @@ struct DomainChecks {
         precondition(ResourceSiteKind.at(0) == .woodland && ResourceSiteKind.at(2) == .cropland)
         precondition(ResourceSiteKind.at(4) == .amberVein && ResourceSiteKind.at(12) == nil)
         precondition(village.canDevelopResource(at: 0) && village.resourceLevel(at: 0) == 0)
-        precondition(village.developResource(at: 0) && village.resourceLevel(at: 0) == 1)
+        precondition(village.developResource(at: 0) && village.resourceLevel(at: 0) == 0)
+        precondition(!village.canDevelopResource(at: 2) && !village.canBuild(.academy, at: 10))
+        village.updateResourceUpgrade(now: village.resourceUpgrade!.endsAt)
+        precondition(village.resourceLevel(at: 0) == 1)
         precondition(village.resources == Resources(wood: 75, amber: 35, provisions: 60))
         village.resourceLevels = [0: 9]
         precondition(!village.canBuild(.lumbermill, at: 11))
@@ -86,6 +89,7 @@ struct DomainChecks {
         village.resources = Resources(wood: 1_000, amber: 1_000, provisions: 1_000)
         village.resourceLevels = [0: 9]
         precondition(village.developResource(at: 0))
+        village.updateResourceUpgrade(now: village.resourceUpgrade!.endsAt)
         precondition(village.resourceLevel(at: 0) == 10 && !village.canDevelopResource(at: 0))
         let villageData = try JSONEncoder().encode(village)
         let restoredVillage = try JSONDecoder().decode(VillageState.self, from: villageData)
@@ -193,7 +197,7 @@ struct DomainChecks {
         let playStartedAt = playTime
         while freshStart.resourceLevel(at: 0) < ResourceSiteKind.maximumLevel {
             if freshStart.canDevelopResource(at: 0) {
-                precondition(freshStart.developResource(at: 0))
+                precondition(freshStart.developResource(at: 0, now: playTime))
             } else {
                 playTime = playTime.addingTimeInterval(60)
                 _ = freshStart.updateInRealTime(now: playTime, on: world)
@@ -272,6 +276,32 @@ struct DomainChecks {
             precondition(offline.resources == settledResources, "Refreshing twice cannot duplicate rewards")
         }
         print("PASS: persistent village across weeks, legacy adoption and chronological offline events")
+        var field = VillageState(seed: seed)
+        field.lastProductionAt = epoch
+        field.lastBotExpansionAt = epoch
+        let startingStock = field.resources
+        precondition(field.developResource(at: 0, now: epoch))
+        precondition(!field.developResource(at: 2, now: epoch))
+        precondition(!field.build(.academy, at: 10, now: epoch))
+        precondition(field.cancelResourceUpgrade(now: epoch.addingTimeInterval(30)))
+        precondition(field.resources.wood == startingStock.wood - 5 + 2)
+        precondition(field.resourceLevel(at: 0) == 0)
+        precondition(!field.cancelResourceUpgrade(now: epoch.addingTimeInterval(30)))
+        precondition(field.developResource(at: 0, now: epoch))
+        try storage.save(field)
+        var resumedField = try storage.load(seed: seed, world: world, now: epoch)!
+        var onlineField = field
+        _ = onlineField.updateInRealTime(now: epoch.addingTimeInterval(59), on: world)
+        precondition(onlineField.resourceLevel(at: 0) == 0)
+        _ = onlineField.updateInRealTime(now: epoch.addingTimeInterval(60), on: world)
+        precondition(onlineField.resourceLevel(at: 0) == 1)
+        _ = onlineField.updateInRealTime(now: epoch.addingTimeInterval(3600), on: world)
+        _ = resumedField.updateInRealTime(now: epoch.addingTimeInterval(3600), on: world)
+        precondition(resumedField == onlineField, "Offline field completion must match online production")
+        precondition(!resumedField.cancelResourceUpgrade(now: epoch.addingTimeInterval(3600)))
+        precondition(resumedField.resources.wood == field.resources.wood + 9,
+                     "The improved field must not produce before its completion")
+        print("PASS: field timer, shared construction slot, 50% refund, save/resume and delayed production")
         print("PASS: training costs, offline completion, raid losses, loot, cooldown, save/resume and no duplicate rewards")
         print("PASS: a new village can develop, research, train and launch its first raid within six hours")
         print("PASS: 40,000 tiles, unique city buildings, resource sites, offline production and legacy migration")

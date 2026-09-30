@@ -12,11 +12,12 @@ struct VillageState: Codable, Equatable {
     var productionRemainder: ProductionRemainder?
     var lastBotExpansionAt: Date?
     var construction: ConstructionJob?
+    var resourceUpgrade: ResourceUpgrade?
     var army: ArmyState?
 
     private enum CodingKeys: String, CodingKey {
         case version, seed, resources, buildings, resourceLevels, bots, people
-        case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army
+        case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
     }
 
     init(from decoder: Decoder) throws {
@@ -32,6 +33,7 @@ struct VillageState: Codable, Equatable {
         productionRemainder = try values.decodeIfPresent(ProductionRemainder.self, forKey: .productionRemainder)
         lastBotExpansionAt = try values.decodeIfPresent(Date.self, forKey: .lastBotExpansionAt)
         construction = try values.decodeIfPresent(ConstructionJob.self, forKey: .construction)
+        resourceUpgrade = try values.decodeIfPresent(ResourceUpgrade.self, forKey: .resourceUpgrade)
         army = try values.decodeIfPresent(ArmyState.self, forKey: .army)
     }
 
@@ -125,7 +127,7 @@ struct VillageState: Codable, Equatable {
 
     func canBuild(_ kind: BuildingKind, at plot: Int) -> Bool {
         Self.canPlace(kind, at: plot) && buildings[plot] == nil && !hasBuilding(kind)
-            && construction == nil && meetsProductionRequirement(kind)
+            && construction == nil && resourceUpgrade == nil && meetsProductionRequirement(kind)
             && resources.wood >= kind.cost.wood && resources.amber >= kind.cost.amber
             && resources.provisions >= kind.cost.provisions
     }
@@ -167,6 +169,7 @@ struct VillageState: Codable, Equatable {
     func resourceLevel(at plot: Int) -> Int { resourceLevels?[plot] ?? 0 }
 
     func canDevelopResource(at plot: Int) -> Bool {
+        guard construction == nil, resourceUpgrade == nil else { return false }
         guard let kind = ResourceSiteKind.at(plot) else { return false }
         let nextLevel = resourceLevel(at: plot) + 1
         guard nextLevel <= ResourceSiteKind.maximumLevel else { return false }
@@ -176,16 +179,33 @@ struct VillageState: Codable, Equatable {
     }
 
     @discardableResult
-    mutating func developResource(at plot: Int) -> Bool {
+    mutating func developResource(at plot: Int, now: Date = .now) -> Bool {
         guard canDevelopResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return false }
         let nextLevel = resourceLevel(at: plot) + 1
         let cost = kind.cost(for: nextLevel)
         resources.wood -= cost.wood
         resources.amber -= cost.amber
         resources.provisions -= cost.provisions
+        resourceUpgrade = ResourceUpgrade(plot: plot, targetLevel: nextLevel, startedAt: now, cost: cost)
+        return true
+    }
+
+    mutating func updateResourceUpgrade(now: Date = .now) {
+        guard let job = resourceUpgrade, now >= job.endsAt else { return }
         var levels = resourceLevels ?? [:]
-        levels[plot] = nextLevel
+        levels[job.plot] = job.targetLevel
         resourceLevels = levels
+        resourceUpgrade = nil
+    }
+
+    @discardableResult
+    mutating func cancelResourceUpgrade(now: Date = .now) -> Bool {
+        updateResourceUpgrade(now: now)
+        guard let job = resourceUpgrade else { return false }
+        resourceUpgrade = nil
+        resources.wood = min(999_999, resources.wood + job.cost.wood / 2)
+        resources.amber = min(999_999, resources.amber + job.cost.amber / 2)
+        resources.provisions = min(999_999, resources.provisions + job.cost.provisions / 2)
         return true
     }
 
@@ -247,12 +267,13 @@ struct VillageState: Codable, Equatable {
         let prior = lastProductionAt ?? now
         let elapsed = max(0, now.timeIntervalSince(prior))
         guard now >= prior else { return 0 }
-        let events = [construction?.endsAt, army?.raid?.returnsAt,
+        let events = [construction?.endsAt, resourceUpgrade?.endsAt, army?.raid?.returnsAt,
                       army?.training?.endsAt, army?.research?.endsAt]
             .compactMap { $0 }.filter { $0 <= now }
         for date in Set(events.map { max(prior, $0) } + [now]).sorted() {
             accrueProduction(until: date)
             updateConstruction(now: date)
+            updateResourceUpgrade(now: date)
             updateArmy(now: date)
         }
 

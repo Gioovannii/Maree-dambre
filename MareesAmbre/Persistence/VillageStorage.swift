@@ -34,6 +34,16 @@ struct VillageStorage {
             throw CocoaError(.coderReadCorrupt)
         }
         var migrated = state
+        if let job = state.resourceUpgrade {
+            guard state.construction == nil,
+                  let kind = ResourceSiteKind.at(job.plot),
+                  (1...ResourceSiteKind.maximumLevel).contains(job.targetLevel),
+                  job.targetLevel == state.resourceLevel(at: job.plot) + 1,
+                  job.startedAt.timeIntervalSince1970.isFinite,
+                  job.cost == kind.cost(for: job.targetLevel) else {
+                throw CocoaError(.coderReadCorrupt)
+            }
+        }
         if migrated.version < 8 {
             // Credit the old village's offline production before removing
             // duplicate buildings, so an existing save loses no earned stock.

@@ -75,7 +75,15 @@ final class VillageSession {
     func developSelectedResource() {
         refreshWorld()
         guard state.developResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return }
-        persist("\(kind.name) développée. Sa production continue même hors ligne.")
+        if let job = state.resourceUpgrade { ConstructionActivityController.start(for: job) }
+        persist("\(kind.name) : amélioration lancée. Fin dans une minute.")
+    }
+
+    func cancelResourceUpgrade() {
+        refreshWorld()
+        guard state.cancelResourceUpgrade() else { return }
+        ConstructionActivityController.end()
+        persist("Amélioration annulée. La moitié des ressources a été récupérée.")
     }
 
     func build(_ kind: BuildingKind) {
@@ -132,7 +140,10 @@ final class VillageSession {
            state.buildings[finished.plot] == finished.kind {
             message = "\(finished.kind.name) terminé. Le bâtiment est prêt."
             ConstructionActivityController.end()
-        } else if state.construction == nil {
+        } else if let finished = previous.resourceUpgrade, state.resourceUpgrade == nil {
+            message = "Terrain amélioré au niveau \(finished.targetLevel)."
+            ConstructionActivityController.end()
+        } else if state.construction == nil && state.resourceUpgrade == nil {
             ConstructionActivityController.end()
         }
         guard seconds > 0 || state != previous else { return }

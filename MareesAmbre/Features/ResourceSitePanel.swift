@@ -35,7 +35,9 @@ struct ResourceSitePanel: View {
 
                 Text("Un seul terrain de ce type au niveau 10 débloque son bâtiment de production au Centre.")
                     .font(.footnote).foregroundStyle(Palette.amber)
-                if level < ResourceSiteKind.maximumLevel {
+                if let job = session.state.resourceUpgrade, job.plot == session.plot {
+                    ResourceUpgradeStatus(job: job, allowsCancellation: true)
+                } else if level < ResourceSiteKind.maximumLevel {
                     let nextLevel = level + 1
                     let cost = kind.cost(for: nextLevel)
                     VStack(alignment: .leading, spacing: 8) {
@@ -46,6 +48,12 @@ struct ResourceSitePanel: View {
                         Text("Coût : \(cost.wood) bois · \(cost.amber) ambre · \(cost.provisions) vivres")
                             .font(.subheadline).foregroundStyle(Palette.muted)
                             .fixedSize(horizontal: false, vertical: true)
+                        Text("Durée : 1 minute")
+                            .font(.subheadline).foregroundStyle(Palette.muted)
+                        if session.state.construction != nil || session.state.resourceUpgrade != nil {
+                            Text("Terminez ou annulez le chantier en cours avant de commencer cette amélioration.")
+                                .font(.footnote).foregroundStyle(Palette.amber)
+                        }
                         Button("Améliorer", systemImage: "arrow.up.circle.fill") {
                             session.developSelectedResource()
                         }

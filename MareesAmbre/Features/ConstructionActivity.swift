@@ -13,16 +13,26 @@ struct ConstructionActivityAttributes: ActivityAttributes {
 }
 
 enum ConstructionActivityController {
+    static func start(for job: ResourceUpgrade) {
+        guard let kind = ResourceSiteKind.at(job.plot) else { return }
+        start(name: "\(kind.name) · Niveau \(job.targetLevel)", symbol: kind.symbol,
+              startedAt: job.startedAt, endsAt: job.endsAt)
+    }
+
     static func start(for job: ConstructionJob) {
+        start(name: job.kind.name, symbol: job.kind.symbol, startedAt: job.startedAt, endsAt: job.endsAt)
+    }
+
+    private static func start(name: String, symbol: String, startedAt: Date, endsAt: Date) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
         let attributes = ConstructionActivityAttributes(
-            buildingName: job.kind.name,
-            buildingSymbol: job.kind.symbol,
-            endsAt: job.endsAt,
-            startedAt: job.startedAt
+            buildingName: name,
+            buildingSymbol: symbol,
+            endsAt: endsAt,
+            startedAt: startedAt
         )
         let state = ConstructionActivityAttributes.ContentState(progress: 0)
-        _ = try? Activity.request(attributes: attributes, content: ActivityContent(state: state, staleDate: job.endsAt), pushType: nil)
+        _ = try? Activity.request(attributes: attributes, content: ActivityContent(state: state, staleDate: endsAt), pushType: nil)
     }
 
     static func end() {

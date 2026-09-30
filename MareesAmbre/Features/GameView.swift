@@ -149,6 +149,9 @@ struct GameView: View {
 
     private var constructionStatus: some View {
         Group {
+            if let job = session.state.resourceUpgrade {
+                ResourceUpgradeStatus(job: job)
+            }
             if let job = session.state.construction {
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
                     let remaining = max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date))))
@@ -285,6 +288,9 @@ struct GameView: View {
     }
 
     private var guideStep: (title: String, detail: String, kind: BuildingKind?, plot: Int?) {
+        if let job = session.state.resourceUpgrade {
+            return ("Votre terrain se développe", "Le nouveau niveau sera disponible à la fin de la minute de travaux.", nil, job.plot)
+        }
         for plot in [0, 2, 4] where session.state.resourceLevel(at: plot) == 0 {
             return ("Lancez vos trois productions", "Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves.", nil, plot)
         }

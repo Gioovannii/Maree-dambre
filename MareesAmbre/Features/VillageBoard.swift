@@ -110,6 +110,15 @@ struct VillageBoard: View {
             ZStack {
                 if let site {
                     TideLevelBadge(level: siteLevel, symbol: site.symbol)
+                        .overlay(alignment: .bottom) {
+                            if let job = session.state.resourceUpgrade, job.plot == plot {
+                                Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
+                                    .font(.caption2.bold()).monospacedDigit().fixedSize()
+                                    .padding(4)
+                                    .background(Palette.ocean, in: .capsule)
+                                    .offset(y: 20)
+                            }
+                        }
                         .overlay {
                             if selected {
                                 Capsule()

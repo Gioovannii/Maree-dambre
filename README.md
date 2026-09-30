@@ -13,6 +13,11 @@ Les recherches, chantiers, entraînements, productions et expéditions sont enre
 
 ## Systèmes
 
+- **Amélioration des champs** : une minute de travaux par niveau. La production
+  précédente continue jusqu’à la fin. Champs et bâtiments partagent un seul chantier ;
+  annuler rembourse 50 % du coût, arrondi à l’entier inférieur par ressource.
+  Les travaux sont sauvegardés et terminent aussi pendant l’absence.
+
 - **Ressources et Centre** : deux cartes plein écran, dix terrains producteurs et douze lots urbains. Chaque bâtiment n’existe qu’en un exemplaire. Un seul chantier peut progresser à la fois ; son annulation rembourse la moitié du coût.
 - **Production** : bois, ambre et vivres s’accumulent jusqu’à la capacité de la réserve, 300 au départ et +500 par Entrepôt. Les fractions et l’heure de dernière production sont sauvegardées.
 - **Armée** : Maison des savoirs, Cour des armes, trois doctrines, entraînement et raids contre trois factions bots. Une expédition mobilise l’armée disponible. L’écran annonce les pertes prévues et la défense avant le départ.
