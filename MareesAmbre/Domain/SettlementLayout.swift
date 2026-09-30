@@ -8,8 +8,8 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var assetName: String {
         switch self {
-        case .resourceFields: "RessourcesBaie"
-        case .townCenter: "CentreVillePortrait"
+        case .resourceFields: "ChampsSobres"
+        case .townCenter: "CentreSobre"
         }
     }
 
@@ -41,40 +41,22 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    // Legacy lots remain addressable so existing buildings and jobs are preserved.
+    var defaultVisibleSlots: [Int] {
+        self == .townCenter ? Array(10..<20) : slots
+    }
+
     func mapPoint(for plot: Int) -> CGPoint {
-        switch self {
-        case .resourceFields:
-            return switch plot {
-            case 0: CGPoint(x: 0.210, y: 0.270)
-            case 1: CGPoint(x: 0.180, y: 0.400)
-            case 2: CGPoint(x: 0.500, y: 0.245)
-            case 3: CGPoint(x: 0.820, y: 0.400)
-            case 4: CGPoint(x: 0.800, y: 0.275)
-            case 5: CGPoint(x: 0.190, y: 0.535)
-            case 6: CGPoint(x: 0.200, y: 0.655)
-            case 7: CGPoint(x: 0.500, y: 0.645)
-            case 8: CGPoint(x: 0.800, y: 0.660)
-            case 9: CGPoint(x: 0.800, y: 0.540)
-            default: CGPoint(x: 0.50, y: 0.50)
-            }
-        case .townCenter:
-            return switch plot {
-            // Anchors match the eleven equal sandy lots in CentreVillePortrait.
-            case 10: CGPoint(x: 0.20, y: 0.28)
-            case 11: CGPoint(x: 0.50, y: 0.28)
-            case 12: CGPoint(x: 0.50, y: 0.47)
-            case 13: CGPoint(x: 0.80, y: 0.28)
-            case 14: CGPoint(x: 0.14, y: 0.41)
-            case 15: CGPoint(x: 0.86, y: 0.41)
-            case 16: CGPoint(x: 0.18, y: 0.62)
-            case 17: CGPoint(x: 0.50, y: 0.62)
-            case 18: CGPoint(x: 0.82, y: 0.62)
-            case 19: CGPoint(x: 0.18, y: 0.72)
-            case 22: CGPoint(x: 0.50, y: 0.72)
-            case 23: CGPoint(x: 0.82, y: 0.72)
-            default: CGPoint(x: 0.50, y: 0.50)
-            }
+        if self == .resourceFields {
+            let column = plot == 9 ? 1 : plot % 3
+            return CGPoint(x: 0.22 + Double(column) * 0.28, y: 0.28 + Double(plot / 3) * 0.13)
         }
+        if plot == 12 { return CGPoint(x: 0.5, y: 0.22) }
+        if plot == 22 { return CGPoint(x: 0.35, y: 0.81) }
+        if plot == 23 { return CGPoint(x: 0.65, y: 0.81) }
+        let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19]
+        guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
+        return CGPoint(x: 0.22 + Double(index % 3) * 0.28, y: 0.38 + Double(index / 3) * 0.16)
     }
 
     var focus: SettlementPosition {

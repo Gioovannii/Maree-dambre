@@ -62,7 +62,7 @@ struct ConstructionPanel: View {
                     .font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("Choisissez un bâtiment pour cet emplacement. Sa production ou son effet commence dès sa construction et continue hors ligne.")
+                Text("Choisissez un bâtiment, puis son emplacement sur la carte. Son effet commence une fois le chantier terminé.")
                     .font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
                 ForEach(availableBuildings) { kind in
@@ -164,7 +164,7 @@ struct ConstructionPanel: View {
         let reason = session.state.construction != nil ? "Un chantier est déjà en cours"
             : !session.state.meetsProductionRequirement(kind) ? "Requiert un terrain « \(kind.requiredResourceSite?.name ?? "producteur") » au niveau 10"
             : "Ressources insuffisantes"
-        return Button { session.build(kind) } label: {
+        return Button { session.beginPlacing(kind); dismiss() } label: {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 12) {
                     BuildingArt(kind: kind).frame(width: 60, height: 60)
@@ -182,7 +182,7 @@ struct ConstructionPanel: View {
                 Text("Coût : \(kind.cost.wood) bois · \(kind.cost.amber) ambre · \(kind.cost.provisions) vivres")
                     .font(.footnote).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
-                Label(canBuild ? "Construire" : reason,
+                Label(canBuild ? "Choisir l’emplacement" : reason,
                       systemImage: canBuild ? "hammer.fill" : "lock.fill")
                     .font(.subheadline.bold())
                     .foregroundStyle(canBuild ? Palette.amber : Palette.muted)

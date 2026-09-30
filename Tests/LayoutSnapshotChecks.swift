@@ -6,11 +6,12 @@ import Foundation
 struct LayoutSnapshotChecks {
     static func main() {
         let town = VillageMapMode.townCenter
+        precondition(town.defaultVisibleSlots.count == 10, "Nine lots plus the hall")
         let points = town.slots.map(town.mapPoint(for:))
 
         precondition(points.count == Set(points.map { "\($0.x),\($0.y)" }).count,
                      "Centre snapshot contains overlapping slots")
-        precondition(points.allSatisfy { (0.08...0.92).contains($0.x) && (0.15...0.75).contains($0.y) },
+        precondition(points.allSatisfy { (0.08...0.92).contains($0.x) && (0.15...0.85).contains($0.y) },
                      "Centre snapshot contains an off-map slot")
         for (index, a) in points.enumerated() {
             for b in points.dropFirst(index + 1) {
@@ -20,7 +21,7 @@ struct LayoutSnapshotChecks {
         }
 
         let hall = town.mapPoint(for: 12)
-        precondition(abs(hall.x - 0.50) < 0.001 && abs(hall.y - 0.47) < 0.001,
+        precondition(abs(hall.x - 0.50) < 0.001 && abs(hall.y - 0.22) < 0.001,
                      "Centre hall moved away from the focal point")
 
         let resource = VillageMapMode.resourceFields

@@ -8,6 +8,7 @@ final class VillageSession {
     var plot = VillageMapMode.resourceFields.initialPlot
     var selectedTile = TileCoordinate.home
     private(set) var message = "Choisissez un emplacement libre pour construire."
+    private(set) var pendingBuilding: BuildingKind?
     private(set) var moveSourcePlot: Int?
     private(set) var elapsedSeconds = 0
     private let storage = VillageStorage()
@@ -105,7 +106,19 @@ final class VillageSession {
         state.construction?.progress(at: date)
     }
 
+    func beginPlacing(_ kind: BuildingKind) {
+        pendingBuilding = kind
+        moveSourcePlot = nil
+        message = "Choisissez une parcelle libre pour \(kind.name.lowercased())."
+    }
+
+    func cancelPlacement() {
+        pendingBuilding = nil
+        cancelMovingBuilding()
+    }
+
     func beginMovingSelectedBuilding() {
+        pendingBuilding = nil
         guard let kind = state.buildings[plot], kind != .hall else { return }
         moveSourcePlot = plot
         message = "Touchez une case libre compatible pour déplacer \(kind.name.lowercased())."
@@ -117,6 +130,16 @@ final class VillageSession {
     }
 
     func selectPlot(_ destination: Int) {
+        if let kind = pendingBuilding {
+            guard state.canBuild(kind, at: destination) else {
+                message = "Choisissez une parcelle libre compatible."
+                return
+            }
+            plot = destination
+            build(kind)
+            if state.construction?.plot == destination { pendingBuilding = nil }
+            return
+        }
         if let source = moveSourcePlot {
             guard state.moveBuilding(from: source, to: destination),
                   let kind = state.buildings[destination] else {

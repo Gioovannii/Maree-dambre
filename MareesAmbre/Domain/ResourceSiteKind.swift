@@ -22,6 +22,14 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    var imageAssetName: String {
+        switch self {
+        case .woodland: "ParcelleBois"
+        case .cropland: "ParcelleVivres"
+        case .amberVein: "ParcelleAmbre"
+        }
+    }
+
     var symbol: String {
         switch self {
         case .woodland: "tree.fill"

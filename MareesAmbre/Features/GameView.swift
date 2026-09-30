@@ -274,7 +274,7 @@ struct GameView: View {
 
     private func selectVillageMap(_ mode: VillageMapMode) {
         showsWorld = false
-        if session.moveSourcePlot != nil { session.cancelMovingBuilding() }
+        if session.moveSourcePlot != nil || session.pendingBuilding != nil { session.cancelPlacement() }
         guard villageMap != mode else { return }
         villageMap = mode
         session.plot = mode == .resourceFields ? selectedResourcePlot : selectedTownPlot

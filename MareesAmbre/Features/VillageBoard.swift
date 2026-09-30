@@ -37,14 +37,40 @@ struct VillageBoard: View {
                         .clipped()
                         .accessibilityHidden(true)
 
-                    VillageAmbience(mode: mode)
-                        .frame(width: mapSize.width, height: mapSize.height)
-                        .accessibilityHidden(true)
+                    if mode == .townCenter {
+                        townPaths
+                            .allowsHitTesting(false)
+                            .accessibilityHidden(true)
+                    }
 
-                    ForEach(mode.slots, id: \.self) { plot in
+                    ForEach(visibleSlots, id: \.self) { plot in
                         plotButton(plot, mapWidth: mapSize.width)
                             .position(position(for: plot, in: mapSize))
                             .zIndex(Double(plot / 5 + plot % 5))
+                    }
+
+                    if mode == .townCenter {
+                        VStack(spacing: 8) {
+                            if session.pendingBuilding != nil || session.moveSourcePlot != nil {
+                                Text(session.message)
+                                    .font(.caption.bold()).multilineTextAlignment(.center)
+                                    .foregroundStyle(Palette.paper)
+                                Button("Annuler", systemImage: "xmark") { session.cancelPlacement() }
+                            } else {
+                                Button("Construire", systemImage: "hammer.fill") {
+                                    if let free = visibleSlots.first(where: { session.state.buildings[$0] == nil && session.state.construction?.plot != $0 }) {
+                                        session.selectPlot(free)
+                                        selectedPlot = free
+                                        onPlotSelected()
+                                    }
+                                }
+                            }
+                        }
+                        .buttonStyle(.borderedProminent).tint(Palette.amber)
+                        .padding(10)
+                        .background(Palette.ocean.opacity(0.92), in: .rect(cornerRadius: 14))
+                        .frame(maxWidth: mapSize.width * 0.85)
+                        .position(x: mapSize.width * 0.5, y: mapSize.height * 0.88)
                     }
 
                     if mode == .resourceFields {
@@ -58,7 +84,7 @@ struct VillageBoard: View {
                                 .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
                         }
                         .buttonStyle(.plain)
-                        .position(x: mapSize.width * 0.50, y: mapSize.height * 0.46)
+                        .position(x: mapSize.width * 0.50, y: mapSize.height * 0.79)
                         .zIndex(100)
                         .accessibilityHint("Ouvrir le port et les bâtiments du Centre-ville")
                     }
@@ -72,6 +98,27 @@ struct VillageBoard: View {
         .accessibilityLabel("Carte entière du district : \(mode.title).")
     }
 
+    private var townPaths: some View {
+        Canvas { context, size in
+            var path = Path()
+            path.move(to: CGPoint(x: size.width * 0.5, y: size.height * 0.22))
+            path.addLine(to: CGPoint(x: size.width * 0.5, y: size.height * 0.76))
+            for y in [0.38, 0.54, 0.70] {
+                path.move(to: CGPoint(x: size.width * 0.22, y: size.height * y))
+                path.addLine(to: CGPoint(x: size.width * 0.78, y: size.height * y))
+            }
+            context.stroke(path, with: .color(Color(red: 0.66, green: 0.53, blue: 0.34)), style: StrokeStyle(lineWidth: 14, lineCap: .round, lineJoin: .round))
+            context.stroke(path, with: .color(Color(red: 0.86, green: 0.76, blue: 0.55)), style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+        }
+    }
+
+    private var visibleSlots: [Int] {
+        mode.slots.filter {
+            mode.defaultVisibleSlots.contains($0) || session.state.buildings[$0] != nil
+                || session.state.construction?.plot == $0
+        }
+    }
+
     private func plotButton(_ plot: Int, mapWidth: CGFloat) -> some View {
         let building = session.state.buildings[plot]
         let construction = session.state.construction?.plot == plot ? session.state.construction : nil
@@ -82,16 +129,14 @@ struct VillageBoard: View {
         let siteLevel = session.state.resourceLevel(at: plot)
         let isUnavailable = mode == .townCenter && building == nil
             && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
-        let hasAvailableBuilding = mode == .townCenter && building == nil
-            && BuildingKind.constructible(in: mode).contains { $0.suits(terrain) && !session.state.hasBuilding($0) }
         // Equal, compact footprints keep the Centre readable and leave room
         // for several buildings without making one lot dominate the map.
-        let size = min(88, max(52, mapWidth * 0.17))
+        let size = min(112, max(64, mapWidth * 0.23))
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
-        let canReceiveMovingBuilding = session.moveSourcePlot.map {
+        let canReceiveMovingBuilding = (session.pendingBuilding.map { session.state.canBuild($0, at: plot) } ?? false) || (session.moveSourcePlot.map {
             building == nil && session.state.canMoveBuilding(from: $0, to: plot)
-        } ?? false
+        } ?? false)
         let plotAccessibilityLabel: String
         if let site {
             plotAccessibilityLabel = "Zone \(mode.slotNumber(for: plot) ?? 0), \(site.name), niveau \(siteLevel)"
@@ -102,14 +147,29 @@ struct VillageBoard: View {
         }
 
         return Button {
-            let isMoving = session.moveSourcePlot != nil
+            let isMoving = session.moveSourcePlot != nil || session.pendingBuilding != nil
             session.selectPlot(plot)
             selectedPlot = session.plot
-            if !isMoving { onPlotSelected() }
+            if !isMoving && (building != nil || construction != nil || site != nil) { onPlotSelected() }
         } label: {
             ZStack {
+                if site == nil {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(red: 0.62, green: 0.49, blue: 0.30).opacity(0.65))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .strokeBorder(selected ? Palette.amber : Palette.paper.opacity(0.65), lineWidth: selected ? 3 : 1)
+                    }
+                    .frame(width: size, height: size * 0.72)
+                }
                 if let site {
+                    Image(site.imageAssetName)
+                        .resizable().scaledToFit()
+                        .frame(width: size, height: size)
+                        .accessibilityHidden(true)
+
                     TideLevelBadge(level: siteLevel, symbol: site.symbol)
+                        .offset(y: size * 0.34)
                         .overlay(alignment: .bottom) {
                             if let job = session.state.resourceUpgrade, job.plot == plot {
                                 Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
@@ -140,7 +200,7 @@ struct VillageBoard: View {
                                     .fixedSize()
                             }
                     }
-                } else if let building, building != .hall {
+                } else if let building {
                     Ellipse()
                         .fill(.black.opacity(0.20))
                         .frame(width: footprintWidth, height: footprintHeight)
@@ -160,7 +220,7 @@ struct VillageBoard: View {
                         }
                         .offset(y: -size * 0.20)
                         .accessibilityHidden(true)
-                } else if building == nil && site == nil && (isUnavailable || hasAvailableBuilding) {
+                } else if building == nil && site == nil {
                     Ellipse()
                         .fill(isUnavailable ? .black.opacity(0.28) : Palette.paper.opacity(0.17))
                         .frame(width: footprintWidth, height: footprintHeight)
@@ -172,12 +232,7 @@ struct VillageBoard: View {
                                 )
                         }
                         .offset(y: size * 0.14)
-                    Image(systemName: isUnavailable ? "lock.fill" : "plus")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundStyle(isUnavailable ? Palette.muted : Palette.ocean)
-                        .frame(width: 40, height: 40)
-                        .background(isUnavailable ? Palette.panel : Palette.paper, in: Circle())
-                        .offset(y: size * 0.14)
+
                 }
 
                 if selected || session.moveSourcePlot == plot || canReceiveMovingBuilding {
