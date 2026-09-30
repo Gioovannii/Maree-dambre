@@ -7,6 +7,7 @@ struct ConstructionActivityAttributes: ActivityAttributes {
     let buildingName: String
     let buildingSymbol: String
     let endsAt: Date
+    var startedAt: Date?
 }
 
 struct ConstructionLiveActivity: Widget {
@@ -16,13 +17,13 @@ struct ConstructionLiveActivity: Widget {
                 Image(systemName: context.attributes.buildingSymbol)
                     .font(.title2.bold()).foregroundStyle(.orange)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Chantier en cours").font(.caption.bold()).textCase(.uppercase)
+                    Text(context.isStale || context.attributes.endsAt <= .now ? "Chantier terminé" : "Chantier en cours").font(.caption.bold()).textCase(.uppercase)
                     Text(context.attributes.buildingName).font(.headline)
-                    ProgressView(timerInterval: Date.now...context.attributes.endsAt, countsDown: true)
+                    ProgressView(timerInterval: min(context.attributes.startedAt ?? context.attributes.endsAt.addingTimeInterval(-60), context.attributes.endsAt)...context.attributes.endsAt, countsDown: false)
                         .tint(.orange)
                 }
                 Spacer()
-                Text(context.attributes.endsAt, style: .timer).font(.headline.monospacedDigit())
+                ConstructionCountdown(endsAt: context.attributes.endsAt, isStale: context.isStale).font(.headline.monospacedDigit())
             }
             .padding(16)
             .activityBackgroundTint(Color(red: 0.04, green: 0.15, blue: 0.18))
@@ -36,16 +37,17 @@ struct ConstructionLiveActivity: Widget {
                     Text(context.attributes.buildingName).font(.headline)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(context.attributes.endsAt, style: .timer).monospacedDigit()
+                    ConstructionCountdown(endsAt: context.attributes.endsAt, isStale: context.isStale).monospacedDigit()
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    ProgressView(timerInterval: Date.now...context.attributes.endsAt, countsDown: true)
+                    ProgressView(timerInterval: min(context.attributes.startedAt ?? context.attributes.endsAt.addingTimeInterval(-60), context.attributes.endsAt)...context.attributes.endsAt, countsDown: false)
                         .tint(.orange)
                 }
             } compactLeading: {
                 Image(systemName: context.attributes.buildingSymbol).foregroundStyle(.orange)
             } compactTrailing: {
-                Text(context.attributes.endsAt, style: .timer).monospacedDigit()
+                ConstructionCountdown(endsAt: context.attributes.endsAt, isStale: context.isStale).monospacedDigit()
+                    .frame(width: 48)
             } minimal: {
                 Image(systemName: "hammer.fill").foregroundStyle(.orange)
             }

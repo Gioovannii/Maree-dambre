@@ -9,6 +9,7 @@ struct ConstructionActivityAttributes: ActivityAttributes {
     let buildingName: String
     let buildingSymbol: String
     let endsAt: Date
+    var startedAt: Date?
 }
 
 enum ConstructionActivityController {
@@ -17,7 +18,8 @@ enum ConstructionActivityController {
         let attributes = ConstructionActivityAttributes(
             buildingName: job.kind.name,
             buildingSymbol: job.kind.symbol,
-            endsAt: job.endsAt
+            endsAt: job.endsAt,
+            startedAt: job.startedAt
         )
         let state = ConstructionActivityAttributes.ContentState(progress: 0)
         _ = try? Activity.request(attributes: attributes, content: ActivityContent(state: state, staleDate: job.endsAt), pushType: nil)
