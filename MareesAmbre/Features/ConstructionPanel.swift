@@ -156,7 +156,9 @@ struct ConstructionPanel: View {
         let reason = session.state.construction != nil ? "Un chantier est déjà en cours"
             : !session.state.meetsProductionRequirement(kind) ? "Requiert un terrain « \(kind.requiredResourceSite?.name ?? "producteur") » au niveau 10"
             : "Ressources insuffisantes"
-        return Button { session.build(kind); dismiss() } label: {
+        return Button {
+            session.build(kind)
+        } label: {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 12) {
                     BuildingArt(kind: kind).frame(width: 60, height: 60)
