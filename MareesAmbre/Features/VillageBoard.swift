@@ -122,15 +122,18 @@ struct VillageBoard: View {
                     Image(site.imageAssetName)
                         .resizable().scaledToFit()
                         .frame(width: size, height: size)
-                        .overlay(alignment: .topTrailing) {
-                            Text("N\(siteLevel)")
-                                .font(.caption2.bold().monospacedDigit())
+                        .overlay {
+                            Text("\(site.name) · Niveau \(siteLevel)")
+                                .font(.caption.bold())
                                 .foregroundStyle(Palette.paper)
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 3)
-                                .background(Palette.ocean.opacity(0.9), in: Capsule())
-                                .overlay { Capsule().strokeBorder(Palette.amber, lineWidth: 1) }
-                                .offset(x: 4, y: -2)
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.75)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 5)
+                                .background(Palette.ocean.opacity(0.88), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                .overlay { RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Palette.amber, lineWidth: 1) }
+                                .shadow(color: Palette.ocean.opacity(0.5), radius: 3)
                         }
                         .accessibilityHidden(true)
 
