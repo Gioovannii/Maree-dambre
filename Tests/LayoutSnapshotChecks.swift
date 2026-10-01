@@ -6,7 +6,7 @@ import Foundation
 struct LayoutSnapshotChecks {
     static func main() {
         let town = VillageMapMode.townCenter
-        precondition(town.defaultVisibleSlots.count == 10, "Nine lots plus the hall")
+        precondition(town.defaultVisibleSlots.count == 12, "Twelve compact centre lots")
         let points = town.slots.map(town.mapPoint(for:))
 
         precondition(points.count == Set(points.map { "\($0.x),\($0.y)" }).count,
@@ -35,6 +35,6 @@ struct LayoutSnapshotChecks {
                              "Resource touch targets overlap on a compact portrait screen")
             }
         }
-        print("PASS: settlement layout snapshot — \(town.slots.count) equal centre slots, hall centred")
+        print("PASS: settlement layout snapshot — \(town.slots.count) compact centre slots, hall centred")
     }
 }

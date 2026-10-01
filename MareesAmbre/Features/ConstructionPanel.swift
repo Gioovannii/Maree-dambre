@@ -104,21 +104,8 @@ struct ConstructionPanel: View {
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
             if kind != .hall {
-                Button {
-                    if session.moveSourcePlot == session.plot {
-                        session.cancelMovingBuilding()
-                    } else {
-                        session.beginMovingSelectedBuilding()
-                        dismiss()
-                    }
-                } label: {
-                    Label(session.moveSourcePlot == session.plot ? "Annuler le déplacement" : "Déplacer le bâtiment",
-                          systemImage: session.moveSourcePlot == session.plot ? "xmark" : "arrow.up.and.down.and.arrow.left.and.right")
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                }
-                .buttonStyle(.bordered)
-                .tint(Palette.amber)
-                .accessibilityHint("Choisir une case compatible sur la carte pour réorganiser le village")
+                Label("Maintenez le bâtiment appuyé pour le déplacer", systemImage: "hand.tap")
+                    .font(.footnote).foregroundStyle(Palette.muted)
             }
         }
         .padding(16)
@@ -164,7 +151,7 @@ struct ConstructionPanel: View {
         let reason = session.state.construction != nil ? "Un chantier est déjà en cours"
             : !session.state.meetsProductionRequirement(kind) ? "Requiert un terrain « \(kind.requiredResourceSite?.name ?? "producteur") » au niveau 10"
             : "Ressources insuffisantes"
-        return Button { session.beginPlacing(kind); dismiss() } label: {
+        return Button { session.build(kind); dismiss() } label: {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 12) {
                     BuildingArt(kind: kind).frame(width: 60, height: 60)

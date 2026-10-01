@@ -87,7 +87,7 @@ struct VillageBoard: View {
             && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
         // Equal, compact footprints keep the Centre readable and leave room
         // for several buildings without making one lot dominate the map.
-        let size = min(112, max(64, mapWidth * 0.23))
+        let size = min(86, max(58, mapWidth * 0.17))
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
         let canReceiveMovingBuilding = (session.pendingBuilding.map { session.state.canBuild($0, at: plot) } ?? false) || (session.moveSourcePlot.map {
@@ -208,6 +208,11 @@ struct VillageBoard: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .simultaneousGesture(LongPressGesture(minimumDuration: 0.55).onEnded { _ in
+            guard mode == .townCenter, building != nil, construction == nil else { return }
+            session.selectPlot(plot)
+            session.beginMovingSelectedBuilding()
+        })
         .accessibilityLabel(plotAccessibilityLabel)
         .accessibilityValue(selected ? "Sélectionné" : "")
         .accessibilityHint(session.moveSourcePlot == nil
