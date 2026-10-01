@@ -124,8 +124,6 @@ struct VillageBoard: View {
                         .frame(width: size, height: size)
                         .accessibilityHidden(true)
 
-                    TideLevelBadge(level: siteLevel, symbol: site.symbol)
-                        .offset(y: size * 0.34)
                         .overlay(alignment: .bottom) {
                             if let job = session.state.resourceUpgrade, job.plot == plot {
                                 Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
@@ -135,13 +133,6 @@ struct VillageBoard: View {
                                     .offset(y: 20)
                             }
                         }
-                        .overlay {
-                            if selected {
-                                Capsule()
-                                    .strokeBorder(Palette.amber, lineWidth: 2.5)
-                            }
-                        }
-                        .shadow(color: selected ? Palette.amber.opacity(0.6) : .clear, radius: 6)
                         .accessibilityHidden(true)
                 } else if let construction {
                     TimelineView(.periodic(from: .now, by: 1)) { timeline in
