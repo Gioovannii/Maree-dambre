@@ -51,14 +51,14 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
             let column = plot == 9 ? 1 : plot % 3
             return CGPoint(x: 0.24 + Double(column) * 0.26, y: 0.36 + Double(plot / 3) * 0.105)
         }
-        if plot == 12 { return CGPoint(x: 0.5, y: 0.34) }
+        if plot == 12 { return CGPoint(x: 0.5, y: 0.42) }
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19, 22, 23]
         guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
         let points: [CGPoint] = [
-            CGPoint(x: 0.25, y: 0.40), CGPoint(x: 0.50, y: 0.43), CGPoint(x: 0.75, y: 0.40),
-            CGPoint(x: 0.25, y: 0.51), CGPoint(x: 0.50, y: 0.54), CGPoint(x: 0.75, y: 0.51),
-            CGPoint(x: 0.25, y: 0.62), CGPoint(x: 0.50, y: 0.65), CGPoint(x: 0.75, y: 0.62),
-            CGPoint(x: 0.34, y: 0.73), CGPoint(x: 0.66, y: 0.73)
+            CGPoint(x: 0.25, y: 0.48), CGPoint(x: 0.50, y: 0.51), CGPoint(x: 0.75, y: 0.48),
+            CGPoint(x: 0.25, y: 0.59), CGPoint(x: 0.50, y: 0.62), CGPoint(x: 0.75, y: 0.59),
+            CGPoint(x: 0.25, y: 0.70), CGPoint(x: 0.50, y: 0.73), CGPoint(x: 0.75, y: 0.70),
+            CGPoint(x: 0.34, y: 0.81), CGPoint(x: 0.66, y: 0.81)
         ]
         return points[index]
     }
