@@ -4,25 +4,42 @@ import UIKit
 /// Render once per world; the camera moves the texture without rebuilding geography.
 @MainActor
 enum WorldTerrainTexture {
-    static func make(_ world: WorldMap) -> SKTexture {
+    private static var cachedSeed: Int?
+    private static var cachedTask: Task<UIImage, Never>?
+    private static var cachedTexture: SKTexture?
+
+    static func make(_ world: WorldMap) async -> SKTexture {
+        if cachedSeed == world.seed, let cachedTexture { return cachedTexture }
+        if cachedSeed != world.seed || cachedTask == nil {
+            cachedSeed = world.seed
+            cachedTexture = nil
+            cachedTask = Task.detached(priority: .userInitiated) { render(world) }
+        }
+        let image = await cachedTask!.value
+        let texture = SKTexture(image: image)
+        if cachedSeed == world.seed { cachedTexture = texture }
+        return texture
+    }
+
+    nonisolated private static func render(_ world: WorldMap) -> UIImage {
         let scale: CGFloat = 10
         let side = 200
         var heights = Array(repeating: 0.0, count: 201 * 201)
         for y in 0...side {
             for x in 0...side {
                 var sum = 0.0
-                for dy in -2...2 {
-                    for dx in -2...2 {
+                for dy in -3...3 {
+                    for dx in -3...3 {
                         if world.terrain(at: .init(x: x + dx, y: y + dy)) != .sea {
-                            sum += Double((3 - abs(dx)) * (3 - abs(dy)))
+                            sum += Double((4 - abs(dx)) * (4 - abs(dy)))
                         }
                     }
                 }
-                heights[y * 201 + x] = sum / 81
+                heights[y * 201 + x] = sum / 256
             }
         }
         let land = CGMutablePath()
-        let coast = CGMutablePath()
+        var segments: [(CGPoint, CGPoint)] = []
         for y in 0..<side {
             for x in 0..<side {
                 let corners = [(x, y), (x + 1, y), (x + 1, y + 1), (x, y + 1)]
@@ -40,10 +57,11 @@ enum WorldTerrainTexture {
                         }
                     }
                     if let p = polygon.first { land.move(to: p); polygon.dropFirst().forEach { land.addLine(to: $0) }; land.closeSubpath() }
-                    if crossings.count == 2 { coast.move(to: crossings[0]); coast.addLine(to: crossings[1]) }
+                    if crossings.count == 2 { segments.append((crossings[0], crossings[1])) }
                 }
             }
         }
+        let coast = CoastlinePath.make(segments)
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1
         let image = UIGraphicsImageRenderer(size: CGSize(width: 2000, height: 2000), format: format).image { renderer in
@@ -56,8 +74,7 @@ enum WorldTerrainTexture {
             ctx.setShadow(offset: CGSize(width: 1, height: 5), blur: 3, color: UIColor.black.withAlphaComponent(0.6).cgColor)
             ctx.addPath(land); ctx.setFillColor(UIColor(red: 0.48, green: 0.57, blue: 0.32, alpha: 1).cgColor); ctx.fillPath()
             ctx.restoreGState()
-            ctx.addPath(coast); ctx.setStrokeColor(UIColor(red: 0.85, green: 0.78, blue: 0.55, alpha: 1).cgColor); ctx.setLineWidth(5); ctx.strokePath()
-            ctx.addPath(coast); ctx.setStrokeColor(UIColor.white.withAlphaComponent(0.7).cgColor); ctx.setLineWidth(1); ctx.strokePath()
+            ctx.addPath(coast); ctx.setStrokeColor(UIColor(red: 0.78, green: 0.74, blue: 0.52, alpha: 1).cgColor); ctx.setLineWidth(3); ctx.strokePath()
             ctx.saveGState(); ctx.addPath(land); ctx.clip()
             for y in 0..<side {
                 for x in 0..<side where heights[y * 201 + x] > 0.62 {
@@ -83,6 +100,6 @@ enum WorldTerrainTexture {
             }
             ctx.restoreGState()
         }
-        return SKTexture(image: image)
+        return image
     }
 }

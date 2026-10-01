@@ -8,6 +8,8 @@ final class ArchipelagoScene: SKScene {
     private let selection = SKShapeNode(circleOfRadius: 38)
     private let route = SKShapeNode()
     private var currentSeed: Int?
+    private var terrainTask: Task<Void, Never>?
+    private let loading = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
     private var dragStart: CGPoint?
     private var zoomStart: CGFloat?
     private var locations: [TileCoordinate] = []
@@ -37,6 +39,12 @@ final class ArchipelagoScene: SKScene {
         sea.shader?.addUniform(SKUniform(name: "u_motion", float: 1))
         addChild(sea)
         addChild(viewpoint)
+        loading.text = "Préparation de l’archipel…"
+        loading.fontSize = 15
+        loading.fontColor = .white
+        loading.zPosition = 100
+        loading.isHidden = true
+        viewpoint.addChild(loading)
         camera = viewpoint
         viewpoint.setScale(2.4)
         viewpoint.position = point(.home)
@@ -57,13 +65,26 @@ final class ArchipelagoScene: SKScene {
 
     func configure(world: WorldMap, bots: [BotFaction], selected: TileCoordinate) {
         if currentSeed != world.seed {
-            childNode(withName: "terrain")?.removeFromParent()
-            let terrain = SKSpriteNode(texture: WorldTerrainTexture.make(world))
-            terrain.name = "terrain"
-            terrain.size = CGSize(width: 4800, height: 4800)
-            terrain.position = CGPoint(x: 2400, y: -2400)
-            addChild(terrain)
             currentSeed = world.seed
+            loading.isHidden = false
+            markers.isHidden = true
+            selection.isHidden = true
+            route.isHidden = true
+            terrainTask?.cancel()
+            terrainTask = Task { [weak self] in
+                let texture = await WorldTerrainTexture.make(world)
+                guard !Task.isCancelled, let self, self.currentSeed == world.seed else { return }
+                self.childNode(withName: "terrain")?.removeFromParent()
+                let terrain = SKSpriteNode(texture: texture)
+                terrain.name = "terrain"
+                terrain.size = CGSize(width: 4800, height: 4800)
+                terrain.position = CGPoint(x: 2400, y: -2400)
+                self.addChild(terrain)
+                self.loading.isHidden = true
+                self.markers.isHidden = false
+                self.selection.isHidden = false
+                self.route.isHidden = false
+            }
         }
         markers.removeAllChildren()
         locations = [.home] + bots.map(\.capital)

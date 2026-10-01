@@ -1,4 +1,4 @@
-struct WorldMap {
+struct WorldMap: Sendable {
     static let side = 200
     let seed: Int
     let tiles: [Terrain]

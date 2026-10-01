@@ -9,7 +9,7 @@ struct WorldCanvas: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            SpriteView(scene: scene, isPaused: scenePhase != .active, preferredFramesPerSecond: 30)
+            SpriteView(scene: scene, isPaused: scenePhase == .background, preferredFramesPerSecond: 30)
                 .frame(height: 500)
                 .overlay(alignment: .topLeading) {
                     Label("MER DES ÉCHOS", systemImage: "location.north.fill")
