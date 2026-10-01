@@ -125,9 +125,9 @@ struct GameView: View {
                 VStack(spacing: 8) {
                     topControls
                         .frame(maxWidth: 560)
+                    Spacer(minLength: 4)
                     constructionStatus
                         .frame(maxWidth: 560)
-                    Spacer(minLength: 4)
                     navigation
                         .frame(maxWidth: 560)
                 }
@@ -218,22 +218,11 @@ struct GameView: View {
 
     private var header: some View {
         HStack(alignment: .center, spacing: 8) {
-            Text(showsWorld ? "L’archipel" : villageMap.title)
-                .font(.headline.bold()).fontDesign(.serif)
-                .contentTransition(.opacity)
-            Spacer(minLength: 2)
-            Button { showsGuide = true } label: {
-                Image(systemName: "book.closed.fill")
-                    .frame(minWidth: 44, minHeight: 44)
+            if showsWorld || villageMap == .townCenter {
+                Text(showsWorld ? "L’archipel" : villageMap.title)
+                    .font(.headline.bold()).fontDesign(.serif)
+                    .contentTransition(.opacity)
             }
-            .accessibilityLabel("Premiers pas : \(guideStep.title)")
-            Label(session.state.people?.name ?? "Veilleurs", systemImage: "sailboat.fill")
-                .font(.caption.bold())
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
-                .foregroundStyle(Palette.muted)
-                .padding(.horizontal, 10).padding(.vertical, 9)
-                .background(Palette.panel, in: .capsule)
         }
         .foregroundStyle(Palette.paper)
         .accessibilityElement(children: .contain)
