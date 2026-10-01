@@ -87,7 +87,8 @@ struct VillageBoard: View {
             && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
         // Equal, compact footprints keep the Centre readable and leave room
         // for several buildings without making one lot dominate the map.
-        let size = min(76, max(52, mapWidth * 0.145))
+        let baseSize = min(76, max(52, mapWidth * 0.145))
+        let size = baseSize * (building == .hall ? 1.3 : 1.0)
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
         let canReceiveMovingBuilding = (session.pendingBuilding.map { session.state.canBuild($0, at: plot) } ?? false) || (session.moveSourcePlot.map {
@@ -122,18 +123,9 @@ struct VillageBoard: View {
                     Image(site.imageAssetName)
                         .resizable().scaledToFit()
                         .frame(width: size, height: size)
-                        .overlay {
-                            Text("\(site.name) · Niveau \(siteLevel)")
-                                .font(.caption.bold())
-                                .foregroundStyle(Palette.paper)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.75)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 5)
-                                .background(Palette.ocean.opacity(0.88), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-                                .overlay { RoundedRectangle(cornerRadius: 8, style: .continuous).strokeBorder(Palette.amber, lineWidth: 1) }
-                                .shadow(color: Palette.ocean.opacity(0.5), radius: 3)
+                        .overlay(alignment: .bottom) {
+                            TideLevelBadge(level: siteLevel, symbol: site.symbol)
+                                .offset(y: size * 0.34)
                         }
                         .accessibilityHidden(true)
 
