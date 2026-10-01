@@ -7,6 +7,10 @@ struct ConstructionPanel: View {
 
     private var terrain: Terrain { VillageState.ground(at: session.plot) }
     private var building: BuildingKind? { session.state.buildings[session.plot] }
+    private var construction: ConstructionJob? {
+        guard let job = session.state.construction, job.plot == session.plot else { return nil }
+        return job
+    }
     private var siteBuildings: [BuildingKind] {
         BuildingKind.constructible(in: mode).filter { $0.suits(terrain) }
     }
@@ -18,7 +22,7 @@ struct ConstructionPanel: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(building == nil ? "PARCELLE" : "BÂTIMENT")
+                    Text(construction != nil ? "CHANTIER" : building == nil ? "PARCELLE" : "BÂTIMENT")
                         .font(.caption.bold()).tracking(2).foregroundStyle(Palette.amber)
                     Text(title).font(.title2.bold()).fontDesign(.serif)
                         .fixedSize(horizontal: false, vertical: true)
@@ -77,6 +81,7 @@ struct ConstructionPanel: View {
     }
 
     private var title: String {
+        if let construction { return construction.kind.name }
         if let building { return building.name }
         return mode == .resourceFields ? "Champ de \(terrain.name.lowercased())" : "Emplacement urbain"
     }
