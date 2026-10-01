@@ -49,16 +49,16 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
     func mapPoint(for plot: Int) -> CGPoint {
         if self == .resourceFields {
             let column = plot == 9 ? 1 : plot % 3
-            return CGPoint(x: 0.22 + Double(column) * 0.28, y: 0.28 + Double(plot / 3) * 0.13)
+            return CGPoint(x: 0.24 + Double(column) * 0.26, y: 0.36 + Double(plot / 3) * 0.105)
         }
-        if plot == 12 { return CGPoint(x: 0.5, y: 0.22) }
+        if plot == 12 { return CGPoint(x: 0.5, y: 0.34) }
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19, 22, 23]
         guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
         let points: [CGPoint] = [
-            CGPoint(x: 0.20, y: 0.32), CGPoint(x: 0.50, y: 0.37), CGPoint(x: 0.80, y: 0.32),
-            CGPoint(x: 0.20, y: 0.46), CGPoint(x: 0.50, y: 0.50), CGPoint(x: 0.80, y: 0.46),
-            CGPoint(x: 0.20, y: 0.61), CGPoint(x: 0.50, y: 0.66), CGPoint(x: 0.80, y: 0.61),
-            CGPoint(x: 0.30, y: 0.76), CGPoint(x: 0.70, y: 0.76)
+            CGPoint(x: 0.25, y: 0.40), CGPoint(x: 0.50, y: 0.43), CGPoint(x: 0.75, y: 0.40),
+            CGPoint(x: 0.25, y: 0.51), CGPoint(x: 0.50, y: 0.54), CGPoint(x: 0.75, y: 0.51),
+            CGPoint(x: 0.25, y: 0.62), CGPoint(x: 0.50, y: 0.65), CGPoint(x: 0.75, y: 0.62),
+            CGPoint(x: 0.34, y: 0.73), CGPoint(x: 0.66, y: 0.73)
         ]
         return points[index]
     }

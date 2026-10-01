@@ -87,7 +87,7 @@ struct VillageBoard: View {
             && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
         // Equal, compact footprints keep the Centre readable and leave room
         // for several buildings without making one lot dominate the map.
-        let size = min(86, max(58, mapWidth * 0.17))
+        let size = min(76, max(52, mapWidth * 0.145))
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
         let canReceiveMovingBuilding = (session.pendingBuilding.map { session.state.canBuild($0, at: plot) } ?? false) || (session.moveSourcePlot.map {
