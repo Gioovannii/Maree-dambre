@@ -6,14 +6,18 @@ struct PlotDetailScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(VillageSession.self) private var session
 
+    private var selectedBuilding: BuildingKind? { session.state.buildings[session.plot] }
+    private var selectedConstruction: ConstructionJob? {
+        guard let job = session.state.construction, job.plot == session.plot else { return nil }
+        return job
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     if !isEmbedded {
-                        Image(mode.assetName)
-                        .resizable()
-                        .scaledToFill()
+                        detailHero
                         .frame(height: 180)
                         .clipped()
                         .overlay(alignment: .bottom) {
@@ -52,5 +56,22 @@ struct PlotDetailScreen: View {
             }
         }
         .preferredColorScheme(.dark)
+    }
+
+    @ViewBuilder
+    private var detailHero: some View {
+        if mode == .townCenter, selectedConstruction != nil {
+            ConstructionSiteArt()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Palette.ocean)
+        } else if mode == .townCenter, let selectedBuilding {
+            BuildingArt(kind: selectedBuilding)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Palette.ocean)
+        } else {
+            Image(mode.assetName)
+                .resizable()
+                .scaledToFill()
+        }
     }
 }
