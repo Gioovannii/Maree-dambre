@@ -122,6 +122,16 @@ struct VillageBoard: View {
                     Image(site.imageAssetName)
                         .resizable().scaledToFit()
                         .frame(width: size, height: size)
+                        .overlay(alignment: .topTrailing) {
+                            Text("N\(siteLevel)")
+                                .font(.caption2.bold().monospacedDigit())
+                                .foregroundStyle(Palette.paper)
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 3)
+                                .background(Palette.ocean.opacity(0.9), in: Capsule())
+                                .overlay { Capsule().strokeBorder(Palette.amber, lineWidth: 1) }
+                                .offset(x: 4, y: -2)
+                        }
                         .accessibilityHidden(true)
 
                         .overlay(alignment: .bottom) {
