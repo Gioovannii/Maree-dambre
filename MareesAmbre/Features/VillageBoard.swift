@@ -174,7 +174,6 @@ struct VillageBoard: View {
                                 .offset(y: -size * 0.01)
                                 .accessibilityHidden(true)
                         }
-                        .offset(y: -size * 0.20)
                         .accessibilityHidden(true)
                 } else if building == nil && site == nil && canReceiveMovingBuilding {
                     Ellipse()
