@@ -35,6 +35,6 @@ struct TideLevelBadge: View {
                 .strokeBorder(Palette.amber, lineWidth: 1.5)
         }
         .shadow(color: Palette.ocean.opacity(0.55), radius: 3, y: 2)
-        .accessibilityLabel("Niveau \(level)")
+        .accessibilityLabel(L10n.text("Niveau \(level)", "Level \(level)"))
     }
 }

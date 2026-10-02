@@ -16,9 +16,9 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
 
     var name: String {
         switch self {
-        case .woodland: "Bois des falaises"
-        case .cropland: "Terres cultivables"
-        case .amberVein: "Veine d’ambre"
+        case .woodland: L10n.text("Bois des falaises", "Cliff Woodland")
+        case .cropland: L10n.text("Terres cultivables", "Farmland")
+        case .amberVein: L10n.text("Veine d’ambre", "Amber Vein")
         }
     }
 
@@ -48,9 +48,9 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
 
     var yieldLabel: String {
         switch self {
-        case .woodland: "bois"
-        case .cropland: "vivres"
-        case .amberVein: "ambre"
+        case .woodland: L10n.text("bois", "wood")
+        case .cropland: L10n.text("vivres", "food")
+        case .amberVein: L10n.text("ambre", "amber")
         }
     }
 

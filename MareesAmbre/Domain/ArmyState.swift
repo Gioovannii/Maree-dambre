@@ -154,7 +154,7 @@ extension VillageState {
             resources.wood += wood
             resources.amber += amber
             resources.provisions += provisions
-            troops.report = "\(won ? "Victoire" : "Défaite") contre \(raid.targetName). \(losses) perte(s). Butin stocké : \(wood) bois, \(amber) ambre, \(provisions) vivres."
+            troops.report = L10n.text("\(won ? "Victoire" : "Défaite") contre \(raid.targetDisplayName). \(losses) perte(s). Butin stocké : \(wood) bois, \(amber) ambre, \(provisions) vivres.", "\(won ? "Victory" : "Defeat") against \(raid.targetDisplayName). \(losses) losses. Loot stored: \(wood) wood, \(amber) amber, \(provisions) food.")
             troops.raid = nil
         }
         army = troops

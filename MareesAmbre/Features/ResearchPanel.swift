@@ -5,8 +5,8 @@ struct ResearchPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Unités · \(session.state.people?.name ?? "Humains")").font(.title2.bold())
-            Text("Chaque recherche débloque définitivement une unité pour ce village. Entraînez-la ensuite à la Cour des armes.")
+            Text(L10n.text("Unités · \(session.state.people?.name ?? "Humains")", "Units · \(session.state.people?.name ?? "Humans")")).font(.title2.bold())
+            Text(L10n.text("Chaque recherche débloque définitivement une unité pour ce village. Entraînez-la ensuite à la Cour des armes.", "Each research permanently unlocks a unit for this village. Train it at the Training Grounds."))
                 .font(.subheadline).foregroundStyle(Palette.muted)
             if let research = session.state.army?.research {
                 Label(research.unit.name, systemImage: "hourglass")
@@ -24,13 +24,13 @@ struct ResearchPanel: View {
                     Label(unit.name, systemImage: unit.emblem).font(.headline)
                     Text(unit.role).font(.subheadline.bold()).foregroundStyle(Palette.amber)
                     Text(unit.description).font(.subheadline).foregroundStyle(Palette.muted)
-                    Text("Force \(unit.attack) · Transport \(unit.carrying)").font(.subheadline)
+                    Text(L10n.text("Force \(unit.attack) · Transport \(unit.carrying)", "Power \(unit.attack) · Carrying capacity \(unit.carrying)")).font(.subheadline)
                     if session.state.unlockedUnits.contains(unit) {
-                        Label("Doctrine acquise", systemImage: "checkmark.seal.fill")
+                        Label(L10n.text("Doctrine acquise", "Doctrine learned"), systemImage: "checkmark.seal.fill")
                     } else {
-                        Text("\(unit.researchCost.wood) bois · \(unit.researchCost.amber) ambre · \(unit.researchCost.provisions) vivres")
+                        Text(L10n.text("\(unit.researchCost.wood) bois · \(unit.researchCost.amber) ambre · \(unit.researchCost.provisions) vivres", "\(unit.researchCost.wood) wood · \(unit.researchCost.amber) amber · \(unit.researchCost.provisions) food"))
                             .font(.footnote)
-                        Button("Rechercher · 1 min") { session.research(unit) }
+                        Button(L10n.text("Rechercher · 1 min", "Research · 1 min")) { session.research(unit) }
                             .buttonStyle(.borderedProminent)
                             .disabled(!session.state.canResearch(unit))
                     }

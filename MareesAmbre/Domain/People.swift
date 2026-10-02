@@ -9,9 +9,9 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .sauniers: "Humains"
-        case .nacre: "Peuple des récifs"
-        case .roseaux: "Elfes des marais"
+        case .sauniers: L10n.text("Humains", "Humans")
+        case .nacre: L10n.text("Peuple des récifs", "Reef Folk")
+        case .roseaux: L10n.text("Elfes des marais", "Marsh Elves")
         }
     }
 
@@ -25,17 +25,17 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var description: String {
         switch self {
-        case .sauniers: "Navigateurs, bâtisseurs et commerçants. Leurs expéditions privilégient le transport des ressources."
-        case .nacre: "Un peuple amphibie à la peau nacrée. Ses gardiens et ses mages combattent ensemble."
-        case .roseaux: "Des elfes des lagunes et des mangroves. Leurs expéditions reviennent plus vite."
+        case .sauniers: L10n.text("Navigateurs, bâtisseurs et commerçants. Leurs expéditions privilégient le transport des ressources.", "Sailors, builders and traders. Their expeditions excel at carrying resources.")
+        case .nacre: L10n.text("Un peuple amphibie à la peau nacrée. Ses gardiens et ses mages combattent ensemble.", "An amphibious people with pearlescent skin. Their guardians and mages fight together.")
+        case .roseaux: L10n.text("Des elfes des lagunes et des mangroves. Leurs expéditions reviennent plus vite.", "Elves of lagoons and mangroves. Their expeditions return sooner.")
         }
     }
 
     var strength: String {
         switch self {
-        case .sauniers: "+20 % de capacité de transport · +10 % de bois"
-        case .nacre: "Les mages réduisent les pertes lors des victoires"
-        case .roseaux: "Expéditions de 90 s au lieu de 120 s · +10 % d’ambre"
+        case .sauniers: L10n.text("+20 % de capacité de transport · +10 % de bois", "+20% carrying capacity · +10% wood")
+        case .nacre: L10n.text("Les mages réduisent les pertes lors des victoires", "Mages reduce losses in victorious battles")
+        case .roseaux: L10n.text("Expéditions de 90 s au lieu de 120 s · +10 % d’ambre", "90-second expeditions instead of 120 · +10% amber")
         }
     }
 

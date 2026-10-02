@@ -17,7 +17,7 @@ struct ConstructionLiveActivity: Widget {
                 Image(systemName: context.attributes.buildingSymbol)
                     .font(.title2.bold()).foregroundStyle(.orange)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(context.isStale || context.attributes.endsAt <= .now ? "Chantier terminé" : "Chantier en cours").font(.caption.bold()).textCase(.uppercase)
+                    Text(context.isStale || context.attributes.endsAt <= .now ? L10n.text("Chantier terminé", "Construction complete") : L10n.text("Chantier en cours", "Construction in progress")).font(.caption.bold()).textCase(.uppercase)
                     Text(context.attributes.buildingName).font(.headline)
                     ProgressView(timerInterval: min(context.attributes.startedAt ?? context.attributes.endsAt.addingTimeInterval(-60), context.attributes.endsAt)...context.attributes.endsAt, countsDown: false)
                         .tint(.orange)

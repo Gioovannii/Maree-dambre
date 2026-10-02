@@ -45,7 +45,7 @@ struct VillageBoard: View {
 
                     if mode == .resourceFields {
                         Button(action: onTownSelected) {
-                            Label("Quais & Centre", systemImage: "sailboat.fill")
+                            Label(L10n.text("Quais & Centre", "Quay & Town"), systemImage: "sailboat.fill")
                                 .font(.caption.bold())
                                 .foregroundStyle(Palette.paper)
                                 .padding(.horizontal, 11)
@@ -56,7 +56,7 @@ struct VillageBoard: View {
                         .buttonStyle(.plain)
                         .position(x: mapSize.width * 0.50, y: mapSize.height * 0.79)
                         .zIndex(100)
-                        .accessibilityHint("Ouvrir le port et les bâtiments du Centre-ville")
+                        .accessibilityHint(L10n.text("Ouvrir le port et les bâtiments du Centre-ville", "Open the harbor and town buildings"))
                     }
                 }
                 .frame(width: mapSize.width, height: mapSize.height)
@@ -65,7 +65,7 @@ struct VillageBoard: View {
             .clipped()
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Carte entière du district : \(mode.title).")
+        .accessibilityLabel(L10n.text("Carte entière du district : \(mode.title).", "Full district map: \(mode.title)."))
     }
 
     private var visibleSlots: [Int] {
@@ -96,11 +96,11 @@ struct VillageBoard: View {
         } ?? false)
         let plotAccessibilityLabel: String
         if let site {
-            plotAccessibilityLabel = "Zone \(mode.slotNumber(for: plot) ?? 0), \(site.name), niveau \(siteLevel)"
+            plotAccessibilityLabel = L10n.text("Zone \(mode.slotNumber(for: plot) ?? 0), \(site.name), niveau \(siteLevel)", "Site \(mode.slotNumber(for: plot) ?? 0), \(site.name), level \(siteLevel)")
         } else if let construction {
-            plotAccessibilityLabel = "Chantier de \(construction.kind.name), \(Int(constructionProgress * 100)) pour cent terminé"
+            plotAccessibilityLabel = L10n.text("Chantier de \(construction.kind.name), \(Int(constructionProgress * 100)) pour cent terminé", "Construction of \(construction.kind.name), \(Int(constructionProgress * 100)) percent complete")
         } else {
-            plotAccessibilityLabel = "Emplacement \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible" : "")"
+            plotAccessibilityLabel = L10n.text("Emplacement \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", indisponible" : "")", "Plot \(mode.slotNumber(for: plot) ?? 0), \(building?.name ?? terrain.name)\(isUnavailable ? ", unavailable" : "")")
         }
 
         return Button {
@@ -209,10 +209,10 @@ struct VillageBoard: View {
             session.beginMovingSelectedBuilding()
         })
         .accessibilityLabel(plotAccessibilityLabel)
-        .accessibilityValue(selected ? "Sélectionné" : "")
+        .accessibilityValue(selected ? L10n.text("Sélectionné", "Selected") : "")
         .accessibilityHint(session.moveSourcePlot == nil
-            ? (site == nil ? "Afficher les détails ou construire sur cet emplacement" : "Afficher la production et améliorer cette zone")
-            : "Déplacer le bâtiment sélectionné vers cette case si elle est compatible")
+            ? (site == nil ? L10n.text("Afficher les détails ou construire sur cet emplacement", "View details or build on this plot") : L10n.text("Afficher la production et améliorer cette zone", "View production and upgrade this site"))
+            : L10n.text("Déplacer le bâtiment sélectionné vers cette case si elle est compatible", "Move the selected building to this plot if compatible"))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 

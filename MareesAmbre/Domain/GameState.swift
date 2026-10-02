@@ -13,11 +13,11 @@ struct GameState: Codable, Equatable {
         // Integer mixing is explicitly stable; never use Swift's randomized hashValue.
         let offset = Double((UInt64(max(seed, 0)) &* 1_664_525 &+ 1_013_904_223) % 11) / 100
         islands = [
-            Island(id: 0, name: "Port d’Ambre", subtitle: "Votre foyer · Ligue des Veilleurs", x: 0.30, y: 0.52, isHome: true, portLevel: 1),
-            Island(id: 1, name: "Les Brumes", subtitle: "Forêts silencieuses", x: 0.24 + offset, y: 0.18, isHome: false, portLevel: 0),
-            Island(id: 2, name: "Éclat", subtitle: "Récifs ambrés", x: 0.72, y: 0.30, isHome: false, portLevel: 0),
-            Island(id: 3, name: "Sillage", subtitle: "Terres fertiles", x: 0.68 + offset / 2, y: 0.72, isHome: false, portLevel: 0),
-            Island(id: 4, name: "Le Refuge", subtitle: "Havre inexploré", x: 0.24, y: 0.86, isHome: false, portLevel: 0)
+            Island(id: 0, name: L10n.text("Port d’Ambre", "Amber Harbor"), subtitle: L10n.text("Votre foyer · Ligue des Veilleurs", "Your home · League of Watchers"), x: 0.30, y: 0.52, isHome: true, portLevel: 1),
+            Island(id: 1, name: L10n.text("Les Brumes", "The Mists"), subtitle: L10n.text("Forêts silencieuses", "Silent forests"), x: 0.24 + offset, y: 0.18, isHome: false, portLevel: 0),
+            Island(id: 2, name: L10n.text("Éclat", "Gleam"), subtitle: L10n.text("Récifs ambrés", "Amber reefs"), x: 0.72, y: 0.30, isHome: false, portLevel: 0),
+            Island(id: 3, name: L10n.text("Sillage", "Wake"), subtitle: L10n.text("Terres fertiles", "Fertile lands"), x: 0.68 + offset / 2, y: 0.72, isHome: false, portLevel: 0),
+            Island(id: 4, name: L10n.text("Le Refuge", "The Refuge"), subtitle: L10n.text("Havre inexploré", "Unexplored haven"), x: 0.24, y: 0.86, isHome: false, portLevel: 0)
         ]
     }
 

@@ -15,7 +15,7 @@ struct ConstructionActivityAttributes: ActivityAttributes {
 enum ConstructionActivityController {
     static func start(for job: ResourceUpgrade) {
         guard let kind = ResourceSiteKind.at(job.plot) else { return }
-        start(name: "\(kind.name) · Niveau \(job.targetLevel)", symbol: kind.symbol,
+        start(name: L10n.text("\(kind.name) · Niveau \(job.targetLevel)", "\(kind.name) · Level \(job.targetLevel)"), symbol: kind.symbol,
               startedAt: job.startedAt, endsAt: job.endsAt)
     }
 

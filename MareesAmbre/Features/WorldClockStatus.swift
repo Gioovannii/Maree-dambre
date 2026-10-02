@@ -10,10 +10,10 @@ struct WorldClockStatus: View {
                 .frame(width: 38, height: 38)
                 .background(Palette.amber.opacity(0.12), in: Circle())
             VStack(alignment: .leading, spacing: 3) {
-                Text("LE MONDE CONTINUE")
+                Text(L10n.text("LE MONDE CONTINUE", "THE WORLD KEEPS MOVING"))
                     .font(.caption.bold()).tracking(1.5).foregroundStyle(Palette.paper)
                 TimelineView(.periodic(from: .now, by: 1)) { timeline in
-                    Text("Prochaine ressource \(session.nextProductionIn(at: timeline.date)) · production et factions avancent hors ligne.")
+                    Text(L10n.text("Prochaine ressource \(session.nextProductionIn(at: timeline.date)) · production et factions avancent hors ligne.", "Next resource \(session.nextProductionIn(at: timeline.date)) · production and factions progress offline."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                 }
             }

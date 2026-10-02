@@ -28,26 +28,26 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
     }
     var name: String {
         switch self {
-        case .hall: "Maison des Veilleurs"
-        case .lumbermill: "Scierie"
-        case .farm: "Ferme"
-        case .amberWorks: "Atelier d’ambre"
-        case .watchtower: "Tour de garde"
-        case .warehouse: "Entrepôt"
-        case .warCourt: "Cour des armes"
-        case .academy: "Maison des savoirs"
+        case .hall: L10n.text("Maison des Veilleurs", "Watchers’ Hall")
+        case .lumbermill: L10n.text("Scierie", "Sawmill")
+        case .farm: L10n.text("Ferme", "Farm")
+        case .amberWorks: L10n.text("Atelier d’ambre", "Amber Workshop")
+        case .watchtower: L10n.text("Tour de garde", "Watchtower")
+        case .warehouse: L10n.text("Entrepôt", "Warehouse")
+        case .warCourt: L10n.text("Cour des armes", "Training Grounds")
+        case .academy: L10n.text("Maison des savoirs", "Academy")
         }
     }
     var purpose: String {
         switch self {
-        case .hall: "Cœur du village : elle assure les premières ressources sans interruption."
-        case .lumbermill: "Transforme le bois de la forêt en réserves pour les chantiers."
-        case .farm: "Cultive des vivres pour soutenir la croissance du village."
-        case .amberWorks: "Extrait et travaille l’ambre présent dans ce gisement."
-        case .watchtower: "Renforce la défense automatique du village."
-        case .warehouse: "Augmente la quantité de ressources que le village peut conserver."
-        case .warCourt: "Entraîne les unités débloquées par la Maison des savoirs."
-        case .academy: "Étudie les doctrines qui débloquent de nouvelles unités."
+        case .hall: L10n.text("Cœur du village : elle assure les premières ressources sans interruption.", "The heart of the village. It provides your first resources continuously.")
+        case .lumbermill: L10n.text("Transforme le bois de la forêt en réserves pour les chantiers.", "Turns forest timber into supplies for construction.")
+        case .farm: L10n.text("Cultive des vivres pour soutenir la croissance du village.", "Grows food to support the village’s growth.")
+        case .amberWorks: L10n.text("Extrait et travaille l’ambre présent dans ce gisement.", "Extracts and crafts amber from this deposit.")
+        case .watchtower: L10n.text("Renforce la défense automatique du village.", "Strengthens the village’s automatic defense.")
+        case .warehouse: L10n.text("Augmente la quantité de ressources que le village peut conserver.", "Increases the amount of resources the village can store.")
+        case .warCourt: L10n.text("Entraîne les unités débloquées par la Maison des savoirs.", "Trains units unlocked at the Academy.")
+        case .academy: L10n.text("Étudie les doctrines qui débloquent de nouvelles unités.", "Researches doctrines that unlock new units.")
         }
     }
 
@@ -99,14 +99,14 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
     }
     var productionText: String {
         return switch self {
-        case .hall: "+2 bois · +1 ambre · +2 vivres / h"
-        case .lumbermill: "+8 bois / h"
-        case .farm: "+8 vivres / h"
-        case .amberWorks: "+4 ambre / h"
-        case .watchtower: "+2 défense automatique"
-        case .warehouse: "+500 de capacité de réserve"
-        case .warCourt: "Entraînement des troupes"
-        case .academy: "Recherche de nouvelles unités"
+        case .hall: L10n.text("+2 bois · +1 ambre · +2 vivres / h", "+2 wood · +1 amber · +2 food / h")
+        case .lumbermill: L10n.text("+8 bois / h", "+8 wood / h")
+        case .farm: L10n.text("+8 vivres / h", "+8 food / h")
+        case .amberWorks: L10n.text("+4 ambre / h", "+4 amber / h")
+        case .watchtower: L10n.text("+2 défense automatique", "+2 automatic defense")
+        case .warehouse: L10n.text("+500 de capacité de réserve", "+500 storage capacity")
+        case .warCourt: L10n.text("Entraînement des troupes", "Troop training")
+        case .academy: L10n.text("Recherche de nouvelles unités", "New unit research")
         }
     }
 

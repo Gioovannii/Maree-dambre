@@ -9,7 +9,7 @@ struct ConstructionCountdown: View {
         if isStale || endsAt <= .now {
             Image(systemName: "checkmark.circle.fill")
                 .foregroundStyle(.green)
-                .accessibilityLabel("Chantier terminé")
+                .accessibilityLabel(L10n.text("Chantier terminé", "Construction complete"))
         } else {
             Text(timerInterval: min(Date.now, endsAt)...endsAt, countsDown: true, showsHours: false)
                 .monospacedDigit()

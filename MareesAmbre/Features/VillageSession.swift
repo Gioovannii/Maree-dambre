@@ -7,7 +7,7 @@ final class VillageSession {
     let world: WorldMap
     var plot = VillageMapMode.resourceFields.initialPlot
     var selectedTile = TileCoordinate.home
-    private(set) var message = "Choisissez un emplacement libre pour construire."
+    private(set) var message = L10n.text("Choisissez un emplacement libre pour construire.", "Choose an empty plot to build.")
     private(set) var pendingBuilding: BuildingKind?
     private(set) var moveSourcePlot: Int?
     private(set) var elapsedSeconds = 0
@@ -36,7 +36,7 @@ final class VillageSession {
         do {
             if let saved = try storage.load(seed: seed, world: world) { state = saved }
         } catch {
-            message = "Sauvegarde du village illisible. Un village neuf est affiché ; la prochaine action remplacera cette sauvegarde."
+            message = L10n.text("Sauvegarde du village illisible. Un village neuf est affiché ; la prochaine action remplacera cette sauvegarde.", "The village save could not be read. A new village is shown; your next action will replace this save.")
         }
         refreshWorld()
         productionTask = Task { [weak self] in
@@ -52,53 +52,53 @@ final class VillageSession {
     func choosePeople(_ people: People) {
         guard state.people == nil else { return }
         state.people = people
-        persist("\(people.name) veille désormais sur Port d’Ambre.")
+        persist(L10n.text("\(people.name) veille désormais sur Port d’Ambre.", "\(people.name) now watch over Amber Harbor."))
     }
 
     func train(_ unit: ArmyUnit, count: Int) {
         refreshWorld()
         guard state.train(unit, count: count) else { return }
-        persist("Entraînement de \(count) unité(s) lancé.")
+        persist(L10n.text("Entraînement de \(count) unité(s) lancé.", "Training started for \(count) units."))
     }
 
     func research(_ unit: ArmyUnit) {
         refreshWorld()
         guard state.research(unit) else { return }
-        persist("Recherche lancée : \(unit.name). Fin dans une minute.")
+        persist(L10n.text("Recherche lancée : \(unit.name). Fin dans une minute.", "Research started: \(unit.name). Ready in one minute."))
     }
 
     func raid(_ targetID: Int) {
         refreshWorld()
         guard state.raid(targetID: targetID) else { return }
-        persist("Expédition partie. Retour dans \(Int(state.raidDuration)) secondes.")
+        persist(L10n.text("Expédition partie. Retour dans \(Int(state.raidDuration)) secondes.", "Expedition departed. Returns in \(Int(state.raidDuration)) seconds."))
     }
 
     func developSelectedResource() {
         refreshWorld()
         guard state.developResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return }
         if let job = state.resourceUpgrade { ConstructionActivityController.start(for: job) }
-        persist("\(kind.name) : amélioration lancée. Fin dans une minute.")
+        persist(L10n.text("\(kind.name) : amélioration lancée. Fin dans une minute.", "\(kind.name): upgrade started. Ready in one minute."))
     }
 
     func cancelResourceUpgrade() {
         refreshWorld()
         guard state.cancelResourceUpgrade() else { return }
         ConstructionActivityController.end()
-        persist("Amélioration annulée. La moitié des ressources a été récupérée.")
+        persist(L10n.text("Amélioration annulée. La moitié des ressources a été récupérée.", "Upgrade canceled. Half the resources were refunded."))
     }
 
     func build(_ kind: BuildingKind) {
         refreshWorld()
         guard state.build(kind, at: plot) else { return }
         if let job = state.construction { ConstructionActivityController.start(for: job) }
-        persist("\(kind.name) : chantier lancé. Fin dans une minute.")
+        persist(L10n.text("\(kind.name) : chantier lancé. Fin dans une minute.", "\(kind.name): construction started. Ready in one minute."))
     }
 
     func cancelConstruction() {
         refreshWorld()
         guard let job = state.cancelConstruction() else { return }
         ConstructionActivityController.end()
-        persist("Chantier annulé. La moitié des ressources a été récupérée.")
+        persist(L10n.text("Chantier annulé. La moitié des ressources a été récupérée.", "Construction canceled. Half the resources were refunded."))
         _ = job
     }
 
@@ -109,7 +109,7 @@ final class VillageSession {
     func beginPlacing(_ kind: BuildingKind) {
         pendingBuilding = kind
         moveSourcePlot = nil
-        message = "Choisissez une parcelle libre pour \(kind.name.lowercased())."
+        message = L10n.text("Choisissez une parcelle libre pour \(kind.name.lowercased()).", "Choose an empty plot for \(kind.name).")
     }
 
     func cancelPlacement() {
@@ -121,18 +121,18 @@ final class VillageSession {
         pendingBuilding = nil
         guard let kind = state.buildings[plot], kind != .hall else { return }
         moveSourcePlot = plot
-        message = "Touchez une case libre compatible pour déplacer \(kind.name.lowercased())."
+        message = L10n.text("Touchez une case libre compatible pour déplacer \(kind.name.lowercased()).", "Tap a compatible empty plot to move \(kind.name).")
     }
 
     func cancelMovingBuilding() {
         moveSourcePlot = nil
-        message = "Déplacement annulé."
+        message = L10n.text("Déplacement annulé.", "Move canceled.")
     }
 
     func selectPlot(_ destination: Int) {
         if let kind = pendingBuilding {
             guard state.canBuild(kind, at: destination) else {
-                message = "Choisissez une parcelle libre compatible."
+                message = L10n.text("Choisissez une parcelle libre compatible.", "Choose a compatible empty plot.")
                 return
             }
             plot = destination
@@ -143,12 +143,12 @@ final class VillageSession {
         if let source = moveSourcePlot {
             guard state.moveBuilding(from: source, to: destination),
                   let kind = state.buildings[destination] else {
-                message = "Cette case ne peut pas accueillir ce bâtiment."
+                message = L10n.text("Cette case ne peut pas accueillir ce bâtiment.", "This building cannot be placed here.")
                 return
             }
             plot = destination
             moveSourcePlot = nil
-            persist("\(kind.name) déplacée. Sa production continue.")
+            persist(L10n.text("\(kind.name) déplacée. Sa production continue.", "\(kind.name) moved. Production continues."))
             return
         }
         plot = destination
@@ -161,10 +161,10 @@ final class VillageSession {
         if let finished = previous.construction,
            state.construction == nil,
            state.buildings[finished.plot] == finished.kind {
-            message = "\(finished.kind.name) terminé. Le bâtiment est prêt."
+            message = L10n.text("\(finished.kind.name) terminé. Le bâtiment est prêt.", "\(finished.kind.name) completed. The building is ready.")
             ConstructionActivityController.end()
         } else if let finished = previous.resourceUpgrade, state.resourceUpgrade == nil {
-            message = "Terrain amélioré au niveau \(finished.targetLevel)."
+            message = L10n.text("Terrain amélioré au niveau \(finished.targetLevel).", "Resource site upgraded to level \(finished.targetLevel).")
             ConstructionActivityController.end()
         } else if state.construction == nil && state.resourceUpgrade == nil {
             ConstructionActivityController.end()
@@ -187,7 +187,7 @@ final class VillageSession {
         }
         guard let seconds = candidates.min() else { return "—" }
         let safe = max(0, seconds)
-        return "dans \(safe / 60)m \(safe % 60)s"
+        return L10n.text("dans \(safe / 60)m \(safe % 60)s", "in \(safe / 60)m \(safe % 60)s")
     }
     private func persist(_ text: String) {
         message = text
@@ -198,7 +198,7 @@ final class VillageSession {
         do {
             try storage.save(state)
         } catch {
-            message = "Action effectuée, mais sauvegarde impossible."
+            message = L10n.text("Action effectuée, mais sauvegarde impossible.", "Action completed, but the game could not be saved.")
         }
     }
 

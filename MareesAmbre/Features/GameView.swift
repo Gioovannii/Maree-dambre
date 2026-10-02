@@ -36,26 +36,26 @@ struct GameView: View {
         }) {
             NavigationStack {
                 List {
-                    Section("Votre prochaine étape") {
+                    Section(L10n.text("Votre prochaine étape", "Your next step")) {
                         Text(guideStep.title).font(.headline)
                         Text(guideStep.detail)
-                        Button("Voir où agir", action: followGuide)
+                        Button(L10n.text("Voir où agir", "Show me where"), action: followGuide)
                     }
-                    Section("Votre première expédition") {
-                        Text("1. Développez une forêt, un champ et un gisement pour produire les trois ressources.")
-                        Text("2. Construisez la Maison des savoirs et recherchez une unité.")
-                        Text("3. Construisez la Cour des armes et entraînez vos troupes.")
-                        Text("4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir.")
+                    Section(L10n.text("Votre première expédition", "Your first expedition")) {
+                        Text(L10n.text("1. Développez une forêt, un champ et un gisement pour produire les trois ressources.", "1. Develop a woodland, a field and a deposit to produce all three resources."))
+                        Text(L10n.text("2. Construisez la Maison des savoirs et recherchez une unité.", "2. Build the Academy and research a unit."))
+                        Text(L10n.text("3. Construisez la Cour des armes et entraînez vos troupes.", "3. Build the Training Grounds and train your troops."))
+                        Text(L10n.text("4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir.", "4. On the world map, select a faction and compare your strength before departing."))
                     }
-                    Section("À savoir") {
-                        Text("La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum.")
-                        Text("Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter.")
-                        Text("Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées.")
+                    Section(L10n.text("À savoir", "Good to know")) {
+                        Text(L10n.text("La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum.", "Production continues while you are away, up to the displayed limit. The Warehouse increases this limit."))
+                        Text(L10n.text("Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter.", "A Sawmill, Farm or Amber Workshop requires a matching resource site at level 10. This bonus is not needed to start recruiting."))
+                        Text(L10n.text("Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées.", "Attacks may cost units. Loot is limited by surviving troops and available storage. Opponents are simulated factions."))
                     }
                 }
-                .navigationTitle("Premiers pas")
+                .navigationTitle(L10n.text("Premiers pas", "Getting started"))
                 .toolbar { ToolbarItem(placement: .confirmationAction) {
-                    Button("Fermer") { showsGuide = false }
+                    Button(L10n.text("Fermer", "Close")) { showsGuide = false }
                 } }
             }
         }
@@ -87,11 +87,11 @@ struct GameView: View {
                 if showsWorld {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Votre prochaine étape").font(.title2.bold())
+                            Text(L10n.text("Votre prochaine étape", "Your next step")).font(.title2.bold())
                             Text(guideStep.title).font(.headline)
                             Text(guideStep.detail)
-                            Button("Ouvrir le guide") { showsGuide = true }
-                            Text("Touchez une faction sur la carte pour consulter sa défense et préparer une expédition.")
+                            Button(L10n.text("Ouvrir le guide", "Open guide")) { showsGuide = true }
+                            Text(L10n.text("Touchez une faction sur la carte pour consulter sa défense et préparer une expédition.", "Tap a faction on the map to view its defense and prepare an expedition."))
                             WorldClockStatus()
                         }
                         .padding(20)
@@ -161,9 +161,9 @@ struct GameView: View {
                             .frame(width: 28, height: 28)
                             .background(Palette.amber, in: Circle())
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("CHANTIER · \(job.kind.name.uppercased())")
+                            Text(L10n.text("CHANTIER · \(job.kind.name.uppercased())", "CONSTRUCTION · \(job.kind.name.uppercased())"))
                                 .font(.caption2.bold()).tracking(1.2)
-                            Text(remaining > 0 ? "Termine dans \(remaining) s" : "Achèvement en cours")
+                            Text(remaining > 0 ? L10n.text("Termine dans \(remaining) s", "Finishes in \(remaining) s") : L10n.text("Achèvement en cours", "Finishing construction"))
                                 .font(.caption.bold()).foregroundStyle(Palette.amber)
                         }
                         Spacer()
@@ -177,7 +177,7 @@ struct GameView: View {
                     .background(.ultraThinMaterial, in: .capsule)
                     .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.45), lineWidth: 1) }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Chantier de \(job.kind.name), \(remaining) secondes restantes")
+                    .accessibilityLabel(L10n.text("Chantier de \(job.kind.name), \(remaining) secondes restantes", "Construction of \(job.kind.name), \(remaining) seconds remaining"))
                 }
             }
         }
@@ -219,7 +219,7 @@ struct GameView: View {
     private var header: some View {
         HStack(alignment: .center, spacing: 8) {
             if showsWorld || villageMap == .townCenter {
-                Text(showsWorld ? "L’archipel" : villageMap.title)
+                Text(showsWorld ? L10n.text("L’archipel", "The Archipelago") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
                     .contentTransition(.opacity)
             }
@@ -230,13 +230,13 @@ struct GameView: View {
 
     private var navigation: some View {
         HStack(spacing: 5) {
-            navigationButton("Ressources", symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
+            navigationButton(L10n.text("Ressources", "Resources"), symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
                 selectVillageMap(.resourceFields)
             }
-            navigationButton("Centre", symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
+            navigationButton(L10n.text("Centre", "Town"), symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
                 selectVillageMap(.townCenter)
             }
-            navigationButton("Monde", symbol: "map.fill", selected: showsWorld) {
+            navigationButton(L10n.text("Monde", "World"), symbol: "map.fill", selected: showsWorld) {
                 showsWorld = true
             }
         }
@@ -278,27 +278,27 @@ struct GameView: View {
 
     private var guideStep: (title: String, detail: String, kind: BuildingKind?, plot: Int?) {
         if let job = session.state.resourceUpgrade {
-            return ("Votre terrain se développe", "Le nouveau niveau sera disponible à la fin de la minute de travaux.", nil, job.plot)
+            return (L10n.text("Votre terrain se développe", "Your resource site is developing"), L10n.text("Le nouveau niveau sera disponible à la fin de la minute de travaux.", "The new level will be ready after one minute of work."), nil, job.plot)
         }
         for plot in [0, 2, 4] where session.state.resourceLevel(at: plot) == 0 {
-            return ("Lancez vos trois productions", "Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves.", nil, plot)
+            return (L10n.text("Lancez vos trois productions", "Start all three resource productions"), L10n.text("Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves.", "Upgrade this site to level 1. If resources are low, let production replenish your stores."), nil, plot)
         }
         if let job = session.state.construction {
-            return ("Votre chantier avance", "Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût.", job.kind, job.plot)
+            return (L10n.text("Votre chantier avance", "Construction is progressing"), L10n.text("Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût.", "Check the remaining time or cancel to recover half the cost."), job.kind, job.plot)
         }
         if !session.state.hasBuilding(.academy) {
-            return ("Construisez la Maison des savoirs", "Choisissez ce bâtiment sur un lot libre du Centre.", .academy, nil)
+            return (L10n.text("Construisez la Maison des savoirs", "Build the Academy"), L10n.text("Choisissez ce bâtiment sur un lot libre du Centre.", "Choose this building on an empty town lot."), .academy, nil)
         }
         if session.state.unlockedUnits.isEmpty {
-            return ("Découvrez votre première unité", "Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours.", .academy, nil)
+            return (L10n.text("Découvrez votre première unité", "Discover your first unit"), L10n.text("Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours.", "Open the Academy to start research or follow its progress."), .academy, nil)
         }
         if !session.state.hasBuilding(.warCourt) {
-            return ("Construisez la Cour des armes", "Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs.", .warCourt, nil)
+            return (L10n.text("Construisez la Cour des armes", "Build the Training Grounds"), L10n.text("Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs.", "This building trains units discovered at the Academy."), .warCourt, nil)
         }
         if session.state.armyPower == 0 && session.state.army?.raid == nil {
-            return ("Entraînez vos premières troupes", "Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition.", .warCourt, nil)
+            return (L10n.text("Entraînez vos premières troupes", "Train your first troops"), L10n.text("Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition.", "Open the Training Grounds and recruit several units before your expedition."), .warCourt, nil)
         }
-        return ("Explorez les factions voisines", "Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour.", nil, nil)
+        return (L10n.text("Explorez les factions voisines", "Explore neighboring factions"), L10n.text("Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour.", "Compare your strength with their defense, launch an expedition and read the report on return."), nil, nil)
     }
 
     private func followGuide() {

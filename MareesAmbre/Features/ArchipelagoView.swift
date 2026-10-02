@@ -6,10 +6,10 @@ struct ArchipelagoView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Label("L’archipel des Veilleurs", systemImage: "location.north.circle")
+                Label(L10n.text("L’archipel des Veilleurs", "The Watchers’ Archipelago"), systemImage: "location.north.circle")
                     .font(.headline)
                 Spacer()
-                Text("5 îles").font(.subheadline).foregroundStyle(Palette.muted)
+                Text(L10n.text("5 îles", "5 islands")).font(.subheadline).foregroundStyle(Palette.muted)
             }
             GeometryReader { geometry in
                 ZStack {
@@ -48,14 +48,14 @@ struct ArchipelagoView: View {
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(island.name)
-                        .accessibilityValue(island.isHome ? "Votre île, port niveau \(island.portLevel)" : "Île inexplorée")
+                        .accessibilityValue(island.isHome ? L10n.text("Votre île, port niveau \(island.portLevel)", "Your island, harbor level \(island.portLevel)") : L10n.text("Île inexplorée", "Unexplored island"))
                         .accessibilityAddTraits(session.selectedID == island.id ? .isSelected : [])
                         .position(x: island.x * geometry.size.width, y: island.y * geometry.size.height)
                     }
                 }
             }
             .frame(height: 340)
-            Text("Touchez une île pour l’explorer").font(.subheadline).foregroundStyle(Palette.muted)
+            Text(L10n.text("Touchez une île pour l’explorer", "Tap an island to explore")).font(.subheadline).foregroundStyle(Palette.muted)
             // Text controls remain readable at every Dynamic Type size.
             ViewThatFits(in: .horizontal) {
                 HStack { islandPicker }

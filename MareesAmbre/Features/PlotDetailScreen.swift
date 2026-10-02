@@ -44,11 +44,11 @@ struct PlotDetailScreen: View {
             }
             .scrollIndicators(.hidden)
             .background(Palette.ocean.ignoresSafeArea())
-            .navigationTitle(mode == .resourceFields ? "Amélioration" : session.state.construction?.plot == session.plot ? (session.state.construction?.kind.name ?? "Votre parcelle") : (session.state.buildings[session.plot]?.name ?? "Votre parcelle"))
+            .navigationTitle(mode == .resourceFields ? L10n.text("Amélioration", "Upgrade") : session.state.construction?.plot == session.plot ? (session.state.construction?.kind.name ?? L10n.text("Votre parcelle", "Your plot")) : (session.state.buildings[session.plot]?.name ?? L10n.text("Votre parcelle", "Your plot")))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if !isEmbedded { ToolbarItem(placement: .topBarTrailing) {
-                    Button("Fermer", systemImage: "xmark") { dismiss() }
+                    Button(L10n.text("Fermer", "Close"), systemImage: "xmark") { dismiss() }
                         .labelStyle(.iconOnly)
                         .tint(Palette.paper)
                 }

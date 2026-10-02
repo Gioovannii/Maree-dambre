@@ -7,11 +7,11 @@ struct ResourcesView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            resource("Bois", value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
+            resource(L10n.text("Bois", "Wood"), value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
             separator
-            resource("Ambre", value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
+            resource(L10n.text("Ambre", "Amber"), value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
             separator
-            resource("Vivres", value: resources.provisions, rate: hourlyProduction.provisions, icon: "basket.fill")
+            resource(L10n.text("Vivres", "Food"), value: resources.provisions, rate: hourlyProduction.provisions, icon: "basket.fill")
         }
         .padding(.horizontal, 7)
         .padding(.vertical, 6)
@@ -39,7 +39,7 @@ struct ResourcesView: View {
                     .foregroundStyle(Palette.paper)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
-                Text(value >= storageCapacity ? "Plein" : "+\(rate)/h")
+                Text(value >= storageCapacity ? L10n.text("Plein", "Full") : "+\(rate)/h")
                     .font(.caption2.bold())
                     .monospacedDigit()
                     .foregroundStyle(Color(red: 0.49, green: 0.82, blue: 0.63))
@@ -48,6 +48,6 @@ struct ResourcesView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 34, alignment: .center)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(name), \(value) sur \(storageCapacity), plus \(rate) par heure")
+        .accessibilityLabel(L10n.text("\(name), \(value) sur \(storageCapacity), plus \(rate) par heure", "\(name), \(value) of \(storageCapacity), plus \(rate) per hour"))
     }
 }
