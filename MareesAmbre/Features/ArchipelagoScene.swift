@@ -98,7 +98,7 @@ final class ArchipelagoScene: SKScene {
                 patch.strokeColor = .clear
                 markers.addChild(patch)
             }
-            addVillage(tile: bot.capital, name: bot.displayName.uppercased(), asset: ["CourArmes", "MaisonSavoirs", String(localized: "screen.archipelago_scene.farm", defaultValue: "Ferme")][bot.id % 3], color: color)
+            addVillage(tile: bot.capital, name: bot.displayName.uppercased(), asset: ["CourArmes", "MaisonSavoirs", "Ferme"][bot.id % 3], color: color)
         }
         select(selected, focus: false)
     }

@@ -135,7 +135,7 @@ struct ConstructionPanel: View {
                 HStack {
                     Label(progress >= 1 ? String(localized: "screen.construction.complete", defaultValue: "Terminé") : String(localized: "screen.construction.value_s_remaining", defaultValue: "Encore \(String(max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date)))) )) s"), systemImage: "timer")
                     Spacer()
-                    Text(String(localized: "screen.construction_panel.value", defaultValue: "\(String(Int(progress * 100))) %")).bold().foregroundStyle(Palette.amber)
+                    Text(String(localized: "screen.construction_panel.value", defaultValue: "\(progress.formatted(.percent.precision(.fractionLength(0))))")).bold().foregroundStyle(Palette.amber)
                 }
                 Button(String(localized: "screen.construction.cancel_construction", defaultValue: "Annuler le chantier"), systemImage: "xmark.circle") {
                     session.cancelConstruction()
@@ -143,7 +143,7 @@ struct ConstructionPanel: View {
                 .frame(maxWidth: .infinity, minHeight: 46)
                 .buttonStyle(.bordered)
                 .tint(Palette.amber)
-                Text(String(localized: "screen.construction.refund_50_of_the_construction_cost", defaultValue: "Remboursement : 50 % du coût de construction."))
+                Text(String(localized: "screen.construction.refund_50_of_the_construction_cost", defaultValue: "Remboursement : \((0.5).formatted(.percent.precision(.fractionLength(0)))) du coût de construction."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
         }

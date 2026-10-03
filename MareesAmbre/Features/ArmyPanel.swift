@@ -76,7 +76,7 @@ struct ArmyPanel: View {
             Button(String(localized: "screen.army.send_all_troops", defaultValue: "Envoyer toutes les troupes")) { session.raid(bot.id); target = nil }
         } message: { bot in
             Text(session.state.armyPower > 10 + min(10, bot.level) * 4
-                 ? String(localized: "screen.army.victory_expected_losses_value_rounded_down_per_unit_type_loot_up_to_60_of_each_resour", defaultValue: "Victoire prévue. Pertes : \(String(Int(session.state.victoryLossRate * 100))) % arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve.")
+                 ? String(localized: "screen.army.victory_expected_losses_value_rounded_down_per_unit_type_loot_up_to_60_of_each_resour", defaultValue: "Victoire prévue. Pertes : \(session.state.victoryLossRate.formatted(.percent.precision(.fractionLength(0)))) arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve.")
                  : String(localized: "screen.army.defeat_expected_half_your_troops_will_be_lost_rounded_up_per_unit_type_no_loot", defaultValue: "Défaite prévue : la moitié des troupes sera perdue, arrondie au supérieur par type. Aucun butin."))
         }
     }

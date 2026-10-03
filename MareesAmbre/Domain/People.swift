@@ -33,9 +33,9 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var strength: String {
         switch self {
-        case .sauniers: String(localized: "domain.people.20_carrying_capacity_10_wood", defaultValue: "+20 % de capacité de transport · +10 % de bois")
+        case .sauniers: String(localized: "domain.people.20_carrying_capacity_10_wood", defaultValue: "+\((0.2).formatted(.percent.precision(.fractionLength(0)))) de capacité de transport · +\((0.1).formatted(.percent.precision(.fractionLength(0)))) de bois")
         case .nacre: String(localized: "domain.people.mages_reduce_losses_in_victorious_battles", defaultValue: "Les mages réduisent les pertes lors des victoires")
-        case .roseaux: String(localized: "domain.people.90_second_expeditions_instead_of_120_10_amber", defaultValue: "Expéditions de 90 s au lieu de 120 s · +10 % d’ambre")
+        case .roseaux: String(localized: "domain.people.90_second_expeditions_instead_of_120_10_amber", defaultValue: "Expéditions de 90 s au lieu de 120 s · +\((0.1).formatted(.percent.precision(.fractionLength(0)))) d’ambre")
         }
     }
 

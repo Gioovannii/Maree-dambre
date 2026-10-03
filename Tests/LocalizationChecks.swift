@@ -1,13 +1,15 @@
 import Foundation
 let app = CommandLine.arguments[1]
-for (language, warehouse, recruit, refund, construction) in [
+for (language, warehouse, recruit, _, construction) in [
     ("en", "Warehouse", "Recruit: 3", "Refund: 50% of the construction cost.", "Construction complete"),
     ("fr", "Entrepôt", "Recruter : 3", "Remboursement : 50 % du coût de construction.", "Chantier terminé")
 ] {
     let bundle = Bundle(path: app + "/" + language + ".lproj")!
     precondition(String(localized: "domain.building_kind.warehouse", defaultValue: "Entrepôt", bundle: bundle) == warehouse)
     precondition(String(localized: "screen.army.recruit", defaultValue: "Recruter : \(String(3))", bundle: bundle) == recruit)
-    precondition(String(localized: "screen.construction.refund_50_of_the_construction_cost", defaultValue: "Remboursement : 50 % du coût de construction.", bundle: bundle) == refund)
+    let percent = 0.5.formatted(.percent.precision(.fractionLength(0)).locale(Locale(identifier: language)))
+    let expectedRefund = language == "fr" ? "Remboursement : \(percent) du coût de construction." : "Refund: \(percent) of the construction cost."
+    precondition(String(localized: "screen.construction.refund_50_of_the_construction_cost", defaultValue: "Remboursement : \(percent) du coût de construction.", bundle: bundle) == expectedRefund)
     let widget = Bundle(path: app + "/PlugIns/MareesAmbreWidget.appex/" + language + ".lproj")!
     precondition(String(localized: "widget.construction_live_activity.construction_complete", defaultValue: "Chantier terminé", bundle: widget) == construction)
     print("PASS: \(language) native catalog lookups, interpolation, percent and widget")

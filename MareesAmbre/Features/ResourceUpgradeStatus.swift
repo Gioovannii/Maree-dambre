@@ -21,7 +21,7 @@ struct ResourceUpgradeStatus: View {
                 if allowsCancellation {
                     Text(String(localized: "screen.resource_upgrade_status.current_production_continues_the_new_level_takes_effect_when_construction_finishes", defaultValue: "La production actuelle continue. Le nouveau niveau sera actif à la fin du chantier."))
                         .font(.footnote)
-                    Button(String(localized: "screen.resource_upgrade_status.cancel_50_refund", defaultValue: "Annuler · remboursement de 50 %"), role: .destructive) {
+                    Button(String(localized: "screen.resource_upgrade_status.cancel_50_refund", defaultValue: "Annuler · remboursement de \((0.5).formatted(.percent.precision(.fractionLength(0))))"), role: .destructive) {
                         session.cancelResourceUpgrade()
                     }
                     .frame(minHeight: 44)

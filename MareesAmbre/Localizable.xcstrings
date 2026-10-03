@@ -330,13 +330,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Avec au moins un mage, les pertes en cas de victoire passent de 20 % à 15 %. Le bonus ne se cumule pas."
+            "value": "Avec au moins un mage, les pertes en cas de victoire passent de %@ à %@. Le bonus ne se cumule pas."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "With at least one mage, losses on victory drop from 20% to 15%. The bonus does not stack."
+            "value": "With at least one mage, losses on victory drop from %@ to %@. The bonus does not stack."
           }
         }
       }
@@ -976,13 +976,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "+20 % de capacité de transport · +10 % de bois"
+            "value": "+%@ de capacité de transport · +%@ de bois"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "+20% carrying capacity · +10% wood"
+            "value": "+%@ carrying capacity · +%@ wood"
           }
         }
       }
@@ -993,13 +993,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Expéditions de 90 s au lieu de 120 s · +10 % d’ambre"
+            "value": "Expéditions de 90 s au lieu de 120 s · +%@ d’ambre"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "90-second expeditions instead of 120 · +10% amber"
+            "value": "90-second expeditions instead of 120 · +%@ amber"
           }
         }
       }
@@ -1429,23 +1429,6 @@
         }
       }
     },
-    "screen.archipelago_scene.farm": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ferme"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Farm"
-          }
-        }
-      }
-    },
     "screen.archipelago_scene.preparing_the_archipelago": {
       "extractionState": "manual",
       "localizations": {
@@ -1741,13 +1724,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Victoire prévue. Pertes : %@ %% arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve."
+            "value": "Victoire prévue. Pertes : %@ arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Victory expected. Losses: %@%%, rounded down per unit type. Loot: up to 60 of each resource, limited by surviving carriers and available storage."
+            "value": "Victory expected. Losses: %@, rounded down per unit type. Loot: up to 60 of each resource, limited by surviving carriers and available storage."
           }
         }
       }
@@ -2132,13 +2115,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Remboursement : 50 % du coût de construction."
+            "value": "Remboursement : %@ du coût de construction."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Refund: 50% of the construction cost."
+            "value": "Refund: %@ of the construction cost."
           }
         }
       }
@@ -2336,13 +2319,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %%"
+            "value": "%@"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ %%"
+            "value": "%@"
           }
         }
       }
@@ -3832,13 +3815,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Annuler · remboursement de 50 %"
+            "value": "Annuler · remboursement de %@"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cancel · 50% refund"
+            "value": "Cancel · %@ refund"
           }
         }
       }
