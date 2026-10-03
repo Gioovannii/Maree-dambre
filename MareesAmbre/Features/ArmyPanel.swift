@@ -9,24 +9,24 @@ struct ArmyPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(isTraining ? L10n.text("Entraînement", "Training") : L10n.text("Troupes et expéditions", "Troops and expeditions")).font(.title2.bold())
-            Text(isTraining ? L10n.text("Débloquez vos unités à la Maison des savoirs. Capacité : 100 unités.", "Unlock units at the Academy. Capacity: 100 units.") : L10n.text("Entraînez vos unités à la Cour des armes, dans le Centre. Les factions voisines sont gérées par le jeu hors ligne.", "Train units at the Training Grounds in town. Neighboring factions are simulated offline."))
+            Text(isTraining ? String(localized: "screen.army.training", defaultValue: "Entraînement") : String(localized: "screen.army.troops_and_expeditions", defaultValue: "Troupes et expéditions")).font(.title2.bold())
+            Text(isTraining ? String(localized: "screen.army.unlock_units_at_the_academy_capacity_100_units", defaultValue: "Débloquez vos unités à la Maison des savoirs. Capacité : 100 unités.") : String(localized: "screen.army.train_units_at_the_training_grounds_in_town_neighboring_factions_are_simulated_offlin", defaultValue: "Entraînez vos unités à la Cour des armes, dans le Centre. Les factions voisines sont gérées par le jeu hors ligne."))
                 .font(.footnote).foregroundStyle(Palette.muted)
             if isTraining {
-            Stepper(L10n.text("Recruter : \(count)", "Recruit: \(count)"), value: $count, in: 1...20)
+            Stepper(String(localized: "screen.army.recruit", defaultValue: "Recruter : \(String(count))"), value: $count, in: 1...20)
             ForEach(session.state.trainableUnits) { unit in
                 VStack(alignment: .leading, spacing: 8) {
                     Image(unit.imageAssetName).resizable().scaledToFit()
                         .frame(height: 120).clipShape(.rect(cornerRadius: 12))
                         .accessibilityHidden(true)
-                    Label(L10n.text("\(unit.name) · \(session.state.availableArmy[unit, default: 0]) disponible(s)", "\(unit.name) · \(session.state.availableArmy[unit, default: 0]) available"), systemImage: unit.emblem)
+                    Label(String(localized: "screen.army.available_units", defaultValue: "\(String(unit.name)) · \(String(session.state.availableArmy[unit, default: 0])) disponible(s)"), systemImage: unit.emblem)
                         .font(.headline)
-                    Text(L10n.text("Force \(unit.attack) · Transport \(unit.carrying) ressources", "Power \(unit.attack) · Carries \(unit.carrying) resources"))
+                    Text(String(localized: "screen.army.power_value_carries_value_resources", defaultValue: "Force \(String(unit.attack)) · Transport \(String(unit.carrying)) ressources"))
                     if !session.state.unlockedUnits.contains(unit) {
-                        Label(L10n.text("À débloquer à la Maison des savoirs", "Unlock at the Academy"), systemImage: "lock.fill")
+                        Label(String(localized: "screen.army.unlock_at_the_academy", defaultValue: "À débloquer à la Maison des savoirs"), systemImage: "lock.fill")
                     }
-                    Text(L10n.text("Coût : \(unit.cost.wood * count) bois · \(unit.cost.amber * count) ambre · \(unit.cost.provisions * count) vivres", "Cost: \(unit.cost.wood * count) wood · \(unit.cost.amber * count) amber · \(unit.cost.provisions * count) food"))
-                    Button(L10n.text("Entraîner · \(count * 30) s", "Train · \(count * 30) s")) { session.train(unit, count: count) }
+                    Text(String(localized: "screen.army.training_cost", defaultValue: "Coût : \(String(unit.cost.wood * count)) bois · \(String(unit.cost.amber * count)) ambre · \(String(unit.cost.provisions * count)) vivres"))
+                    Button(String(localized: "screen.army.train", defaultValue: "Entraîner · \(String(count * 30)) s")) { session.train(unit, count: count) }
                         .buttonStyle(.borderedProminent)
                         .disabled(!session.state.canTrain(unit, count: count))
                 }
@@ -35,32 +35,32 @@ struct ArmyPanel: View {
                 .background(Palette.panel, in: .rect(cornerRadius: 14))
             }
             if let training = session.state.army?.training {
-                Label("\(training.count) × \(training.unit.name)", systemImage: "hourglass")
+                Label(String(localized: "screen.army_panel.value", defaultValue: "\(String(training.count)) × \(String(training.unit.name))"), systemImage: "hourglass")
                 countdown(training.endsAt)
             }
             }
             if !isTraining {
             if let raid = session.state.army?.raid {
-                Text(L10n.text("Expédition vers \(raid.targetDisplayName) · Retour", "Expedition to \(raid.targetDisplayName) · Returning"))
+                Text(String(localized: "screen.army.expedition_to_value_returning", defaultValue: "Expédition vers \(String(raid.targetDisplayName)) · Retour"))
                 countdown(raid.returnsAt)
             }
-            Text(L10n.text("Force disponible : \(session.state.armyPower)", "Available power: \(session.state.armyPower)")).font(.headline)
-            Text(L10n.text("Chaque départ mobilise toutes les troupes disponibles. Aller-retour : \(Int(session.state.raidDuration)) secondes. Une cible se repose 10 minutes après le retour.", "Each expedition deploys all available troops. Round trip: \(Int(session.state.raidDuration)) seconds. Targets recover for 10 minutes after your return."))
+            Text(String(localized: "screen.army.available_power_value", defaultValue: "Force disponible : \(String(session.state.armyPower))")).font(.headline)
+            Text(String(localized: "screen.army.each_expedition_deploys_all_available_troops_round_trip_value_seconds_targets_recover", defaultValue: "Chaque départ mobilise toutes les troupes disponibles. Aller-retour : \(String(Int(session.state.raidDuration))) secondes. Une cible se repose 10 minutes après le retour."))
                 .font(.footnote).foregroundStyle(Palette.muted)
             ForEach(session.state.bots) { bot in
                 VStack(alignment: .leading, spacing: 6) {
                     Text(bot.displayName).font(.headline)
-                    Text(L10n.text("Défense : \(10 + min(10, bot.level) * 4)", "Defense: \(10 + min(10, bot.level) * 4)"))
-                    Button(L10n.text("Préparer l’attaque", "Prepare attack")) { target = bot; confirmsRaid = true }
+                    Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(10 + min(10, bot.level) * 4))"))
+                    Button(String(localized: "screen.army.prepare_attack", defaultValue: "Préparer l’attaque")) { target = bot; confirmsRaid = true }
                         .buttonStyle(.bordered)
                         .disabled(!session.state.canRaid(bot))
                     if let until = session.state.army?.raidedUntil[bot.id], until > Date.now {
-                        Text(L10n.text("Cible disponible à \(until.formatted(date: .omitted, time: .shortened))", "Target available at \(until.formatted(date: .omitted, time: .shortened))")).font(.caption)
+                        Text(String(localized: "screen.army.target_available_at_value", defaultValue: "Cible disponible à \(String(until.formatted(date: .omitted, time: .shortened)))")).font(.caption)
                     }
                 }
             }
             if let report = session.state.army?.report {
-                Text(L10n.text("Dernier rapport", "Latest report")).font(.headline)
+                Text(String(localized: "screen.army.latest_report", defaultValue: "Dernier rapport")).font(.headline)
                 Text(report).font(.subheadline)
             }
             }
@@ -72,12 +72,12 @@ struct ArmyPanel: View {
                 do { try await Task.sleep(for: .seconds(1)) } catch { return }
             }
         }
-        .confirmationDialog(L10n.text("Départ vers \(target?.displayName ?? "")", "Departure for \(target?.displayName ?? "")"), isPresented: $confirmsRaid, presenting: target) { bot in
-            Button(L10n.text("Envoyer toutes les troupes", "Send all troops")) { session.raid(bot.id); target = nil }
+        .confirmationDialog(String(localized: "screen.army.departure_for_value", defaultValue: "Départ vers \(String(target?.displayName ?? ""))"), isPresented: $confirmsRaid, presenting: target) { bot in
+            Button(String(localized: "screen.army.send_all_troops", defaultValue: "Envoyer toutes les troupes")) { session.raid(bot.id); target = nil }
         } message: { bot in
             Text(session.state.armyPower > 10 + min(10, bot.level) * 4
-                 ? L10n.text("Victoire prévue. Pertes : \(Int(session.state.victoryLossRate * 100)) % arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve.", "Victory expected. Losses: \(Int(session.state.victoryLossRate * 100))%, rounded down per unit type. Loot: up to 60 of each resource, limited by surviving carriers and available storage.")
-                 : L10n.text("Défaite prévue : la moitié des troupes sera perdue, arrondie au supérieur par type. Aucun butin.", "Defeat expected: half your troops will be lost, rounded up per unit type. No loot."))
+                 ? String(localized: "screen.army.victory_expected_losses_value_rounded_down_per_unit_type_loot_up_to_60_of_each_resour", defaultValue: "Victoire prévue. Pertes : \(String(Int(session.state.victoryLossRate * 100))) % arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve.")
+                 : String(localized: "screen.army.defeat_expected_half_your_troops_will_be_lost_rounded_up_per_unit_type_no_loot", defaultValue: "Défaite prévue : la moitié des troupes sera perdue, arrondie au supérieur par type. Aucun butin."))
         }
     }
 

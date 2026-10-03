@@ -15,8 +15,8 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .resourceFields: L10n.text("Ressources côtières", "Coastal Resources")
-        case .townCenter: L10n.text("Centre-ville d’Ambre", "Amber Town Center")
+        case .resourceFields: String(localized: "domain.settlement_layout.coastal_resources", defaultValue: "Ressources côtières")
+        case .townCenter: String(localized: "domain.settlement_layout.amber_town_center", defaultValue: "Centre-ville d’Ambre")
         }
     }
 

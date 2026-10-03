@@ -12,7 +12,7 @@ struct WorldCanvas: View {
             SpriteView(scene: scene, isPaused: scenePhase == .background, preferredFramesPerSecond: 30)
                 .frame(height: 500)
                 .overlay(alignment: .topLeading) {
-                    Label(L10n.text("MER DES ÉCHOS", "SEA OF ECHOES"), systemImage: "location.north.fill")
+                    Label(String(localized: "screen.world_canvas.sea_of_echoes", defaultValue: "MER DES ÉCHOS"), systemImage: "location.north.fill")
                         .font(.caption.bold()).tracking(2)
                         .padding(12).background(Palette.ocean.opacity(0.85), in: .capsule)
                         .padding(12).allowsHitTesting(false)
@@ -26,20 +26,20 @@ struct WorldCanvas: View {
                     .onChanged { scene.zoom($0.magnification, ended: false) }
                     .onEnded { scene.zoom($0.magnification) })
                 .simultaneousGesture(SpatialTapGesture().onEnded { session.selectedTile = scene.tile(at: $0.location) })
-                .accessibilityLabel(L10n.text("Archipel et villages voisins", "Archipelago and neighboring villages"))
-                .accessibilityHint(L10n.text("Choisissez une destination avec les boutons sous la carte.", "Choose a destination using the buttons below the map."))
+                .accessibilityLabel(String(localized: "screen.world_canvas.archipelago_and_neighboring_villages", defaultValue: "Archipel et villages voisins"))
+                .accessibilityHint(String(localized: "screen.world_canvas.choose_a_destination_using_the_buttons_below_the_map", defaultValue: "Choisissez une destination avec les boutons sous la carte."))
             HStack {
-                Button(L10n.text("Dézoomer", "Zoom out"), systemImage: "minus.magnifyingglass") { scene.zoom(1 / 1.3) }.labelStyle(.iconOnly)
-                Button(L10n.text("Zoomer", "Zoom in"), systemImage: "plus.magnifyingglass") { scene.zoom(1.3) }.labelStyle(.iconOnly)
+                Button(String(localized: "screen.world_canvas.zoom_out", defaultValue: "Dézoomer"), systemImage: "minus.magnifyingglass") { scene.zoom(1 / 1.3) }.labelStyle(.iconOnly)
+                Button(String(localized: "screen.world_canvas.zoom_in", defaultValue: "Zoomer"), systemImage: "plus.magnifyingglass") { scene.zoom(1.3) }.labelStyle(.iconOnly)
                 Spacer()
-                Button(L10n.text("Vue d’ensemble", "Overview"), systemImage: "viewfinder") { scene.overview() }
+                Button(String(localized: "screen.world_canvas.overview", defaultValue: "Vue d’ensemble"), systemImage: "viewfinder") { scene.overview() }
             }
             .buttonStyle(.bordered).controlSize(.large)
-            Text(L10n.text("Glissez pour explorer · Pincez pour zoomer · Touchez un village", "Drag to explore · Pinch to zoom · Tap a village"))
+            Text(String(localized: "screen.world_canvas.drag_to_explore_pinch_to_zoom_tap_a_village", defaultValue: "Glissez pour explorer · Pincez pour zoomer · Touchez un village"))
                 .font(.caption).foregroundStyle(Palette.muted)
             ScrollView(.horizontal) {
                 HStack {
-                    Button(L10n.text("Mon village", "My village"), systemImage: "house.fill") { session.selectedTile = .home; scene.select(.home) }
+                    Button(String(localized: "screen.world_canvas.my_village", defaultValue: "Mon village"), systemImage: "house.fill") { session.selectedTile = .home; scene.select(.home) }
                     ForEach(session.state.bots) { bot in
                         Button(bot.displayName) { session.selectedTile = bot.capital; scene.select(bot.capital) }
                             .tint(Self.factionColor(bot.id))
@@ -48,14 +48,14 @@ struct WorldCanvas: View {
                 .buttonStyle(.bordered)
             }
             .scrollIndicators(.hidden)
-            DisclosureGroup(L10n.text("Choisir une position", "Choose a position")) {
-                Stepper(L10n.text("Colonne : \(session.selectedTile.x)", "Column: \(session.selectedTile.x)"), onIncrement: { move(dx: 1, dy: 0) }, onDecrement: { move(dx: -1, dy: 0) })
-                Stepper(L10n.text("Ligne : \(session.selectedTile.y)", "Row: \(session.selectedTile.y)"), onIncrement: { move(dx: 0, dy: 1) }, onDecrement: { move(dx: 0, dy: -1) })
+            DisclosureGroup(String(localized: "screen.world_canvas.choose_a_position", defaultValue: "Choisir une position")) {
+                Stepper(String(localized: "screen.world_canvas.column_value", defaultValue: "Colonne : \(String(session.selectedTile.x))"), onIncrement: { move(dx: 1, dy: 0) }, onDecrement: { move(dx: -1, dy: 0) })
+                Stepper(String(localized: "screen.world_canvas.row_value", defaultValue: "Ligne : \(String(session.selectedTile.y))"), onIncrement: { move(dx: 0, dy: 1) }, onDecrement: { move(dx: 0, dy: -1) })
             }
             HStack(spacing: 14) {
-                Label(L10n.text("Forêts", "Forests"), systemImage: "tree.fill").foregroundStyle(.green)
-                Label(L10n.text("Ambre", "Amber"), systemImage: "sparkles").foregroundStyle(Palette.amber)
-                Label(L10n.text("Territoires", "Territories"), systemImage: "flag.fill").foregroundStyle(.cyan)
+                Label(String(localized: "screen.world_canvas.forests", defaultValue: "Forêts"), systemImage: "tree.fill").foregroundStyle(.green)
+                Label(String(localized: "screen.world_canvas.amber", defaultValue: "Ambre"), systemImage: "sparkles").foregroundStyle(Palette.amber)
+                Label(String(localized: "screen.world_canvas.territories", defaultValue: "Territoires"), systemImage: "flag.fill").foregroundStyle(.cyan)
             }
             .font(.caption)
         }

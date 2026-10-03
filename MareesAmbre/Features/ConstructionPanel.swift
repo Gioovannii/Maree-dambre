@@ -22,19 +22,19 @@ struct ConstructionPanel: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(construction != nil ? L10n.text("CHANTIER", "CONSTRUCTION") : building == nil ? L10n.text("PARCELLE", "PLOT") : L10n.text("BÂTIMENT", "BUILDING"))
+                    Text(construction != nil ? String(localized: "screen.construction.construction", defaultValue: "CHANTIER") : building == nil ? String(localized: "screen.construction.plot", defaultValue: "PARCELLE") : String(localized: "screen.construction.building", defaultValue: "BÂTIMENT"))
                         .font(.caption.bold()).tracking(2).foregroundStyle(Palette.amber)
                     Text(title).font(.title2.bold()).fontDesign(.serif)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 0)
-                Text("\(mode == .resourceFields ? L10n.text("CHAMP", "FIELD") : "LOT") \(mode.slotNumber(for: session.plot) ?? 0)")
+                Text(String(localized: "screen.construction.slot_number", defaultValue: "\(String(mode == .resourceFields ? String(localized: "screen.construction.field", defaultValue: "CHAMP") : String(localized: "screen.construction.lot", defaultValue: "LOT"))) \(String(mode.slotNumber(for: session.plot) ?? 0))"))
                     .font(.caption.bold()).foregroundStyle(Palette.muted)
                     .padding(.top, 4)
             }
             .accessibilityElement(children: .combine)
 
-            Label(L10n.text("Terrain : \(terrain.name) · \(mode.title)", "Terrain: \(terrain.name) · \(mode.title)"), systemImage: "square.dashed")
+            Label(String(localized: "screen.construction.terrain_value_value", defaultValue: "Terrain : \(String(terrain.name)) · \(String(mode.title))"), systemImage: "square.dashed")
                 .font(.subheadline)
                 .foregroundStyle(Palette.muted)
 
@@ -48,25 +48,25 @@ struct ConstructionPanel: View {
                 Label(session.message, systemImage: "hand.tap")
                     .font(.subheadline).foregroundStyle(Palette.amber)
                     .fixedSize(horizontal: false, vertical: true)
-                Button(L10n.text("Annuler le déplacement", "Cancel move"), systemImage: "xmark") {
+                Button(String(localized: "screen.construction.cancel_move", defaultValue: "Annuler le déplacement"), systemImage: "xmark") {
                     session.cancelMovingBuilding()
                 }
                 .font(.subheadline.bold())
                 .tint(Palette.muted)
-                .accessibilityHint(L10n.text("Le bâtiment reste sur la case \(source + 1)", "The building stays on plot \(source + 1)"))
+                .accessibilityHint(String(localized: "screen.construction.the_building_stays_on_plot_value", defaultValue: "Le bâtiment reste sur la case \(String(source + 1))"))
             } else if !mode.contains(session.plot) || siteBuildings.isEmpty {
-                Label(L10n.text("Aucune construction possible ici", "Cannot build here"), systemImage: "lock.fill")
+                Label(String(localized: "screen.construction.cannot_build_here", defaultValue: "Aucune construction possible ici"), systemImage: "lock.fill")
                     .font(.headline).foregroundStyle(Palette.muted)
-                Text(L10n.text("Ce terrain n’accueille aucun bâtiment de ce district.", "No building in this district can be built on this terrain."))
+                Text(String(localized: "screen.construction.no_building_in_this_district_can_be_built_on_this_terrain", defaultValue: "Ce terrain n’accueille aucun bâtiment de ce district."))
                     .font(.subheadline).foregroundStyle(Palette.muted)
             } else if availableBuildings.isEmpty {
-                Label(L10n.text("Tous les bâtiments sont déjà présents", "All buildings are already present"), systemImage: "checkmark.seal.fill")
+                Label(String(localized: "screen.construction.all_buildings_are_already_present", defaultValue: "Tous les bâtiments sont déjà présents"), systemImage: "checkmark.seal.fill")
                     .font(.headline).foregroundStyle(Palette.amber)
-                Text(L10n.text("Chaque type de bâtiment se construit une seule fois dans ce village. Les autres lots accueilleront de nouveaux bâtiments plus tard.", "Each building type can only be built once per village. Other lots will host future buildings."))
+                Text(String(localized: "screen.construction.each_building_type_can_only_be_built_once_per_village_other_lots_will_host_future_bui", defaultValue: "Chaque type de bâtiment se construit une seule fois dans ce village. Les autres lots accueilleront de nouveaux bâtiments plus tard."))
                     .font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text(L10n.text("Choisissez un bâtiment, puis son emplacement sur la carte. Son effet commence une fois le chantier terminé.", "Choose a building for this plot. Its effect begins when construction finishes."))
+                Text(String(localized: "screen.construction.choose_a_building_for_this_plot_its_effect_begins_when_construction_finishes", defaultValue: "Choisissez un bâtiment, puis son emplacement sur la carte. Son effet commence une fois le chantier terminé."))
                     .font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
                 ForEach(availableBuildings) { kind in
@@ -83,7 +83,7 @@ struct ConstructionPanel: View {
     private var title: String {
         if let construction { return construction.kind.name }
         if let building { return building.name }
-        return mode == .resourceFields ? L10n.text("Champ de \(terrain.name.lowercased())", "\(terrain.name) field") : L10n.text("Emplacement urbain", "Town lot")
+        return mode == .resourceFields ? String(localized: "screen.construction.value_field", defaultValue: "Champ de \(String(terrain.name.lowercased()))") : String(localized: "screen.construction.town_lot", defaultValue: "Emplacement urbain")
     }
 
     private func buildingDetails(_ kind: BuildingKind) -> some View {
@@ -102,14 +102,14 @@ struct ConstructionPanel: View {
             }
             if kind.yield != Resources(wood: 0, amber: 0, provisions: 0) {
                 if let site = kind.requiredResourceSite, !session.state.meetsProductionRequirement(kind) {
-                    Text(L10n.text("Requiert un terrain « \(site.name) » au niveau 10. Le bâtiment est conservé et sa production reprendra dès ce prérequis atteint.", "Requires a level 10 \(site.name) site. The building is retained and production resumes once this requirement is met."))
+                    Text(String(localized: "screen.construction.requires_a_level_10_value_site_the_building_is_retained_and_production_resumes_once_t", defaultValue: "Requiert un terrain « \(String(site.name)) » au niveau 10. Le bâtiment est conservé et sa production reprendra dès ce prérequis atteint."))
                         .font(.footnote).foregroundStyle(Palette.amber)
                 }
-                Text(session.state.meetsProductionRequirement(kind) ? L10n.text("Production continue, y compris pendant votre absence.", "Production continues, including while you are away.") : L10n.text("Améliorez le terrain correspondant pour activer cette production.", "Upgrade the matching resource site to activate production."))
+                Text(session.state.meetsProductionRequirement(kind) ? String(localized: "screen.construction.production_continues_including_while_you_are_away", defaultValue: "Production continue, y compris pendant votre absence.") : String(localized: "screen.construction.upgrade_the_matching_resource_site_to_activate_production", defaultValue: "Améliorez le terrain correspondant pour activer cette production."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
             if kind != .hall {
-                Label(L10n.text("Maintenez le bâtiment appuyé pour le déplacer", "Touch and hold the building to move it"), systemImage: "hand.tap")
+                Label(String(localized: "screen.construction.touch_and_hold_the_building_to_move_it", defaultValue: "Maintenez le bâtiment appuyé pour le déplacer"), systemImage: "hand.tap")
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
         }
@@ -126,24 +126,24 @@ struct ConstructionPanel: View {
                 .frame(height: 150)
                 .frame(maxWidth: .infinity)
                 .background(Palette.ocean, in: .rect(cornerRadius: 18))
-                Text(L10n.text("Chantier en cours", "Construction in progress"))
+                Text(String(localized: "screen.construction.construction_in_progress", defaultValue: "Chantier en cours"))
                     .font(.title3.bold())
-                Text(L10n.text("\(job.kind.name) prend forme sur cette parcelle.", "\(job.kind.name) is taking shape on this plot."))
+                Text(String(localized: "screen.construction.value_is_taking_shape_on_this_plot", defaultValue: "\(String(job.kind.name)) prend forme sur cette parcelle."))
                     .font(.subheadline).foregroundStyle(Palette.muted)
                 ProgressView(value: progress)
                     .tint(Palette.amber)
                 HStack {
-                    Label(progress >= 1 ? L10n.text("Terminé", "Complete") : L10n.text("Encore \(max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date)))) ) s", "\(max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date)))) ) s remaining"), systemImage: "timer")
+                    Label(progress >= 1 ? String(localized: "screen.construction.complete", defaultValue: "Terminé") : String(localized: "screen.construction.value_s_remaining", defaultValue: "Encore \(String(max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date)))) )) s"), systemImage: "timer")
                     Spacer()
-                    Text("\(Int(progress * 100)) %").bold().foregroundStyle(Palette.amber)
+                    Text(String(localized: "screen.construction_panel.value", defaultValue: "\(String(Int(progress * 100))) %")).bold().foregroundStyle(Palette.amber)
                 }
-                Button(L10n.text("Annuler le chantier", "Cancel construction"), systemImage: "xmark.circle") {
+                Button(String(localized: "screen.construction.cancel_construction", defaultValue: "Annuler le chantier"), systemImage: "xmark.circle") {
                     session.cancelConstruction()
                 }
                 .frame(maxWidth: .infinity, minHeight: 46)
                 .buttonStyle(.bordered)
                 .tint(Palette.amber)
-                Text(L10n.text("Remboursement : 50 % du coût de construction.", "Refund: 50% of the construction cost."))
+                Text(String(localized: "screen.construction.refund_50_of_the_construction_cost", defaultValue: "Remboursement : 50 % du coût de construction."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
         }
@@ -153,9 +153,9 @@ struct ConstructionPanel: View {
 
     private func buildingCard(_ kind: BuildingKind) -> some View {
         let canBuild = session.state.canBuild(kind, at: session.plot)
-        let reason = session.state.construction != nil ? L10n.text("Un chantier est déjà en cours", "Construction is already in progress")
-            : !session.state.meetsProductionRequirement(kind) ? L10n.text("Requiert un terrain « \(kind.requiredResourceSite?.name ?? "producteur") » au niveau 10", "Requires a level 10 \(kind.requiredResourceSite?.name ?? "resource") site")
-            : L10n.text("Ressources insuffisantes", "Not enough resources")
+        let reason = session.state.construction != nil ? String(localized: "screen.construction.construction_is_already_in_progress", defaultValue: "Un chantier est déjà en cours")
+            : !session.state.meetsProductionRequirement(kind) ? String(localized: "screen.construction.requires_a_level_10_value_site", defaultValue: "Requiert un terrain « \(String(kind.requiredResourceSite?.name ?? String(localized: "screen.construction.production_site", defaultValue: "producteur"))) » au niveau 10")
+            : String(localized: "screen.construction.not_enough_resources", defaultValue: "Ressources insuffisantes")
         return Button {
             session.build(kind)
         } label: {
@@ -173,10 +173,10 @@ struct ConstructionPanel: View {
                 Text(kind.purpose)
                     .font(.subheadline).foregroundStyle(Palette.paper)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(L10n.text("Coût : \(kind.cost.wood) bois · \(kind.cost.amber) ambre · \(kind.cost.provisions) vivres", "Cost: \(kind.cost.wood) wood · \(kind.cost.amber) amber · \(kind.cost.provisions) food"))
+                Text(String(localized: "screen.construction.cost_value_wood_value_amber_value_food", defaultValue: "Coût : \(String(kind.cost.wood)) bois · \(String(kind.cost.amber)) ambre · \(String(kind.cost.provisions)) vivres"))
                     .font(.footnote).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
-                Label(canBuild ? L10n.text("Choisir l’emplacement", "Build here") : reason,
+                Label(canBuild ? String(localized: "screen.construction.build_here", defaultValue: "Choisir l’emplacement") : reason,
                       systemImage: canBuild ? "hammer.fill" : "lock.fill")
                     .font(.subheadline.bold())
                     .foregroundStyle(canBuild ? Palette.amber : Palette.muted)
@@ -191,6 +191,6 @@ struct ConstructionPanel: View {
         }
         .buttonStyle(.plain)
         .disabled(!canBuild)
-        .accessibilityHint(canBuild ? L10n.text("Construire sur la parcelle sélectionnée", "Build on the selected plot") : reason)
+        .accessibilityHint(canBuild ? String(localized: "screen.construction.build_on_the_selected_plot", defaultValue: "Construire sur la parcelle sélectionnée") : reason)
     }
 }

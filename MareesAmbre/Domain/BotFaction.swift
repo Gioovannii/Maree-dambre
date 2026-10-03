@@ -7,9 +7,9 @@ struct BotFaction: Identifiable, Codable, Equatable {
 
     var displayName: String {
         switch id {
-        case 0: L10n.text("Les Sauniers", "The Salt Traders")
-        case 1: L10n.text("La Garde de Nacre", "The Pearl Guard")
-        case 2: L10n.text("Le Pacte des Roseaux", "The Reed Pact")
+        case 0: String(localized: "domain.bot_faction.the_salt_traders", defaultValue: "Les Sauniers")
+        case 1: String(localized: "domain.bot_faction.the_pearl_guard", defaultValue: "La Garde de Nacre")
+        case 2: String(localized: "domain.bot_faction.the_reed_pact", defaultValue: "Le Pacte des Roseaux")
         default: name
         }
     }

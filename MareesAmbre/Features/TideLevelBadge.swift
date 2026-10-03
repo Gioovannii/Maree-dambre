@@ -15,7 +15,7 @@ struct TideLevelBadge: View {
             // The number alone stays legible at small sizes; the capsule already
             // communicates that this is a level marker and avoids “N0” reading
             // like the word “NO” on compact screens.
-            Text("\(level)")
+            Text(String(localized: "screen.tide_level_badge.value", defaultValue: "\(String(level))"))
                 .font(.subheadline.bold())
                 .monospacedDigit()
         }
@@ -35,6 +35,6 @@ struct TideLevelBadge: View {
                 .strokeBorder(Palette.amber, lineWidth: 1.5)
         }
         .shadow(color: Palette.ocean.opacity(0.55), radius: 3, y: 2)
-        .accessibilityLabel(L10n.text("Niveau \(level)", "Level \(level)"))
+        .accessibilityLabel(String(localized: "screen.tide_level_badge.level_value", defaultValue: "Niveau \(String(level))"))
     }
 }

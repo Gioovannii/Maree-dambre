@@ -1,0 +1,5157 @@
+{
+  "sourceLanguage": "fr",
+  "strings": {
+    "domain.army_state.defeat": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défaite"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defeat"
+          }
+        }
+      }
+    },
+    "domain.army_state.value_against_value_value_losses_loot_stored_value_wood_value_amber_value_food": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ contre %@. %@ perte(s). Butin stocké : %@ bois, %@ ambre, %@ vivres."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ against %@. %@ losses. Loot stored: %@ wood, %@ amber, %@ food."
+          }
+        }
+      }
+    },
+    "domain.army_state.victory": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victoire"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victory"
+          }
+        }
+      }
+    },
+    "domain.army_unit.a_reef_fighter_in_pearlescent_armor_powerful_but_expensive": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un combattant des récifs à l’armure nacrée, puissant mais coûteux."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A reef fighter in pearlescent armor. Powerful, but expensive."
+          }
+        }
+      }
+    },
+    "domain.army_unit.a_shortbow_strengthens_the_attack_power_of_elven_expeditions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un arc court pour renforcer la force d’attaque des expéditions elfiques."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A shortbow strengthens the attack power of elven expeditions."
+          }
+        }
+      }
+    },
+    "domain.army_unit.a_spear_and_shield_form_the_backbone_of_human_expeditions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une lance et un bouclier pour former le cœur des expéditions humaines."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A spear and shield form the backbone of human expeditions."
+          }
+        }
+      }
+    },
+    "domain.army_unit.an_elf_with_a_light_spear_inexpensive_and_a_capable_carrier": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un elfe équipé d’une lance légère, peu coûteux et bon porteur."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An elf with a light spear: inexpensive and a capable carrier."
+          }
+        }
+      }
+    },
+    "domain.army_unit.group_protection": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protection du groupe"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group protection"
+          }
+        }
+      }
+    },
+    "domain.army_unit.guardian": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardien"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardian"
+          }
+        }
+      }
+    },
+    "domain.army_unit.heavy_infantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infanterie puissante"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heavy infantry"
+          }
+        }
+      }
+    },
+    "domain.army_unit.light_infantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infanterie légère"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light infantry"
+          }
+        }
+      }
+    },
+    "domain.army_unit.loot_carrier": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transport du butin"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loot carrier"
+          }
+        }
+      }
+    },
+    "domain.army_unit.raider": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillard"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raider"
+          }
+        }
+      }
+    },
+    "domain.army_unit.ranged_attack": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attaque à distance"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ranged attack"
+          }
+        }
+      }
+    },
+    "domain.army_unit.spearman": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancier"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spearman"
+          }
+        }
+      }
+    },
+    "domain.army_unit.tide_mage": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mage des marées"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tide Mage"
+          }
+        }
+      }
+    },
+    "domain.army_unit.versatile_infantry": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infanterie polyvalente"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versatile infantry"
+          }
+        }
+      }
+    },
+    "domain.army_unit.warrior": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guerrier"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warrior"
+          }
+        }
+      }
+    },
+    "domain.army_unit.weaker_than_a_spearman_but_able_to_bring_back_more_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moins puissant qu’un lancier, mais capable de rapporter davantage de ressources."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weaker than a spearman, but able to bring back more resources."
+          }
+        }
+      }
+    },
+    "domain.army_unit.with_at_least_one_mage_losses_on_victory_drop_from_20_to_15_the_bonus_does_not_stack": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avec au moins un mage, les pertes en cas de victoire passent de 20 % à 15 %. Le bonus ne se cumule pas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With at least one mage, losses on victory drop from 20% to 15%. The bonus does not stack."
+          }
+        }
+      }
+    },
+    "domain.bot_faction.the_pearl_guard": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La Garde de Nacre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Pearl Guard"
+          }
+        }
+      }
+    },
+    "domain.bot_faction.the_reed_pact": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le Pacte des Roseaux"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Reed Pact"
+          }
+        }
+      }
+    },
+    "domain.bot_faction.the_salt_traders": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les Sauniers"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Salt Traders"
+          }
+        }
+      }
+    },
+    "domain.building_kind.2_automatic_defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+2 défense automatique"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+2 automatic defense"
+          }
+        }
+      }
+    },
+    "domain.building_kind.2_wood_1_amber_2_food_h": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+2 bois · +1 ambre · +2 vivres / h"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+2 wood · +1 amber · +2 food / h"
+          }
+        }
+      }
+    },
+    "domain.building_kind.4_amber_h": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+4 ambre / h"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+4 amber / h"
+          }
+        }
+      }
+    },
+    "domain.building_kind.500_storage_capacity": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+500 de capacité de réserve"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+500 storage capacity"
+          }
+        }
+      }
+    },
+    "domain.building_kind.8_food_h": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+8 vivres / h"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+8 food / h"
+          }
+        }
+      }
+    },
+    "domain.building_kind.8_wood_h": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+8 bois / h"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+8 wood / h"
+          }
+        }
+      }
+    },
+    "domain.building_kind.academy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maison des savoirs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Academy"
+          }
+        }
+      }
+    },
+    "domain.building_kind.amber_workshop": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atelier d’ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Workshop"
+          }
+        }
+      }
+    },
+    "domain.building_kind.extracts_and_crafts_amber_from_this_deposit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrait et travaille l’ambre présent dans ce gisement."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extracts and crafts amber from this deposit."
+          }
+        }
+      }
+    },
+    "domain.building_kind.farm": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferme"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farm"
+          }
+        }
+      }
+    },
+    "domain.building_kind.grows_food_to_support_the_village_s_growth": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cultive des vivres pour soutenir la croissance du village."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grows food to support the village’s growth."
+          }
+        }
+      }
+    },
+    "domain.building_kind.increases_the_amount_of_resources_the_village_can_store": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Augmente la quantité de ressources que le village peut conserver."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Increases the amount of resources the village can store."
+          }
+        }
+      }
+    },
+    "domain.building_kind.new_unit_research": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche de nouvelles unités"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New unit research"
+          }
+        }
+      }
+    },
+    "domain.building_kind.researches_doctrines_that_unlock_new_units": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Étudie les doctrines qui débloquent de nouvelles unités."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Researches doctrines that unlock new units."
+          }
+        }
+      }
+    },
+    "domain.building_kind.sawmill": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scierie"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sawmill"
+          }
+        }
+      }
+    },
+    "domain.building_kind.strengthens_the_village_s_automatic_defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renforce la défense automatique du village."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strengthens the village’s automatic defense."
+          }
+        }
+      }
+    },
+    "domain.building_kind.the_heart_of_the_village_it_provides_your_first_resources_continuously": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cœur du village : elle assure les premières ressources sans interruption."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The heart of the village. It provides your first resources continuously."
+          }
+        }
+      }
+    },
+    "domain.building_kind.training_grounds": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cour des armes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training Grounds"
+          }
+        }
+      }
+    },
+    "domain.building_kind.trains_units_unlocked_at_the_academy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraîne les unités débloquées par la Maison des savoirs."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trains units unlocked at the Academy."
+          }
+        }
+      }
+    },
+    "domain.building_kind.troop_training": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraînement des troupes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troop training"
+          }
+        }
+      }
+    },
+    "domain.building_kind.turns_forest_timber_into_supplies_for_construction": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transforme le bois de la forêt en réserves pour les chantiers."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turns forest timber into supplies for construction."
+          }
+        }
+      }
+    },
+    "domain.building_kind.warehouse": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrepôt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warehouse"
+          }
+        }
+      }
+    },
+    "domain.building_kind.watchers_hall": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maison des Veilleurs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watchers’ Hall"
+          }
+        }
+      }
+    },
+    "domain.building_kind.watchtower": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tour de garde"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watchtower"
+          }
+        }
+      }
+    },
+    "domain.game_state.amber_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port d’Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Harbor"
+          }
+        }
+      }
+    },
+    "domain.game_state.amber_reefs": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récifs ambrés"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber reefs"
+          }
+        }
+      }
+    },
+    "domain.game_state.fertile_lands": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terres fertiles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertile lands"
+          }
+        }
+      }
+    },
+    "domain.game_state.gleam": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Éclat"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gleam"
+          }
+        }
+      }
+    },
+    "domain.game_state.silent_forests": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forêts silencieuses"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Silent forests"
+          }
+        }
+      }
+    },
+    "domain.game_state.the_mists": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les Brumes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mists"
+          }
+        }
+      }
+    },
+    "domain.game_state.the_refuge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le Refuge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Refuge"
+          }
+        }
+      }
+    },
+    "domain.game_state.unexplored_haven": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Havre inexploré"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unexplored haven"
+          }
+        }
+      }
+    },
+    "domain.game_state.wake": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sillage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wake"
+          }
+        }
+      }
+    },
+    "domain.game_state.your_home_league_of_watchers": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre foyer · Ligue des Veilleurs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your home · League of Watchers"
+          }
+        }
+      }
+    },
+    "domain.people.20_carrying_capacity_10_wood": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+20 % de capacité de transport · +10 % de bois"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+20% carrying capacity · +10% wood"
+          }
+        }
+      }
+    },
+    "domain.people.90_second_expeditions_instead_of_120_10_amber": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expéditions de 90 s au lieu de 120 s · +10 % d’ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "90-second expeditions instead of 120 · +10% amber"
+          }
+        }
+      }
+    },
+    "domain.people.an_amphibious_people_with_pearlescent_skin_their_guardians_and_mages_fight_together": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un peuple amphibie à la peau nacrée. Ses gardiens et ses mages combattent ensemble."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An amphibious people with pearlescent skin. Their guardians and mages fight together."
+          }
+        }
+      }
+    },
+    "domain.people.elves_of_lagoons_and_mangroves_their_expeditions_return_sooner": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des elfes des lagunes et des mangroves. Leurs expéditions reviennent plus vite."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elves of lagoons and mangroves. Their expeditions return sooner."
+          }
+        }
+      }
+    },
+    "domain.people.humans": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humains"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humans"
+          }
+        }
+      }
+    },
+    "domain.people.mages_reduce_losses_in_victorious_battles": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les mages réduisent les pertes lors des victoires"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mages reduce losses in victorious battles"
+          }
+        }
+      }
+    },
+    "domain.people.marsh_elves": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elfes des marais"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marsh Elves"
+          }
+        }
+      }
+    },
+    "domain.people.reef_folk": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peuple des récifs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reef Folk"
+          }
+        }
+      }
+    },
+    "domain.people.sailors_builders_and_traders_their_expeditions_excel_at_carrying_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigateurs, bâtisseurs et commerçants. Leurs expéditions privilégient le transport des ressources."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sailors, builders and traders. Their expeditions excel at carrying resources."
+          }
+        }
+      }
+    },
+    "domain.resource_site_kind.amber": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "amber"
+          }
+        }
+      }
+    },
+    "domain.resource_site_kind.amber_vein": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veine d’ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Vein"
+          }
+        }
+      }
+    },
+    "domain.resource_site_kind.cliff_woodland": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bois des falaises"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cliff Woodland"
+          }
+        }
+      }
+    },
+    "domain.resource_site_kind.farmland": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terres cultivables"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farmland"
+          }
+        }
+      }
+    },
+    "domain.resource_site_kind.food": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "food"
+          }
+        }
+      }
+    },
+    "domain.resource_site_kind.wood": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bois"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "wood"
+          }
+        }
+      }
+    },
+    "domain.settlement_layout.amber_town_center": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Centre-ville d’Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Town Center"
+          }
+        }
+      }
+    },
+    "domain.settlement_layout.coastal_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources côtières"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coastal Resources"
+          }
+        }
+      }
+    },
+    "domain.terrain.amber_deposit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gisement d’ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Deposit"
+          }
+        }
+      }
+    },
+    "domain.terrain.forest": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forêt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forest"
+          }
+        }
+      }
+    },
+    "domain.terrain.meadow": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prairie"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meadow"
+          }
+        }
+      }
+    },
+    "domain.terrain.sea": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sea"
+          }
+        }
+      }
+    },
+    "screen.archipelago.5_islands": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 îles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5 islands"
+          }
+        }
+      }
+    },
+    "screen.archipelago.tap_an_island_to_explore": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez une île pour l’explorer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap an island to explore"
+          }
+        }
+      }
+    },
+    "screen.archipelago.the_watchers_archipelago": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’archipel des Veilleurs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Watchers’ Archipelago"
+          }
+        }
+      }
+    },
+    "screen.archipelago.unexplored_island": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Île inexplorée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unexplored island"
+          }
+        }
+      }
+    },
+    "screen.archipelago.your_island_harbor_level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre île, port niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your island, harbor level %@"
+          }
+        }
+      }
+    },
+    "screen.archipelago_scene.amber_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PORT D’AMBRE"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMBER HARBOR"
+          }
+        }
+      }
+    },
+    "screen.archipelago_scene.farm": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferme"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Farm"
+          }
+        }
+      }
+    },
+    "screen.archipelago_scene.preparing_the_archipelago": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préparation de l’archipel…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing the archipelago…"
+          }
+        }
+      }
+    },
+    "screen.army.available_power_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Force disponible : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available power: %@"
+          }
+        }
+      }
+    },
+    "screen.army.defeat_expected_half_your_troops_will_be_lost_rounded_up_per_unit_type_no_loot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défaite prévue : la moitié des troupes sera perdue, arrondie au supérieur par type. Aucun butin."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defeat expected: half your troops will be lost, rounded up per unit type. No loot."
+          }
+        }
+      }
+    },
+    "screen.army.defense_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defense: %@"
+          }
+        }
+      }
+    },
+    "screen.army.departure_for_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Départ vers %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Departure for %@"
+          }
+        }
+      }
+    },
+    "screen.army.each_expedition_deploys_all_available_troops_round_trip_value_seconds_targets_recover": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque départ mobilise toutes les troupes disponibles. Aller-retour : %@ secondes. Une cible se repose 10 minutes après le retour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each expedition deploys all available troops. Round trip: %@ seconds. Targets recover for 10 minutes after your return."
+          }
+        }
+      }
+    },
+    "screen.army.expedition_to_value_returning": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expédition vers %@ · Retour"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expedition to %@ · Returning"
+          }
+        }
+      }
+    },
+    "screen.army.latest_report": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier rapport"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest report"
+          }
+        }
+      }
+    },
+    "screen.army.power_value_carries_value_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Force %@ · Transport %@ ressources"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power %@ · Carries %@ resources"
+          }
+        }
+      }
+    },
+    "screen.army.prepare_attack": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préparer l’attaque"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prepare attack"
+          }
+        }
+      }
+    },
+    "screen.army.send_all_troops": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer toutes les troupes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send all troops"
+          }
+        }
+      }
+    },
+    "screen.army.target_available_at_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cible disponible à %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target available at %@"
+          }
+        }
+      }
+    },
+    "screen.army.train_units_at_the_training_grounds_in_town_neighboring_factions_are_simulated_offlin": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraînez vos unités à la Cour des armes, dans le Centre. Les factions voisines sont gérées par le jeu hors ligne."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Train units at the Training Grounds in town. Neighboring factions are simulated offline."
+          }
+        }
+      }
+    },
+    "screen.army.training": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraînement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training"
+          }
+        }
+      }
+    },
+    "screen.army.troops_and_expeditions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troupes et expéditions"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troops and expeditions"
+          }
+        }
+      }
+    },
+    "screen.army.unlock_at_the_academy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À débloquer à la Maison des savoirs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock at the Academy"
+          }
+        }
+      }
+    },
+    "screen.army.unlock_units_at_the_academy_capacity_100_units": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquez vos unités à la Maison des savoirs. Capacité : 100 unités."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock units at the Academy. Capacity: 100 units."
+          }
+        }
+      }
+    },
+    "screen.army.victory_expected_losses_value_rounded_down_per_unit_type_loot_up_to_60_of_each_resour": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victoire prévue. Pertes : %@ %% arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victory expected. Losses: %@%%, rounded down per unit type. Loot: up to 60 of each resource, limited by surviving carriers and available storage."
+          }
+        }
+      }
+    },
+    "screen.army_panel.value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ × %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ × %@"
+          }
+        }
+      }
+    },
+    "screen.construction.all_buildings_are_already_present": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tous les bâtiments sont déjà présents"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All buildings are already present"
+          }
+        }
+      }
+    },
+    "screen.construction.build_here": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir l’emplacement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build here"
+          }
+        }
+      }
+    },
+    "screen.construction.build_on_the_selected_plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construire sur la parcelle sélectionnée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build on the selected plot"
+          }
+        }
+      }
+    },
+    "screen.construction.building": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BÂTIMENT"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BUILDING"
+          }
+        }
+      }
+    },
+    "screen.construction.cancel_construction": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler le chantier"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel construction"
+          }
+        }
+      }
+    },
+    "screen.construction.cancel_move": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler le déplacement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel move"
+          }
+        }
+      }
+    },
+    "screen.construction.cannot_build_here": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune construction possible ici"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cannot build here"
+          }
+        }
+      }
+    },
+    "screen.construction.choose_a_building_for_this_plot_its_effect_begins_when_construction_finishes": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un bâtiment, puis son emplacement sur la carte. Son effet commence une fois le chantier terminé."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a building for this plot. Its effect begins when construction finishes."
+          }
+        }
+      }
+    },
+    "screen.construction.complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete"
+          }
+        }
+      }
+    },
+    "screen.construction.construction": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CHANTIER"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CONSTRUCTION"
+          }
+        }
+      }
+    },
+    "screen.construction.construction_in_progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier en cours"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction in progress"
+          }
+        }
+      }
+    },
+    "screen.construction.construction_is_already_in_progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un chantier est déjà en cours"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction is already in progress"
+          }
+        }
+      }
+    },
+    "screen.construction.cost_value_wood_value_amber_value_food": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ wood · %@ amber · %@ food"
+          }
+        }
+      }
+    },
+    "screen.construction.each_building_type_can_only_be_built_once_per_village_other_lots_will_host_future_bui": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque type de bâtiment se construit une seule fois dans ce village. Les autres lots accueilleront de nouveaux bâtiments plus tard."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each building type can only be built once per village. Other lots will host future buildings."
+          }
+        }
+      }
+    },
+    "screen.construction.field": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CHAMP"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FIELD"
+          }
+        }
+      }
+    },
+    "screen.construction.lot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LOT"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LOT"
+          }
+        }
+      }
+    },
+    "screen.construction.no_building_in_this_district_can_be_built_on_this_terrain": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce terrain n’accueille aucun bâtiment de ce district."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No building in this district can be built on this terrain."
+          }
+        }
+      }
+    },
+    "screen.construction.not_enough_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources insuffisantes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough resources"
+          }
+        }
+      }
+    },
+    "screen.construction.plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PARCELLE"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PLOT"
+          }
+        }
+      }
+    },
+    "screen.construction.production_continues_including_while_you_are_away": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production continue, y compris pendant votre absence."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production continues, including while you are away."
+          }
+        }
+      }
+    },
+    "screen.construction.production_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "producteur"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "production site"
+          }
+        }
+      }
+    },
+    "screen.construction.refund_50_of_the_construction_cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remboursement : 50 % du coût de construction."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refund: 50% of the construction cost."
+          }
+        }
+      }
+    },
+    "screen.construction.requires_a_level_10_value_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiert un terrain « %@ » au niveau 10"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requires a level 10 %@ site"
+          }
+        }
+      }
+    },
+    "screen.construction.requires_a_level_10_value_site_the_building_is_retained_and_production_resumes_once_t": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiert un terrain « %@ » au niveau 10. Le bâtiment est conservé et sa production reprendra dès ce prérequis atteint."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requires a level 10 %@ site. The building is retained and production resumes once this requirement is met."
+          }
+        }
+      }
+    },
+    "screen.construction.terrain_value_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terrain : %@ · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terrain: %@ · %@"
+          }
+        }
+      }
+    },
+    "screen.construction.the_building_stays_on_plot_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le bâtiment reste sur la case %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The building stays on plot %@"
+          }
+        }
+      }
+    },
+    "screen.construction.touch_and_hold_the_building_to_move_it": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintenez le bâtiment appuyé pour le déplacer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold the building to move it"
+          }
+        }
+      }
+    },
+    "screen.construction.town_lot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement urbain"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Town lot"
+          }
+        }
+      }
+    },
+    "screen.construction.upgrade_the_matching_resource_site_to_activate_production": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorez le terrain correspondant pour activer cette production."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade the matching resource site to activate production."
+          }
+        }
+      }
+    },
+    "screen.construction.value_field": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Champ de %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ field"
+          }
+        }
+      }
+    },
+    "screen.construction.value_is_taking_shape_on_this_plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ prend forme sur cette parcelle."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is taking shape on this plot."
+          }
+        }
+      }
+    },
+    "screen.construction.value_s_remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encore %@ s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ s remaining"
+          }
+        }
+      }
+    },
+    "screen.construction_activity.value_level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Level %@"
+          }
+        }
+      }
+    },
+    "screen.construction_panel.value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %%"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %%"
+          }
+        }
+      }
+    },
+    "screen.game.1_develop_a_woodland_a_field_and_a_deposit_to_produce_all_three_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Développez une forêt, un champ et un gisement pour produire les trois ressources."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1. Develop a woodland, a field and a deposit to produce all three resources."
+          }
+        }
+      }
+    },
+    "screen.game.2_build_the_academy_and_research_a_unit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Construisez la Maison des savoirs et recherchez une unité."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2. Build the Academy and research a unit."
+          }
+        }
+      }
+    },
+    "screen.game.3_build_the_training_grounds_and_train_your_troops": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Construisez la Cour des armes et entraînez vos troupes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3. Build the Training Grounds and train your troops."
+          }
+        }
+      }
+    },
+    "screen.game.4_on_the_world_map_select_a_faction_and_compare_your_strength_before_departing": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4. On the world map, select a faction and compare your strength before departing."
+          }
+        }
+      }
+    },
+    "screen.game.a_sawmill_farm_or_amber_workshop_requires_a_matching_resource_site_at_level_10_this_b": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Sawmill, Farm or Amber Workshop requires a matching resource site at level 10. This bonus is not needed to start recruiting."
+          }
+        }
+      }
+    },
+    "screen.game.attacks_may_cost_units_loot_is_limited_by_surviving_troops_and_available_storage_oppo": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attacks may cost units. Loot is limited by surviving troops and available storage. Opponents are simulated factions."
+          }
+        }
+      }
+    },
+    "screen.game.build_the_academy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construisez la Maison des savoirs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build the Academy"
+          }
+        }
+      }
+    },
+    "screen.game.build_the_training_grounds": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construisez la Cour des armes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build the Training Grounds"
+          }
+        }
+      }
+    },
+    "screen.game.check_the_remaining_time_or_cancel_to_recover_half_the_cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check the remaining time or cancel to recover half the cost."
+          }
+        }
+      }
+    },
+    "screen.game.choose_this_building_on_an_empty_town_lot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez ce bâtiment sur un lot libre du Centre."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose this building on an empty town lot."
+          }
+        }
+      }
+    },
+    "screen.game.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "screen.game.compare_your_strength_with_their_defense_launch_an_expedition_and_read_the_report_on": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare your strength with their defense, launch an expedition and read the report on return."
+          }
+        }
+      }
+    },
+    "screen.game.construction_is_progressing": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre chantier avance"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction is progressing"
+          }
+        }
+      }
+    },
+    "screen.game.construction_of_value_value_seconds_remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier de %@, %@ secondes restantes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction of %@, %@ seconds remaining"
+          }
+        }
+      }
+    },
+    "screen.game.construction_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CHANTIER · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CONSTRUCTION · %@"
+          }
+        }
+      }
+    },
+    "screen.game.discover_your_first_unit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Découvrez votre première unité"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discover your first unit"
+          }
+        }
+      }
+    },
+    "screen.game.explore_neighboring_factions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorez les factions voisines"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore neighboring factions"
+          }
+        }
+      }
+    },
+    "screen.game.finishes_in_value_s": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine dans %@ s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finishes in %@ s"
+          }
+        }
+      }
+    },
+    "screen.game.finishing_construction": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achèvement en cours"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finishing construction"
+          }
+        }
+      }
+    },
+    "screen.game.getting_started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premiers pas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting started"
+          }
+        }
+      }
+    },
+    "screen.game.good_to_know": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À savoir"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Good to know"
+          }
+        }
+      }
+    },
+    "screen.game.open_guide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le guide"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open guide"
+          }
+        }
+      }
+    },
+    "screen.game.open_the_academy_to_start_research_or_follow_its_progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Academy to start research or follow its progress."
+          }
+        }
+      }
+    },
+    "screen.game.open_the_training_grounds_and_recruit_several_units_before_your_expedition": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Training Grounds and recruit several units before your expedition."
+          }
+        }
+      }
+    },
+    "screen.game.production_continues_while_you_are_away_up_to_the_displayed_limit_the_warehouse_incre": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production continues while you are away, up to the displayed limit. The Warehouse increases this limit."
+          }
+        }
+      }
+    },
+    "screen.game.resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resources"
+          }
+        }
+      }
+    },
+    "screen.game.show_me_where": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir où agir"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show me where"
+          }
+        }
+      }
+    },
+    "screen.game.start_all_three_resource_productions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancez vos trois productions"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start all three resource productions"
+          }
+        }
+      }
+    },
+    "screen.game.tap_a_faction_on_the_map_to_view_its_defense_and_prepare_an_expedition": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez une faction sur la carte pour consulter sa défense et préparer une expédition."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a faction on the map to view its defense and prepare an expedition."
+          }
+        }
+      }
+    },
+    "screen.game.the_archipelago": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’archipel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Archipelago"
+          }
+        }
+      }
+    },
+    "screen.game.the_new_level_will_be_ready_after_one_minute_of_work": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le nouveau niveau sera disponible à la fin de la minute de travaux."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The new level will be ready after one minute of work."
+          }
+        }
+      }
+    },
+    "screen.game.this_building_trains_units_discovered_at_the_academy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This building trains units discovered at the Academy."
+          }
+        }
+      }
+    },
+    "screen.game.town": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Centre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Town"
+          }
+        }
+      }
+    },
+    "screen.game.train_your_first_troops": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraînez vos premières troupes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Train your first troops"
+          }
+        }
+      }
+    },
+    "screen.game.upgrade_this_site_to_level_1_if_resources_are_low_let_production_replenish_your_store": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade this site to level 1. If resources are low, let production replenish your stores."
+          }
+        }
+      }
+    },
+    "screen.game.world": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monde"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "World"
+          }
+        }
+      }
+    },
+    "screen.game.your_first_expedition": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre première expédition"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first expedition"
+          }
+        }
+      }
+    },
+    "screen.game.your_next_step": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre prochaine étape"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next step"
+          }
+        }
+      }
+    },
+    "screen.game.your_resource_site_is_developing": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre terrain se développe"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your resource site is developing"
+          }
+        }
+      }
+    },
+    "screen.game_session.harbor_upgraded_to_level_value_progress_saved_on_this_device": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port amélioré au niveau %@. Progression enregistrée sur cet appareil."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harbor upgraded to level %@. Progress saved on this device."
+          }
+        }
+      }
+    },
+    "screen.game_session.unreadable_save_a_fresh_preview_was_loaded_your_previous_save_remains_intact_until_yo": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sauvegarde illisible : aperçu neuf chargé. L’ancienne sauvegarde reste intacte jusqu’à votre prochaine action."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unreadable save: a fresh preview was loaded. Your previous save remains intact until your next action."
+          }
+        }
+      }
+    },
+    "screen.game_session.upgrade_applied_but_the_local_save_failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amélioration active, mais la sauvegarde locale a échoué."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade applied, but the local save failed."
+          }
+        }
+      }
+    },
+    "screen.game_session.your_archipelago_awaits_nothing_changes_while_you_are_away": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre archipel vous attend. Rien ne change en votre absence."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your archipelago awaits. Nothing changes while you are away."
+          }
+        }
+      }
+    },
+    "screen.island_detail.cost_value_wood_value_amber": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ bois · %@ ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ wood · %@ amber"
+          }
+        }
+      }
+    },
+    "screen.island_detail.expand_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Développer le port"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expand harbor"
+          }
+        }
+      }
+    },
+    "screen.island_detail.expand_your_harbor_to_prepare_for_future_expeditions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agrandissez votre port pour préparer les prochaines expéditions."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expand your harbor to prepare for future expeditions."
+          }
+        }
+      }
+    },
+    "screen.island_detail.harbor_at_prototype_maximum": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port au maximum du prototype"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harbor at prototype maximum"
+          }
+        }
+      }
+    },
+    "screen.island_detail.level_value_4": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ / 4"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ / 4"
+          }
+        }
+      }
+    },
+    "screen.island_detail.not_enough_resources_harvesting_will_be_added_in_a_future_version": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources insuffisantes. La récolte sera ajoutée dans une prochaine version."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough resources. Harvesting will be added in a future version."
+          }
+        }
+      }
+    },
+    "screen.island_detail.unclaimed_land_beyond_your_harbor_map_expeditions_will_be_added_in_a_future_version": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une terre encore libre, au-delà de votre port. Les expéditions sur la carte seront ajoutées dans une prochaine version."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unclaimed land beyond your harbor. Map expeditions will be added in a future version."
+          }
+        }
+      }
+    },
+    "screen.island_detail.unexplored_horizon": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HORIZON À EXPLORER"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UNEXPLORED HORIZON"
+          }
+        }
+      }
+    },
+    "screen.island_detail.your_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VOTRE ESCALE"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR HARBOR"
+          }
+        }
+      }
+    },
+    "screen.plot_detail.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "screen.plot_detail.upgrade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amélioration"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade"
+          }
+        }
+      }
+    },
+    "screen.plot_detail.your_plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre parcelle"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plot"
+          }
+        }
+      }
+    },
+    "screen.prologue.amber_tides": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LES MARÉES D’AMBRE"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AMBER TIDES"
+          }
+        }
+      }
+    },
+    "screen.prologue.first_playable_version_develop_resource_sites_build_your_village_train_units_and_send": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Première version jouable : développez les champs, construisez votre village, entraînez vos unités et partez en expédition contre les factions voisines."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First playable version: develop resource sites, build your village, train units and send expeditions against neighboring factions."
+          }
+        }
+      }
+    },
+    "screen.prologue.found_my_village": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fonder mon village"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Found my village"
+          }
+        }
+      }
+    },
+    "screen.prologue.long_before_the_kingdoms_the_archipelago_was_nothing_but_mist_and_hidden_rocks_then_t": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bien avant les royaumes, l’archipel n’était qu’une étendue de brume et d’écueils. Puis la mer se retira, révélant dans ses profondeurs une matière inconnue : l’ambre des marées, une pierre chaude et dorée qui semblait retenir la lumière du jour.\n\nLes premiers habitants bâtirent leurs maisons sur les hauteurs et leurs ports au creux des anses. Ils apprirent à lire les courants, à cultiver les terres salées et à tailler l’ambre pour guider les navires dans la nuit. Pendant des générations, les îles prospérèrent.\n\nMais l’archipel n’est jamais immobile. Les courants changent, de nouvelles terres émergent, et d’anciennes routes disparaissent sous les flots. Chaque marée apporte son lot de découvertes — et réveille des rivalités oubliées.\n\nTu arrives à Port d’Ambre au moment où les cartes cessent d’être fiables. Quelques bâtiments, des réserves modestes et un port à reconstruire : c’est peu, mais c’est un début. Autour de toi, les Humains défendent leurs ports, le Peuple des récifs veille sur les passes maritimes et les Elfes des marais étendent leurs villages le long des chenaux.\n\nAucun de ces peuples ne peut dominer seul les marées. Il faudra développer ton village, protéger ses habitants et envoyer des expéditions au-delà des récifs. Ici, une absence ne condamne pas une cité : les gardes tiennent leur poste, les ateliers poursuivent leur ouvrage, et les réserves grandissent au rythme du monde.\n\nCar l’archipel garde la mémoire de chaque marée. Et peut-être, dans ses îles les plus anciennes, l’ambre révèle-t-il pourquoi la mer se retire."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long before the kingdoms, the archipelago was nothing but mist and hidden rocks. Then the sea withdrew, revealing an unknown substance in its depths: tidal amber, a warm golden stone that seemed to hold the light of day.\n\nThe first settlers built their homes on high ground and their harbors in sheltered coves. They learned to read the currents, farm the salty land and carve amber to guide ships through the night. For generations, the islands prospered.\n\nBut the archipelago never stands still. Currents shift, new lands emerge and old routes vanish beneath the waves. Every tide brings discoveries and awakens forgotten rivalries.\n\nYou arrive at Amber Harbor just as the charts become unreliable. A few buildings, modest supplies and a harbor to rebuild: it is little, but it is a beginning. Around you, Humans defend their ports, the Reef Folk guard the sea passages and Marsh Elves expand their villages along the channels.\n\nNone of these peoples can master the tides alone. You must develop your village, protect its inhabitants and send expeditions beyond the reefs. Here, an absence does not doom a town: guards keep their posts, workshops keep working and stores grow with the rhythm of the world.\n\nFor the archipelago remembers every tide. Perhaps, on its oldest islands, the amber will reveal why the sea withdraws."
+          }
+        }
+      }
+    },
+    "screen.prologue.prologue_amber_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PROLOGUE · PORT D’AMBRE"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PROLOGUE · AMBER HARBOR"
+          }
+        }
+      }
+    },
+    "screen.prologue.start_with_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencer avec %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start with %@"
+          }
+        }
+      }
+    },
+    "screen.prologue.strength": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ATOUT"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "STRENGTH"
+          }
+        }
+      }
+    },
+    "screen.prologue.the_memory_of_the_islands": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mémoire\ndes îles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The memory\nof the islands"
+          }
+        }
+      }
+    },
+    "screen.prologue.the_memory_of_the_tides": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LA MÉMOIRE DES MARÉES"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "THE MEMORY OF THE TIDES"
+          }
+        }
+      }
+    },
+    "screen.prologue.three_peoples_three_destinies": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TROIS PEUPLES, TROIS DESTINS"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "THREE PEOPLES, THREE DESTINIES"
+          }
+        }
+      }
+    },
+    "screen.prologue.who_will_watch_over_your_village": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui veillera sur votre village ?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Who will watch over your village?"
+          }
+        }
+      }
+    },
+    "screen.research.doctrine_learned": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doctrine acquise"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doctrine learned"
+          }
+        }
+      }
+    },
+    "screen.research.each_research_permanently_unlocks_a_unit_for_this_village_train_it_at_the_training_gr": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque recherche débloque définitivement une unité pour ce village. Entraînez-la ensuite à la Cour des armes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each research permanently unlocks a unit for this village. Train it at the Training Grounds."
+          }
+        }
+      }
+    },
+    "screen.research.humans": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humains"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Humans"
+          }
+        }
+      }
+    },
+    "screen.research.power_value_carrying_capacity_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Force %@ · Transport %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power %@ · Carrying capacity %@"
+          }
+        }
+      }
+    },
+    "screen.research.research_1_min": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher · 1 min"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research · 1 min"
+          }
+        }
+      }
+    },
+    "screen.research.units_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unités · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units · %@"
+          }
+        }
+      }
+    },
+    "screen.research.value_wood_value_amber_value_food": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ wood · %@ amber · %@ food"
+          }
+        }
+      }
+    },
+    "screen.resource_site.cost_value_wood_value_amber_value_food": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ wood · %@ amber · %@ food"
+          }
+        }
+      }
+    },
+    "screen.resource_site.develop_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Développer le terrain"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Develop site"
+          }
+        }
+      }
+    },
+    "screen.resource_site.duration_1_minute": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée : 1 minute"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration: 1 minute"
+          }
+        }
+      }
+    },
+    "screen.resource_site.finish_or_cancel_the_current_construction_before_starting_this_upgrade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminez ou annulez le chantier en cours avant de commencer cette amélioration."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish or cancel the current construction before starting this upgrade."
+          }
+        }
+      }
+    },
+    "screen.resource_site.gain_value_value_h": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain : +%@ %@ / h"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gain: +%@ %@ / h"
+          }
+        }
+      }
+    },
+    "screen.resource_site.harvesting_continues_while_you_are_away_resources_are_automatically_added_to_village": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La récolte continue pendant votre absence. Les ressources rejoignent automatiquement le stock du village."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harvesting continues while you are away. Resources are automatically added to village storage."
+          }
+        }
+      }
+    },
+    "screen.resource_site.level_value_of_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ sur %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ of %@"
+          }
+        }
+      }
+    },
+    "screen.resource_site.one_level_10_site_of_this_type_unlocks_its_production_building_in_town": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un seul terrain de ce type au niveau 10 débloque son bâtiment de production au Centre."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One level 10 site of this type unlocks its production building in town."
+          }
+        }
+      }
+    },
+    "screen.resource_site.resource_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TERRAIN PRODUCTEUR"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RESOURCE SITE"
+          }
+        }
+      }
+    },
+    "screen.resource_site.site_at_maximum_level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terrain au niveau maximal"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Site at maximum level"
+          }
+        }
+      }
+    },
+    "screen.resource_site.site_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ZONE %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SITE %@"
+          }
+        }
+      }
+    },
+    "screen.resource_site.upgrade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade"
+          }
+        }
+      }
+    },
+    "screen.resource_site.upgrade_to_level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorer au niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade to level %@"
+          }
+        }
+      }
+    },
+    "screen.resource_site.value_value_per_hour": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ %@ par heure"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ %@ per hour"
+          }
+        }
+      }
+    },
+    "screen.resource_upgrade_status.cancel_50_refund": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler · remboursement de 50 %"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel · 50% refund"
+          }
+        }
+      }
+    },
+    "screen.resource_upgrade_status.current_production_continues_the_new_level_takes_effect_when_construction_finishes": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La production actuelle continue. Le nouveau niveau sera actif à la fin du chantier."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current production continues. The new level takes effect when construction finishes."
+          }
+        }
+      }
+    },
+    "screen.resource_upgrade_status.resource_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terrain"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resource site"
+          }
+        }
+      }
+    },
+    "screen.resource_upgrade_status.upgrade_in_progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amélioration en cours"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade in progress"
+          }
+        }
+      }
+    },
+    "screen.resource_upgrade_status.value_level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Level %@"
+          }
+        }
+      }
+    },
+    "screen.resources.amber": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber"
+          }
+        }
+      }
+    },
+    "screen.resources.food": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food"
+          }
+        }
+      }
+    },
+    "screen.resources.full": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plein"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full"
+          }
+        }
+      }
+    },
+    "screen.resources.value_value_of_value_plus_value_per_hour": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@ sur %@, plus %@ par heure"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@ of %@, plus %@ per hour"
+          }
+        }
+      }
+    },
+    "screen.resources.wood": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bois"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wood"
+          }
+        }
+      }
+    },
+    "screen.resources_view.value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@"
+          }
+        }
+      }
+    },
+    "screen.tide_level_badge.level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@"
+          }
+        }
+      }
+    },
+    "screen.tide_level_badge.value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
+    "screen.village_board.construction_of_value_value_percent_complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier de %@, %@ pour cent terminé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction of %@, %@ percent complete"
+          }
+        }
+      }
+    },
+    "screen.village_board.full_district_map_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carte entière du district : %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full district map: %@."
+          }
+        }
+      }
+    },
+    "screen.village_board.move_the_selected_building_to_this_plot_if_compatible": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacer le bâtiment sélectionné vers cette case si elle est compatible"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move the selected building to this plot if compatible"
+          }
+        }
+      }
+    },
+    "screen.village_board.open_the_harbor_and_town_buildings": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir le port et les bâtiments du Centre-ville"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the harbor and town buildings"
+          }
+        }
+      }
+    },
+    "screen.village_board.plot_value_value_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emplacement %@, %@%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plot %@, %@%@"
+          }
+        }
+      }
+    },
+    "screen.village_board.quay_town": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quais & Centre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quay & Town"
+          }
+        }
+      }
+    },
+    "screen.village_board.selected": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionné"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected"
+          }
+        }
+      }
+    },
+    "screen.village_board.site_value_value_level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone %@, %@, niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Site %@, %@, level %@"
+          }
+        }
+      }
+    },
+    "screen.village_board.unavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", indisponible"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", unavailable"
+          }
+        }
+      }
+    },
+    "screen.village_board.view_details_or_build_on_this_plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher les détails ou construire sur cet emplacement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View details or build on this plot"
+          }
+        }
+      }
+    },
+    "screen.village_board.view_production_and_upgrade_this_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afficher la production et améliorer cette zone"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View production and upgrade this site"
+          }
+        }
+      }
+    },
+    "screen.village_session.action_completed_but_the_game_could_not_be_saved": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action effectuée, mais sauvegarde impossible."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Action completed, but the game could not be saved."
+          }
+        }
+      }
+    },
+    "screen.village_session.choose_a_compatible_empty_plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez une parcelle libre compatible."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a compatible empty plot."
+          }
+        }
+      }
+    },
+    "screen.village_session.choose_an_empty_plot_for_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez une parcelle libre pour %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an empty plot for %@."
+          }
+        }
+      }
+    },
+    "screen.village_session.choose_an_empty_plot_to_build": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez un emplacement libre pour construire."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an empty plot to build."
+          }
+        }
+      }
+    },
+    "screen.village_session.construction_canceled_half_the_resources_were_refunded": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier annulé. La moitié des ressources a été récupérée."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction canceled. Half the resources were refunded."
+          }
+        }
+      }
+    },
+    "screen.village_session.expedition_departed_returns_in_value_seconds": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expédition partie. Retour dans %@ secondes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expedition departed. Returns in %@ seconds."
+          }
+        }
+      }
+    },
+    "screen.village_session.in_value_m_value_s": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dans %@m %@s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %@m %@s"
+          }
+        }
+      }
+    },
+    "screen.village_session.move_canceled": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacement annulé."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move canceled."
+          }
+        }
+      }
+    },
+    "screen.village_session.research_started_value_ready_in_one_minute": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche lancée : %@. Fin dans une minute."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research started: %@. Ready in one minute."
+          }
+        }
+      }
+    },
+    "screen.village_session.resource_site_upgraded_to_level_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terrain amélioré au niveau %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resource site upgraded to level %@."
+          }
+        }
+      }
+    },
+    "screen.village_session.tap_a_compatible_empty_plot_to_move_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez une case libre compatible pour déplacer %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a compatible empty plot to move %@."
+          }
+        }
+      }
+    },
+    "screen.village_session.the_village_save_could_not_be_read_a_new_village_is_shown_your_next_action_will_repla": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sauvegarde du village illisible. Un village neuf est affiché ; la prochaine action remplacera cette sauvegarde."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The village save could not be read. A new village is shown; your next action will replace this save."
+          }
+        }
+      }
+    },
+    "screen.village_session.this_building_cannot_be_placed_here": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cette case ne peut pas accueillir ce bâtiment."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This building cannot be placed here."
+          }
+        }
+      }
+    },
+    "screen.village_session.training_started_for_value_units": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraînement de %@ unité(s) lancé."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training started for %@ units."
+          }
+        }
+      }
+    },
+    "screen.village_session.upgrade_canceled_half_the_resources_were_refunded": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amélioration annulée. La moitié des ressources a été récupérée."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade canceled. Half the resources were refunded."
+          }
+        }
+      }
+    },
+    "screen.village_session.value_completed_the_building_is_ready": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ terminé. Le bâtiment est prêt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ completed. The building is ready."
+          }
+        }
+      }
+    },
+    "screen.village_session.value_construction_started_ready_in_one_minute": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : chantier lancé. Fin dans une minute."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: construction started. Ready in one minute."
+          }
+        }
+      }
+    },
+    "screen.village_session.value_moved_production_continues": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ déplacée. Sa production continue."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ moved. Production continues."
+          }
+        }
+      }
+    },
+    "screen.village_session.value_now_watch_over_amber_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ veille désormais sur Port d’Ambre."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ now watch over Amber Harbor."
+          }
+        }
+      }
+    },
+    "screen.village_session.value_upgrade_started_ready_in_one_minute": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : amélioration lancée. Fin dans une minute."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: upgrade started. Ready in one minute."
+          }
+        }
+      }
+    },
+    "screen.world.amber_harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port d’Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Harbor"
+          }
+        }
+      }
+    },
+    "screen.world.level_value_defense_value_value_locations": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ · Défense %@ · %@ lieux"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ · Defense %@ · %@ locations"
+          }
+        }
+      }
+    },
+    "screen.world.neighboring_shores": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rivages voisins"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neighboring Shores"
+          }
+        }
+      }
+    },
+    "screen.world.offline_simulated_factions_the_golden_line_connects_your_village_to_the_selected_loca": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pavillons simulés hors ligne · Le tracé doré relie votre village au lieu sélectionné ; il ne représente pas une expédition en cours."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offline simulated factions · The golden line connects your village to the selected location; it does not represent an active expedition."
+          }
+        }
+      }
+    },
+    "screen.world.select_a_faction_to_discover_your_neighbors": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sélectionnez un pavillon pour découvrir vos voisins."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a faction to discover your neighbors."
+          }
+        }
+      }
+    },
+    "screen.world.troops_expeditions_and_report": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troupes, expéditions et rapport"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troops, expeditions and report"
+          }
+        }
+      }
+    },
+    "screen.world.unclaimed_land_attacks_target_neighboring_factions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lieu libre · Les attaques ciblent les pavillons voisins."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unclaimed land · Attacks target neighboring factions."
+          }
+        }
+      }
+    },
+    "screen.world.view_expeditions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir les expéditions"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View expeditions"
+          }
+        }
+      }
+    },
+    "screen.world.your_power_value_round_trip_value_s": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre force : %@ · Aller-retour : %@ s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your power: %@ · Round trip: %@ s"
+          }
+        }
+      }
+    },
+    "screen.world.your_village_available_power_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre village · Force disponible : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your village · Available power: %@"
+          }
+        }
+      }
+    },
+    "screen.world.your_village_the_surrounding_lands_and_neighboring_factions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre village, les terres alentour et les autres pavillons."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your village, the surrounding lands and neighboring factions."
+          }
+        }
+      }
+    },
+    "screen.world_canvas.amber": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.archipelago_and_neighboring_villages": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archipel et villages voisins"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archipelago and neighboring villages"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.choose_a_destination_using_the_buttons_below_the_map": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez une destination avec les boutons sous la carte."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a destination using the buttons below the map."
+          }
+        }
+      }
+    },
+    "screen.world_canvas.choose_a_position": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir une position"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a position"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.column_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colonne : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Column: %@"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.drag_to_explore_pinch_to_zoom_tap_a_village": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glissez pour explorer · Pincez pour zoomer · Touchez un village"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag to explore · Pinch to zoom · Tap a village"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.forests": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forêts"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forests"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.my_village": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon village"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My village"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.overview": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vue d’ensemble"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overview"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.row_value": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligne : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row: %@"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.sea_of_echoes": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MER DES ÉCHOS"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SEA OF ECHOES"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.territories": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Territoires"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Territories"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.zoom_in": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoomer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoom in"
+          }
+        }
+      }
+    },
+    "screen.world_canvas.zoom_out": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dézoomer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoom out"
+          }
+        }
+      }
+    },
+    "screen.world_clock_status.next_resource_value_production_and_factions_progress_offline": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaine ressource %@ · production et factions avancent hors ligne."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next resource %@ · production and factions progress offline."
+          }
+        }
+      }
+    },
+    "screen.world_clock_status.the_world_keeps_moving": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LE MONDE CONTINUE"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "THE WORLD KEEPS MOVING"
+          }
+        }
+      }
+    },
+    "screen.world_panel.position": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position %@, %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Position %@, %@"
+          }
+        }
+      }
+    },
+    "screen.construction.slot_number": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        }
+      }
+    },
+    "screen.army.recruit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recruter : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recruit: %@"
+          }
+        }
+      }
+    },
+    "screen.army.available_units": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ disponible(s)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ available"
+          }
+        }
+      }
+    },
+    "screen.army.train": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraîner · %@ s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Train · %@ s"
+          }
+        }
+      }
+    },
+    "screen.army.training_cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ wood · %@ amber · %@ food"
+          }
+        }
+      }
+    },
+    "screen.island_detail.harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harbor"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

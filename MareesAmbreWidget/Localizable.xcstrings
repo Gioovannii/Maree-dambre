@@ -1,0 +1,57 @@
+{
+  "sourceLanguage": "fr",
+  "strings": {
+    "widget.construction_countdown.construction_complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier terminé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction complete"
+          }
+        }
+      }
+    },
+    "widget.construction_live_activity.construction_complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier terminé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction complete"
+          }
+        }
+      }
+    },
+    "widget.construction_live_activity.construction_in_progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chantier en cours"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construction in progress"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

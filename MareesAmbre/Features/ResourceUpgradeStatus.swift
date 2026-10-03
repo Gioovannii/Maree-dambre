@@ -8,10 +8,10 @@ struct ResourceUpgradeStatus: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { timeline in
             VStack(alignment: .leading, spacing: 8) {
-                Label(L10n.text("\(ResourceSiteKind.at(job.plot)?.name ?? "Terrain") · Niveau \(job.targetLevel)", "\(ResourceSiteKind.at(job.plot)?.name ?? "Site") · Level \(job.targetLevel)"), systemImage: "hammer.fill")
+                Label(String(localized: "screen.resource_upgrade_status.value_level_value", defaultValue: "\(String(ResourceSiteKind.at(job.plot)?.name ?? String(localized: "screen.resource_upgrade_status.resource_site", defaultValue: "Terrain"))) · Niveau \(String(job.targetLevel))"), systemImage: "hammer.fill")
                     .font(.subheadline.bold())
                 HStack {
-                    Text(L10n.text("Amélioration en cours", "Upgrade in progress"))
+                    Text(String(localized: "screen.resource_upgrade_status.upgrade_in_progress", defaultValue: "Amélioration en cours"))
                     Spacer()
                     Text(timerInterval: min(timeline.date, job.endsAt)...job.endsAt, countsDown: true)
                         .monospacedDigit().fixedSize()
@@ -19,9 +19,9 @@ struct ResourceUpgradeStatus: View {
                 .font(.caption)
                 ProgressView(value: job.progress(at: timeline.date)).tint(Palette.amber)
                 if allowsCancellation {
-                    Text(L10n.text("La production actuelle continue. Le nouveau niveau sera actif à la fin du chantier.", "Current production continues. The new level takes effect when construction finishes."))
+                    Text(String(localized: "screen.resource_upgrade_status.current_production_continues_the_new_level_takes_effect_when_construction_finishes", defaultValue: "La production actuelle continue. Le nouveau niveau sera actif à la fin du chantier."))
                         .font(.footnote)
-                    Button(L10n.text("Annuler · remboursement de 50 %", "Cancel · 50% refund"), role: .destructive) {
+                    Button(String(localized: "screen.resource_upgrade_status.cancel_50_refund", defaultValue: "Annuler · remboursement de 50 %"), role: .destructive) {
                         session.cancelResourceUpgrade()
                     }
                     .frame(minHeight: 44)

@@ -39,7 +39,7 @@ final class ArchipelagoScene: SKScene {
         sea.shader?.addUniform(SKUniform(name: "u_motion", float: 1))
         addChild(sea)
         addChild(viewpoint)
-        loading.text = L10n.text("Préparation de l’archipel…", "Preparing the archipelago…")
+        loading.text = String(localized: "screen.archipelago_scene.preparing_the_archipelago", defaultValue: "Préparation de l’archipel…")
         loading.fontSize = 15
         loading.fontColor = .white
         loading.zPosition = 100
@@ -88,7 +88,7 @@ final class ArchipelagoScene: SKScene {
         }
         markers.removeAllChildren()
         locations = [.home] + bots.map(\.capital)
-        addVillage(tile: .home, name: L10n.text("PORT D’AMBRE", "AMBER HARBOR"), asset: "MaisonVeilleurs", color: .systemYellow)
+        addVillage(tile: .home, name: String(localized: "screen.archipelago_scene.amber_harbor", defaultValue: "PORT D’AMBRE"), asset: "MaisonVeilleurs", color: .systemYellow)
         for bot in bots {
             let color = [UIColor.systemOrange, .systemCyan, .systemPurple][bot.id % 3]
             for tile in bot.territory {
@@ -98,7 +98,7 @@ final class ArchipelagoScene: SKScene {
                 patch.strokeColor = .clear
                 markers.addChild(patch)
             }
-            addVillage(tile: bot.capital, name: bot.displayName.uppercased(), asset: ["CourArmes", "MaisonSavoirs", L10n.text("Ferme", "Farm")][bot.id % 3], color: color)
+            addVillage(tile: bot.capital, name: bot.displayName.uppercased(), asset: ["CourArmes", "MaisonSavoirs", String(localized: "screen.archipelago_scene.farm", defaultValue: "Ferme")][bot.id % 3], color: color)
         }
         select(selected, focus: false)
     }

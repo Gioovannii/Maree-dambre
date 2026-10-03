@@ -36,26 +36,26 @@ struct GameView: View {
         }) {
             NavigationStack {
                 List {
-                    Section(L10n.text("Votre prochaine étape", "Your next step")) {
+                    Section(String(localized: "screen.game.your_next_step", defaultValue: "Votre prochaine étape")) {
                         Text(guideStep.title).font(.headline)
                         Text(guideStep.detail)
-                        Button(L10n.text("Voir où agir", "Show me where"), action: followGuide)
+                        Button(String(localized: "screen.game.show_me_where", defaultValue: "Voir où agir"), action: followGuide)
                     }
-                    Section(L10n.text("Votre première expédition", "Your first expedition")) {
-                        Text(L10n.text("1. Développez une forêt, un champ et un gisement pour produire les trois ressources.", "1. Develop a woodland, a field and a deposit to produce all three resources."))
-                        Text(L10n.text("2. Construisez la Maison des savoirs et recherchez une unité.", "2. Build the Academy and research a unit."))
-                        Text(L10n.text("3. Construisez la Cour des armes et entraînez vos troupes.", "3. Build the Training Grounds and train your troops."))
-                        Text(L10n.text("4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir.", "4. On the world map, select a faction and compare your strength before departing."))
+                    Section(String(localized: "screen.game.your_first_expedition", defaultValue: "Votre première expédition")) {
+                        Text(String(localized: "screen.game.1_develop_a_woodland_a_field_and_a_deposit_to_produce_all_three_resources", defaultValue: "1. Développez une forêt, un champ et un gisement pour produire les trois ressources."))
+                        Text(String(localized: "screen.game.2_build_the_academy_and_research_a_unit", defaultValue: "2. Construisez la Maison des savoirs et recherchez une unité."))
+                        Text(String(localized: "screen.game.3_build_the_training_grounds_and_train_your_troops", defaultValue: "3. Construisez la Cour des armes et entraînez vos troupes."))
+                        Text(String(localized: "screen.game.4_on_the_world_map_select_a_faction_and_compare_your_strength_before_departing", defaultValue: "4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir."))
                     }
-                    Section(L10n.text("À savoir", "Good to know")) {
-                        Text(L10n.text("La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum.", "Production continues while you are away, up to the displayed limit. The Warehouse increases this limit."))
-                        Text(L10n.text("Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter.", "A Sawmill, Farm or Amber Workshop requires a matching resource site at level 10. This bonus is not needed to start recruiting."))
-                        Text(L10n.text("Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées.", "Attacks may cost units. Loot is limited by surviving troops and available storage. Opponents are simulated factions."))
+                    Section(String(localized: "screen.game.good_to_know", defaultValue: "À savoir")) {
+                        Text(String(localized: "screen.game.production_continues_while_you_are_away_up_to_the_displayed_limit_the_warehouse_incre", defaultValue: "La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum."))
+                        Text(String(localized: "screen.game.a_sawmill_farm_or_amber_workshop_requires_a_matching_resource_site_at_level_10_this_b", defaultValue: "Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter."))
+                        Text(String(localized: "screen.game.attacks_may_cost_units_loot_is_limited_by_surviving_troops_and_available_storage_oppo", defaultValue: "Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées."))
                     }
                 }
-                .navigationTitle(L10n.text("Premiers pas", "Getting started"))
+                .navigationTitle(String(localized: "screen.game.getting_started", defaultValue: "Premiers pas"))
                 .toolbar { ToolbarItem(placement: .confirmationAction) {
-                    Button(L10n.text("Fermer", "Close")) { showsGuide = false }
+                    Button(String(localized: "screen.game.close", defaultValue: "Fermer")) { showsGuide = false }
                 } }
             }
         }
@@ -87,11 +87,11 @@ struct GameView: View {
                 if showsWorld {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
-                            Text(L10n.text("Votre prochaine étape", "Your next step")).font(.title2.bold())
+                            Text(String(localized: "screen.game.your_next_step", defaultValue: "Votre prochaine étape")).font(.title2.bold())
                             Text(guideStep.title).font(.headline)
                             Text(guideStep.detail)
-                            Button(L10n.text("Ouvrir le guide", "Open guide")) { showsGuide = true }
-                            Text(L10n.text("Touchez une faction sur la carte pour consulter sa défense et préparer une expédition.", "Tap a faction on the map to view its defense and prepare an expedition."))
+                            Button(String(localized: "screen.game.open_guide", defaultValue: "Ouvrir le guide")) { showsGuide = true }
+                            Text(String(localized: "screen.game.tap_a_faction_on_the_map_to_view_its_defense_and_prepare_an_expedition", defaultValue: "Touchez une faction sur la carte pour consulter sa défense et préparer une expédition."))
                             WorldClockStatus()
                         }
                         .padding(20)
@@ -161,9 +161,9 @@ struct GameView: View {
                             .frame(width: 28, height: 28)
                             .background(Palette.amber, in: Circle())
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(L10n.text("CHANTIER · \(job.kind.name.uppercased())", "CONSTRUCTION · \(job.kind.name.uppercased())"))
+                            Text(String(localized: "screen.game.construction_value", defaultValue: "CHANTIER · \(String(job.kind.name.uppercased()))"))
                                 .font(.caption2.bold()).tracking(1.2)
-                            Text(remaining > 0 ? L10n.text("Termine dans \(remaining) s", "Finishes in \(remaining) s") : L10n.text("Achèvement en cours", "Finishing construction"))
+                            Text(remaining > 0 ? String(localized: "screen.game.finishes_in_value_s", defaultValue: "Termine dans \(String(remaining)) s") : String(localized: "screen.game.finishing_construction", defaultValue: "Achèvement en cours"))
                                 .font(.caption.bold()).foregroundStyle(Palette.amber)
                         }
                         Spacer()
@@ -177,7 +177,7 @@ struct GameView: View {
                     .background(.ultraThinMaterial, in: .capsule)
                     .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.45), lineWidth: 1) }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(L10n.text("Chantier de \(job.kind.name), \(remaining) secondes restantes", "Construction of \(job.kind.name), \(remaining) seconds remaining"))
+                    .accessibilityLabel(String(localized: "screen.game.construction_of_value_value_seconds_remaining", defaultValue: "Chantier de \(String(job.kind.name)), \(String(remaining)) secondes restantes"))
                 }
             }
         }
@@ -219,7 +219,7 @@ struct GameView: View {
     private var header: some View {
         HStack(alignment: .center, spacing: 8) {
             if showsWorld || villageMap == .townCenter {
-                Text(showsWorld ? L10n.text("L’archipel", "The Archipelago") : villageMap.title)
+                Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
                     .contentTransition(.opacity)
             }
@@ -230,13 +230,13 @@ struct GameView: View {
 
     private var navigation: some View {
         HStack(spacing: 5) {
-            navigationButton(L10n.text("Ressources", "Resources"), symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
+            navigationButton(String(localized: "screen.game.resources", defaultValue: "Ressources"), symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
                 selectVillageMap(.resourceFields)
             }
-            navigationButton(L10n.text("Centre", "Town"), symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
+            navigationButton(String(localized: "screen.game.town", defaultValue: "Centre"), symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
                 selectVillageMap(.townCenter)
             }
-            navigationButton(L10n.text("Monde", "World"), symbol: "map.fill", selected: showsWorld) {
+            navigationButton(String(localized: "screen.game.world", defaultValue: "Monde"), symbol: "map.fill", selected: showsWorld) {
                 showsWorld = true
             }
         }
@@ -278,27 +278,27 @@ struct GameView: View {
 
     private var guideStep: (title: String, detail: String, kind: BuildingKind?, plot: Int?) {
         if let job = session.state.resourceUpgrade {
-            return (L10n.text("Votre terrain se développe", "Your resource site is developing"), L10n.text("Le nouveau niveau sera disponible à la fin de la minute de travaux.", "The new level will be ready after one minute of work."), nil, job.plot)
+            return (String(localized: "screen.game.your_resource_site_is_developing", defaultValue: "Votre terrain se développe"), String(localized: "screen.game.the_new_level_will_be_ready_after_one_minute_of_work", defaultValue: "Le nouveau niveau sera disponible à la fin de la minute de travaux."), nil, job.plot)
         }
         for plot in [0, 2, 4] where session.state.resourceLevel(at: plot) == 0 {
-            return (L10n.text("Lancez vos trois productions", "Start all three resource productions"), L10n.text("Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves.", "Upgrade this site to level 1. If resources are low, let production replenish your stores."), nil, plot)
+            return (String(localized: "screen.game.start_all_three_resource_productions", defaultValue: "Lancez vos trois productions"), String(localized: "screen.game.upgrade_this_site_to_level_1_if_resources_are_low_let_production_replenish_your_store", defaultValue: "Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves."), nil, plot)
         }
         if let job = session.state.construction {
-            return (L10n.text("Votre chantier avance", "Construction is progressing"), L10n.text("Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût.", "Check the remaining time or cancel to recover half the cost."), job.kind, job.plot)
+            return (String(localized: "screen.game.construction_is_progressing", defaultValue: "Votre chantier avance"), String(localized: "screen.game.check_the_remaining_time_or_cancel_to_recover_half_the_cost", defaultValue: "Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût."), job.kind, job.plot)
         }
         if !session.state.hasBuilding(.academy) {
-            return (L10n.text("Construisez la Maison des savoirs", "Build the Academy"), L10n.text("Choisissez ce bâtiment sur un lot libre du Centre.", "Choose this building on an empty town lot."), .academy, nil)
+            return (String(localized: "screen.game.build_the_academy", defaultValue: "Construisez la Maison des savoirs"), String(localized: "screen.game.choose_this_building_on_an_empty_town_lot", defaultValue: "Choisissez ce bâtiment sur un lot libre du Centre."), .academy, nil)
         }
         if session.state.unlockedUnits.isEmpty {
-            return (L10n.text("Découvrez votre première unité", "Discover your first unit"), L10n.text("Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours.", "Open the Academy to start research or follow its progress."), .academy, nil)
+            return (String(localized: "screen.game.discover_your_first_unit", defaultValue: "Découvrez votre première unité"), String(localized: "screen.game.open_the_academy_to_start_research_or_follow_its_progress", defaultValue: "Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours."), .academy, nil)
         }
         if !session.state.hasBuilding(.warCourt) {
-            return (L10n.text("Construisez la Cour des armes", "Build the Training Grounds"), L10n.text("Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs.", "This building trains units discovered at the Academy."), .warCourt, nil)
+            return (String(localized: "screen.game.build_the_training_grounds", defaultValue: "Construisez la Cour des armes"), String(localized: "screen.game.this_building_trains_units_discovered_at_the_academy", defaultValue: "Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs."), .warCourt, nil)
         }
         if session.state.armyPower == 0 && session.state.army?.raid == nil {
-            return (L10n.text("Entraînez vos premières troupes", "Train your first troops"), L10n.text("Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition.", "Open the Training Grounds and recruit several units before your expedition."), .warCourt, nil)
+            return (String(localized: "screen.game.train_your_first_troops", defaultValue: "Entraînez vos premières troupes"), String(localized: "screen.game.open_the_training_grounds_and_recruit_several_units_before_your_expedition", defaultValue: "Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition."), .warCourt, nil)
         }
-        return (L10n.text("Explorez les factions voisines", "Explore neighboring factions"), L10n.text("Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour.", "Compare your strength with their defense, launch an expedition and read the report on return."), nil, nil)
+        return (String(localized: "screen.game.explore_neighboring_factions", defaultValue: "Explorez les factions voisines"), String(localized: "screen.game.compare_your_strength_with_their_defense_launch_an_expedition_and_read_the_report_on", defaultValue: "Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour."), nil, nil)
     }
 
     private func followGuide() {

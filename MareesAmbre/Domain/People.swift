@@ -9,9 +9,9 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .sauniers: L10n.text("Humains", "Humans")
-        case .nacre: L10n.text("Peuple des récifs", "Reef Folk")
-        case .roseaux: L10n.text("Elfes des marais", "Marsh Elves")
+        case .sauniers: String(localized: "domain.people.humans", defaultValue: "Humains")
+        case .nacre: String(localized: "domain.people.reef_folk", defaultValue: "Peuple des récifs")
+        case .roseaux: String(localized: "domain.people.marsh_elves", defaultValue: "Elfes des marais")
         }
     }
 
@@ -25,17 +25,17 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var description: String {
         switch self {
-        case .sauniers: L10n.text("Navigateurs, bâtisseurs et commerçants. Leurs expéditions privilégient le transport des ressources.", "Sailors, builders and traders. Their expeditions excel at carrying resources.")
-        case .nacre: L10n.text("Un peuple amphibie à la peau nacrée. Ses gardiens et ses mages combattent ensemble.", "An amphibious people with pearlescent skin. Their guardians and mages fight together.")
-        case .roseaux: L10n.text("Des elfes des lagunes et des mangroves. Leurs expéditions reviennent plus vite.", "Elves of lagoons and mangroves. Their expeditions return sooner.")
+        case .sauniers: String(localized: "domain.people.sailors_builders_and_traders_their_expeditions_excel_at_carrying_resources", defaultValue: "Navigateurs, bâtisseurs et commerçants. Leurs expéditions privilégient le transport des ressources.")
+        case .nacre: String(localized: "domain.people.an_amphibious_people_with_pearlescent_skin_their_guardians_and_mages_fight_together", defaultValue: "Un peuple amphibie à la peau nacrée. Ses gardiens et ses mages combattent ensemble.")
+        case .roseaux: String(localized: "domain.people.elves_of_lagoons_and_mangroves_their_expeditions_return_sooner", defaultValue: "Des elfes des lagunes et des mangroves. Leurs expéditions reviennent plus vite.")
         }
     }
 
     var strength: String {
         switch self {
-        case .sauniers: L10n.text("+20 % de capacité de transport · +10 % de bois", "+20% carrying capacity · +10% wood")
-        case .nacre: L10n.text("Les mages réduisent les pertes lors des victoires", "Mages reduce losses in victorious battles")
-        case .roseaux: L10n.text("Expéditions de 90 s au lieu de 120 s · +10 % d’ambre", "90-second expeditions instead of 120 · +10% amber")
+        case .sauniers: String(localized: "domain.people.20_carrying_capacity_10_wood", defaultValue: "+20 % de capacité de transport · +10 % de bois")
+        case .nacre: String(localized: "domain.people.mages_reduce_losses_in_victorious_battles", defaultValue: "Les mages réduisent les pertes lors des victoires")
+        case .roseaux: String(localized: "domain.people.90_second_expeditions_instead_of_120_10_amber", defaultValue: "Expéditions de 90 s au lieu de 120 s · +10 % d’ambre")
         }
     }
 

@@ -13,11 +13,11 @@ struct GameState: Codable, Equatable {
         // Integer mixing is explicitly stable; never use Swift's randomized hashValue.
         let offset = Double((UInt64(max(seed, 0)) &* 1_664_525 &+ 1_013_904_223) % 11) / 100
         islands = [
-            Island(id: 0, name: L10n.text("Port d’Ambre", "Amber Harbor"), subtitle: L10n.text("Votre foyer · Ligue des Veilleurs", "Your home · League of Watchers"), x: 0.30, y: 0.52, isHome: true, portLevel: 1),
-            Island(id: 1, name: L10n.text("Les Brumes", "The Mists"), subtitle: L10n.text("Forêts silencieuses", "Silent forests"), x: 0.24 + offset, y: 0.18, isHome: false, portLevel: 0),
-            Island(id: 2, name: L10n.text("Éclat", "Gleam"), subtitle: L10n.text("Récifs ambrés", "Amber reefs"), x: 0.72, y: 0.30, isHome: false, portLevel: 0),
-            Island(id: 3, name: L10n.text("Sillage", "Wake"), subtitle: L10n.text("Terres fertiles", "Fertile lands"), x: 0.68 + offset / 2, y: 0.72, isHome: false, portLevel: 0),
-            Island(id: 4, name: L10n.text("Le Refuge", "The Refuge"), subtitle: L10n.text("Havre inexploré", "Unexplored haven"), x: 0.24, y: 0.86, isHome: false, portLevel: 0)
+            Island(id: 0, name: String(localized: "domain.game_state.amber_harbor", defaultValue: "Port d’Ambre"), subtitle: String(localized: "domain.game_state.your_home_league_of_watchers", defaultValue: "Votre foyer · Ligue des Veilleurs"), x: 0.30, y: 0.52, isHome: true, portLevel: 1),
+            Island(id: 1, name: String(localized: "domain.game_state.the_mists", defaultValue: "Les Brumes"), subtitle: String(localized: "domain.game_state.silent_forests", defaultValue: "Forêts silencieuses"), x: 0.24 + offset, y: 0.18, isHome: false, portLevel: 0),
+            Island(id: 2, name: String(localized: "domain.game_state.gleam", defaultValue: "Éclat"), subtitle: String(localized: "domain.game_state.amber_reefs", defaultValue: "Récifs ambrés"), x: 0.72, y: 0.30, isHome: false, portLevel: 0),
+            Island(id: 3, name: String(localized: "domain.game_state.wake", defaultValue: "Sillage"), subtitle: String(localized: "domain.game_state.fertile_lands", defaultValue: "Terres fertiles"), x: 0.68 + offset / 2, y: 0.72, isHome: false, portLevel: 0),
+            Island(id: 4, name: String(localized: "domain.game_state.the_refuge", defaultValue: "Le Refuge"), subtitle: String(localized: "domain.game_state.unexplored_haven", defaultValue: "Havre inexploré"), x: 0.24, y: 0.86, isHome: false, portLevel: 0)
         ]
     }
 

@@ -5,28 +5,28 @@ struct IslandDetailView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Label(session.selected.isHome ? L10n.text("VOTRE ESCALE", "YOUR HARBOR") : L10n.text("HORIZON À EXPLORER", "UNEXPLORED HORIZON"), systemImage: session.selected.isHome ? "flag.fill" : "binoculars.fill")
+            Label(session.selected.isHome ? String(localized: "screen.island_detail.your_harbor", defaultValue: "VOTRE ESCALE") : String(localized: "screen.island_detail.unexplored_horizon", defaultValue: "HORIZON À EXPLORER"), systemImage: session.selected.isHome ? "flag.fill" : "binoculars.fill")
                 .font(.caption.bold()).foregroundStyle(Palette.amber)
             Text(session.selected.name).font(.largeTitle.bold()).fontDesign(.serif)
             Text(session.selected.subtitle).foregroundStyle(Palette.muted)
             Divider().overlay(Palette.muted.opacity(0.3))
             if session.selected.isHome {
-                LabeledContent("Port", value: L10n.text("Niveau \(session.selected.portLevel) / 4", "Level \(session.selected.portLevel) / 4"))
-                Text(L10n.text("Agrandissez votre port pour préparer les prochaines expéditions.", "Expand your harbor to prepare for future expeditions."))
+                LabeledContent(String(localized: "screen.island_detail.harbor", defaultValue: "Port"), value: String(localized: "screen.island_detail.level_value_4", defaultValue: "Niveau \(String(session.selected.portLevel)) / 4"))
+                Text(String(localized: "screen.island_detail.expand_your_harbor_to_prepare_for_future_expeditions", defaultValue: "Agrandissez votre port pour préparer les prochaines expéditions."))
                     .foregroundStyle(Palette.muted)
                 if let cost = session.game.developmentCost(for: session.selectedID) {
-                    Text(L10n.text("Coût : \(cost.wood) bois · \(cost.amber) ambre", "Cost: \(cost.wood) wood · \(cost.amber) amber")).font(.subheadline)
-                    Button(L10n.text("Développer le port", "Expand harbor"), systemImage: "hammer.fill", action: session.develop)
+                    Text(String(localized: "screen.island_detail.cost_value_wood_value_amber", defaultValue: "Coût : \(String(cost.wood)) bois · \(String(cost.amber)) ambre")).font(.subheadline)
+                    Button(String(localized: "screen.island_detail.expand_harbor", defaultValue: "Développer le port"), systemImage: "hammer.fill", action: session.develop)
                         .buttonStyle(.borderedProminent).tint(Palette.amber).foregroundStyle(Palette.ocean)
                         .controlSize(.large).disabled(!session.game.canDevelop(session.selectedID))
                     if !session.game.canDevelop(session.selectedID) {
-                        Text(L10n.text("Ressources insuffisantes. La récolte sera ajoutée dans une prochaine version.", "Not enough resources. Harvesting will be added in a future version.")).font(.subheadline)
+                        Text(String(localized: "screen.island_detail.not_enough_resources_harvesting_will_be_added_in_a_future_version", defaultValue: "Ressources insuffisantes. La récolte sera ajoutée dans une prochaine version.")).font(.subheadline)
                     }
                 } else {
-                    Label(L10n.text("Port au maximum du prototype", "Harbor at prototype maximum"), systemImage: "checkmark.seal.fill")
+                    Label(String(localized: "screen.island_detail.harbor_at_prototype_maximum", defaultValue: "Port au maximum du prototype"), systemImage: "checkmark.seal.fill")
                 }
             } else {
-                Text(L10n.text("Une terre encore libre, au-delà de votre port. Les expéditions sur la carte seront ajoutées dans une prochaine version.", "Unclaimed land beyond your harbor. Map expeditions will be added in a future version."))
+                Text(String(localized: "screen.island_detail.unclaimed_land_beyond_your_harbor_map_expeditions_will_be_added_in_a_future_version", defaultValue: "Une terre encore libre, au-delà de votre port. Les expéditions sur la carte seront ajoutées dans une prochaine version."))
                     .foregroundStyle(Palette.muted)
             }
             Text(session.message).font(.footnote).foregroundStyle(Palette.muted)

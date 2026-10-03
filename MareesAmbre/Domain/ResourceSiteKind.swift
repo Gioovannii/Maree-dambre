@@ -16,9 +16,9 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
 
     var name: String {
         switch self {
-        case .woodland: L10n.text("Bois des falaises", "Cliff Woodland")
-        case .cropland: L10n.text("Terres cultivables", "Farmland")
-        case .amberVein: L10n.text("Veine d’ambre", "Amber Vein")
+        case .woodland: String(localized: "domain.resource_site_kind.cliff_woodland", defaultValue: "Bois des falaises")
+        case .cropland: String(localized: "domain.resource_site_kind.farmland", defaultValue: "Terres cultivables")
+        case .amberVein: String(localized: "domain.resource_site_kind.amber_vein", defaultValue: "Veine d’ambre")
         }
     }
 
@@ -48,9 +48,9 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
 
     var yieldLabel: String {
         switch self {
-        case .woodland: L10n.text("bois", "wood")
-        case .cropland: L10n.text("vivres", "food")
-        case .amberVein: L10n.text("ambre", "amber")
+        case .woodland: String(localized: "domain.resource_site_kind.wood", defaultValue: "bois")
+        case .cropland: String(localized: "domain.resource_site_kind.food", defaultValue: "vivres")
+        case .amberVein: String(localized: "domain.resource_site_kind.amber", defaultValue: "ambre")
         }
     }
 

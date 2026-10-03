@@ -9,28 +9,28 @@ struct PrologueView: View {
             ScrollView(.vertical) {
                 VStack(alignment: .leading, spacing: 22) {
                     VStack(alignment: .leading, spacing: 7) {
-                        Text(L10n.text("LES MARÉES D’AMBRE", "AMBER TIDES"))
+                        Text(String(localized: "screen.prologue.amber_tides", defaultValue: "LES MARÉES D’AMBRE"))
                             .font(.caption.bold()).tracking(2.5).foregroundStyle(Palette.amber)
-                        Text(L10n.text("La mémoire\ndes îles", "The memory\nof the islands"))
+                        Text(String(localized: "screen.prologue.the_memory_of_the_islands", defaultValue: "La mémoire\ndes îles"))
                             .font(.system(.largeTitle, design: .serif, weight: .bold))
                             .foregroundStyle(Palette.paper)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text(L10n.text("PROLOGUE · PORT D’AMBRE", "PROLOGUE · AMBER HARBOR"))
+                        Text(String(localized: "screen.prologue.prologue_amber_harbor", defaultValue: "PROLOGUE · PORT D’AMBRE"))
                             .font(.caption.bold()).tracking(1.8).foregroundStyle(Palette.muted)
                     }
                     .padding(.top, 18)
                     story
                     VStack(alignment: .leading, spacing: 12) {
-                        Text(L10n.text("TROIS PEUPLES, TROIS DESTINS", "THREE PEOPLES, THREE DESTINIES"))
+                        Text(String(localized: "screen.prologue.three_peoples_three_destinies", defaultValue: "TROIS PEUPLES, TROIS DESTINS"))
                             .font(.caption.bold()).tracking(1.5).foregroundStyle(Palette.amber)
-                        Text(L10n.text("Qui veillera sur votre village ?", "Who will watch over your village?"))
+                        Text(String(localized: "screen.prologue.who_will_watch_over_your_village", defaultValue: "Qui veillera sur votre village ?"))
                             .font(.title2.bold()).fontDesign(.serif).foregroundStyle(Palette.paper)
                         ForEach(People.allCases) { people in peopleCard(people) }
                     }
                     Button { onChoose(selected) } label: {
                         HStack {
                             Spacer()
-                            Text(L10n.text("Fonder mon village", "Found my village"))
+                            Text(String(localized: "screen.prologue.found_my_village", defaultValue: "Fonder mon village"))
                             Image(systemName: "arrow.right")
                             Spacer()
                         }
@@ -40,8 +40,8 @@ struct PrologueView: View {
                         .background(Palette.amber, in: .capsule)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityHint(L10n.text("Commencer avec \(selected.name)", "Start with \(selected.name)"))
-                    Text(L10n.text("Première version jouable : développez les champs, construisez votre village, entraînez vos unités et partez en expédition contre les factions voisines.", "First playable version: develop resource sites, build your village, train units and send expeditions against neighboring factions."))
+                    .accessibilityHint(String(localized: "screen.prologue.start_with_value", defaultValue: "Commencer avec \(String(selected.name))"))
+                    Text(String(localized: "screen.prologue.first_playable_version_develop_resource_sites_build_your_village_train_units_and_send", defaultValue: "Première version jouable : développez les champs, construisez votre village, entraînez vos unités et partez en expédition contre les factions voisines."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.bottom, 18)
@@ -71,9 +71,9 @@ struct PrologueView: View {
 
     private var story: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label(L10n.text("LA MÉMOIRE DES MARÉES", "THE MEMORY OF THE TIDES"), systemImage: "sparkles")
+            Label(String(localized: "screen.prologue.the_memory_of_the_tides", defaultValue: "LA MÉMOIRE DES MARÉES"), systemImage: "sparkles")
                 .font(.caption.bold()).tracking(1.3).foregroundStyle(Palette.amber)
-            Text(L10n.text("Bien avant les royaumes, l’archipel n’était qu’une étendue de brume et d’écueils. Puis la mer se retira, révélant dans ses profondeurs une matière inconnue : l’ambre des marées, une pierre chaude et dorée qui semblait retenir la lumière du jour.\n\nLes premiers habitants bâtirent leurs maisons sur les hauteurs et leurs ports au creux des anses. Ils apprirent à lire les courants, à cultiver les terres salées et à tailler l’ambre pour guider les navires dans la nuit. Pendant des générations, les îles prospérèrent.\n\nMais l’archipel n’est jamais immobile. Les courants changent, de nouvelles terres émergent, et d’anciennes routes disparaissent sous les flots. Chaque marée apporte son lot de découvertes — et réveille des rivalités oubliées.\n\nTu arrives à Port d’Ambre au moment où les cartes cessent d’être fiables. Quelques bâtiments, des réserves modestes et un port à reconstruire : c’est peu, mais c’est un début. Autour de toi, les Humains défendent leurs ports, le Peuple des récifs veille sur les passes maritimes et les Elfes des marais étendent leurs villages le long des chenaux.\n\nAucun de ces peuples ne peut dominer seul les marées. Il faudra développer ton village, protéger ses habitants et envoyer des expéditions au-delà des récifs. Ici, une absence ne condamne pas une cité : les gardes tiennent leur poste, les ateliers poursuivent leur ouvrage, et les réserves grandissent au rythme du monde.\n\nCar l’archipel garde la mémoire de chaque marée. Et peut-être, dans ses îles les plus anciennes, l’ambre révèle-t-il pourquoi la mer se retire.", "Long before the kingdoms, the archipelago was nothing but mist and hidden rocks. Then the sea withdrew, revealing an unknown substance in its depths: tidal amber, a warm golden stone that seemed to hold the light of day.\n\nThe first settlers built their homes on high ground and their harbors in sheltered coves. They learned to read the currents, farm the salty land and carve amber to guide ships through the night. For generations, the islands prospered.\n\nBut the archipelago never stands still. Currents shift, new lands emerge and old routes vanish beneath the waves. Every tide brings discoveries and awakens forgotten rivalries.\n\nYou arrive at Amber Harbor just as the charts become unreliable. A few buildings, modest supplies and a harbor to rebuild: it is little, but it is a beginning. Around you, Humans defend their ports, the Reef Folk guard the sea passages and Marsh Elves expand their villages along the channels.\n\nNone of these peoples can master the tides alone. You must develop your village, protect its inhabitants and send expeditions beyond the reefs. Here, an absence does not doom a town: guards keep their posts, workshops keep working and stores grow with the rhythm of the world.\n\nFor the archipelago remembers every tide. Perhaps, on its oldest islands, the amber will reveal why the sea withdraws."))
+            Text(String(localized: "screen.prologue.long_before_the_kingdoms_the_archipelago_was_nothing_but_mist_and_hidden_rocks_then_t", defaultValue: "Bien avant les royaumes, l’archipel n’était qu’une étendue de brume et d’écueils. Puis la mer se retira, révélant dans ses profondeurs une matière inconnue : l’ambre des marées, une pierre chaude et dorée qui semblait retenir la lumière du jour.\n\nLes premiers habitants bâtirent leurs maisons sur les hauteurs et leurs ports au creux des anses. Ils apprirent à lire les courants, à cultiver les terres salées et à tailler l’ambre pour guider les navires dans la nuit. Pendant des générations, les îles prospérèrent.\n\nMais l’archipel n’est jamais immobile. Les courants changent, de nouvelles terres émergent, et d’anciennes routes disparaissent sous les flots. Chaque marée apporte son lot de découvertes — et réveille des rivalités oubliées.\n\nTu arrives à Port d’Ambre au moment où les cartes cessent d’être fiables. Quelques bâtiments, des réserves modestes et un port à reconstruire : c’est peu, mais c’est un début. Autour de toi, les Humains défendent leurs ports, le Peuple des récifs veille sur les passes maritimes et les Elfes des marais étendent leurs villages le long des chenaux.\n\nAucun de ces peuples ne peut dominer seul les marées. Il faudra développer ton village, protéger ses habitants et envoyer des expéditions au-delà des récifs. Ici, une absence ne condamne pas une cité : les gardes tiennent leur poste, les ateliers poursuivent leur ouvrage, et les réserves grandissent au rythme du monde.\n\nCar l’archipel garde la mémoire de chaque marée. Et peut-être, dans ses îles les plus anciennes, l’ambre révèle-t-il pourquoi la mer se retire."))
                 .font(.body).foregroundStyle(Palette.paper.opacity(0.9))
                 .lineSpacing(4).fixedSize(horizontal: false, vertical: true)
         }
@@ -111,7 +111,7 @@ struct PrologueView: View {
                 }
                 Text(people.description).font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
-                trait(title: L10n.text("ATOUT", "STRENGTH"), text: people.strength, symbol: "sparkle", tint: Color(red: 0.55, green: 0.87, blue: 0.67))
+                trait(title: String(localized: "screen.prologue.strength", defaultValue: "ATOUT"), text: people.strength, symbol: "sparkle", tint: Color(red: 0.55, green: 0.87, blue: 0.67))
             }
             .padding(15)
             .background(isSelected ? Palette.panel : .white.opacity(0.035), in: .rect(cornerRadius: 20))
