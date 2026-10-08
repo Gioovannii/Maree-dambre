@@ -85,10 +85,11 @@ struct VillageBoard: View {
         let siteLevel = session.state.resourceLevel(at: plot)
         let isUnavailable = mode == .townCenter && building == nil
             && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
-        // Equal, compact footprints keep the Centre readable and leave room
-        // for several buildings without making one lot dominate the map.
-        let baseSize = min(76, max(52, mapWidth * 0.145))
-        let size = baseSize * (building == .hall ? 1.3 : 1.0)
+        // Larger landmarks and smaller, lower badges expose the building silhouettes.
+        let baseSize = mode == .townCenter
+            ? min(120, max(74, mapWidth * 0.25))
+            : min(76, max(52, mapWidth * 0.145))
+        let size = baseSize * (building == .hall ? 1.2 : 1.0)
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
         let canReceiveMovingBuilding = (session.pendingBuilding.map { session.state.canBuild($0, at: plot) } ?? false) || (session.moveSourcePlot.map {
@@ -167,9 +168,11 @@ struct VillageBoard: View {
                                     }
                                 }
                                 .shadow(color: selected ? Palette.amber.opacity(0.55) : .clear, radius: 5)
-                                .offset(y: -size * 0.01)
+                                .scaleEffect(0.72)
+                                .offset(x: size * 0.25, y: size * 0.12)
                                 .accessibilityHidden(true)
                         }
+                        .offset(y: -size * 0.13)
                         .accessibilityHidden(true)
                 } else if building == nil && site == nil && canReceiveMovingBuilding {
                     Ellipse()
@@ -184,6 +187,15 @@ struct VillageBoard: View {
                         }
                         .offset(y: size * 0.14)
 
+                }
+
+                if mode == .townCenter, plot == SettlementLayout.expeditionQuayPlot,
+                   building == nil, construction == nil, !canReceiveMovingBuilding {
+                    Image(systemName: "sailboat.fill")
+                        .font(.title2.bold()).foregroundStyle(Palette.amber)
+                        .frame(width: 44, height: 44)
+                        .background(Palette.panel, in: .circle)
+                        .overlay { Circle().strokeBorder(Palette.amber, lineWidth: 1.5) }
                 }
 
                 if session.moveSourcePlot == plot || canReceiveMovingBuilding {
@@ -204,7 +216,8 @@ struct VillageBoard: View {
         }
         .buttonStyle(.plain)
         .simultaneousGesture(LongPressGesture(minimumDuration: 0.55).onEnded { _ in
-            guard mode == .townCenter, building != nil, construction == nil else { return }
+            guard mode == .townCenter, let building, building != .hall, building != .expeditionQuay,
+                  construction == nil else { return }
             session.selectPlot(plot)
             session.beginMovingSelectedBuilding()
         })

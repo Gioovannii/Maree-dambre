@@ -24,7 +24,7 @@ struct ResearchPanel: View {
                     Label(unit.name, systemImage: unit.emblem).font(.headline)
                     Text(unit.role).font(.subheadline.bold()).foregroundStyle(Palette.amber)
                     Text(unit.description).font(.subheadline).foregroundStyle(Palette.muted)
-                    Text(String(localized: "screen.research.power_value_carrying_capacity_value", defaultValue: "Force \(String(unit.attack)) · Transport \(String(unit.carrying))")).font(.subheadline)
+                    Text(String(localized: "screen.research.power_value_carrying_capacity_value", defaultValue: "Force \(String(session.state.attackStrength(of: unit))) · Transport \(String(unit.carrying))")).font(.subheadline)
                     if session.state.unlockedUnits.contains(unit) {
                         Label(String(localized: "screen.research.doctrine_learned", defaultValue: "Doctrine acquise"), systemImage: "checkmark.seal.fill")
                     } else {

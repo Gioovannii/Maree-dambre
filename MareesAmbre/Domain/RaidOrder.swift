@@ -10,4 +10,9 @@ struct RaidOrder: Codable, Equatable {
     let units: [ArmyUnit: Int]
     let defense: Int
     let returnsAt: Date
+    var attackUpgrade: Int? = nil
+    var victoryLossRate: Double? = nil
+    var defeatLossRate: Double? = nil
+    var transportBonusPercent: Int? = nil
+    var lootLimit: Int? = nil
 }

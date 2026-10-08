@@ -4,11 +4,11 @@ struct GameView: View {
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var showsWorld = ProcessInfo.processInfo.arguments.contains("--snapshot-world")
-    @State private var showsVillageDetails = ProcessInfo.processInfo.arguments.contains("--snapshot-upgrade")
-    @State private var villageMap: VillageMapMode = ProcessInfo.processInfo.arguments.contains("--snapshot-center")
+    @State private var showsVillageDetails = ProcessInfo.processInfo.arguments.contains("--snapshot-upgrade") || VillageSession.snapshotBuilding != nil
+    @State private var villageMap: VillageMapMode = ProcessInfo.processInfo.arguments.contains("--snapshot-center") || VillageSession.snapshotBuilding != nil
         ? .townCenter : .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
-    @State private var selectedTownPlot = VillageMapMode.townCenter.initialPlot
+    @State private var selectedTownPlot = VillageSession.snapshotTownPlot
     @State private var showsGuide = false
     @State private var opensGuidedPlot = false
 

@@ -3,6 +3,17 @@ import Observation
 
 @MainActor @Observable
 final class VillageSession {
+    static var snapshotBuilding: BuildingKind? {
+        [.market, .forge, .infirmary, .expeditionQuay].first {
+            ProcessInfo.processInfo.arguments.contains("--snapshot-\($0.rawValue)")
+        }
+    }
+    static var snapshotTownPlot: Int {
+        guard let kind = snapshotBuilding, let index = BuildingKind.constructible.firstIndex(of: kind) else {
+            return VillageMapMode.townCenter.initialPlot
+        }
+        return VillageMapMode.townCenter.slots.filter { $0 != 12 }[index]
+    }
     private(set) var state: VillageState
     let world: WorldMap
     var plot = VillageMapMode.resourceFields.initialPlot
@@ -30,6 +41,16 @@ final class VillageSession {
             state.resourceLevels = [0: 1, 1: 0, 2: 1, 3: 1, 4: 0, 5: 1, 6: 1, 7: 0, 8: 0, 9: 0]
             if ProcessInfo.processInfo.arguments.contains("--snapshot-construction") {
                 state.construction = ConstructionJob(plot: 14, kind: .academy, startedAt: .now.addingTimeInterval(-30), duration: 60)
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-developed") || Self.snapshotBuilding != nil {
+                let plots = VillageMapMode.townCenter.slots.filter { $0 != 12 }
+                state.buildings = Dictionary(uniqueKeysWithValues: zip(plots, BuildingKind.constructible))
+                state.buildings[12] = .hall
+                state.resources = Resources(wood: 400, amber: 200, provisions: 350)
+                state.resourceLevels = [0: 10, 2: 10, 4: 10]
+                state.weaponsLevel = 2
+                state.army = ArmyState(units: [.tideguard: 20], unlockedUnits: [.tideguard])
+                plot = Self.snapshotTownPlot
             }
             return
         }
@@ -71,6 +92,18 @@ final class VillageSession {
         refreshWorld()
         guard state.raid(targetID: targetID) else { return }
         persist(String(localized: "screen.village_session.expedition_departed_returns_in_value_seconds", defaultValue: "Expédition partie. Retour dans \(String(Int(state.raidDuration))) secondes."))
+    }
+
+    func trade(from source: ResourceKind, to destination: ResourceKind, lots: Int) {
+        refreshWorld()
+        guard state.trade(from: source, to: destination, lots: lots) else { return }
+        persist(String(localized: "screen.village_session.trade_completed", defaultValue: "Échange effectué. Les réserves ont été mises à jour."))
+    }
+
+    func upgradeWeapons() {
+        refreshWorld()
+        guard state.upgradeWeapons() else { return }
+        persist(String(localized: "screen.village_session.weapons_research_started", defaultValue: "Recherche d’armes lancée. Fin dans une minute."))
     }
 
     func developSelectedResource() {
@@ -119,7 +152,7 @@ final class VillageSession {
 
     func beginMovingSelectedBuilding() {
         pendingBuilding = nil
-        guard let kind = state.buildings[plot], kind != .hall else { return }
+        guard let kind = state.buildings[plot], kind != .hall, kind != .expeditionQuay else { return }
         moveSourcePlot = plot
         message = String(localized: "screen.village_session.tap_a_compatible_empty_plot_to_move_value", defaultValue: "Touchez une case libre compatible pour déplacer \(String(kind.name.lowercased())).")
     }
@@ -158,6 +191,9 @@ final class VillageSession {
         guard !isUISnapshot else { return }
         let previous = state
         let seconds = state.updateInRealTime(on: world)
+        if previous.weaponUpgrade != nil, state.weaponUpgrade == nil {
+            message = String(localized: "screen.village_session.weapons_research_complete", defaultValue: "Armes améliorées. Le bonus s’applique aux prochaines expéditions.")
+        }
         if let finished = previous.construction,
            state.construction == nil,
            state.buildings[finished.plot] == finished.kind {

@@ -52,6 +52,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
             return CGPoint(x: 0.24 + Double(column) * 0.26, y: 0.36 + Double(plot / 3) * 0.105)
         }
         if plot == 12 { return CGPoint(x: 0.50, y: 0.345) }
+        if plot == SettlementLayout.expeditionQuayPlot { return CGPoint(x: 0.69, y: 0.785) }
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19, 22, 23]
         guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
         let points: [CGPoint] = [
@@ -85,6 +86,7 @@ struct SettlementPosition: Equatable, Sendable {
 }
 
 enum SettlementLayout {
+    static let expeditionQuayPlot = 23
     static func position(for plot: Int) -> SettlementPosition {
         let column = plot % 5
         let row = plot / 5

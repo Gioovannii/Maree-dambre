@@ -14,10 +14,13 @@ struct VillageState: Codable, Equatable {
     var construction: ConstructionJob?
     var resourceUpgrade: ResourceUpgrade?
     var army: ArmyState?
+    var weaponsLevel: Int?
+    var weaponUpgrade: WeaponUpgrade?
 
     private enum CodingKeys: String, CodingKey {
         case version, seed, resources, buildings, resourceLevels, bots, people
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
+        case weaponsLevel, weaponUpgrade
     }
 
     init(from decoder: Decoder) throws {
@@ -35,10 +38,12 @@ struct VillageState: Codable, Equatable {
         construction = try values.decodeIfPresent(ConstructionJob.self, forKey: .construction)
         resourceUpgrade = try values.decodeIfPresent(ResourceUpgrade.self, forKey: .resourceUpgrade)
         army = try values.decodeIfPresent(ArmyState.self, forKey: .army)
+        weaponsLevel = try values.decodeIfPresent(Int.self, forKey: .weaponsLevel)
+        weaponUpgrade = try values.decodeIfPresent(WeaponUpgrade.self, forKey: .weaponUpgrade)
     }
 
     init(seed: Int) {
-        version = 9
+        version = 11
         self.seed = seed
         resources = Resources()
         buildings = [12: .hall]
@@ -59,7 +64,7 @@ struct VillageState: Codable, Equatable {
                 case .lumbermill: .woodland
                 case .farm: .cropland
                 case .amberWorks: .amberVein
-                case .hall, .watchtower, .warehouse, .warCourt, .academy: nil
+                case .hall, .watchtower, .warehouse, .warCourt, .academy, .market, .forge, .infirmary, .expeditionQuay: nil
                 }
                 guard let siteKind else { continue }
                 let candidates = VillageMapMode.resourceFields.slots.filter { ResourceSiteKind.at($0) == siteKind }
@@ -114,13 +119,47 @@ struct VillageState: Codable, Equatable {
             version = 8
         }
         if version < 9 { version = 9 }
+        if version < 10 { version = 10 }
+        if version < 11 {
+            relocateQuayToWaterfront()
+            version = 11
+        }
+    }
+
+    private mutating func relocateQuayToWaterfront() {
+        let waterfront = SettlementLayout.expeditionQuayPlot
+        if let oldPlot = buildings.first(where: { $0.value == .expeditionQuay })?.key, oldPlot != waterfront {
+            // Swap lots so even a fully developed village keeps every building.
+            buildings[oldPlot] = buildings[waterfront]
+            buildings[waterfront] = .expeditionQuay
+            if let job = construction, job.plot == waterfront { relocateConstruction(job, to: oldPlot) }
+        } else if let job = construction, job.kind == .expeditionQuay, job.plot != waterfront {
+            buildings[job.plot] = buildings[waterfront]
+            buildings[waterfront] = nil
+            relocateConstruction(job, to: waterfront)
+        } else if buildings[waterfront] != nil, buildings[waterfront] != .expeditionQuay,
+                  let destination = VillageMapMode.townCenter.slots.first(where: {
+                      $0 != waterfront && buildings[$0] == nil && construction?.plot != $0
+                  }) {
+            buildings[destination] = buildings.removeValue(forKey: waterfront)
+        }
+        if let job = construction, job.plot == waterfront, job.kind != .expeditionQuay,
+           let destination = VillageMapMode.townCenter.slots.first(where: {
+               $0 != waterfront && buildings[$0] == nil
+           }) {
+            relocateConstruction(job, to: destination)
+        }
+    }
+
+    private mutating func relocateConstruction(_ job: ConstructionJob, to plot: Int) {
+        construction = ConstructionJob(plot: plot, kind: job.kind, startedAt: job.startedAt, duration: job.duration)
     }
 
     static func ground(at plot: Int) -> Terrain {
         switch plot {
         case 0, 1, 5: .forest
         case 4, 9: .amber
-        case 20, 21, 24: .sea
+        case 20, 21, 23, 24: .sea
         default: .meadow
         }
     }
@@ -143,6 +182,8 @@ struct VillageState: Codable, Equatable {
 
     static func canPlace(_ kind: BuildingKind, at plot: Int) -> Bool {
         guard kind != .hall, kind.area.contains(plot), (0..<25).contains(plot) else { return false }
+        if kind == .expeditionQuay { return plot == SettlementLayout.expeditionQuayPlot }
+        guard plot != SettlementLayout.expeditionQuayPlot else { return false }
         return kind.suits(ground(at: plot))
     }
 
@@ -268,12 +309,13 @@ struct VillageState: Codable, Equatable {
         let elapsed = max(0, now.timeIntervalSince(prior))
         guard now >= prior else { return 0 }
         let events = [construction?.endsAt, resourceUpgrade?.endsAt, army?.raid?.returnsAt,
-                      army?.training?.endsAt, army?.research?.endsAt]
+                      army?.training?.endsAt, army?.research?.endsAt, weaponUpgrade?.endsAt]
             .compactMap { $0 }.filter { $0 <= now }
         for date in Set(events.map { max(prior, $0) } + [now]).sorted() {
             accrueProduction(until: date)
             updateConstruction(now: date)
             updateResourceUpgrade(now: date)
+            updateWeaponUpgrade(now: date)
             updateArmy(now: date)
         }
 

@@ -25,6 +25,8 @@ for (source, bundlePath) in [("MareesAmbre", app), ("MareesAmbreWidget", app + "
         for language in ["fr", "en"] {
             let bundle = Bundle(path: bundlePath + "/" + language + ".lproj")!
             for (key, entry) in strings {
+                // Xcode also extracts technical metadata that is explicitly not localizable.
+                guard entry["shouldTranslate"] as? Bool != false else { continue }
                 let translations = entry["localizations"] as! [String: [String: Any]]
                 let unit = translations[language]!["stringUnit"] as! [String: String]
                 precondition(bundle.localizedString(forKey: key, value: "MISSING", table: table) == unit["value"], "Missing or incorrect \(language) translation: \(key)")

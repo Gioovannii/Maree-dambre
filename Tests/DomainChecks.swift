@@ -3,6 +3,7 @@ import Foundation
 @main
 struct DomainChecks {
     static func main() throws {
+        try checkCityBuildings()
         let seed = 202639
         var game = GameState(seed: seed)
         precondition(game == GameState(seed: seed), "Same seed must produce same start")
@@ -104,7 +105,7 @@ struct DomainChecks {
         let oldData = try JSONEncoder().encode(oldSave)
         var restoredOldSave = try JSONDecoder().decode(VillageState.self, from: oldData)
         restoredOldSave.migrateIfNeeded(now: epoch)
-        precondition(restoredOldSave.version == 9)
+        precondition(restoredOldSave.version == 11)
         precondition(restoredOldSave.buildings[0] == nil && restoredOldSave.buildings[2] == nil)
         precondition(restoredOldSave.resourceLevel(at: 0) == 1 && restoredOldSave.resourceLevel(at: 2) == 1)
         precondition(restoredOldSave.production == oldProduction, "Migration preserves hourly production")
@@ -113,7 +114,7 @@ struct DomainChecks {
         legacyVillage.resourceLevels = nil
         legacyVillage.buildings[13] = .farm
         legacyVillage.migrateIfNeeded(now: epoch)
-        precondition(legacyVillage.version == 9 && legacyVillage.resourceLevel(at: 2) == 1)
+        precondition(legacyVillage.version == 11 && legacyVillage.resourceLevel(at: 2) == 1)
         precondition(legacyVillage.buildings[12] == .hall && legacyVillage.buildings[13] == nil)
 
         var duplicatedVillage = VillageState(seed: seed)
@@ -121,7 +122,7 @@ struct DomainChecks {
         duplicatedVillage.resources = Resources(wood: 100, amber: 50, provisions: 60)
         duplicatedVillage.buildings = [10: .watchtower, 11: .watchtower, 12: .hall, 13: .farm, 14: .farm]
         duplicatedVillage.migrateIfNeeded(now: epoch)
-        precondition(duplicatedVillage.version == 9)
+        precondition(duplicatedVillage.version == 11)
         precondition(duplicatedVillage.buildings[10] == .watchtower && duplicatedVillage.buildings[11] == nil)
         precondition(duplicatedVillage.buildings[13] == .farm && duplicatedVillage.buildings[14] == nil)
         precondition(duplicatedVillage.resources == Resources(wood: 155, amber: 58, provisions: 85),

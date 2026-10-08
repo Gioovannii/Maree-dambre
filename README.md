@@ -21,6 +21,7 @@ Les recherches, chantiers, entraînements, productions et expéditions sont enre
 - **Ressources et Centre** : deux cartes plein écran, dix terrains producteurs et douze lots urbains. Chaque bâtiment n’existe qu’en un exemplaire. Un seul chantier peut progresser à la fois ; son annulation rembourse la moitié du coût.
 - **Production** : bois, ambre et vivres s’accumulent jusqu’à la capacité de la réserve, 300 au départ et +500 par Entrepôt. Les fractions et l’heure de dernière production sont sauvegardées.
 - **Armée** : Maison des savoirs, Cour des armes, trois doctrines, entraînement et raids contre trois factions bots. Une expédition mobilise l’armée disponible. L’écran annonce les pertes prévues et la défense avant le départ.
+- **Douze bâtiments distincts** : le Marché échange les surplus, la Forge recherche trois niveaux d’armes (+1 attaque par unité à chaque niveau), l’Infirmerie réduit les pertes et le Quai augmente le transport et le plafond du butin. Les effets des raids sont fixés au départ ; les recherches d’armes se terminent aussi hors ligne. Voir `docs/BATIMENTS.md` pour les coûts et les règles.
 - **Monde** : carte fictive de 200 × 200 cases, déplacements et zoom locaux. Les factions gagnent un niveau et étendent leur territoire toutes les six heures, jusqu’au niveau 10 et 64 cases.
 - **Démarrage** : prologue, choix d’un clan, puis guide Premiers pas. La graine initiale dépend de la semaine UTC, mais le village reste le même ensuite, même au changement de semaine.
 - **Live Activity** : les chantiers affichent le temps restant dans la Dynamic Island et sur l’écran verrouillé.
@@ -36,6 +37,8 @@ puis en fenêtre réduite, avant de publier une version iPad.
 Lancer `sh Scripts/check-domain.sh` pour les règles de ressources, constructions, migration des sauvegardes, entraînement, raids, pertes, butin et reprise hors ligne.
 
 Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les quatre captures iPhone aux références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`.
+
+Pour voir les douze bâtiments sans toucher à une sauvegarde, lancer avec `--ui-snapshot --snapshot-center --snapshot-developed`. Les arguments `--ui-snapshot --snapshot-market`, `--ui-snapshot --snapshot-forge`, `--ui-snapshot --snapshot-infirmary` ou `--ui-snapshot --snapshot-expeditionQuay` ouvrent leurs panneaux dans une partie de démonstration. Ajouter `--snapshot-actions` pour cadrer le bas de la fiche et ses commandes.
 
 Avant une bêta, faire une partie neuve sur iPhone jusqu’au premier raid. Noter le temps nécessaire pour atteindre le niveau 10, les points où les ressources manquent, et si l’écran explique clairement le prochain objectif. Aucun système en ligne n’est nécessaire pour ce test.
 

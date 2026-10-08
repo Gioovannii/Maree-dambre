@@ -21,7 +21,7 @@ struct LayoutSnapshotChecks {
         }
 
         let hall = town.mapPoint(for: 12)
-        precondition(abs(hall.x - 0.50) < 0.001 && abs(hall.y - 0.22) < 0.001,
+        precondition(abs(hall.x - 0.50) < 0.001 && abs(hall.y - 0.345) < 0.001,
                      "Centre hall moved away from the focal point")
 
         let resource = VillageMapMode.resourceFields

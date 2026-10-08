@@ -528,6 +528,23 @@
         }
       }
     },
+    "domain.building_kind.expedition_quay": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quai d’expédition"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expedition quay"
+          }
+        }
+      }
+    },
     "domain.building_kind.extracts_and_crafts_amber_from_this_deposit": {
       "extractionState": "manual",
       "localizations": {
@@ -558,6 +575,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Farm"
+          }
+        }
+      }
+    },
+    "domain.building_kind.forge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forge"
+          }
+        }
+      }
+    },
+    "domain.building_kind.forge_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+1 attaque par unité et par recherche · 3 niveaux"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+1 attack per unit per research level · 3 levels"
+          }
+        }
+      }
+    },
+    "domain.building_kind.forge_purpose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliore les armes de toutes les troupes, en trois recherches successives."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Improve every unit’s weapons through three successive research levels."
           }
         }
       }
@@ -596,6 +664,108 @@
         }
       }
     },
+    "domain.building_kind.infirmary": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infirmerie"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Infirmary"
+          }
+        }
+      }
+    },
+    "domain.building_kind.infirmary_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertes : 10 % en victoire, 35 % en défaite · 5 % avec un mage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Losses: 10% on victory, 35% on defeat · 5% with a mage"
+          }
+        }
+      }
+    },
+    "domain.building_kind.infirmary_purpose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soigne les blessés et réduit les pertes des prochaines expéditions."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treat wounded troops and reduce losses in future expeditions."
+          }
+        }
+      }
+    },
+    "domain.building_kind.market": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marché"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Market"
+          }
+        }
+      }
+    },
+    "domain.building_kind.market_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échanges locaux de ressources"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local resource trading"
+          }
+        }
+      }
+    },
+    "domain.building_kind.market_purpose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échange les surplus contre les ressources qui manquent au village."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trade surplus supplies for resources your village needs."
+          }
+        }
+      }
+    },
     "domain.building_kind.new_unit_research": {
       "extractionState": "manual",
       "localizations": {
@@ -609,6 +779,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "New unit research"
+          }
+        }
+      }
+    },
+    "domain.building_kind.quay_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+25 % de transport · butin jusqu’à 90 par ressource"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+25% carrying capacity · up to 90 loot per resource"
+          }
+        }
+      }
+    },
+    "domain.building_kind.quay_purpose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organise le transport du butin des prochaines expéditions."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organize loot transport for future expeditions."
           }
         }
       }
@@ -1123,6 +1327,57 @@
         }
       }
     },
+    "domain.resource_kind.amber": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber"
+          }
+        }
+      }
+    },
+    "domain.resource_kind.provisions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food"
+          }
+        }
+      }
+    },
+    "domain.resource_kind.wood": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bois"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wood"
+          }
+        }
+      }
+    },
     "domain.resource_site_kind.amber": {
       "extractionState": "manual",
       "localizations": {
@@ -1463,6 +1718,23 @@
         }
       }
     },
+    "screen.army.available_units": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ disponible(s)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ available"
+          }
+        }
+      }
+    },
     "screen.army.defeat_expected_half_your_troops_will_be_lost_rounded_up_per_unit_type_no_loot": {
       "extractionState": "manual",
       "localizations": {
@@ -1476,6 +1748,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Defeat expected: half your troops will be lost, rounded up per unit type. No loot."
+          }
+        }
+      }
+    },
+    "screen.army.defeat_with_support": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défaite prévue. Pertes : %@ arrondies à l’entier supérieur par type. Aucun butin."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defeat expected. Losses: %@ rounded up per unit type. No loot."
           }
         }
       }
@@ -1599,6 +1888,23 @@
         }
       }
     },
+    "screen.army.recruit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recruter : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recruit: %@"
+          }
+        }
+      }
+    },
     "screen.army.send_all_troops": {
       "extractionState": "manual",
       "localizations": {
@@ -1633,6 +1939,23 @@
         }
       }
     },
+    "screen.army.train": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraîner · %@ s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Train · %@ s"
+          }
+        }
+      }
+    },
     "screen.army.train_units_at_the_training_grounds_in_town_neighboring_factions_are_simulated_offlin": {
       "extractionState": "manual",
       "localizations": {
@@ -1663,6 +1986,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Training"
+          }
+        }
+      }
+    },
+    "screen.army.training_cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ wood · %@ amber · %@ food"
           }
         }
       }
@@ -1731,6 +2071,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Victory expected. Losses: %@, rounded down per unit type. Loot: up to 60 of each resource, limited by surviving carriers and available storage."
+          }
+        }
+      }
+    },
+    "screen.army.victory_with_support": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victoire prévue. Pertes : %@ arrondies à l’entier inférieur par type. Butin : jusqu’à %@ de chaque ressource, selon le transport des survivants et la place en réserve."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Victory expected. Losses: %@ rounded down per unit type. Loot: up to %@ of each resource, depending on the survivors’ carrying capacity and available storage."
           }
         }
       }
@@ -2160,6 +2517,23 @@
         }
       }
     },
+    "screen.construction.slot_number": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        }
+      }
+    },
     "screen.construction.terrain_value_value": {
       "extractionState": "manual",
       "localizations": {
@@ -2326,6 +2700,278 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@"
+          }
+        }
+      }
+    },
+    "screen.expedition_support.defeat_losses": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertes en défaite"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Losses on defeat"
+          }
+        }
+      }
+    },
+    "screen.expedition_support.departure_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les bonus sont fixés au départ. Un bâtiment terminé pendant un raid profite au suivant."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonuses are fixed at departure. A building completed during a raid benefits the next one."
+          }
+        }
+      }
+    },
+    "screen.expedition_support.loot_limit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Butin maximum par ressource"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum loot per resource"
+          }
+        }
+      }
+    },
+    "screen.expedition_support.loot_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le butin dépend du transport des survivants et de la place en réserve. Le bonus du Quai s’ajoute à celui des Sauniers."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loot depends on the survivors’ carrying capacity and available storage. The quay bonus adds to the Humans’ bonus."
+          }
+        }
+      }
+    },
+    "screen.expedition_support.next_raids": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaines expéditions"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Future expeditions"
+          }
+        }
+      }
+    },
+    "screen.expedition_support.rounding": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En victoire, les pertes sont arrondies à l’entier inférieur par type d’unité ; en défaite, à l’entier supérieur. Un mage réduit encore les pertes en victoire."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On victory, losses are rounded down per unit type; on defeat, they are rounded up. A mage further reduces losses on victory."
+          }
+        }
+      }
+    },
+    "screen.expedition_support.transport": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonus de transport total"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total carrying capacity bonus"
+          }
+        }
+      }
+    },
+    "screen.expedition_support.victory_losses": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertes en victoire"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Losses on victory"
+          }
+        }
+      }
+    },
+    "screen.forge.complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armes améliorées au maximum"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapons fully upgraded"
+          }
+        }
+      }
+    },
+    "screen.forge.cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ wood · %@ amber · %@ food"
+          }
+        }
+      }
+    },
+    "screen.forge.effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque niveau ajoute 1 point d’attaque à chaque unité. Les améliorations s’appliquent aux expéditions lancées après la fin de la recherche."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each level adds 1 attack point to every unit. Upgrades apply to expeditions launched after the research is complete."
+          }
+        }
+      }
+    },
+    "screen.forge.insufficient_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources insuffisantes pour cette recherche."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough resources for this research."
+          }
+        }
+      }
+    },
+    "screen.forge.level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau des armes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapon level"
+          }
+        }
+      }
+    },
+    "screen.forge.research": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher le prochain niveau · 60 s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research next level · 60 s"
+          }
+        }
+      }
+    },
+    "screen.forge.researching": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche en cours"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research in progress"
+          }
+        }
+      }
+    },
+    "screen.forge.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorer les armes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Improve weapons"
           }
         }
       }
@@ -3112,6 +3758,23 @@
         }
       }
     },
+    "screen.island_detail.harbor": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harbor"
+          }
+        }
+      }
+    },
     "screen.island_detail.harbor_at_prototype_maximum": {
       "extractionState": "manual",
       "localizations": {
@@ -3210,6 +3873,159 @@
           "stringUnit": {
             "state": "translated",
             "value": "YOUR HARBOR"
+          }
+        }
+      }
+    },
+    "screen.market.different_resources": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez deux ressources différentes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose two different resources."
+          }
+        }
+      }
+    },
+    "screen.market.exchange": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmer l’échange"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirm trade"
+          }
+        }
+      }
+    },
+    "screen.market.give": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donner"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Give"
+          }
+        }
+      }
+    },
+    "screen.market.insufficient_capacity": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La réserve d’arrivée manque de place. Réduisez le nombre de lots."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiving store needs more space. Reduce the number of lots."
+          }
+        }
+      }
+    },
+    "screen.market.insufficient_stock": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stock insuffisant pour cet échange."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough supplies for this trade."
+          }
+        }
+      }
+    },
+    "screen.market.lots": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lots de 20 : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lots of 20: %@"
+          }
+        }
+      }
+    },
+    "screen.market.receive": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recevoir"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receive"
+          }
+        }
+      }
+    },
+    "screen.market.rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’ambre vaut deux fois le bois ou les vivres. Le marché conserve la moitié de la valeur échangée. Un échange est refusé si la réserve d’arrivée est pleine."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber is worth twice as much as wood or food. The market keeps half the traded value. Trades are refused if the receiving store has insufficient space."
+          }
+        }
+      }
+    },
+    "screen.market.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échanger des ressources"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trade resources"
           }
         }
       }
@@ -4438,6 +5254,23 @@
         }
       }
     },
+    "screen.village_session.trade_completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Échange effectué. Les réserves ont été mises à jour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trade complete. Your supplies have been updated."
+          }
+        }
+      }
+    },
     "screen.village_session.training_started_for_value_units": {
       "extractionState": "manual",
       "localizations": {
@@ -4553,6 +5386,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@: upgrade started. Ready in one minute."
+          }
+        }
+      }
+    },
+    "screen.village_session.weapons_research_complete": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armes améliorées. Le bonus s’applique aux prochaines expéditions."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapons upgraded. The bonus applies to future expeditions."
+          }
+        }
+      }
+    },
+    "screen.village_session.weapons_research_started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche d’armes lancée. Fin dans une minute."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapon research started. Ready in one minute."
           }
         }
       }
@@ -5029,108 +5896,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Position %@, %@"
-          }
-        }
-      }
-    },
-    "screen.construction.slot_number": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ %@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ %@"
-          }
-        }
-      }
-    },
-    "screen.army.recruit": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recruter : %@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recruit: %@"
-          }
-        }
-      }
-    },
-    "screen.army.available_units": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ · %@ disponible(s)"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ · %@ available"
-          }
-        }
-      }
-    },
-    "screen.army.train": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entraîner · %@ s"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Train · %@ s"
-          }
-        }
-      }
-    },
-    "screen.army.training_cost": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coût : %@ bois · %@ ambre · %@ vivres"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cost: %@ wood · %@ amber · %@ food"
-          }
-        }
-      }
-    },
-    "screen.island_detail.harbor": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Port"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Harbor"
           }
         }
       }

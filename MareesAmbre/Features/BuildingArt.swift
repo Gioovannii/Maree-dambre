@@ -60,6 +60,8 @@ struct BuildingArt: View {
                 }
                 context.draw(Text(Image(systemName: kind.symbol)).font(.system(size: w * 0.22)).foregroundStyle(Palette.amber),
                              at: CGPoint(x: w * 0.5, y: h * 0.57))
+            case .market, .forge, .infirmary, .expeditionQuay:
+                drawWarehouse(polygon, context: context, size: size)
             }
         }
         .accessibilityHidden(true)

@@ -43,6 +43,7 @@ struct PlotDetailScreen: View {
                 .frame(maxWidth: .infinity)
             }
             .scrollIndicators(.hidden)
+            .defaultScrollAnchor(ProcessInfo.processInfo.arguments.contains("--snapshot-actions") ? .bottom : .top)
             .background(Palette.ocean.ignoresSafeArea())
             .navigationTitle(mode == .resourceFields ? String(localized: "screen.plot_detail.upgrade", defaultValue: "Amélioration") : session.state.construction?.plot == session.plot ? (session.state.construction?.kind.name ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")) : (session.state.buildings[session.plot]?.name ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")))
             .navigationBarTitleDisplayMode(.inline)

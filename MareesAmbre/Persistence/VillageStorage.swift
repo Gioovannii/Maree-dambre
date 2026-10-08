@@ -23,7 +23,8 @@ struct VillageStorage {
     func load(seed: Int, world: WorldMap, now: Date = .now) throws -> VillageState? {
         guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
-        guard (2...9).contains(state.version), state.seed == seed,
+        guard (2...11).contains(state.version), state.seed == seed,
+              (0...VillageState.maximumWeaponLevel).contains(state.weaponLevel),
               state.army?.isValid ?? true,
               state.resources.wood >= 0, state.resources.amber >= 0, state.resources.provisions >= 0,
               state.resources.wood <= 999_999, state.resources.amber <= 999_999, state.resources.provisions <= 999_999,
@@ -34,6 +35,12 @@ struct VillageStorage {
             throw CocoaError(.coderReadCorrupt)
         }
         var migrated = state
+        if let job = state.weaponUpgrade {
+            guard state.hasBuilding(.forge), (1...VillageState.maximumWeaponLevel).contains(job.targetLevel),
+                  job.targetLevel == state.weaponLevel + 1, job.endsAt.timeIntervalSince1970.isFinite else {
+                throw CocoaError(.coderReadCorrupt)
+            }
+        }
         if let job = state.resourceUpgrade {
             guard state.construction == nil,
                   let kind = ResourceSiteKind.at(job.plot),

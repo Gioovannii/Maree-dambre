@@ -23,6 +23,11 @@ struct ArmyState: Codable, Equatable {
                   raid.returnsAt.timeIntervalSince1970.isFinite,
                   raid.units.values.allSatisfy({ (0...100).contains($0) }),
                   raid.units.values.reduce(0, +) > 0 else { return false }
+            guard (0...3).contains(raid.attackUpgrade ?? 0),
+                  [0.05, 0.1, 0.15, 0.2].contains(raid.victoryLossRate ?? 0.2),
+                  [0.35, 0.5].contains(raid.defeatLossRate ?? 0.5),
+                  [0, 20, 25, 45].contains(raid.transportBonusPercent ?? 0),
+                  [60, 90].contains(raid.lootLimit ?? 60) else { return false }
         }
         return units.values.reduce(0, +) + (training?.count ?? 0)
             + (raid?.units.values.reduce(0, +) ?? 0) <= 100
@@ -52,7 +57,14 @@ extension VillageState {
     var peopleUnits: [ArmyUnit] { ArmyUnit.allCases.filter { $0.people == (people ?? .sauniers) } }
     var trainableUnits: [ArmyUnit] { ArmyUnit.allCases.filter { peopleUnits.contains($0) || unlockedUnits.contains($0) } }
     var raidDuration: TimeInterval { people == .roseaux ? 90 : 120 }
-    var victoryLossRate: Double { availableArmy[.tideMage, default: 0] > 0 ? 0.15 : 0.2 }
+    var victoryLossRate: Double {
+        let mage = availableArmy[.tideMage, default: 0] > 0
+        return hasBuilding(.infirmary) ? (mage ? 0.05 : 0.1) : (mage ? 0.15 : 0.2)
+    }
+    var defeatLossRate: Double { hasBuilding(.infirmary) ? 0.35 : 0.5 }
+    var transportBonusPercent: Int { (people == .sauniers ? 20 : 0) + (hasBuilding(.expeditionQuay) ? 25 : 0) }
+    var raidLootLimit: Int { hasBuilding(.expeditionQuay) ? 90 : 60 }
+    func attackStrength(of unit: ArmyUnit) -> Int { unit.attack + weaponLevel }
 
     var unlockedUnits: Set<ArmyUnit> {
         if let unlocked = army?.unlockedUnits { return unlocked }
@@ -83,7 +95,7 @@ extension VillageState {
         return true
     }
     var availableArmy: [ArmyUnit: Int] { army?.units ?? [:] }
-    var armyPower: Int { availableArmy.reduce(0) { $0 + $1.key.attack * $1.value } }
+    var armyPower: Int { availableArmy.reduce(0) { $0 + attackStrength(of: $1.key) * $1.value } }
 
     func canTrain(_ unit: ArmyUnit, count: Int) -> Bool {
         guard hasBuilding(.warCourt), unlockedUnits.contains(unit),
@@ -113,11 +125,14 @@ extension VillageState {
 
     @discardableResult
     mutating func raid(targetID: Int, now: Date = .now) -> Bool {
+        updateWeaponUpgrade(now: now)
         updateArmy(now: now)
         guard let bot = bots.first(where: { $0.id == targetID }), canRaid(bot, now: now) else { return false }
         var troops = army ?? ArmyState()
         troops.raid = RaidOrder(targetID: bot.id, targetName: bot.name, units: troops.units,
-                               defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(raidDuration))
+                               defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(raidDuration),
+                               attackUpgrade: weaponLevel, victoryLossRate: victoryLossRate, defeatLossRate: defeatLossRate,
+                               transportBonusPercent: transportBonusPercent, lootLimit: raidLootLimit)
         troops.units = [:]
         troops.raidedUntil[bot.id] = now.addingTimeInterval(raidDuration + 600)
         army = troops
@@ -136,18 +151,21 @@ extension VillageState {
             troops.training = nil
         }
         if let raid = troops.raid, now >= raid.returnsAt {
-            let power = raid.units.reduce(0) { $0 + $1.key.attack * $1.value }
+            let power = raid.units.reduce(0) { $0 + ($1.key.attack + (raid.attackUpgrade ?? 0)) * $1.value }
             let won = power > raid.defense
             var losses = 0
             var capacity = 0
             for (unit, count) in raid.units {
-                let lost = won ? min(count, max(0, Int(Double(count) * (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)))) : (count + 1) / 2
+                let victoryRate = raid.victoryLossRate ?? (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)
+                let lost = won ? min(count, max(0, Int(floor(Double(count) * victoryRate + 1e-9))))
+                    : min(count, Int(ceil(Double(count) * (raid.defeatLossRate ?? 0.5) - 1e-9)))
                 losses += lost
                 troops.units[unit, default: 0] += count - lost
                 capacity += (count - lost) * unit.carrying
             }
-            let transport = people == .sauniers ? capacity * 120 / 100 : capacity
-            let share = won ? min(60, transport / 3) : 0
+            let bonus = raid.transportBonusPercent ?? (people == .sauniers ? 20 : 0)
+            let transport = capacity * (100 + bonus) / 100
+            let share = won ? min(raid.lootLimit ?? 60, transport / 3) : 0
             let wood = min(share, max(0, storageCapacity - resources.wood))
             let amber = min(share, max(0, storageCapacity - resources.amber))
             let provisions = min(share, max(0, storageCapacity - resources.provisions))

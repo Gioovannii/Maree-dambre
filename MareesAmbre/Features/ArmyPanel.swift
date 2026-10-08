@@ -21,7 +21,7 @@ struct ArmyPanel: View {
                         .accessibilityHidden(true)
                     Label(String(localized: "screen.army.available_units", defaultValue: "\(String(unit.name)) · \(String(session.state.availableArmy[unit, default: 0])) disponible(s)"), systemImage: unit.emblem)
                         .font(.headline)
-                    Text(String(localized: "screen.army.power_value_carries_value_resources", defaultValue: "Force \(String(unit.attack)) · Transport \(String(unit.carrying)) ressources"))
+                    Text(String(localized: "screen.army.power_value_carries_value_resources", defaultValue: "Force \(String(session.state.attackStrength(of: unit))) · Transport \(String(unit.carrying)) ressources"))
                     if !session.state.unlockedUnits.contains(unit) {
                         Label(String(localized: "screen.army.unlock_at_the_academy", defaultValue: "À débloquer à la Maison des savoirs"), systemImage: "lock.fill")
                     }
@@ -76,8 +76,8 @@ struct ArmyPanel: View {
             Button(String(localized: "screen.army.send_all_troops", defaultValue: "Envoyer toutes les troupes")) { session.raid(bot.id); target = nil }
         } message: { bot in
             Text(session.state.armyPower > 10 + min(10, bot.level) * 4
-                 ? String(localized: "screen.army.victory_expected_losses_value_rounded_down_per_unit_type_loot_up_to_60_of_each_resour", defaultValue: "Victoire prévue. Pertes : \(session.state.victoryLossRate.formatted(.percent.precision(.fractionLength(0)))) arrondies à l’entier inférieur par type. Butin : jusqu’à 60 de chaque ressource, selon le transport des survivants et la place en réserve.")
-                 : String(localized: "screen.army.defeat_expected_half_your_troops_will_be_lost_rounded_up_per_unit_type_no_loot", defaultValue: "Défaite prévue : la moitié des troupes sera perdue, arrondie au supérieur par type. Aucun butin."))
+                 ? String(localized: "screen.army.victory_with_support", defaultValue: "Victoire prévue. Pertes : \(String(session.state.victoryLossRate.formatted(.percent.precision(.fractionLength(0))))) arrondies à l’entier inférieur par type. Butin : jusqu’à \(String(session.state.raidLootLimit)) de chaque ressource, selon le transport des survivants et la place en réserve.")
+                 : String(localized: "screen.army.defeat_with_support", defaultValue: "Défaite prévue. Pertes : \(String(session.state.defeatLossRate.formatted(.percent.precision(.fractionLength(0))))) arrondies à l’entier supérieur par type. Aucun butin."))
         }
     }
 

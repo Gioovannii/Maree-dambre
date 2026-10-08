@@ -44,6 +44,10 @@ struct ConstructionPanel: View {
                 buildingDetails(building)
                 if building == .warCourt { ArmyPanel(isTraining: true) }
                 if building == .academy { ResearchPanel() }
+                if building == .market { MarketPanel() }
+                if building == .forge { ForgePanel() }
+                if building == .infirmary || building == .expeditionQuay { ExpeditionSupportPanel(kind: building) }
+                if building == .expeditionQuay { ArmyPanel() }
             } else if let source = session.moveSourcePlot {
                 Label(session.message, systemImage: "hand.tap")
                     .font(.subheadline).foregroundStyle(Palette.amber)
@@ -108,7 +112,7 @@ struct ConstructionPanel: View {
                 Text(session.state.meetsProductionRequirement(kind) ? String(localized: "screen.construction.production_continues_including_while_you_are_away", defaultValue: "Production continue, y compris pendant votre absence.") : String(localized: "screen.construction.upgrade_the_matching_resource_site_to_activate_production", defaultValue: "Améliorez le terrain correspondant pour activer cette production."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
-            if kind != .hall {
+            if kind != .hall && kind != .expeditionQuay {
                 Label(String(localized: "screen.construction.touch_and_hold_the_building_to_move_it", defaultValue: "Maintenez le bâtiment appuyé pour le déplacer"), systemImage: "hand.tap")
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
