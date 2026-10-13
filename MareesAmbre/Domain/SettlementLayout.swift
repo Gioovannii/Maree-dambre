@@ -8,7 +8,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var assetName: String {
         switch self {
-        case .resourceFields: "ChampsSobres"
+        case .resourceFields: "ChampsDomaine"
         case .townCenter: "CentrePlaceCentrale"
         }
     }

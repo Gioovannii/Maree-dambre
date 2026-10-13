@@ -88,7 +88,7 @@ struct VillageBoard: View {
         // Larger landmarks and smaller, lower badges expose the building silhouettes.
         let baseSize = mode == .townCenter
             ? min(120, max(74, mapWidth * 0.25))
-            : min(76, max(52, mapWidth * 0.145))
+            : min(112, max(72, mapWidth * 0.24))
         let size = baseSize * (building == .hall ? 1.2 : 1.0)
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
@@ -121,12 +121,22 @@ struct VillageBoard: View {
                     .frame(width: size, height: size * 0.72)
                 }
                 if let site {
-                    Image(site.imageAssetName)
+                    Ellipse()
+                        .fill(.black.opacity(0.15))
+                        .frame(width: footprintWidth, height: footprintHeight)
+                        .offset(y: size * 0.27)
+                    Image(site.imageAssetName(for: siteLevel))
                         .resizable().scaledToFit()
                         .frame(width: size, height: size)
                         .overlay(alignment: .bottom) {
                             TideLevelBadge(level: siteLevel, symbol: site.symbol)
-                                .offset(y: size * 0.34)
+                                .overlay {
+                                    if selected {
+                                        Capsule().strokeBorder(Palette.paper, lineWidth: 2)
+                                    }
+                                }
+                                .scaleEffect(0.78)
+                                .offset(x: size * 0.22, y: size * 0.09)
                         }
                         .accessibilityHidden(true)
 
@@ -134,11 +144,13 @@ struct VillageBoard: View {
                             if let job = session.state.resourceUpgrade, job.plot == plot {
                                 Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
                                     .font(.caption2.bold()).monospacedDigit().fixedSize()
+                                    .foregroundStyle(Palette.paper)
                                     .padding(4)
                                     .background(Palette.ocean, in: .capsule)
-                                    .offset(y: 20)
+                                    .offset(y: 24)
                             }
                         }
+                        .offset(y: -size * 0.06)
                         .accessibilityHidden(true)
                 } else if let construction {
                     TimelineView(.periodic(from: .now, by: 1)) { timeline in

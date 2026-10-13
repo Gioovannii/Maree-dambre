@@ -38,6 +38,10 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    func imageAssetName(for level: Int) -> String {
+        self == .cropland && level > 0 ? "ParcelleVivresCultivee" : imageAssetName
+    }
+
     var yieldPerLevel: Resources {
         switch self {
         case .woodland: Resources(wood: 8, amber: 0, provisions: 0)
