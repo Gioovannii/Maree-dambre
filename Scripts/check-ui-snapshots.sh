@@ -2,17 +2,47 @@
 set -euo pipefail
 
 project_root="$(cd "$(dirname "$0")/.." && pwd)"
-developer_dir="${DEVELOPER_DIR:-/Applications/Xcode 27.1.app/Contents/Developer}"
-simulator_id="${SIMULATOR_ID:-FB634AC5-AA73-49F9-86DE-8BB59894AC25}"
+source "$project_root/Scripts/xcode-environment.sh"
+developer_dir="$DEVELOPER_DIR"
 mode="${1:-verify}"
 build_dir="/tmp/MareesAmbreSnapshotDerivedData"
-output_dir="/tmp/MareesAmbreUISnapshots"
-reference_dir="$project_root/Tests/Snapshots/iPhone18Pro-iOS27"
+snapshot_device="${SNAPSHOT_DEVICE:-iphone}"
+output_dir="/tmp/MareesAmbreUISnapshots/$snapshot_device"
+
+case "$snapshot_device" in
+    iphone)
+        device_name='iPhone 18 Pro'
+        capture_delay=3
+        reference_dir="$project_root/Tests/Snapshots/iPhone18Pro-iOS27"
+        districts=(resources centre upgrade world guide market forge infirmary expeditionQuay)
+        ;;
+    ipad)
+        device_name='iPad Pro 11-inch (M5)'
+        capture_delay=5
+        reference_dir="$project_root/Tests/Snapshots/iPad11-iOS27"
+        districts=(resources centre world)
+        ;;
+    *)
+        print -u2 'SNAPSHOT_DEVICE must be iphone or ipad'
+        exit 2
+        ;;
+esac
 
 if [[ "$mode" != verify && "$mode" != record ]]; then
     print -u2 "Usage: $0 [verify|record]"
     exit 2
 fi
+
+simctl() { DEVELOPER_DIR="$developer_dir" /usr/bin/xcrun simctl "$@"; }
+simulator_id="${SIMULATOR_ID:-$(simctl list devices available --json | /usr/bin/python3 -c '
+import json, sys
+devices = json.load(sys.stdin)["devices"].get("com.apple.CoreSimulator.SimRuntime.iOS-27-0", [])
+matches = [device for device in devices if device["name"] == sys.argv[1]]
+matches.sort(key=lambda device: device["state"] != "Booted")
+if not matches:
+    sys.exit("Install an iOS 27.0 simulator for " + sys.argv[1] + " or set SIMULATOR_ID.")
+print(matches[0]["udid"])
+' "$device_name")}"
 
 mkdir -p "$output_dir"
 DEVELOPER_DIR="$developer_dir" "$developer_dir/usr/bin/xcodebuild" \
@@ -25,11 +55,13 @@ DEVELOPER_DIR="$developer_dir" "$developer_dir/usr/bin/xcodebuild" \
         exit 1
     }
 
-simctl() { DEVELOPER_DIR="$developer_dir" /usr/bin/xcrun simctl "$@"; }
+simctl bootstatus "$simulator_id" -b
 app_path="$build_dir/Build/Products/Debug-iphonesimulator/MareesAmbre.app"
 bundle_id=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app_path/Info.plist")
 simctl install "$simulator_id" "$app_path"
-simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi \
+# The ISO timestamp also freezes the date displayed in the iPad status bar.
+# simctl's ISO parser requires fractional seconds.
+simctl status_bar "$simulator_id" override --time '2026-10-13T09:41:00.000+08:00' --dataNetwork wifi \
     --wifiMode active --wifiBars 3 --cellularMode active --cellularBars 4 \
     --batteryState charged --batteryLevel 100
 trap 'simctl status_bar "$simulator_id" clear' EXIT
@@ -38,18 +70,20 @@ DEVELOPER_DIR="$developer_dir" /usr/bin/xcrun swiftc -O \
     -module-cache-path /tmp/MareesAmbreSwiftModuleCache \
     "$project_root/Scripts/compare-snapshot.swift" -o "$output_dir/compare-snapshot"
 
-for district in resources centre upgrade world; do
+for district in "${districts[@]}"; do
     simctl terminate "$simulator_id" "$bundle_id" >/dev/null 2>&1 || true
-    if [[ "$district" == centre ]]; then
-        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot --snapshot-center >/dev/null
-    elif [[ "$district" == upgrade ]]; then
-        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot --snapshot-upgrade >/dev/null
-    elif [[ "$district" == world ]]; then
-        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot --snapshot-world >/dev/null
-    else
-        simctl launch "$simulator_id" "$bundle_id" --ui-snapshot >/dev/null
-    fi
-    sleep 3
+    snapshot_args=(--ui-snapshot -AppleLanguages '(fr)' -AppleLocale fr_FR)
+    case "$district" in
+        centre) snapshot_args+=(--snapshot-center) ;;
+        upgrade) snapshot_args+=(--snapshot-upgrade) ;;
+        world) snapshot_args+=(--snapshot-world) ;;
+        guide) snapshot_args+=(--snapshot-guide) ;;
+        market|forge|infirmary|expeditionQuay)
+            snapshot_args+=("--snapshot-$district" --snapshot-actions)
+            ;;
+    esac
+    simctl launch "$simulator_id" "$bundle_id" "${snapshot_args[@]}" >/dev/null
+    sleep "$capture_delay"
     simctl io "$simulator_id" screenshot "$output_dir/$district.png" >/dev/null 2>&1
 
     if [[ "$mode" == record ]]; then
@@ -57,7 +91,7 @@ for district in resources centre upgrade world; do
         cp "$output_dir/$district.png" "$reference_dir/$district.png"
         print "RECORDED: $district"
     elif "$output_dir/compare-snapshot" "$reference_dir/$district.png" "$output_dir/$district.png"; then
-        print "PASS: $district matches its iPhone 18 Pro snapshot"
+        print "PASS: $district matches its $device_name snapshot"
     else
         print -u2 "FAIL: $district differs from $reference_dir/$district.png"
         print -u2 "Actual capture: $output_dir/$district.png"

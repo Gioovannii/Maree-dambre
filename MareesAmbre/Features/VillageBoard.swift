@@ -64,8 +64,6 @@ struct VillageBoard: View {
             .frame(width: viewSize.width, height: viewSize.height)
             .clipped()
         }
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel(String(localized: "screen.village_board.full_district_map_value", defaultValue: "Carte entière du district : \(String(mode.title))."))
     }
 
     private var visibleSlots: [Int] {
@@ -78,7 +76,6 @@ struct VillageBoard: View {
     private func plotButton(_ plot: Int, mapWidth: CGFloat) -> some View {
         let building = session.state.buildings[plot]
         let construction = session.state.construction?.plot == plot ? session.state.construction : nil
-        let constructionProgress = construction?.progress(at: Date()) ?? 0
         let selected = session.plot == plot
         let terrain = VillageState.ground(at: plot)
         let site = mode == .resourceFields ? ResourceSiteKind.at(plot) : nil
@@ -95,20 +92,8 @@ struct VillageBoard: View {
         let canReceiveMovingBuilding = (session.pendingBuilding.map { session.state.canBuild($0, at: plot) } ?? false) || (session.moveSourcePlot.map {
             building == nil && session.state.canMoveBuilding(from: $0, to: plot)
         } ?? false)
-        let plotAccessibilityLabel: String
-        if let site {
-            plotAccessibilityLabel = String(localized: "screen.village_board.site_value_value_level_value", defaultValue: "Zone \(String(mode.slotNumber(for: plot) ?? 0)), \(String(site.name)), niveau \(String(siteLevel))")
-        } else if let construction {
-            plotAccessibilityLabel = String(localized: "screen.village_board.construction_of_value_value_percent_complete", defaultValue: "Chantier de \(String(construction.kind.name)), \(String(Int(constructionProgress * 100))) pour cent terminé")
-        } else {
-            plotAccessibilityLabel = String(localized: "screen.village_board.plot_value_value_value", defaultValue: "Emplacement \(String(mode.slotNumber(for: plot) ?? 0)), \(String(building?.name ?? terrain.name))\(String(isUnavailable ? String(localized: "screen.village_board.unavailable", defaultValue: ", indisponible") : ""))")
-        }
-
         return Button {
-            let isMoving = session.moveSourcePlot != nil || session.pendingBuilding != nil
-            session.selectPlot(plot)
-            selectedPlot = session.plot
-            if !isMoving { onPlotSelected() }
+            selectPlot(plot)
         } label: {
             ZStack {
                 if site == nil && canReceiveMovingBuilding {
@@ -228,17 +213,62 @@ struct VillageBoard: View {
         }
         .buttonStyle(.plain)
         .simultaneousGesture(LongPressGesture(minimumDuration: 0.55).onEnded { _ in
-            guard mode == .townCenter, let building, building != .hall, building != .expeditionQuay,
-                  construction == nil else { return }
-            session.selectPlot(plot)
-            session.beginMovingSelectedBuilding()
+            beginMovingBuilding(at: plot)
         })
-        .accessibilityLabel(plotAccessibilityLabel)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(plotAccessibilityLabel(for: plot))
+        .accessibilityIdentifier("plot.\(mode.rawValue).\(plot)")
         .accessibilityValue(selected ? String(localized: "screen.village_board.selected", defaultValue: "Sélectionné") : "")
-        .accessibilityHint(session.moveSourcePlot == nil
-            ? (site == nil ? String(localized: "screen.village_board.view_details_or_build_on_this_plot", defaultValue: "Afficher les détails ou construire sur cet emplacement") : String(localized: "screen.village_board.view_production_and_upgrade_this_site", defaultValue: "Afficher la production et améliorer cette zone"))
-            : String(localized: "screen.village_board.move_the_selected_building_to_this_plot_if_compatible", defaultValue: "Déplacer le bâtiment sélectionné vers cette case si elle est compatible"))
+        .accessibilityHint(plotAccessibilityHint(for: plot))
+        .accessibilityAddTraits(.isButton)
         .accessibilityAddTraits(selected ? .isSelected : [])
+        .accessibilityAction { selectPlot(plot) }
+        .accessibilityActions {
+            if canMoveBuilding(at: plot) {
+                Button(String(localized: "screen.village_board.move_building", defaultValue: "Déplacer le bâtiment")) {
+                    beginMovingBuilding(at: plot)
+                }
+            }
+        }
+    }
+
+    private func selectPlot(_ plot: Int) {
+        let isMoving = session.moveSourcePlot != nil || session.pendingBuilding != nil
+        session.selectPlot(plot)
+        selectedPlot = session.plot
+        if !isMoving { onPlotSelected() }
+    }
+
+    private func canMoveBuilding(at plot: Int) -> Bool {
+        guard mode == .townCenter, let building = session.state.buildings[plot] else { return false }
+        return building != .hall && building != .expeditionQuay && session.state.construction?.plot != plot
+    }
+
+    private func beginMovingBuilding(at plot: Int) {
+        guard canMoveBuilding(at: plot) else { return }
+        session.selectPlot(plot)
+        selectedPlot = session.plot
+        session.beginMovingSelectedBuilding()
+    }
+
+    private func plotAccessibilityLabel(for plot: Int) -> String {
+        if mode == .resourceFields, let site = ResourceSiteKind.at(plot) {
+            return String(localized: "screen.village_board.site_value_value_level_value", defaultValue: "Zone \(String(mode.slotNumber(for: plot) ?? 0)), \(String(site.name)), niveau \(String(session.state.resourceLevel(at: plot)))")
+        }
+        if let construction = session.state.construction, construction.plot == plot {
+            return String(localized: "screen.village_board.construction_of_value_value_percent_complete", defaultValue: "Chantier de \(String(construction.kind.name)), \(String(Int(construction.progress(at: .now) * 100))) pour cent terminé")
+        }
+        let building = session.state.buildings[plot]
+        let terrain = VillageState.ground(at: plot)
+        let isUnavailable = building == nil && !BuildingKind.constructible(in: mode).contains { $0.suits(terrain) }
+        return String(localized: "screen.village_board.plot_value_value_value", defaultValue: "Emplacement \(String(mode.slotNumber(for: plot) ?? 0)), \(String(building?.name ?? terrain.name))\(String(isUnavailable ? String(localized: "screen.village_board.unavailable", defaultValue: ", indisponible") : ""))")
+    }
+
+    private func plotAccessibilityHint(for plot: Int) -> String {
+        let site = mode == .resourceFields ? ResourceSiteKind.at(plot) : nil
+        return session.moveSourcePlot == nil
+            ? (site == nil ? String(localized: "screen.village_board.view_details_or_build_on_this_plot", defaultValue: "Afficher les détails ou construire sur cet emplacement") : String(localized: "screen.village_board.view_production_and_upgrade_this_site", defaultValue: "Afficher la production et améliorer cette zone"))
+            : String(localized: "screen.village_board.move_the_selected_building_to_this_plot_if_compatible", defaultValue: "Déplacer le bâtiment sélectionné vers cette case si elle est compatible")
     }
 
     private func position(for plot: Int, in size: CGSize) -> CGPoint {

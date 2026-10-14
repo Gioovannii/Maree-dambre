@@ -23,6 +23,7 @@ struct ForgePanel: View {
                     .font(.subheadline)
                 Button(String(localized: "screen.forge.research", defaultValue: "Rechercher le prochain niveau · 60 s"), systemImage: "hammer.fill", action: session.upgradeWeapons)
                     .buttonStyle(.borderedProminent)
+                    .foregroundStyle(Palette.ocean)
                     .disabled(!session.state.canUpgradeWeapons)
                 if !session.state.canUpgradeWeapons {
                     Text(String(localized: "screen.forge.insufficient_resources", defaultValue: "Ressources insuffisantes pour cette recherche."))

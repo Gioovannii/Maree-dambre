@@ -32,6 +32,7 @@ struct ResearchPanel: View {
                             .font(.footnote)
                         Button(String(localized: "screen.research.research_1_min", defaultValue: "Rechercher · 1 min")) { session.research(unit) }
                             .buttonStyle(.borderedProminent)
+                            .foregroundStyle(Palette.ocean)
                             .disabled(!session.state.canResearch(unit))
                     }
                 }

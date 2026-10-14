@@ -42,6 +42,7 @@ struct MarketPanel: View {
             }
             Button(String(localized: "screen.market.exchange", defaultValue: "Confirmer l’échange"), systemImage: "arrow.left.arrow.right", action: exchange)
                 .buttonStyle(.borderedProminent)
+                .foregroundStyle(Palette.ocean)
                 .disabled(!session.state.canTrade(from: source, to: destination, lots: lots))
         }
         .tint(Palette.amber)

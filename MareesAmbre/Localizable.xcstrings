@@ -4880,6 +4880,23 @@
         }
       }
     },
+    "screen.village_board.move_building": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacer le bâtiment"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move building"
+          }
+        }
+      }
+    },
     "screen.village_board.move_the_selected_building_to_this_plot_if_compatible": {
       "extractionState": "manual",
       "localizations": {

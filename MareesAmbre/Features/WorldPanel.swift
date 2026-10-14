@@ -23,6 +23,7 @@ struct WorldPanel: View {
                     Text(String(localized: "screen.world.your_power_value_round_trip_value_s", defaultValue: "Votre force : \(String(session.state.armyPower)) · Aller-retour : \(String(Int(session.state.raidDuration))) s"))
                     Button(String(localized: "screen.world.view_expeditions", defaultValue: "Voir les expéditions"), systemImage: "sailboat.fill") { showsExpeditions = true }
                         .buttonStyle(.borderedProminent)
+                        .foregroundStyle(Palette.ocean)
                 } else {
                     Label(session.world.terrain(at: session.selectedTile).name, systemImage: "location.fill").font(.headline)
                     Text(String(localized: "screen.world.unclaimed_land_attacks_target_neighboring_factions", defaultValue: "Lieu libre · Les attaques ciblent les pavillons voisins.")).foregroundStyle(Palette.muted)

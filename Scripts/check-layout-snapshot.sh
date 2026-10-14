@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="/tmp/marees-ambre-layout-snapshot"
-DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode 27.1.app/Contents/Developer}"
+source "$ROOT/Scripts/xcode-environment.sh"
 
 DEVELOPER_DIR="$DEVELOPER_DIR" /usr/bin/xcrun swiftc \
   -module-cache-path /tmp/MareesAmbreSwiftModuleCache \

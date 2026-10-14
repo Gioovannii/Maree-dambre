@@ -36,7 +36,7 @@ puis en fenêtre réduite, avant de publier une version iPad.
 
 Lancer `sh Scripts/check-domain.sh` pour les règles de ressources, constructions, migration des sauvegardes, entraînement, raids, pertes, butin et reprise hors ligne.
 
-Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les quatre captures iPhone aux références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`.
+Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les neuf captures iPhone aux références : Ressources, Centre, amélioration, Monde, guide, marché, forge, infirmerie et quai. Lancer `SNAPSHOT_DEVICE=ipad zsh Scripts/check-ui-snapshots.sh verify` pour les trois captures iPad. Les scripts détectent Xcode et le simulateur iOS 27.0 correspondant ; `DEVELOPER_DIR` et `SIMULATOR_ID` permettent de les choisir explicitement. La langue de l’app est fixée au français et la date de la barre d’état est figée. Après contrôle visuel d’un changement voulu, le mode `record` actualise les références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`.
 
 Pour voir les douze bâtiments sans toucher à une sauvegarde, lancer avec `--ui-snapshot --snapshot-center --snapshot-developed`. Les arguments `--ui-snapshot --snapshot-market`, `--ui-snapshot --snapshot-forge`, `--ui-snapshot --snapshot-infirmary` ou `--ui-snapshot --snapshot-expeditionQuay` ouvrent leurs panneaux dans une partie de démonstration. Ajouter `--snapshot-actions` pour cadrer le bas de la fiche et ses commandes.
 

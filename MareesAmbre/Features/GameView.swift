@@ -9,7 +9,7 @@ struct GameView: View {
         ? .townCenter : .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
     @State private var selectedTownPlot = VillageSession.snapshotTownPlot
-    @State private var showsGuide = false
+    @State private var showsGuide = ProcessInfo.processInfo.arguments.contains("--snapshot-guide")
     @State private var opensGuidedPlot = false
 
     var body: some View {
@@ -90,7 +90,6 @@ struct GameView: View {
                             Text(String(localized: "screen.game.your_next_step", defaultValue: "Votre prochaine étape")).font(.title2.bold())
                             Text(guideStep.title).font(.headline)
                             Text(guideStep.detail)
-                            Button(String(localized: "screen.game.open_guide", defaultValue: "Ouvrir le guide")) { showsGuide = true }
                             Text(String(localized: "screen.game.tap_a_faction_on_the_map_to_view_its_defense_and_prepare_an_expedition", defaultValue: "Touchez une faction sur la carte pour consulter sa défense et préparer une expédition."))
                             WorldClockStatus()
                         }
@@ -221,8 +220,24 @@ struct GameView: View {
             if showsWorld || villageMap == .townCenter {
                 Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Palette.panel, in: .capsule)
                     .contentTransition(.opacity)
             }
+            Spacer(minLength: 0)
+            Button(String(localized: "screen.game.open_guide", defaultValue: "Ouvrir le guide"), systemImage: "book.closed.fill") {
+                showsGuide = true
+            }
+            .labelStyle(.iconOnly)
+            .font(.body.bold())
+            .foregroundStyle(Palette.ocean)
+            .frame(width: 44, height: 44)
+            .background(Palette.amber, in: .circle)
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("guide.open")
         }
         .foregroundStyle(Palette.paper)
         .accessibilityElement(children: .contain)

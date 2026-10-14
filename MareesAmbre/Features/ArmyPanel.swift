@@ -28,6 +28,7 @@ struct ArmyPanel: View {
                     Text(String(localized: "screen.army.training_cost", defaultValue: "Coût : \(String(unit.cost.wood * count)) bois · \(String(unit.cost.amber * count)) ambre · \(String(unit.cost.provisions * count)) vivres"))
                     Button(String(localized: "screen.army.train", defaultValue: "Entraîner · \(String(count * 30)) s")) { session.train(unit, count: count) }
                         .buttonStyle(.borderedProminent)
+                        .foregroundStyle(Palette.ocean)
                         .disabled(!session.state.canTrain(unit, count: count))
                 }
                 .font(.subheadline).padding(12)
