@@ -98,7 +98,7 @@ struct ConstructionPanel: View {
                     Text(kind.purpose)
                         .font(.subheadline)
                         .fixedSize(horizontal: false, vertical: true)
-                    Label(session.state.meetsProductionRequirement(kind) ? kind.productionText : "Production inactive", systemImage: kind.defenseStrength > 0 ? "shield.fill" : "arrow.up.right")
+                    Label(session.state.meetsProductionRequirement(kind) ? kind.productionText : String(localized: "screen.construction.production_inactive", defaultValue: "Production inactive"), systemImage: kind.defenseStrength > 0 ? "shield.fill" : "arrow.up.right")
                         .font(.subheadline.bold()).foregroundStyle(Palette.amber)
                         .fixedSize(horizontal: false, vertical: true)
                 }

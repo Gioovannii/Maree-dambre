@@ -28,6 +28,8 @@ struct VillageStorage {
               state.army?.isValid ?? true,
               state.resources.wood >= 0, state.resources.amber >= 0, state.resources.provisions >= 0,
               state.resources.wood <= 999_999, state.resources.amber <= 999_999, state.resources.provisions <= 999_999,
+              (state.resourceLevels ?? [:]).allSatisfy({ VillageMapMode.resourceFields.contains($0.key) && (0...ResourceSiteKind.maximumLevel).contains($0.value) }),
+              hasValidTiming(state),
               state.buildings[12] == .hall,
               state.buildings.allSatisfy({ (0..<25).contains($0.key) && ($0.value != .hall || $0.key == 12) }),
               state.bots.map(\.id) == [0, 1, 2],
@@ -35,6 +37,13 @@ struct VillageStorage {
             throw CocoaError(.coderReadCorrupt)
         }
         var migrated = state
+        if let job = state.construction {
+            guard (0..<25).contains(job.plot), job.kind != .hall,
+                  state.buildings[job.plot] == nil, job.duration.isFinite, job.duration > 0,
+                  state.version < 8 || !state.hasBuilding(job.kind) else {
+                throw CocoaError(.coderReadCorrupt)
+            }
+        }
         if let job = state.weaponUpgrade {
             guard state.hasBuilding(.forge), (1...VillageState.maximumWeaponLevel).contains(job.targetLevel),
                   job.targetLevel == state.weaponLevel + 1, job.endsAt.timeIntervalSince1970.isFinite else {
@@ -62,11 +71,43 @@ struct VillageStorage {
               (migrated.resourceLevels ?? [:]).allSatisfy({ VillageMapMode.resourceFields.contains($0.key) && (0...ResourceSiteKind.maximumLevel).contains($0.value) }) else {
             throw CocoaError(.coderReadCorrupt)
         }
+        if let job = migrated.construction, state.version >= 8,
+           !VillageState.canPlace(job.kind, at: job.plot) {
+            throw CocoaError(.coderReadCorrupt)
+        }
         if migrated != state { try? save(migrated) }
         return migrated
     }
     func save(_ state: VillageState) throws {
         defaults.set(try JSONEncoder().encode(state), forKey: "village.v2.\(state.seed)")
         defaults.set(state.seed, forKey: "village.activeSeed")
+    }
+
+    func preserveUnreadableSave(seed: Int) throws {
+        guard let data = defaults.data(forKey: "village.v2.\(seed)") else {
+            throw CocoaError(.fileReadNoSuchFile)
+        }
+        let backupKey = "village.unreadable.\(seed).\(UUID().uuidString)"
+        defaults.set(data, forKey: backupKey)
+        guard defaults.data(forKey: backupKey) == data else {
+            throw CocoaError(.fileWriteUnknown)
+        }
+    }
+
+    private func hasValidTiming(_ state: VillageState) -> Bool {
+        // Validate before legacy production runs: arbitrary JSON dates can
+        // overflow the integer seconds used by offline progression.
+        let cooldownDates = state.army.map { Array($0.raidedUntil.values) } ?? []
+        let dates = [state.lastProductionAt, state.lastBotExpansionAt,
+                     state.construction?.startedAt, state.construction?.endsAt,
+                     state.resourceUpgrade?.startedAt, state.resourceUpgrade?.endsAt,
+                     state.weaponUpgrade?.endsAt, state.army?.training?.endsAt,
+                     state.army?.research?.endsAt, state.army?.raid?.returnsAt].compactMap { $0 }
+            + cooldownDates
+        guard dates.allSatisfy({ $0 >= .distantPast && $0 <= .distantFuture }) else { return false }
+        let remainder = state.productionRemainder ?? .zero
+        return [remainder.wood, remainder.amber, remainder.provisions].allSatisfy {
+            $0.isFinite && $0 >= 0 && $0 < 1
+        }
     }
 }

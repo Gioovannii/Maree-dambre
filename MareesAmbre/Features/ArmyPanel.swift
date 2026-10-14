@@ -5,7 +5,6 @@ struct ArmyPanel: View {
     @Environment(VillageSession.self) private var session
     @State private var count = 1
     @State private var target: BotFaction?
-    @State private var confirmsRaid = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -44,17 +43,21 @@ struct ArmyPanel: View {
             if let raid = session.state.army?.raid {
                 Text(String(localized: "screen.army.expedition_to_value_returning", defaultValue: "Expédition vers \(String(raid.targetDisplayName)) · Retour"))
                 countdown(raid.returnsAt)
+                Text(String(localized: "screen.army.deployed_count", defaultValue: "Unités en expédition : \(String(raid.units.values.reduce(0, +)))"))
             }
+            Text(String(localized: "screen.army.garrison_count", defaultValue: "Unités au village : \(String(session.state.availableArmy.values.reduce(0, +)))"))
+                .accessibilityIdentifier("raid.garrisonCount")
             Text(String(localized: "screen.army.available_power_value", defaultValue: "Force disponible : \(String(session.state.armyPower))")).font(.headline)
-            Text(String(localized: "screen.army.each_expedition_deploys_all_available_troops_round_trip_value_seconds_targets_recover", defaultValue: "Chaque départ mobilise toutes les troupes disponibles. Aller-retour : \(String(Int(session.state.raidDuration))) secondes. Une cible se repose 10 minutes après le retour."))
+            Text(String(localized: "screen.army.expedition_rules", defaultValue: "Choisissez les troupes envoyées et celles qui restent au village. Aller-retour : \(String(Int(session.state.raidDuration))) secondes. Une cible se repose 10 minutes après le retour."))
                 .font(.footnote).foregroundStyle(Palette.muted)
             ForEach(session.state.bots) { bot in
                 VStack(alignment: .leading, spacing: 6) {
                     Text(bot.displayName).font(.headline)
                     Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(10 + min(10, bot.level) * 4))"))
-                    Button(String(localized: "screen.army.prepare_attack", defaultValue: "Préparer l’attaque")) { target = bot; confirmsRaid = true }
+                    Button(String(localized: "screen.army.prepare_attack", defaultValue: "Préparer l’attaque")) { target = bot }
                         .buttonStyle(.bordered)
                         .disabled(!session.state.canRaid(bot))
+                        .accessibilityIdentifier("raid.prepare.\(bot.id)")
                     if let until = session.state.army?.raidedUntil[bot.id], until > Date.now {
                         Text(String(localized: "screen.army.target_available_at_value", defaultValue: "Cible disponible à \(String(until.formatted(date: .omitted, time: .shortened)))")).font(.caption)
                     }
@@ -73,12 +76,8 @@ struct ArmyPanel: View {
                 do { try await Task.sleep(for: .seconds(1)) } catch { return }
             }
         }
-        .confirmationDialog(String(localized: "screen.army.departure_for_value", defaultValue: "Départ vers \(String(target?.displayName ?? ""))"), isPresented: $confirmsRaid, presenting: target) { bot in
-            Button(String(localized: "screen.army.send_all_troops", defaultValue: "Envoyer toutes les troupes")) { session.raid(bot.id); target = nil }
-        } message: { bot in
-            Text(session.state.armyPower > 10 + min(10, bot.level) * 4
-                 ? String(localized: "screen.army.victory_with_support", defaultValue: "Victoire prévue. Pertes : \(String(session.state.victoryLossRate.formatted(.percent.precision(.fractionLength(0))))) arrondies à l’entier inférieur par type. Butin : jusqu’à \(String(session.state.raidLootLimit)) de chaque ressource, selon le transport des survivants et la place en réserve.")
-                 : String(localized: "screen.army.defeat_with_support", defaultValue: "Défaite prévue. Pertes : \(String(session.state.defeatLossRate.formatted(.percent.precision(.fractionLength(0))))) arrondies à l’entier supérieur par type. Aucun butin."))
+        .sheet(item: $target) { bot in
+            RaidPreparationView(target: bot)
         }
     }
 

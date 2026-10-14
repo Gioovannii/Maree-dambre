@@ -15,7 +15,9 @@ struct GameView: View {
     var body: some View {
         GeometryReader { viewport in
             if session.state.people == nil {
-                PrologueView(onChoose: session.choosePeople)
+                PrologueView(saveRecoveryMessage: session.saveRecoveryMessage, onChoose: session.choosePeople)
+            } else if typeSize.isAccessibilitySize {
+                accessibilityScreen
             } else if viewport.size.width >= 700 && viewport.size.height >= 600 {
                 tabletScreen
             } else if showsWorld {
@@ -58,6 +60,35 @@ struct GameView: View {
                     Button(String(localized: "screen.game.close", defaultValue: "Fermer")) { showsGuide = false }
                 } }
             }
+        }
+    }
+
+    private var accessibilityScreen: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                topControls
+                navigation
+                constructionStatus
+                if showsWorld {
+                    WorldPanel()
+                } else {
+                    VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                                 onPlotSelected: { showsVillageDetails = true },
+                                 onTownSelected: { selectVillageMap(.townCenter) })
+                        .id(villageMap)
+                }
+            }
+            .padding(12)
+            .frame(maxWidth: 720)
+            .frame(maxWidth: .infinity)
+        }
+        .background(Palette.ocean.ignoresSafeArea())
+        .foregroundStyle(Palette.paper)
+        .onAppear {
+            session.plot = villageMap == .resourceFields ? selectedResourcePlot : selectedTownPlot
+        }
+        .fullScreenCover(isPresented: $showsVillageDetails) {
+            PlotDetailScreen(mode: villageMap)
         }
     }
 
@@ -220,8 +251,9 @@ struct GameView: View {
             if showsWorld || villageMap == .townCenter {
                 Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
+                    .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
                     .background(Palette.panel, in: .capsule)
@@ -234,7 +266,7 @@ struct GameView: View {
             .labelStyle(.iconOnly)
             .font(.body.bold())
             .foregroundStyle(Palette.ocean)
-            .frame(width: 44, height: 44)
+            .frame(width: typeSize.isAccessibilitySize ? 64 : 44, height: typeSize.isAccessibilitySize ? 64 : 44)
             .background(Palette.amber, in: .circle)
             .buttonStyle(.plain)
             .accessibilityIdentifier("guide.open")
@@ -244,7 +276,7 @@ struct GameView: View {
     }
 
     private var navigation: some View {
-        HStack(spacing: 5) {
+        navigationLayout {
             navigationButton(String(localized: "screen.game.resources", defaultValue: "Ressources"), symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
                 selectVillageMap(.resourceFields)
             }
@@ -259,12 +291,18 @@ struct GameView: View {
         .background(Palette.panel.opacity(0.96), in: .capsule)
     }
 
+    private var navigationLayout: AnyLayout {
+        typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 5))
+            : AnyLayout(HStackLayout(spacing: 5))
+    }
+
     private func navigationButton(_ title: String, symbol: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Label(title, systemImage: symbol)
                 .font(.caption.bold())
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
+                .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
+                .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
                 .frame(maxWidth: .infinity, minHeight: 50)
                 .foregroundStyle(selected ? Palette.ocean : Palette.muted)
                 .background {

@@ -7,62 +7,80 @@ struct VillageBoard: View {
     let onTownSelected: () -> Void
     var preservesMapProportions = false
     @Environment(VillageSession.self) private var session
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
-        GeometryReader { viewport in
-            let viewSize = viewport.size
-            let fittedWidth = min(viewSize.width, viewSize.height * 0.52)
-            let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.52) : CGSize(
-                width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.52) : viewSize.width,
-                height: viewSize.height
-            )
-
-            ZStack {
-                if preservesMapProportions || viewSize.width > viewSize.height {
-                    Image(mode.assetName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: viewSize.width, height: viewSize.height)
-                        .blur(radius: 24)
-                        .overlay(Palette.ocean.opacity(0.25))
-                        .clipped()
-                        .accessibilityHidden(true)
+        if typeSize.isAccessibilitySize {
+            VStack(spacing: 12) {
+                if session.moveSourcePlot != nil {
+                    Text(session.message).font(.body).foregroundStyle(Palette.amber)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Button(String(localized: "screen.construction.cancel_move", defaultValue: "Annuler le déplacement")) {
+                        session.cancelMovingBuilding()
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Palette.amber)
                 }
+                ForEach(visibleSlots, id: \.self) { plot in
+                    plotButton(plot, mapWidth: 0)
+                }
+            }
+        } else {
+            GeometryReader { viewport in
+                let viewSize = viewport.size
+                let fittedWidth = min(viewSize.width, viewSize.height * 0.52)
+                let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.52) : CGSize(
+                    width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.52) : viewSize.width,
+                    height: viewSize.height
+                )
 
                 ZStack {
-                    Image(mode.assetName)
-                        .resizable()
-                        .interpolation(.high)
-                        .frame(width: mapSize.width, height: mapSize.height)
-                        .clipped()
-                        .accessibilityHidden(true)
-
-                    ForEach(visibleSlots, id: \.self) { plot in
-                        plotButton(plot, mapWidth: mapSize.width)
-                            .position(position(for: plot, in: mapSize))
-                            .zIndex(Double(plot / 5 + plot % 5))
+                    if preservesMapProportions || viewSize.width > viewSize.height {
+                        Image(mode.assetName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: viewSize.width, height: viewSize.height)
+                            .blur(radius: 24)
+                            .overlay(Palette.ocean.opacity(0.25))
+                            .clipped()
+                            .accessibilityHidden(true)
                     }
 
-                    if mode == .resourceFields {
-                        Button(action: onTownSelected) {
-                            Label(String(localized: "screen.village_board.quay_town", defaultValue: "Quais & Centre"), systemImage: "sailboat.fill")
-                                .font(.caption.bold())
-                                .foregroundStyle(Palette.paper)
-                                .padding(.horizontal, 11)
-                                .frame(minHeight: 38)
-                                .background(Palette.panel.opacity(0.92), in: .capsule)
-                                .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
+                    ZStack {
+                        Image(mode.assetName)
+                            .resizable()
+                            .interpolation(.high)
+                            .frame(width: mapSize.width, height: mapSize.height)
+                            .clipped()
+                            .accessibilityHidden(true)
+
+                        ForEach(visibleSlots, id: \.self) { plot in
+                            plotButton(plot, mapWidth: mapSize.width)
+                                .position(position(for: plot, in: mapSize))
+                                .zIndex(Double(plot / 5 + plot % 5))
                         }
-                        .buttonStyle(.plain)
-                        .position(x: mapSize.width * 0.50, y: mapSize.height * 0.79)
-                        .zIndex(100)
-                        .accessibilityHint(String(localized: "screen.village_board.open_the_harbor_and_town_buildings", defaultValue: "Ouvrir le port et les bâtiments du Centre-ville"))
+
+                        if mode == .resourceFields {
+                            Button(action: onTownSelected) {
+                                Label(String(localized: "screen.village_board.quay_town", defaultValue: "Quais & Centre"), systemImage: "sailboat.fill")
+                                    .font(.caption.bold())
+                                    .foregroundStyle(Palette.paper)
+                                    .padding(.horizontal, 11)
+                                    .frame(minHeight: 38)
+                                    .background(Palette.panel.opacity(0.92), in: .capsule)
+                                    .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
+                            }
+                            .buttonStyle(.plain)
+                            .position(x: mapSize.width * 0.50, y: mapSize.height * 0.79)
+                            .zIndex(100)
+                            .accessibilityHint(String(localized: "screen.village_board.open_the_harbor_and_town_buildings", defaultValue: "Ouvrir le port et les bâtiments du Centre-ville"))
+                        }
                     }
+                    .frame(width: mapSize.width, height: mapSize.height)
                 }
-                .frame(width: mapSize.width, height: mapSize.height)
+                .frame(width: viewSize.width, height: viewSize.height)
+                .clipped()
             }
-            .frame(width: viewSize.width, height: viewSize.height)
-            .clipped()
         }
     }
 
@@ -95,121 +113,135 @@ struct VillageBoard: View {
         return Button {
             selectPlot(plot)
         } label: {
-            ZStack {
-                if site == nil && canReceiveMovingBuilding {
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color(red: 0.62, green: 0.49, blue: 0.30).opacity(0.65))
+            if typeSize.isAccessibilitySize {
+                Text(plotAccessibilityLabel(for: plot))
+                    .font(.body)
+                    .foregroundStyle(Palette.paper)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Palette.panel, in: .rect(cornerRadius: 16))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(selected ? Palette.amber : Palette.paper.opacity(0.65), lineWidth: selected ? 3 : 1)
+                        RoundedRectangle(cornerRadius: 16)
+                            .strokeBorder(canReceiveMovingBuilding ? .green : selected ? Palette.amber : .clear, lineWidth: 2)
                     }
-                    .frame(width: size, height: size * 0.72)
-                }
-                if let site {
-                    Ellipse()
-                        .fill(.black.opacity(0.15))
-                        .frame(width: footprintWidth, height: footprintHeight)
-                        .offset(y: size * 0.27)
-                    Image(site.imageAssetName(for: siteLevel))
-                        .resizable().scaledToFit()
-                        .frame(width: size, height: size)
-                        .overlay(alignment: .bottom) {
-                            TideLevelBadge(level: siteLevel, symbol: site.symbol)
-                                .overlay {
-                                    if selected {
-                                        Capsule().strokeBorder(Palette.paper, lineWidth: 2)
-                                    }
-                                }
-                                .scaleEffect(0.78)
-                                .offset(x: size * 0.22, y: size * 0.09)
+            } else {
+                ZStack {
+                    if site == nil && canReceiveMovingBuilding {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(red: 0.62, green: 0.49, blue: 0.30).opacity(0.65))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(selected ? Palette.amber : Palette.paper.opacity(0.65), lineWidth: selected ? 3 : 1)
                         }
-                        .accessibilityHidden(true)
-
-                        .overlay(alignment: .bottom) {
-                            if let job = session.state.resourceUpgrade, job.plot == plot {
-                                Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
-                                    .font(.caption2.bold()).monospacedDigit().fixedSize()
-                                    .foregroundStyle(Palette.paper)
-                                    .padding(4)
-                                    .background(Palette.ocean, in: .capsule)
-                                    .offset(y: 24)
-                            }
-                        }
-                        .offset(y: -size * 0.06)
-                        .accessibilityHidden(true)
-                } else if let construction {
-                    TimelineView(.periodic(from: .now, by: 1)) { timeline in
-                        ConstructionSiteArt()
+                        .frame(width: size, height: size * 0.72)
+                    }
+                    if let site {
+                        Ellipse()
+                            .fill(.black.opacity(0.15))
+                            .frame(width: footprintWidth, height: footprintHeight)
+                            .offset(y: size * 0.27)
+                        Image(site.imageAssetName(for: siteLevel))
+                            .resizable().scaledToFit()
                             .frame(width: size, height: size)
                             .overlay(alignment: .bottom) {
-                                Text(timerInterval: min(timeline.date, construction.endsAt)...construction.endsAt, countsDown: true)
-                                    .font(.caption2.bold()).monospacedDigit()
-                                    .foregroundStyle(Palette.paper)
-                                    .padding(.horizontal, 6).padding(.vertical, 3)
-                                    .background(Palette.ocean, in: .capsule)
-                                    .fixedSize()
-                            }
-                    }
-                } else if let building {
-                    Ellipse()
-                        .fill(.black.opacity(0.20))
-                        .frame(width: footprintWidth, height: footprintHeight)
-                        .offset(y: size * 0.30)
-                    BuildingArt(kind: building)
-                        .frame(width: size, height: size)
-                        .overlay(alignment: .bottom) {
-                            TideLevelBadge(level: 1)
-                                .overlay {
-                                    if selected {
-                                        Capsule().strokeBorder(Palette.amber, lineWidth: 2.5)
+                                TideLevelBadge(level: siteLevel, symbol: site.symbol)
+                                    .overlay {
+                                        if selected {
+                                            Capsule().strokeBorder(Palette.paper, lineWidth: 2)
+                                        }
                                     }
+                                    .scaleEffect(0.78)
+                                    .offset(x: size * 0.22, y: size * 0.09)
+                            }
+                            .accessibilityHidden(true)
+
+                            .overlay(alignment: .bottom) {
+                                if let job = session.state.resourceUpgrade, job.plot == plot {
+                                    Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
+                                        .font(.caption2.bold()).monospacedDigit().fixedSize()
+                                        .foregroundStyle(Palette.paper)
+                                        .padding(4)
+                                        .background(Palette.ocean, in: .capsule)
+                                        .offset(y: 24)
                                 }
-                                .shadow(color: selected ? Palette.amber.opacity(0.55) : .clear, radius: 5)
-                                .scaleEffect(0.72)
-                                .offset(x: size * 0.25, y: size * 0.12)
-                                .accessibilityHidden(true)
+                            }
+                            .offset(y: -size * 0.06)
+                            .accessibilityHidden(true)
+                    } else if let construction {
+                        TimelineView(.periodic(from: .now, by: 1)) { timeline in
+                            ConstructionSiteArt()
+                                .frame(width: size, height: size)
+                                .overlay(alignment: .bottom) {
+                                    Text(timerInterval: min(timeline.date, construction.endsAt)...construction.endsAt, countsDown: true)
+                                        .font(.caption2.bold()).monospacedDigit()
+                                        .foregroundStyle(Palette.paper)
+                                        .padding(.horizontal, 6).padding(.vertical, 3)
+                                        .background(Palette.ocean, in: .capsule)
+                                        .fixedSize()
+                                }
                         }
-                        .offset(y: -size * 0.13)
-                        .accessibilityHidden(true)
-                } else if building == nil && site == nil && canReceiveMovingBuilding {
-                    Ellipse()
-                        .fill(isUnavailable ? .black.opacity(0.28) : Palette.paper.opacity(0.17))
-                        .frame(width: footprintWidth, height: footprintHeight)
-                        .overlay {
-                            Ellipse()
+                    } else if let building {
+                        Ellipse()
+                            .fill(.black.opacity(0.20))
+                            .frame(width: footprintWidth, height: footprintHeight)
+                            .offset(y: size * 0.30)
+                        BuildingArt(kind: building)
+                            .frame(width: size, height: size)
+                            .overlay(alignment: .bottom) {
+                                TideLevelBadge(level: 1)
+                                    .overlay {
+                                        if selected {
+                                            Capsule().strokeBorder(Palette.amber, lineWidth: 2.5)
+                                        }
+                                    }
+                                    .shadow(color: selected ? Palette.amber.opacity(0.55) : .clear, radius: 5)
+                                    .scaleEffect(0.72)
+                                    .offset(x: size * 0.25, y: size * 0.12)
+                                    .accessibilityHidden(true)
+                            }
+                            .offset(y: -size * 0.13)
+                            .accessibilityHidden(true)
+                    } else if building == nil && site == nil && canReceiveMovingBuilding {
+                        Ellipse()
+                            .fill(isUnavailable ? .black.opacity(0.28) : Palette.paper.opacity(0.17))
+                            .frame(width: footprintWidth, height: footprintHeight)
+                            .overlay {
+                                Ellipse()
+                                    .strokeBorder(
+                                        isUnavailable ? Palette.muted.opacity(0.45) : Palette.paper.opacity(0.82),
+                                        style: StrokeStyle(lineWidth: 2, dash: [6, 5])
+                                    )
+                            }
+                            .offset(y: size * 0.14)
+
+                    }
+
+                    if mode == .townCenter, plot == SettlementLayout.expeditionQuayPlot,
+                       building == nil, construction == nil, !canReceiveMovingBuilding {
+                        Image(systemName: "sailboat.fill")
+                            .font(.title2.bold()).foregroundStyle(Palette.amber)
+                            .frame(width: 44, height: 44)
+                            .background(Palette.panel, in: .circle)
+                            .overlay { Circle().strokeBorder(Palette.amber, lineWidth: 1.5) }
+                    }
+
+                    if session.moveSourcePlot == plot || canReceiveMovingBuilding {
+                        if site == nil && (building == nil || session.moveSourcePlot == plot || canReceiveMovingBuilding) {
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .strokeBorder(
-                                    isUnavailable ? Palette.muted.opacity(0.45) : Palette.paper.opacity(0.82),
-                                    style: StrokeStyle(lineWidth: 2, dash: [6, 5])
+                                    canReceiveMovingBuilding ? .green : Palette.amber,
+                                    lineWidth: selected || session.moveSourcePlot == plot ? 3 : 2
                                 )
+                                .frame(width: size * 0.68, height: size * 0.30)
+                                .shadow(color: (canReceiveMovingBuilding ? Color.green : Palette.amber).opacity(0.7), radius: 8)
+                                .offset(y: size * (building == nil ? 0.14 : 0.22))
                         }
-                        .offset(y: size * 0.14)
-
-                }
-
-                if mode == .townCenter, plot == SettlementLayout.expeditionQuayPlot,
-                   building == nil, construction == nil, !canReceiveMovingBuilding {
-                    Image(systemName: "sailboat.fill")
-                        .font(.title2.bold()).foregroundStyle(Palette.amber)
-                        .frame(width: 44, height: 44)
-                        .background(Palette.panel, in: .circle)
-                        .overlay { Circle().strokeBorder(Palette.amber, lineWidth: 1.5) }
-                }
-
-                if session.moveSourcePlot == plot || canReceiveMovingBuilding {
-                    if site == nil && (building == nil || session.moveSourcePlot == plot || canReceiveMovingBuilding) {
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .strokeBorder(
-                                canReceiveMovingBuilding ? .green : Palette.amber,
-                                lineWidth: selected || session.moveSourcePlot == plot ? 3 : 2
-                            )
-                            .frame(width: size * 0.68, height: size * 0.30)
-                            .shadow(color: (canReceiveMovingBuilding ? Color.green : Palette.amber).opacity(0.7), radius: 8)
-                            .offset(y: size * (building == nil ? 0.14 : 0.22))
                     }
                 }
+                .frame(width: size, height: size)
+                .contentShape(Rectangle())
             }
-            .frame(width: size, height: size)
-            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .simultaneousGesture(LongPressGesture(minimumDuration: 0.55).onEnded { _ in

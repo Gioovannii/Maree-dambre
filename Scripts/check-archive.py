@@ -25,5 +25,12 @@ assert widget["CFBundleIdentifier"].startswith(main["CFBundleIdentifier"] + ".")
 for key in ("CFBundleVersion", "CFBundleShortVersionString"):
     assert main[key] == widget[key], f"Mismatched {key}"
 assert widget["NSExtension"]["NSExtensionPointIdentifier"] == "com.apple.widgetkit-extension"
+privacy = plistlib.loads((app / "PrivacyInfo.xcprivacy").read_bytes())
+assert privacy["NSPrivacyTracking"] is False, "The offline game must not declare tracking"
+assert privacy["NSPrivacyCollectedDataTypes"] == [], "No data collection in this offline game"
+reasons = next(item["NSPrivacyAccessedAPITypeReasons"] for item in privacy["NSPrivacyAccessedAPITypes"]
+               if item["NSPrivacyAccessedAPIType"] == "NSPrivacyAccessedAPICategoryUserDefaults")
+assert "CA92.1" in reasons, "Local saves require the app-only UserDefaults reason"
 print("PASS: app and widget names, identifiers, versions, executables and extension embedding")
+print("PASS: packaged privacy manifest declares local saves without tracking or data collection")
 print("Apple signed distribution validation is still required in Xcode.")

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct PrologueView: View {
+    var saveRecoveryMessage: String? = nil
     let onChoose: (People) -> Void
     @State private var selected: People = .sauniers
 
@@ -19,6 +20,16 @@ struct PrologueView: View {
                             .font(.caption.bold()).tracking(1.8).foregroundStyle(Palette.muted)
                     }
                     .padding(.top, 18)
+                    if let saveRecoveryMessage {
+                        Label(saveRecoveryMessage, systemImage: "exclamationmark.triangle.fill")
+                            .font(.subheadline)
+                            .foregroundStyle(Palette.paper)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(16)
+                            .background(Palette.panel, in: .rect(cornerRadius: 16))
+                            .overlay { RoundedRectangle(cornerRadius: 16).strokeBorder(Palette.amber, lineWidth: 1) }
+                            .accessibilityIdentifier("save.recovery")
+                    }
                     story
                     VStack(alignment: .leading, spacing: 12) {
                         Text(String(localized: "screen.prologue.three_peoples_three_destinies", defaultValue: "TROIS PEUPLES, TROIS DESTINS"))

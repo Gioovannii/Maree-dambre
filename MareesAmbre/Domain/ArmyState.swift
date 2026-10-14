@@ -57,8 +57,9 @@ extension VillageState {
     var peopleUnits: [ArmyUnit] { ArmyUnit.allCases.filter { $0.people == (people ?? .sauniers) } }
     var trainableUnits: [ArmyUnit] { ArmyUnit.allCases.filter { peopleUnits.contains($0) || unlockedUnits.contains($0) } }
     var raidDuration: TimeInterval { people == .roseaux ? 90 : 120 }
-    var victoryLossRate: Double {
-        let mage = availableArmy[.tideMage, default: 0] > 0
+    var victoryLossRate: Double { victoryLossRate(for: availableArmy) }
+    func victoryLossRate(for units: [ArmyUnit: Int]) -> Double {
+        let mage = units[.tideMage, default: 0] > 0
         return hasBuilding(.infirmary) ? (mage ? 0.05 : 0.1) : (mage ? 0.15 : 0.2)
     }
     var defeatLossRate: Double { hasBuilding(.infirmary) ? 0.35 : 0.5 }
@@ -95,7 +96,10 @@ extension VillageState {
         return true
     }
     var availableArmy: [ArmyUnit: Int] { army?.units ?? [:] }
-    var armyPower: Int { availableArmy.reduce(0) { $0 + attackStrength(of: $1.key) * $1.value } }
+    var armyPower: Int { armyPower(for: availableArmy) }
+    func armyPower(for units: [ArmyUnit: Int]) -> Int {
+        units.reduce(0) { $0 + attackStrength(of: $1.key) * $1.value }
+    }
 
     func canTrain(_ unit: ArmyUnit, count: Int) -> Bool {
         guard hasBuilding(.warCourt), unlockedUnits.contains(unit),
@@ -118,22 +122,33 @@ extension VillageState {
         return true
     }
 
-    func canRaid(_ bot: BotFaction, now: Date = .now) -> Bool {
-        army?.raid == nil && armyPower > 0 && (army?.raidedUntil[bot.id] ?? .distantPast) <= now
-            && bots.contains(where: { $0.id == bot.id })
+    func canRaid(_ bot: BotFaction, units: [ArmyUnit: Int]? = nil, now: Date = .now) -> Bool {
+        let selected = units ?? availableArmy
+        guard army?.raid == nil, (army?.raidedUntil[bot.id] ?? .distantPast) <= now,
+              bots.contains(where: { $0.id == bot.id }),
+              selected.values.contains(where: { $0 > 0 }),
+              selected.allSatisfy({ $0.value >= 0 && $0.value <= availableArmy[$0.key, default: 0] }) else {
+            return false
+        }
+        return armyPower(for: selected) > 0
     }
 
     @discardableResult
-    mutating func raid(targetID: Int, now: Date = .now) -> Bool {
+    mutating func raid(targetID: Int, units: [ArmyUnit: Int]? = nil, now: Date = .now) -> Bool {
         updateWeaponUpgrade(now: now)
         updateArmy(now: now)
-        guard let bot = bots.first(where: { $0.id == targetID }), canRaid(bot, now: now) else { return false }
+        guard let bot = bots.first(where: { $0.id == targetID }), canRaid(bot, units: units, now: now) else { return false }
+        let deployed = (units ?? availableArmy).filter { $0.value > 0 }
         var troops = army ?? ArmyState()
-        troops.raid = RaidOrder(targetID: bot.id, targetName: bot.name, units: troops.units,
+        troops.raid = RaidOrder(targetID: bot.id, targetName: bot.name, units: deployed,
                                defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(raidDuration),
-                               attackUpgrade: weaponLevel, victoryLossRate: victoryLossRate, defeatLossRate: defeatLossRate,
+                               attackUpgrade: weaponLevel, victoryLossRate: victoryLossRate(for: deployed), defeatLossRate: defeatLossRate,
                                transportBonusPercent: transportBonusPercent, lootLimit: raidLootLimit)
-        troops.units = [:]
+        for (unit, count) in deployed {
+            let remaining = troops.units[unit, default: 0] - count
+            if remaining == 0 { troops.units.removeValue(forKey: unit) }
+            else { troops.units[unit] = remaining }
+        }
         troops.raidedUntil[bot.id] = now.addingTimeInterval(raidDuration + 600)
         army = troops
         return true

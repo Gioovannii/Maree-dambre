@@ -14,8 +14,11 @@ final class ArchipelagoScene: SKScene {
     private var zoomStart: CGFloat?
     private var locations: [TileCoordinate] = []
     private let unit: CGFloat = 24
+    private var seaMotion: Float {
+        reducedMotion || ProcessInfo.processInfo.arguments.contains("--ui-snapshot") ? 0 : 1
+    }
     var reducedMotion = false {
-        didSet { childNode(withName: "sea").flatMap { $0 as? SKSpriteNode }?.shader?.uniformNamed("u_motion")?.floatValue = reducedMotion ? 0 : 1 }
+        didSet { childNode(withName: "sea").flatMap { $0 as? SKSpriteNode }?.shader?.uniformNamed("u_motion")?.floatValue = seaMotion }
     }
 
     override init(size: CGSize) {
@@ -36,7 +39,7 @@ final class ArchipelagoScene: SKScene {
             gl_FragColor = vec4(water + shimmer * vec3(0.07, 0.12, 0.12), 1.0);
         }
         """)
-        sea.shader?.addUniform(SKUniform(name: "u_motion", float: 1))
+        sea.shader?.addUniform(SKUniform(name: "u_motion", float: seaMotion))
         addChild(sea)
         addChild(viewpoint)
         loading.text = String(localized: "screen.archipelago_scene.preparing_the_archipelago", defaultValue: "Préparation de l’archipel…")

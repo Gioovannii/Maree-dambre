@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct ResourcesView: View {
+    @Environment(\.dynamicTypeSize) private var typeSize
     let resources: Resources
     let hourlyProduction: Resources
     let storageCapacity: Int
 
     var body: some View {
-        HStack(spacing: 0) {
+        resourceLayout {
             resource(String(localized: "screen.resources.wood", defaultValue: "Bois"), value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
             separator
             resource(String(localized: "screen.resources.amber", defaultValue: "Ambre"), value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
@@ -18,11 +19,18 @@ struct ResourcesView: View {
         .background(Palette.panel.opacity(0.96), in: .rect(cornerRadius: 16))
     }
 
+    private var resourceLayout: AnyLayout {
+        typeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 0))
+            : AnyLayout(HStackLayout(spacing: 0))
+    }
+
     private var separator: some View {
         Rectangle()
             .fill(.white.opacity(0.12))
-            .frame(width: 1, height: 28)
-            .padding(.horizontal, 4)
+            .frame(width: typeSize.isAccessibilitySize ? nil : 1, height: typeSize.isAccessibilitySize ? 1 : 28)
+            .padding(.horizontal, typeSize.isAccessibilitySize ? 0 : 4)
+            .padding(.vertical, typeSize.isAccessibilitySize ? 4 : 0)
             .accessibilityHidden(true)
     }
 
@@ -31,22 +39,24 @@ struct ResourcesView: View {
             Image(systemName: icon)
                 .font(.caption.bold())
                 .foregroundStyle(Palette.amber)
-                .frame(width: 18)
+                .frame(width: typeSize.isAccessibilitySize ? nil : 18)
             VStack(alignment: .leading, spacing: 0) {
                 Text(String(localized: "screen.resources_view.value", defaultValue: "\(String(value.formatted())) / \(String(storageCapacity.formatted()))"))
                     .font(.caption.bold())
                     .monospacedDigit()
                     .foregroundStyle(Palette.paper)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
+                    .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(value >= storageCapacity ? String(localized: "screen.resources.full", defaultValue: "Plein") : "+\(rate)/h")
                     .font(.caption2.bold())
                     .monospacedDigit()
                     .foregroundStyle(Color(red: 0.49, green: 0.82, blue: 0.63))
-                    .lineLimit(1)
+                    .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 34, alignment: .center)
+        .frame(maxWidth: .infinity, minHeight: 34, alignment: typeSize.isAccessibilitySize ? .leading : .center)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(String(localized: "screen.resources.value_value_of_value_plus_value_per_hour", defaultValue: "\(String(name)), \(String(value)) sur \(String(storageCapacity)), plus \(String(rate)) par heure"))
     }

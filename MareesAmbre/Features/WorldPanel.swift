@@ -2,7 +2,7 @@ import SwiftUI
 
 struct WorldPanel: View {
     @Environment(VillageSession.self) private var session
-    @State private var showsExpeditions = false
+    @State private var showsExpeditions = ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {

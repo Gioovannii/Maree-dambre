@@ -10,9 +10,9 @@ Les bâtiments se placent uniquement sur les lots du Centre-ville, à raison d�
 | Scierie | Transforme le bois récolté autour du village | +8 bois par heure |
 | Ferme | Soutient l’approvisionnement du village | +8 vivres par heure |
 | Atelier d’ambre | Travaille le minerai des gisements | +4 ambre par heure |
-| Tour de garde | Protège le village automatiquement | +2 défense |
+| Tour de garde | Poste de veille décoratif dans cette version | Aucun effet sur les combats actuels ; les factions n’attaquent pas le village |
 | Entrepôt | Agrandit les réserves | +500 de capacité pour chaque ressource |
-| Maison des savoirs | Recherche | Débloque les trois unités, une minute par doctrine |
+| Maison des savoirs | Recherche | Débloque les deux unités du peuple choisi, une minute par unité |
 | Cour des armes | Recrutement | Entraîne jusqu’à 20 unités, 30 secondes par unité ; file unique, limite de 100 |
 | Marché | Échanges locaux | Lots de 20 ressources ; l’ambre vaut deux fois le bois ou les vivres ; le marché conserve la moitié de la valeur |
 | Forge | Amélioration des armes | Trois recherches de 60 s ; chaque niveau ajoute 1 attaque à toutes les unités |

@@ -22,16 +22,23 @@ final class VillageSession {
     private(set) var pendingBuilding: BuildingKind?
     private(set) var moveSourcePlot: Int?
     private(set) var elapsedSeconds = 0
-    private let storage = VillageStorage()
+    private(set) var hasUnreadableSave = false
+    var saveRecoveryMessage: String? { hasUnreadableSave ? message : nil }
+    private let storage: VillageStorage
     private var productionTask: Task<Void, Never>?
     private let isUISnapshot: Bool
 
-    init() {
+    init(storage: VillageStorage = VillageStorage()) {
+        self.storage = storage
         isUISnapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
         let seed = isUISnapshot ? 42 : storage.activeSeed()
         world = WorldMap(seed: seed)
         state = VillageState(seed: seed)
         if isUISnapshot {
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-save-recovery") {
+                markUnreadableSave()
+                return
+            }
             state.people = .sauniers
             state.resources = Resources(wood: 180, amber: 40, provisions: 240)
             state.buildings = [
@@ -42,7 +49,8 @@ final class VillageSession {
             if ProcessInfo.processInfo.arguments.contains("--snapshot-construction") {
                 state.construction = ConstructionJob(plot: 14, kind: .academy, startedAt: .now.addingTimeInterval(-30), duration: 60)
             }
-            if ProcessInfo.processInfo.arguments.contains("--snapshot-developed") || Self.snapshotBuilding != nil {
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-developed")
+                || ProcessInfo.processInfo.arguments.contains("--snapshot-raid") || Self.snapshotBuilding != nil {
                 let plots = VillageMapMode.townCenter.slots.filter { $0 != 12 }
                 state.buildings = Dictionary(uniqueKeysWithValues: zip(plots, BuildingKind.constructible))
                 state.buildings[12] = .hall
@@ -50,6 +58,9 @@ final class VillageSession {
                 state.resourceLevels = [0: 10, 2: 10, 4: 10]
                 state.weaponsLevel = 2
                 state.army = ArmyState(units: [.tideguard: 20], unlockedUnits: [.tideguard])
+                if ProcessInfo.processInfo.arguments.contains("--snapshot-raid") {
+                    state.army = ArmyState(units: [.tideguard: 20, .pillager: 8], unlockedUnits: [.tideguard, .pillager])
+                }
                 plot = Self.snapshotTownPlot
             }
             return
@@ -57,21 +68,31 @@ final class VillageSession {
         do {
             if let saved = try storage.load(seed: seed, world: world) { state = saved }
         } catch {
-            message = String(localized: "screen.village_session.the_village_save_could_not_be_read_a_new_village_is_shown_your_next_action_will_repla", defaultValue: "Sauvegarde du village illisible. Un village neuf est affiché ; la prochaine action remplacera cette sauvegarde.")
+            markUnreadableSave()
         }
         refreshWorld()
         productionTask = Task { [weak self] in
             while !Task.isCancelled {
                 let interval: Duration = .seconds(1)
                 try? await Task.sleep(for: interval)
-                guard !Task.isCancelled else { return }
-                self?.refreshWorld()
+                guard !Task.isCancelled, let self else { return }
+                self.refreshWorld()
             }
         }
     }
 
     func choosePeople(_ people: People) {
         guard state.people == nil else { return }
+        if hasUnreadableSave {
+            do {
+                if !isUISnapshot { try storage.preserveUnreadableSave(seed: state.seed) }
+            } catch {
+                message = String(localized: "screen.village_session.save_backup_failed", defaultValue: "Impossible de conserver une copie de la sauvegarde précédente. La nouvelle partie n’a pas été créée. Réessayez.")
+                return
+            }
+            state = VillageState(seed: world.seed)
+            hasUnreadableSave = false
+        }
         state.people = people
         persist(String(localized: "screen.village_session.value_now_watch_over_amber_harbor", defaultValue: "\(String(people.name)) veille désormais sur Port d’Ambre."))
     }
@@ -88,10 +109,12 @@ final class VillageSession {
         persist(String(localized: "screen.village_session.research_started_value_ready_in_one_minute", defaultValue: "Recherche lancée : \(String(unit.name)). Fin dans une minute."))
     }
 
-    func raid(_ targetID: Int) {
+    @discardableResult
+    func raid(_ targetID: Int, units: [ArmyUnit: Int]? = nil) -> Bool {
         refreshWorld()
-        guard state.raid(targetID: targetID) else { return }
+        guard state.raid(targetID: targetID, units: units) else { return false }
         persist(String(localized: "screen.village_session.expedition_departed_returns_in_value_seconds", defaultValue: "Expédition partie. Retour dans \(String(Int(state.raidDuration))) secondes."))
+        return true
     }
 
     func trade(from source: ResourceKind, to destination: ResourceKind, lots: Int) {
@@ -187,10 +210,10 @@ final class VillageSession {
         plot = destination
     }
 
-    func refreshWorld() {
-        guard !isUISnapshot else { return }
+    func refreshWorld(now: Date = .now) {
+        guard !isUISnapshot, !hasUnreadableSave else { return }
         let previous = state
-        let seconds = state.updateInRealTime(on: world)
+        let seconds = state.updateInRealTime(now: now, on: world)
         if previous.weaponUpgrade != nil, state.weaponUpgrade == nil {
             message = String(localized: "screen.village_session.weapons_research_complete", defaultValue: "Armes améliorées. Le bonus s’applique aux prochaines expéditions.")
         }
@@ -230,12 +253,17 @@ final class VillageSession {
         save()
     }
     private func save() {
-        guard !isUISnapshot else { return }
+        guard !isUISnapshot, !hasUnreadableSave else { return }
         do {
             try storage.save(state)
         } catch {
             message = String(localized: "screen.village_session.action_completed_but_the_game_could_not_be_saved", defaultValue: "Action effectuée, mais sauvegarde impossible.")
         }
+    }
+
+    private func markUnreadableSave() {
+        hasUnreadableSave = true
+        message = String(localized: "screen.village_session.unreadable_save_recovery", defaultValue: "Votre sauvegarde est illisible. Fonder un village démarrera une nouvelle partie et conservera une copie de la sauvegarde précédente sur cet appareil.")
     }
 
     func refreshAfterSceneChange() { refreshWorld() }

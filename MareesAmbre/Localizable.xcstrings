@@ -392,23 +392,6 @@
         }
       }
     },
-    "domain.building_kind.2_automatic_defense": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+2 défense automatique"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "+2 automatic defense"
-          }
-        }
-      }
-    },
     "domain.building_kind.2_wood_1_amber_2_food_h": {
       "extractionState": "manual",
       "localizations": {
@@ -851,23 +834,6 @@
         }
       }
     },
-    "domain.building_kind.strengthens_the_village_s_automatic_defense": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Renforce la défense automatique du village."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Strengthens the village’s automatic defense."
-          }
-        }
-      }
-    },
     "domain.building_kind.the_heart_of_the_village_it_provides_your_first_resources_continuously": {
       "extractionState": "manual",
       "localizations": {
@@ -1000,6 +966,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Watchtower"
+          }
+        }
+      }
+    },
+    "domain.building_kind.watchtower_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sans effet sur les combats actuels"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No effect on current battles"
+          }
+        }
+      }
+    },
+    "domain.building_kind.watchtower_purpose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poste de veille du village. Dans cette version, les factions n’attaquent pas votre village et la tour n’améliore pas vos expéditions."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A village lookout. In this version, factions do not attack your village and the tower does not improve your expeditions."
           }
         }
       }
@@ -2445,6 +2445,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Production continues, including while you are away."
+          }
+        }
+      }
+    },
+    "screen.construction.production_inactive": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production inactive"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production inactive"
           }
         }
       }
@@ -5220,6 +5237,23 @@
         }
       }
     },
+    "screen.village_session.save_backup_failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossible de conserver une copie de la sauvegarde précédente. La nouvelle partie n’a pas été créée. Réessayez."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A copy of your previous save could not be kept. No new game was created. Please try again."
+          }
+        }
+      }
+    },
     "screen.village_session.tap_a_compatible_empty_plot_to_move_value": {
       "extractionState": "manual",
       "localizations": {
@@ -5233,23 +5267,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tap a compatible empty plot to move %@."
-          }
-        }
-      }
-    },
-    "screen.village_session.the_village_save_could_not_be_read_a_new_village_is_shown_your_next_action_will_repla": {
-      "extractionState": "manual",
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sauvegarde du village illisible. Un village neuf est affiché ; la prochaine action remplacera cette sauvegarde."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The village save could not be read. A new village is shown; your next action will replace this save."
           }
         }
       }
@@ -5301,6 +5318,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Training started for %@ units."
+          }
+        }
+      }
+    },
+    "screen.village_session.unreadable_save_recovery": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre sauvegarde est illisible. Fonder un village démarrera une nouvelle partie et conservera une copie de la sauvegarde précédente sur cet appareil."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your save could not be read. Founding a village will start a new game and keep a copy of your previous save on this device."
           }
         }
       }
@@ -5913,6 +5947,329 @@
           "stringUnit": {
             "state": "translated",
             "value": "Position %@, %@"
+          }
+        }
+      }
+    },
+    "screen.army.expedition_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez les troupes envoyées et celles qui restent au village. Aller-retour : %@ secondes. Une cible se repose 10 minutes après le retour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose which troops to send and which to keep in the village. Round trip: %@ seconds. A target recovers 10 minutes after the return."
+          }
+        }
+      }
+    },
+    "screen.raid.sent_count": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyées : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent: %@"
+          }
+        }
+      }
+    },
+    "screen.raid.assign_unit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engager : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deploy: %@"
+          }
+        }
+      }
+    },
+    "screen.raid.assignment": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ envoyées, %@ au village"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sent, %@ in the village"
+          }
+        }
+      }
+    },
+    "screen.raid.available_and_remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disponibles : %@ · Au village : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available: %@ · In the village: %@"
+          }
+        }
+      }
+    },
+    "screen.raid.duration": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aller-retour : %@ secondes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round trip: %@ seconds."
+          }
+        }
+      }
+    },
+    "screen.raid.choose_units": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir les troupes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose troops"
+          }
+        }
+      }
+    },
+    "screen.raid.select_all": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout sélectionner"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select all"
+          }
+        }
+      }
+    },
+    "screen.raid.keep_half": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garder la moitié au village"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep half in the village"
+          }
+        }
+      }
+    },
+    "screen.raid.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répartition"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deployment"
+          }
+        }
+      }
+    },
+    "screen.raid.deployed_summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyées : %@ · Force : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent: %@ · Power: %@"
+          }
+        }
+      }
+    },
+    "screen.raid.remaining_summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au village : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the village: %@"
+          }
+        }
+      }
+    },
+    "screen.raid.remaining_help": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les troupes gardées au village restent disponibles. Les troupes envoyées sont mobilisées jusqu’au retour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troops kept in the village remain available. Deployed troops are committed until they return."
+          }
+        }
+      }
+    },
+    "screen.raid.empty_selection": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez au moins une unité pour préparer le départ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose at least one unit to prepare the departure."
+          }
+        }
+      }
+    },
+    "screen.raid.departure_failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les troupes ou la cible ne sont plus disponibles. Vérifiez votre sélection."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The troops or target are no longer available. Check your selection."
+          }
+        }
+      }
+    },
+    "screen.raid.send_selection": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer les troupes choisies"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send selected troops"
+          }
+        }
+      }
+    },
+    "screen.raid.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "screen.army.deployed_count": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unités en expédition : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units on expedition: %@"
+          }
+        }
+      }
+    },
+    "screen.army.garrison_count": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unités au village : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units in the village: %@"
           }
         }
       }

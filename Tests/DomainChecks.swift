@@ -3,7 +3,9 @@ import Foundation
 @main
 struct DomainChecks {
     static func main() throws {
+        try checkStorageValidation()
         try checkCityBuildings()
+        try checkRaidSelection()
         let seed = 202639
         var game = GameState(seed: seed)
         precondition(game == GameState(seed: seed), "Same seed must produce same start")
