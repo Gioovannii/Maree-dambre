@@ -21,6 +21,7 @@ struct ArmyPanel: View {
                     Label(String(localized: "screen.army.available_units", defaultValue: "\(String(unit.name)) · \(String(session.state.availableArmy[unit, default: 0])) disponible(s)"), systemImage: unit.emblem)
                         .font(.headline)
                     Text(String(localized: "screen.army.power_value_carries_value_resources", defaultValue: "Force \(String(session.state.attackStrength(of: unit))) · Transport \(String(unit.carrying)) ressources"))
+                    Text(String(localized: "screen.army.unit_defense", defaultValue: "Défense du port : \(String(unit.defense + session.state.weaponLevel)) par unité"))
                     if !session.state.unlockedUnits.contains(unit) {
                         Label(String(localized: "screen.army.unlock_at_the_academy", defaultValue: "À débloquer à la Maison des savoirs"), systemImage: "lock.fill")
                     }
@@ -40,6 +41,9 @@ struct ArmyPanel: View {
             }
             }
             if !isTraining {
+            if let convoy = session.state.army?.convoy {
+                Text(String(localized: "screen.commerce.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour à la marée \(String(convoy.returnsAtTide))"))
+            }
             if let raid = session.state.army?.raid {
                 Text(String(localized: "screen.army.expedition_to_value_returning", defaultValue: "Expédition vers \(String(raid.targetDisplayName)) · Retour"))
                 countdown(raid.returnsAt)

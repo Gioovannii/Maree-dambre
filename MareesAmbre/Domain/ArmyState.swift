@@ -8,10 +8,12 @@ struct ArmyState: Codable, Equatable {
     var raidedUntil: [Int: Date] = [:]
     var unlockedUnits: Set<ArmyUnit>?
     var research: TrainingOrder?
+    var convoy: ConvoyOrder?
 
     var isValid: Bool {
         guard units.values.allSatisfy({ (0...100).contains($0) }),
               raidedUntil.allSatisfy({ (0...2).contains($0.key) && $0.value.timeIntervalSince1970.isFinite }) else { return false }
+        guard convoy?.isValid ?? true else { return false }
         if let training {
             guard (1...20).contains(training.count), training.endsAt.timeIntervalSince1970.isFinite else { return false }
         }
@@ -30,7 +32,7 @@ struct ArmyState: Codable, Equatable {
                   [60, 90].contains(raid.lootLimit ?? 60) else { return false }
         }
         return units.values.reduce(0, +) + (training?.count ?? 0)
-            + (raid?.units.values.reduce(0, +) ?? 0) <= 100
+            + (raid?.units.values.reduce(0, +) ?? 0) + (convoy?.units.values.reduce(0, +) ?? 0) <= 100
     }
 }
 
@@ -73,6 +75,7 @@ extension VillageState {
         var unlocked = Set(availableArmy.filter { $0.value > 0 }.map(\.key))
         if let training = army?.training { unlocked.insert(training.unit) }
         if let raid = army?.raid { unlocked.formUnion(raid.units.keys) }
+        if let convoy = army?.convoy { unlocked.formUnion(convoy.units.keys) }
         return unlocked
     }
 
@@ -105,6 +108,7 @@ extension VillageState {
         guard hasBuilding(.warCourt), unlockedUnits.contains(unit),
               (1...20).contains(count), army?.training == nil else { return false }
         let total = availableArmy.values.reduce(0, +) + (army?.raid?.units.values.reduce(0, +) ?? 0)
+            + (army?.convoy?.units.values.reduce(0, +) ?? 0)
         return total + count <= 100 && resources.wood >= unit.cost.wood * count
             && resources.amber >= unit.cost.amber * count && resources.provisions >= unit.cost.provisions * count
     }

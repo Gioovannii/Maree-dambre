@@ -6,7 +6,7 @@ struct SessionChecks {
     static func main() async throws {
         try await checkUnreadableSave(Data("{invalid save}".utf8))
         var futureSave = VillageState(seed: 42)
-        futureSave.version = 12
+        futureSave.version = VillageState.currentVersion + 1
         try await checkUnreadableSave(JSONEncoder().encode(futureSave))
         var invalidClock = VillageState(seed: 42)
         invalidClock.lastProductionAt = Date(timeIntervalSince1970: -1e100)
@@ -15,12 +15,16 @@ struct SessionChecks {
         try checkOfflineResume()
         try checkCompletedActionsAfterRelaunch()
         try checkSelectedRaidAfterRelaunch()
+        try checkCoastalCampaignAfterRelaunch()
+        try checkConvoyAfterRelaunch()
         try checkFreshStart()
         print("PASS: unreadable and unsupported saves survive automatic ticks, scene changes and relaunch")
         print("PASS: explicit new game preserves the original bytes and resumes saving without duplicate backups")
         print("PASS: failed backup blocks replacement; fresh starts and offline upgrades still save normally")
         print("PASS: construction, research, training, weapons and raid resume together without duplicate loot")
         print("PASS: selected raid persists its garrison, accepts training and merges survivors after relaunch")
+        print("PASS: coastal threat survives relaunch and offline ticks; defensive losses settle once through the actual session")
+        print("PASS: convoys and escrow survive relaunch, return after defense, preserve full-storage payments and never duplicate troops or rewards")
     }
 
     @MainActor
@@ -161,6 +165,72 @@ struct SessionChecks {
         let stocks = relaunched.state.resources
         let restored = VillageSession(storage: storage)
         precondition(restored.state.availableArmy[.tideguard] == 12 && restored.state.resources == stocks)
+    }
+
+    @MainActor
+    private static func checkCoastalCampaignAfterRelaunch() throws {
+        let suite = "MareesAmbre.CoastalSessionChecks.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        var state = VillageState(seed: 42)
+        state.people = .sauniers
+        state.buildings[10] = .warCourt
+        state.army = ArmyState(units: [.tideguard: 2], unlockedUnits: [.tideguard])
+        try storage.save(state)
+        let session = VillageSession(storage: storage)
+        precondition(session.startCoastalCampaign() && session.advanceCoastalTide())
+        let threatened = session.state.coastalCampaign
+        let relaunched = VillageSession(storage: storage)
+        precondition(relaunched.state.coastalCampaign == threatened)
+        relaunched.refreshWorld(now: .now.addingTimeInterval(14 * 86_400))
+        precondition(relaunched.state.coastalCampaign == threatened)
+        let preview = relaunched.state.defensePreview
+        precondition(relaunched.advanceCoastalTide())
+        precondition(relaunched.state.coastalCampaign?.report == preview)
+        precondition(relaunched.state.availableArmy[.tideguard] == 1)
+        let settled = relaunched.state
+        let restored = VillageSession(storage: storage)
+        precondition(restored.state.coastalCampaign == settled.coastalCampaign && restored.state.army == settled.army)
+        precondition(restored.state.resources == settled.resources)
+        precondition(!restored.startCoastalCampaign(), "The session cannot restart a campaign to reset its threat")
+    }
+
+    @MainActor
+    private static func checkConvoyAfterRelaunch() throws {
+        let suite = "MareesAmbre.ConvoySessionChecks.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        var state = VillageState(seed: 42)
+        state.people = .sauniers
+        state.buildings[10] = .market
+        state.buildings[11] = .warCourt
+        state.buildings[13] = .forge
+        state.resources = Resources(wood: 300, amber: 300, provisions: 300)
+        state.army = ArmyState(units: [.tideguard: 4, .pillager: 2], unlockedUnits: [.tideguard, .pillager])
+        try storage.save(state)
+        let session = VillageSession(storage: storage)
+        precondition(session.startCoastalCampaign())
+        precondition(session.sendConvoy(on: .crossing, units: [.tideguard: 3]))
+        let active = session.state.army?.convoy
+        let relaunched = VillageSession(storage: storage)
+        precondition(relaunched.state.army?.convoy == active && relaunched.state.availableArmy[.tideguard] == 1)
+        relaunched.refreshWorld(now: .now.addingTimeInterval(7 * 86_400))
+        precondition(relaunched.state.army?.convoy == active && relaunched.state.coastalCampaign?.tide == 0)
+        precondition(relaunched.advanceCoastalTide() && relaunched.advanceCoastalTide())
+        precondition(relaunched.state.army?.convoy == nil && relaunched.state.commerce?.report?.pendingAmber == 26)
+        precondition(relaunched.state.availableArmy[.tideguard] == 3 && relaunched.state.availableArmy[.pillager] == 1)
+        precondition(!relaunched.claimConvoyReward(), "No silent overflow into a full amber reserve")
+        let awaitingPayment = VillageSession(storage: storage)
+        precondition(awaitingPayment.state.commerce?.report?.pendingAmber == 26)
+        awaitingPayment.upgradeWeapons()
+        precondition(awaitingPayment.state.weaponUpgrade != nil)
+        precondition(awaitingPayment.claimConvoyReward() && awaitingPayment.state.resources.amber == 298)
+        let settled = awaitingPayment.state
+        let restored = VillageSession(storage: storage)
+        precondition(restored.state.army == settled.army && restored.state.commerce == settled.commerce)
+        precondition(restored.state.resources == settled.resources && !restored.claimConvoyReward())
     }
 
     @MainActor

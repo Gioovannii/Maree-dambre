@@ -1,9 +1,10 @@
 # Direction recommandée — Le Grand Phare
 
 Proposition de conception du 14 octobre 2026 pour Les Marées d’Ambre.
-Les systèmes de campagne, marées stratégiques, contrats, défenses et classements
-restent à implémenter. Le premier lot permet de choisir les troupes d’une expédition
-et de conserver les autres au village ; voir `V1-JOUABLE.md` pour l’état réalisé.
+Le choix des troupes, un premier cycle de défense du port et deux contrats
+maritimes avec escortes sont implémentés. La campagne complète, les effets de
+marée sur les routes, les alliances, les avant-postes, le phare et les classements restent à construire ; voir
+`V1-JOUABLE.md` pour l’état réalisé.
 Les nombres de sites, de missions et les durées sont des hypothèses de prototype,
 pas des résultats de tests.
 Précisions intégrées après la référence vidéo et la demande de classements :
@@ -204,9 +205,10 @@ Conserver trois ressources : bois pour les ouvrages, vivres pour les missions,
 ambre pour les recherches, achats et éléments du phare. Les pièces uniques du
 chantier sont des objectifs identifiés, pas une quatrième économie répétitive.
 
-Le marché actuel est un échange immédiat qui conserve la moitié de la valeur.
-Il peut servir de dépannage, mais ne suffit pas à créer le plaisir du commerce.
-Le cœur proposé est un petit ensemble de contrats avec des ports identifiables.
+Le marché propose un échange immédiat qui conserve la moitié de la valeur,
+ainsi que deux premiers contrats vers le Comptoir des Roseaux. Le dépannage
+immédiat reste disponible ; le voyage en marées mobilise une escorte réelle.
+La suite étendra les contrats à des partenaires et avantages identifiables.
 
 Un contrat annonce : partenaire, cargaison, récompense, route, durée en marées,
 besoin de transport et danger. Deux offres contrastées suffisent à commencer :
@@ -230,9 +232,10 @@ Elle conserve un besoin de défense contre la ligue ennemie.
 
 ## Attaques et défenses : engager une armée est un choix
 
-Le système actuel envoie l’armée disponible et compare surtout des forces.
-La prochaine expérience permet de choisir les troupes envoyées et de garder
-une garnison et/ou une escorte.
+Le système actuel permet de choisir les troupes envoyées et de conserver une
+garnison. Le deuxième lot rend cette garnison utile contre des assauts corsaires
+annoncés, résolus au passage d’une marée décidé par le joueur. Les escortes,
+avant-postes et effets de terrain restent à intégrer.
 
 Commencer avec deux rôles jouables : une unité qui tient les positions et une
 unité adaptée aux expéditions. Les six unités et les trois peuples existants

@@ -10,12 +10,12 @@ Les bâtiments se placent uniquement sur les lots du Centre-ville, à raison d�
 | Scierie | Transforme le bois récolté autour du village | +8 bois par heure |
 | Ferme | Soutient l’approvisionnement du village | +8 vivres par heure |
 | Atelier d’ambre | Travaille le minerai des gisements | +4 ambre par heure |
-| Tour de garde | Poste de veille décoratif dans cette version | Aucun effet sur les combats actuels ; les factions n’attaquent pas le village |
+| Tour de garde | Fortification du port contre les corsaires | +20 de défense, cumulés avec les unités présentes au village |
 | Entrepôt | Agrandit les réserves | +500 de capacité pour chaque ressource |
 | Maison des savoirs | Recherche | Débloque les deux unités du peuple choisi, une minute par unité |
 | Cour des armes | Recrutement | Entraîne jusqu’à 20 unités, 30 secondes par unité ; file unique, limite de 100 |
-| Marché | Échanges locaux | Lots de 20 ressources ; l’ambre vaut deux fois le bois ou les vivres ; le marché conserve la moitié de la valeur |
-| Forge | Amélioration des armes | Trois recherches de 60 s ; chaque niveau ajoute 1 attaque à toutes les unités |
+| Marché | Échanges et contrats | Dépannage immédiat par lots de 20 ; contrats maritimes avec cargaison, escorte et paiement différé |
+| Forge | Amélioration des armes | Trois recherches de 60 s ; chaque niveau ajoute 1 attaque et 1 défense par unité |
 | Infirmerie | Soins après combat | Pertes de 10 % en victoire (5 % avec un mage), 35 % en défaite |
 | Quai d’expédition | Transport et départs | +25 % de transport, cumulable avec le bonus humain ; plafond de butin porté de 60 à 90 par ressource |
 
@@ -31,7 +31,34 @@ Les niveaux d’armes 1, 2 et 3 coûtent respectivement 40/20/30, 80/40/60 et 12
 
 L’attaque, les taux de pertes, le bonus de transport et le plafond de butin sont enregistrés au départ de chaque nouveau raid. Une recherche ou un bâtiment terminé pendant son trajet profite au raid suivant. En victoire les pertes s’arrondissent vers le bas par type d’unité, en défaite vers le haut. Le Quai ne change pas la durée ni le temps de récupération des factions ; les survivants et les réserves restent les limites réelles du butin.
 
-Les sauvegardes des versions 2 à 10 migrent vers la version 11 sans modifier les réserves, bâtiments ou troupes. Les anciennes expéditions conservent leurs règles antérieures ; les armes commencent au niveau 0. Les tests couvrent les échanges, recherches, bonus figés au départ, reprise hors ligne, migration et sauvegarde d’un Centre complet.
+Les sauvegardes des versions 2 à 12 migrent vers la version 13 avec les migrations
+antérieures conservées. La campagne côtière reste inactive jusqu’au choix du joueur.
+Les anciennes expéditions conservent leurs règles antérieures ; les armes absentes
+commencent au niveau 0. Les tests couvrent les échanges, recherches, bonus figés au
+départ, reprise hors ligne, migration et sauvegarde d’un Centre complet.
+
+### Garnison et défense du port
+
+Le Lancier apporte 10 de défense, le Pillard 3, le Gardien 14, le Mage 4, le
+Guerrier 7 et l’Archer 12, avant le bonus d’armes. La tour ajoute 20 et le peuple
+des récifs 1. Les troupes en expédition et en formation sont exclues. Les pertes
+utilisent les mêmes taux et arrondis que les raids, avec les mages et l’Infirmerie
+présents au moment de l’assaut. À égalité, le port tient.
+
+### Contrats maritimes du Marché
+
+Le Comptoir des Roseaux achète 20 bois, avec 5 vivres consommés au départ.
+La route des lagunes dure trois marées et paie 18 ambres sans perte d’escorte.
+La passe des corsaires dure deux marées et paie 26 ambres si l’escorte atteint
+24 de force ; sinon, la cargaison est perdue et les pertes de défaite s’appliquent.
+Armes, mages, Infirmerie et bonus de transport sont figés au départ.
+
+Une offre par route se renouvelle six marées après son départ. Un seul convoi
+commercial voyage à la fois ; sa cargaison est payée immédiatement et ses unités
+quittent la garnison. Les survivants rentrent après le combat de leur marée, même
+si le paiement ne tient pas encore dans l’entrepôt. Le paiement reste au comptoir
+jusqu’à récupération complète, une seule fois ; il doit être récupéré avant
+d’accepter un autre contrat. Aucune progression commerciale pendant une absence.
 
 Les champs de niveau 10 sont une condition de production et de construction : forêt pour la Scierie, culture pour la Ferme, veine d’ambre pour l’Atelier d’ambre. Les coûts de champs sont réglés pour qu’un village neuf puisse atteindre son premier seuil en quelques heures, et non en plusieurs jours.
 

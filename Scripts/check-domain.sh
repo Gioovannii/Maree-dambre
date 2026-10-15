@@ -2,5 +2,5 @@
 set -eu
 cd "$(dirname "$0")/.."
 CHECK_DIR=$(mktemp -d /tmp/marees-checks.XXXXXX)
-xcrun swiftc -module-cache-path "$CHECK_DIR/cache" MareesAmbre/Domain/*.swift MareesAmbre/Persistence/VillageStorage.swift Tests/DomainChecks.swift Tests/CityBuildingsChecks.swift Tests/StorageValidationChecks.swift Tests/RaidSelectionChecks.swift -o "$CHECK_DIR/domain-checks"
+xcrun swiftc -module-cache-path "$CHECK_DIR/cache" MareesAmbre/Domain/*.swift MareesAmbre/Persistence/VillageStorage.swift Tests/DomainChecks.swift Tests/CityBuildingsChecks.swift Tests/StorageValidationChecks.swift Tests/RaidSelectionChecks.swift Tests/DefenseChecks.swift Tests/CommerceChecks.swift -o "$CHECK_DIR/domain-checks"
 "$CHECK_DIR/domain-checks"

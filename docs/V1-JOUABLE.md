@@ -1,4 +1,4 @@
-# État de la V1 jouable — 14 octobre 2026
+# État de la V1 jouable — 15 octobre 2026
 
 La boucle locale existe : produire, développer les champs, construire, rechercher,
 entraîner, attaquer une faction et rapporter des ressources. Ce sont des adversaires
@@ -12,14 +12,14 @@ simulés, pas des joueurs connectés. Firebase n'est pas nécessaire pour cette 
   à la fin des travaux.
 - Le chantier montre progressivement le bâtiment construit, avec des fondations
   au début et un échafaudage latéral.
-- Le guide se rouvre depuis les trois écrans principaux ; les parcelles sont
-  sélectionnables avec VoiceOver, y compris pour déplacer un bâtiment.
+- Les parcelles sont sélectionnables avec VoiceOver, y compris pour déplacer
+  un bâtiment. Le guide en modale et son bouton livre ont été retirés.
 - Une sauvegarde illisible reste intacte pendant les mises à jour automatiques.
   Fonder un nouveau village conserve une copie des données originales avant remplacement.
 - La validation des sauvegardes refuse les dates extrêmes, fractions de production
   invalides et chantiers incohérents avant le calcul des revenus hors ligne.
-- Les textes de la Tour de garde décrivent son rôle actuel, sans annoncer d’attaques
-  du village. Les recherches concernent les deux unités du peuple choisi.
+- La Tour de garde apporte désormais un bonus à la défense côtière. Les recherches
+  concernent les deux unités du peuple choisi.
 - Le manifeste de confidentialité déclare le stockage local par `UserDefaults`.
 - Les tailles de texte d’accessibilité utilisent un bandeau de ressources en
   colonne et une liste de parcelles défilante. Les noms, stocks et commandes
@@ -53,16 +53,84 @@ simulés, pas des joueurs connectés. Firebase n'est pas nécessaire pour cette 
   normale en français puis à la taille d’accessibilité maximale en anglais.
   Conserver ces deux tailles de vérification pour les prochains écrans modifiés.
 
-Les attaques entrantes, défenses de positions, contrats, époques, merveille et
-classements restent les lots suivants décrits dans `VISION-SOLO.md`.
+## Deuxième lot : premières défenses côtières
+
+- Accès depuis Monde → Organiser la défense ou depuis la Tour de garde.
+- Activation volontaire après la Cour des armes et une première unité ; aucune
+  campagne n’est activée automatiquement dans les sauvegardes existantes.
+- Marées de campagne décidées par le joueur : premier assaut à la marée 2, puis
+  aux marées 5, 8, etc. Aucune attaque rétroactive pendant une absence.
+- Première vague de 4 pillards, force 24 ; deux pillards supplémentaires par
+  vague, plafonnés à 42 et force 252, sans adaptation à la puissance du joueur.
+- Garnison seule, bonus de Tour (+20), armes (+1 par niveau et unité), mage et
+  Infirmerie pris en compte. Une égalité de force tient le port.
+- Prévision du résultat, des pertes et stocks pillés avant résolution. La préparation
+  d’un raid affiche aussi la défense qui restera et la menace annoncée.
+- En défaite, pillage limité à force ennemie / 3 par ressource, plafond de 90,
+  avec 20 protégés si disponibles. Champs, bâtiments, recherches, formation et
+  troupes déjà parties sont conservés ; la reconstruction reste possible.
+- Rapport de défense structuré et sauvegardé séparément du rapport d’expédition.
+  Relance, production hors ligne et passages suivants ne rejouent pas le combat.
+- État défensif conservé dans la migration en version 13 et validation des compteurs
+  et rapports corrompus. Tests de règles et de session réelle réussis.
+- Compilation iOS et 409 textes français/anglais vérifiés. Victoire et pillage
+  contrôlés sur iPhone simulé en français à taille normale ; préparation,
+  confirmation et rapports contrôlés aussi en anglais à taille d’accessibilité
+  maximale. Les libellés des commandes
+  passent en colonne aux grandes tailles et la confirmation reste défilante.
+
+Ce premier cycle rend le choix sortie/garnison concret. Les marées ne distribuent
+pas encore de production et n’agissent pas sur les routes ; elles servent à
+tester la préparation et la résolution des menaces. La progression territoriale
+des trois pavillons existants garde son horloge de six heures et ne déclenche pas
+ces assauts. Avant-postes, alliances commerciales, époques, merveille et classements
+restent les lots suivants décrits dans `VISION-SOLO.md`.
+
+## Troisième lot : contrats et escortes
+
+- Accès depuis Monde → Voir les contrats ou depuis le Marché. La campagne côtière
+  doit être ouverte volontairement ; le commerce ne l’active pas automatiquement.
+- Premier partenaire : Comptoir des Roseaux. Coût commun : 20 bois et 5 vivres au
+  départ. Route sûre : trois marées, 18 ambres, aucune perte. Route courte : deux
+  marées, 26 ambres, pillards de force 24 ; une égalité suffit à livrer.
+- Choix des effectifs par type, prévision du résultat et de la défense restante.
+  Les armes, taux de pertes et bonus de transport sont enregistrés au départ.
+- Une offre par route toutes les six marées après son départ ; un convoi commercial
+  à la fois. Les unités d’escorte comptent dans la limite commune de 100 avec
+  garnison, recrutement et raids. Elles ne sont disponibles pour aucune autre tâche.
+- Combat du port avant retour des convois de la même marée. Les survivants rentrent
+  même si l’entrepôt est plein. Le paiement est conservé, réclamable une fois dès
+  qu’il tient en réserve ; aucun contrat suivant ne peut écraser un paiement dû.
+- La fermeture de l’app ne fait avancer ni le trajet ni l’offre. Sauvegarde en
+  version 13 ; anciennes armées conservées, contrôles des effectifs et états de
+  contrat incohérents avant chargement.
+- Tests de domaine et de session réelle réussis : trajets sûrs/risqués, pertes,
+  départ atomique, capacité de transport, garnison, plafond de 100, reprise,
+  réserve pleine, paiement unique et sauvegardes corrompues.
+- Parcours complet de la route courte contrôlé en police normale, puis route sûre
+  en police d’accessibilité maximale, avec défense pendant le trajet et paiement.
+  Compilation iOS et 451 textes français/anglais vérifiés.
+- Neuf références iPhone, dont l’écran de contrats, et trois références iPad
+  contrôlées visuellement puis comparées avec succès. Le masque matériel est
+  fixé en noir pour éviter les variations de l’encoche du simulateur, sans
+  augmenter la tolérance de comparaison de l’interface.
+
+Ce lot ne crée pas encore d’alliance, de marché mondial, de routes sur la carte ou
+de variation des trajets selon haute/basse mer. Ces règles restent à tester avec
+les avant-postes et le premier objectif du phare.
 
 ## Pour rendre la première partie compréhensible
 
-- Guide Premiers pas ajouté : ouverture après le choix du clan, prochaine étape et accès direct au champ ou bâtiment concerné.
-- Le guide explique les plafonds, le niveau 10, le recrutement et les pertes.
+- Le guide « Premiers pas », son ouverture après le choix du clan et le bouton
+  livre sont supprimés à la demande du porteur du projet. La fondation ouvre
+  directement le village.
+- Fondation vérifiée sur simulateur, puis lecture du village à taille normale
+  et maximale. Les références iPhone et iPad ne contiennent plus le guide.
+- Le nouvel onboarding est reporté à la fin : conseils TipKit et personnage avec
+  chat dédié via CoreAI, dont le choix technique sera étudié lors de ce lot.
 - Définir un premier objectif de session et tester les temps d'attente avec des joueurs.
-- Les bots n’attaquent pas le village. La Tour de garde est décorative ; les missions
-  d’exploration et de colonisation restent à construire.
+- Les corsaires attaquent dans la campagne côtière activée par le joueur. Les
+  missions d’exploration et de colonisation restent à construire.
 
 ## Après validation de la première boucle
 

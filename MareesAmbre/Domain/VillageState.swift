@@ -1,6 +1,7 @@
 import Foundation
 
 struct VillageState: Codable, Equatable {
+    static let currentVersion = 13
     var version: Int
     let seed: Int
     var resources: Resources
@@ -16,11 +17,13 @@ struct VillageState: Codable, Equatable {
     var army: ArmyState?
     var weaponsLevel: Int?
     var weaponUpgrade: WeaponUpgrade?
+    var coastalCampaign: CoastalCampaign?
+    var commerce: CommerceState?
 
     private enum CodingKeys: String, CodingKey {
         case version, seed, resources, buildings, resourceLevels, bots, people
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
-        case weaponsLevel, weaponUpgrade
+        case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
     }
 
     init(from decoder: Decoder) throws {
@@ -40,10 +43,12 @@ struct VillageState: Codable, Equatable {
         army = try values.decodeIfPresent(ArmyState.self, forKey: .army)
         weaponsLevel = try values.decodeIfPresent(Int.self, forKey: .weaponsLevel)
         weaponUpgrade = try values.decodeIfPresent(WeaponUpgrade.self, forKey: .weaponUpgrade)
+        coastalCampaign = try values.decodeIfPresent(CoastalCampaign.self, forKey: .coastalCampaign)
+        commerce = try values.decodeIfPresent(CommerceState.self, forKey: .commerce)
     }
 
     init(seed: Int) {
-        version = 11
+        version = Self.currentVersion
         self.seed = seed
         resources = Resources()
         buildings = [12: .hall]
@@ -124,6 +129,8 @@ struct VillageState: Codable, Equatable {
             relocateQuayToWaterfront()
             version = 11
         }
+        if version < 12 { version = 12 }
+        if version < 13 { version = 13 }
     }
 
     private mutating func relocateQuayToWaterfront() {

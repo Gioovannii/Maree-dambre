@@ -34,6 +34,8 @@ struct WorldPanel: View {
             .font(.subheadline)
             .padding(16).frame(maxWidth: .infinity, alignment: .leading)
             .background(Palette.panel, in: .rect(cornerRadius: 20))
+            CoastalDefensePanel()
+            TradeContractsPanel()
             DisclosureGroup(String(localized: "screen.world.troops_expeditions_and_report", defaultValue: "Troupes, expéditions et rapport"), isExpanded: $showsExpeditions) {
                 ArmyPanel().padding(.top, 12)
             }

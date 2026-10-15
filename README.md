@@ -23,7 +23,7 @@ Les recherches, chantiers, entraînements, productions et expéditions sont enre
 - **Armée** : Maison des savoirs, Cour des armes, deux unités propres à chaque peuple, entraînement et raids contre trois factions bots. Le joueur choisit les effectifs envoyés par type et conserve le reste au village. L’écran annonce la force, les pertes prévues et les effectifs gardés avant le départ ; le bonus du mage dépend de sa présence dans l’expédition.
 - **Douze bâtiments distincts** : le Marché échange les surplus, la Forge recherche trois niveaux d’armes (+1 attaque par unité à chaque niveau), l’Infirmerie réduit les pertes et le Quai augmente le transport et le plafond du butin. Les effets des raids sont fixés au départ ; les recherches d’armes se terminent aussi hors ligne. Voir `docs/BATIMENTS.md` pour les coûts et les règles.
 - **Monde** : carte fictive de 200 × 200 cases, déplacements et zoom locaux. Les factions gagnent un niveau et étendent leur territoire toutes les six heures, jusqu’au niveau 10 et 64 cases.
-- **Démarrage** : prologue, choix d’un clan, puis guide Premiers pas. La graine initiale dépend de la semaine UTC, mais le village reste le même ensuite, même au changement de semaine.
+- **Démarrage** : prologue et choix d’un clan, puis accès direct au village. Le guide en modale a été retiré ; le futur onboarding TipKit avec un personnage et un chat dédié est reporté à la fin. La graine initiale dépend de la semaine UTC, mais le village reste le même ensuite, même au changement de semaine.
 - **Live Activity** : les chantiers affichent le temps restant dans la Dynamic Island et sur l’écran verrouillé.
 
 ## Vérifier la base
@@ -48,7 +48,7 @@ Lancer `sh Scripts/check-session.sh` pour la reprise réelle de la session, les 
 
 Pour contrôler l’avertissement de sauvegarde illisible visuellement, lancer avec `--ui-snapshot --snapshot-save-recovery`. Le mode `--ui-snapshot` fige aussi l’animation de l’eau pour rendre les captures comparables.
 
-Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les neuf captures iPhone aux références : Ressources, Centre, amélioration, Monde, guide, marché, forge, infirmerie et quai. Lancer `SNAPSHOT_DEVICE=ipad zsh Scripts/check-ui-snapshots.sh verify` pour les trois captures iPad. Les scripts détectent Xcode et le simulateur iOS 27.0 correspondant ; `DEVELOPER_DIR` et `SIMULATOR_ID` permettent de les choisir explicitement. La langue de l’app est fixée au français et la date de la barre d’état est figée. Après contrôle visuel d’un changement voulu, le mode `record` actualise les références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`.
+Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les neuf captures iPhone aux références : Ressources, Centre, amélioration, Monde, marché, forge, infirmerie, quai et contrats maritimes. Lancer `SNAPSHOT_DEVICE=ipad zsh Scripts/check-ui-snapshots.sh verify` pour les trois captures iPad. Les scripts détectent Xcode et le simulateur iOS 27.0 correspondant ; `DEVELOPER_DIR` et `SIMULATOR_ID` permettent de les choisir explicitement. La langue de l’app est fixée au français et la date de la barre d’état est figée. Après contrôle visuel d’un changement voulu, le mode `record` actualise les références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`. Pour tester la fondation sans toucher aux sauvegardes, utiliser `--ui-snapshot --snapshot-new-village`.
 
 Pour voir les douze bâtiments sans toucher à une sauvegarde, lancer avec `--ui-snapshot --snapshot-center --snapshot-developed`. Les arguments `--ui-snapshot --snapshot-market`, `--ui-snapshot --snapshot-forge`, `--ui-snapshot --snapshot-infirmary` ou `--ui-snapshot --snapshot-expeditionQuay` ouvrent leurs panneaux dans une partie de démonstration. Ajouter `--snapshot-actions` pour cadrer le bas de la fiche et ses commandes.
 
@@ -56,6 +56,18 @@ Avant une bêta, faire une partie neuve sur iPhone jusqu’au premier raid. Note
 
 ## Limites de cette version
 
-La Tour de garde est un poste de veille décoratif : les factions n’attaquent pas le village et ce bâtiment n’apporte pas de bonus aux raids. Le manifeste `PrivacyInfo.xcprivacy` déclare l’utilisation de `UserDefaults` pour les sauvegardes locales (motif Apple `CA92.1`), sans suivi ni collecte de données. Vérifier sa présence dans une archive avec `python3 Scripts/check-archive.py /chemin/vers/MareesAmbre.xcarchive`, puis effectuer la validation de distribution signée dans Xcode avant un envoi.
+La campagne côtière s’ouvre volontairement depuis Monde → Organiser la défense,
+après construction de la Cour des armes et recrutement d’une unité. Le premier
+assaut arrive après deux marées, les suivants toutes les trois marées. Le joueur
+décide chaque passage ; les absences ne font avancer aucune attaque. La Tour de
+garde ajoute 20 de défense à la garnison du port. Les expéditions et productions
+gardent leurs délais réels. Le Marché et le Monde donnent accès aux contrats maritimes : 20 bois et 5 vivres
+au départ, escorte choisie, route sûre de trois marées (18 ambres) ou route
+exposée de deux marées (26 ambres, force ennemie 24). Les escortes reviennent après
+les combats ; les paiements restent au comptoir si la réserve est pleine. Chaque
+route propose une offre toutes les six marées. Routes sur la carte, alliances,
+avant-postes, merveille et classements restent à développer.
+
+Le manifeste `PrivacyInfo.xcprivacy` déclare l’utilisation de `UserDefaults` pour les sauvegardes locales (motif Apple `CA92.1`), sans suivi ni collecte de données. Vérifier sa présence dans une archive avec `python3 Scripts/check-archive.py /chemin/vers/MareesAmbre.xcarchive`, puis effectuer la validation de distribution signée dans Xcode avant un envoi.
 
 Les raids sont des résolutions locales abstraites : pas de déplacement animé jusqu’à la capitale, pas de contrôle manuel du combat, de fondation de nouveaux villages, de classement, de compte joueur ou de synchronisation entre appareils. Les coûts et forces des factions sont un premier équilibrage à valider en jouant.

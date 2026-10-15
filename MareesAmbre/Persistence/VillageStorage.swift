@@ -23,9 +23,11 @@ struct VillageStorage {
     func load(seed: Int, world: WorldMap, now: Date = .now) throws -> VillageState? {
         guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
-        guard (2...11).contains(state.version), state.seed == seed,
+        guard (2...VillageState.currentVersion).contains(state.version), state.seed == seed,
               (0...VillageState.maximumWeaponLevel).contains(state.weaponLevel),
               state.army?.isValid ?? true,
+              state.coastalCampaign?.isValid ?? true,
+              state.hasValidCommerce,
               state.resources.wood >= 0, state.resources.amber >= 0, state.resources.provisions >= 0,
               state.resources.wood <= 999_999, state.resources.amber <= 999_999, state.resources.provisions <= 999_999,
               (state.resourceLevels ?? [:]).allSatisfy({ VillageMapMode.resourceFields.contains($0.key) && (0...ResourceSiteKind.maximumLevel).contains($0.value) }),

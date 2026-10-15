@@ -5,6 +5,7 @@ struct MarketPanel: View {
     @State private var source: ResourceKind = .wood
     @State private var destination: ResourceKind = .provisions
     @State private var lots = 1
+    @State private var showsContracts = false
 
     private var received: Int { session.state.tradeReturn(from: source, to: destination, lots: lots) }
 
@@ -44,8 +45,14 @@ struct MarketPanel: View {
                 .buttonStyle(.borderedProminent)
                 .foregroundStyle(Palette.ocean)
                 .disabled(!session.state.canTrade(from: source, to: destination, lots: lots))
+            Button { showsContracts = true } label: {
+                AdaptiveActionLabel(title: String(localized: "screen.commerce.open", defaultValue: "Voir les contrats"), systemImage: "sailboat.fill")
+            }
+            .buttonStyle(.bordered).buttonBorderShape(.roundedRectangle(radius: 14))
+            .accessibilityIdentifier("commerce.open")
         }
         .tint(Palette.amber)
+        .sheet(isPresented: $showsContracts) { TradeContractsView() }
     }
 
     private func exchange() { session.trade(from: source, to: destination, lots: lots) }

@@ -3,6 +3,7 @@ import SwiftUI
 struct RaidTroopSelectionRow: View {
     @Binding var selection: RaidTroopSelection
     let available: Int
+    var accessibilityPrefix = "raid"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -13,7 +14,7 @@ struct RaidTroopSelectionRow: View {
             }
             .accessibilityLabel(String(localized: "screen.raid.assign_unit", defaultValue: "Engager : \(String(selection.unit.name))"))
             .accessibilityValue(String(localized: "screen.raid.assignment", defaultValue: "\(String(selection.count)) envoyées, \(String(max(0, available - selection.count))) au village"))
-            .accessibilityIdentifier("raid.units.\(selection.unit.rawValue)")
+            .accessibilityIdentifier("\(accessibilityPrefix).units.\(selection.unit.rawValue)")
             Text(String(localized: "screen.raid.available_and_remaining", defaultValue: "Disponibles : \(String(available)) · Au village : \(String(max(0, available - selection.count)))"))
                 .font(.footnote).foregroundStyle(Palette.muted)
         }

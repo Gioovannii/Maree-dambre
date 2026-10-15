@@ -15,6 +15,11 @@ struct RaidPreparationView: View {
     }
     private var deployedCount: Int { deployed.values.reduce(0, +) }
     private var remainingCount: Int { session.state.availableArmy.values.reduce(0, +) - deployedCount }
+    private var remainingUnits: [ArmyUnit: Int] {
+        session.state.availableArmy.reduce(into: [:]) { result, entry in
+            result[entry.key] = max(0, entry.value - deployed[entry.key, default: 0])
+        }
+    }
     private var power: Int { session.state.armyPower(for: deployed) }
     private var defense: Int { 10 + min(10, currentTarget.level) * 4 }
 
@@ -45,6 +50,12 @@ struct RaidPreparationView: View {
                         .accessibilityIdentifier("raid.deployedSummary")
                     Text(String(localized: "screen.raid.remaining_summary", defaultValue: "Au village : \(String(max(0, remainingCount)))"))
                         .accessibilityIdentifier("raid.remainingSummary")
+                    Text(String(localized: "screen.raid.remaining_defense", defaultValue: "Défense du port après départ : \(String(session.state.defensePower(for: remainingUnits)))"))
+                        .accessibilityIdentifier("raid.remainingDefense")
+                    if let campaign = session.state.coastalCampaign {
+                        Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
+                            .font(.footnote)
+                    }
                     Text(String(localized: "screen.raid.remaining_help", defaultValue: "Les troupes gardées au village restent disponibles. Les troupes envoyées sont mobilisées jusqu’au retour."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                     if deployedCount > 0 {

@@ -687,13 +687,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Soigne les blessés et réduit les pertes des prochaines expéditions."
+            "value": "Soigne les blessés et réduit les pertes en expédition et en défense du port."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Treat wounded troops and reduce losses in future expeditions."
+            "value": "Treats the wounded and reduces losses on expeditions and when defending the port."
           }
         }
       }
@@ -721,13 +721,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échanges locaux de ressources"
+            "value": "Échanges locaux et contrats maritimes"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Local resource trading"
+            "value": "Local exchanges and maritime contracts"
           }
         }
       }
@@ -738,13 +738,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Échange les surplus contre les ressources qui manquent au village."
+            "value": "Échange les surplus et organise les contrats maritimes du village."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trade surplus supplies for resources your village needs."
+            "value": "Trades surplus resources and organizes the village’s maritime contracts."
           }
         }
       }
@@ -976,13 +976,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sans effet sur les combats actuels"
+            "value": "+20 de défense du port"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No effect on current battles"
+            "value": "+20 port defense"
           }
         }
       }
@@ -993,13 +993,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Poste de veille du village. Dans cette version, les factions n’attaquent pas votre village et la tour n’améliore pas vos expéditions."
+            "value": "Fortifie le port contre les assauts corsaires. Son bonus s’ajoute à la garnison restée au village."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A village lookout. In this version, factions do not attack your village and the tower does not improve your expeditions."
+            "value": "Fortifies the port against corsair assaults. Its bonus adds to the garrison remaining in the village."
           }
         }
       }
@@ -6270,6 +6270,1400 @@
           "stringUnit": {
             "state": "translated",
             "value": "Units in the village: %@"
+          }
+        }
+      }
+    },
+    "screen.army.unit_defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense du port : %@ par unité"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port defense: %@ per unit"
+          }
+        }
+      }
+    },
+    "screen.raid.remaining_defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense du port après départ : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port defense after departure: %@"
+          }
+        }
+      }
+    },
+    "screen.defense.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense du port"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port defense"
+          }
+        }
+      }
+    },
+    "screen.defense.power": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense disponible : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available defense: %@"
+          }
+        }
+      }
+    },
+    "screen.defense.incoming": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assaut dans %@ marée(s) · Force ennemie : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assault in %@ tide(s) · Enemy strength: %@"
+          }
+        }
+      }
+    },
+    "screen.defense.intro": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez la campagne côtière quand votre garnison est prête. Les corsaires progressent avec vos décisions."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the coastal campaign when your garrison is ready. Corsairs advance with your decisions."
+          }
+        }
+      }
+    },
+    "screen.defense.organize": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organiser la défense"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organize defense"
+          }
+        }
+      }
+    },
+    "screen.defense.held": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port défendu"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Port held"
+          }
+        }
+      }
+    },
+    "screen.defense.breached": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense percée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defenses breached"
+          }
+        }
+      }
+    },
+    "screen.defense.comparison": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défense : %@ · Assaut : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defense: %@ · Assault: %@"
+          }
+        }
+      }
+    },
+    "screen.defense.fortifications": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortifications et peuple : %@ points inclus dans la défense."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortifications and people: %@ points included in defense."
+          }
+        }
+      }
+    },
+    "screen.defense.losses": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertes dans la garnison : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garrison losses: %@"
+          }
+        }
+      }
+    },
+    "screen.defense.unit_losses": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : %@ perte(s)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@ lost"
+          }
+        }
+      }
+    },
+    "screen.defense.stolen": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stocks pillés : %@ bois · %@ ambre · %@ vivres"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stocks plundered: %@ wood · %@ amber · %@ food"
+          }
+        }
+      }
+    },
+    "screen.defense.corsairs": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les pillards corsaires convoitent les réserves de Port d’Ambre."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corsair raiders covet Amber Harbor’s reserves."
+          }
+        }
+      }
+    },
+    "screen.defense.clock_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une marée avance uniquement avec votre accord. Production, construction et recrutement gardent leurs délais actuels. Aucun assaut ne se résout pendant votre absence."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tide advances only when you choose. Production, construction and recruitment keep their current timers. No assault resolves while you are away."
+          }
+        }
+      }
+    },
+    "screen.defense.threat": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menace annoncée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Announced threat"
+          }
+        }
+      }
+    },
+    "screen.defense.tide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marée %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tide %@"
+          }
+        }
+      }
+    },
+    "screen.defense.high_tide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marée haute"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High tide"
+          }
+        }
+      }
+    },
+    "screen.defense.low_tide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marée basse"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low tide"
+          }
+        }
+      }
+    },
+    "screen.defense.arrival": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ pillards · Force %@ · Arrivée à la marée %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ raiders · Strength %@ · Arriving at tide %@"
+          }
+        }
+      }
+    },
+    "screen.defense.warning": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Il reste %@ marée(s) pour préparer la garnison."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ tide(s) remain to prepare the garrison."
+          }
+        }
+      }
+    },
+    "screen.defense.scaling": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Après chaque assaut, deux pillards rejoignent la prochaine vague, jusqu’à 42. Leurs forces ne dépendent pas de votre armée."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After each assault, two raiders join the next wave, up to 42. Their strength does not depend on your army."
+          }
+        }
+      }
+    },
+    "screen.defense.garrison": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garnison du village"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Village garrison"
+          }
+        }
+      }
+    },
+    "screen.defense.unit_power": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : %@ · Défense par unité : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@ · Defense per unit: %@"
+          }
+        }
+      }
+    },
+    "screen.defense.garrison_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toutes les troupes présentes défendent le port. Les unités en expédition ou encore en formation ne participent pas. La Tour ajoute 20 de défense ; les armes ajoutent 1 par niveau et par unité."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All troops present defend the port. Units on expeditions or still training do not take part. The Tower adds 20 defense; weapons add 1 per level and per unit."
+          }
+        }
+      }
+    },
+    "screen.defense.preview": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimation avec vos forces et stocks actuels"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimate with your current forces and stocks"
+          }
+        }
+      }
+    },
+    "screen.defense.loss_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À défense égale, le port tient. Les pertes suivent les règles de l’Infirmerie et des mages présents. En défaite, au moins 20 de chaque ressource restent protégés si vous les possédez ; champs et bâtiments sont conservés."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At equal strength, the port holds. Losses follow the rules for the Infirmary and mages present. On defeat, at least 20 of each resource remain protected if you have them; fields and buildings are preserved."
+          }
+        }
+      }
+    },
+    "screen.defense.latest_report": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier rapport de défense"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest defense report"
+          }
+        }
+      }
+    },
+    "screen.defense.report_tide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assaut de la marée %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assault at tide %@"
+          }
+        }
+      }
+    },
+    "screen.defense.advance_and_defend": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passer la marée et défendre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advance the tide and defend"
+          }
+        }
+      }
+    },
+    "screen.defense.advance": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passer la marée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advance the tide"
+          }
+        }
+      }
+    },
+    "screen.defense.start": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir la campagne côtière"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the coastal campaign"
+          }
+        }
+      }
+    },
+    "screen.defense.requirements": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construisez la Cour des armes et recrutez au moins une unité au village pour commencer."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build the Training Grounds and recruit at least one unit in the village to begin."
+          }
+        }
+      }
+    },
+    "screen.defense.confirm_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les corsaires attaquent à cette marée."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The corsairs attack at this tide."
+          }
+        }
+      }
+    },
+    "screen.defense.resolve": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Résoudre l’assaut"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resolve the assault"
+          }
+        }
+      }
+    },
+    "screen.defense.confirm_message": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les troupes actuellement au village défendront le port. Le résultat et les pertes seront sauvegardés."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troops currently in the village will defend the port. The outcome and losses will be saved."
+          }
+        }
+      }
+    },
+    "screen.defense.started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les corsaires approchent. Premier assaut dans deux marées."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The corsairs are approaching. First assault in two tides."
+          }
+        }
+      }
+    },
+    "screen.defense.advanced": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La marée a changé. Consultez la menace et le rapport de défense."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The tide has changed. Check the threat and defense report."
+          }
+        }
+      }
+    },
+    "screen.defense.cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer les préparatifs"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue preparations"
+          }
+        }
+      }
+    },
+    "screen.commerce.sheltered": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La route des lagunes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The lagoon route"
+          }
+        }
+      }
+    },
+    "screen.commerce.crossing": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La passe des corsaires"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The corsair passage"
+          }
+        }
+      }
+    },
+    "screen.commerce.partner": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comptoir des Roseaux"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reed Trading Post"
+          }
+        }
+      }
+    },
+    "screen.commerce.departed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convoi parti. Son escorte rejoindra le village à la marée de retour annoncée."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convoy departed. Its escort will rejoin the village at the announced return tide."
+          }
+        }
+      }
+    },
+    "screen.commerce.claimed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paiement du contrat ajouté aux réserves."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contract payment added to reserves."
+          }
+        }
+      }
+    },
+    "screen.commerce.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrats maritimes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maritime contracts"
+          }
+        }
+      }
+    },
+    "screen.commerce.active": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ unités en escorte · Retour à la marée %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ units escorting · Returning at tide %@"
+          }
+        }
+      }
+    },
+    "screen.commerce.pending": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paiement à récupérer : %@ ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment to collect: %@ amber"
+          }
+        }
+      }
+    },
+    "screen.commerce.intro": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livrez du bois au Comptoir des Roseaux. Choisissez une route et gardez assez de troupes pour défendre le port."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deliver wood to the Reed Trading Post. Choose a route and keep enough troops to defend the port."
+          }
+        }
+      }
+    },
+    "screen.commerce.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voir les contrats"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View contracts"
+          }
+        }
+      }
+    },
+    "screen.commerce.success_expected": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livraison prévue"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivery expected"
+          }
+        }
+      }
+    },
+    "screen.commerce.delivered": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livraison accomplie"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivery completed"
+          }
+        }
+      }
+    },
+    "screen.commerce.failure_expected": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convoi en danger : cargaison perdue prévue"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convoy at risk: cargo loss expected"
+          }
+        }
+      }
+    },
+    "screen.commerce.lost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargaison perdue"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargo lost"
+          }
+        }
+      }
+    },
+    "screen.commerce.escort_result": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escorte de retour : %@ · Pertes : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escorts returning: %@ · Losses: %@"
+          }
+        }
+      }
+    },
+    "screen.commerce.payment": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paiement : %@ ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment: %@ amber"
+          }
+        }
+      }
+    },
+    "screen.commerce.cargo": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque contrat : 20 bois livrés et 5 vivres consommés au départ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each contract delivers 20 wood and consumes 5 food on departure."
+          }
+        }
+      }
+    },
+    "screen.commerce.rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une offre par route toutes les six marées. Un seul convoi commercial à la fois. Les escortes rentrent après les combats de leur marée ; elles ne défendent pas pendant le trajet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One offer per route every six tides. One commercial convoy at a time. Escorts return after battles at their arrival tide; they do not defend during the journey."
+          }
+        }
+      }
+    },
+    "screen.commerce.needs_market": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construisez le Marché pour accepter un contrat."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build the Market to accept a contract."
+          }
+        }
+      }
+    },
+    "screen.commerce.needs_campaign": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez la campagne côtière depuis Défense du port pour faire progresser les voyages en marées."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the coastal campaign from Port defense to advance journeys in tides."
+          }
+        }
+      }
+    },
+    "screen.commerce.in_transit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convoi en route"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convoy underway"
+          }
+        }
+      }
+    },
+    "screen.commerce.cargo_reserved": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La cargaison est déjà réservée. Fermer l’app ne fait ni avancer ni échouer le contrat."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The cargo is already reserved. Closing the app neither advances nor fails the contract."
+          }
+        }
+      }
+    },
+    "screen.commerce.last_report": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dernier rapport commercial"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latest trade report"
+          }
+        }
+      }
+    },
+    "screen.commerce.collect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récupérer le paiement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Collect payment"
+          }
+        }
+      }
+    },
+    "screen.commerce.full_storage": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libérez assez de place dans la réserve d’ambre. Le paiement reste conservé au comptoir et bloque le prochain contrat jusqu’à sa récupération."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make enough room in your amber reserve. The trading post keeps your payment safe and the next contract stays locked until you collect it."
+          }
+        }
+      }
+    },
+    "screen.commerce.payment_collected": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paiement récupéré"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Payment collected"
+          }
+        }
+      }
+    },
+    "screen.commerce.offer": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ marée(s) · Paiement : %@ ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ tide(s) · Payment: %@ amber"
+          }
+        }
+      }
+    },
+    "screen.commerce.safe_route": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route protégée : aucune perte dans l’escorte."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protected route: no escort losses."
+          }
+        }
+      }
+    },
+    "screen.commerce.risky_route": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pillards sur la route : force 24. Une escorte de force 24 ou plus livre la cargaison ; une escorte plus faible la perd."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raiders on the route: strength 24. An escort of strength 24 or higher delivers the cargo; a weaker escort loses it."
+          }
+        }
+      }
+    },
+    "screen.commerce.restock": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochaine offre à la marée %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next offer at tide %@"
+          }
+        }
+      }
+    },
+    "screen.commerce.prepare": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir l’escorte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose escort"
+          }
+        }
+      }
+    },
+    "screen.commerce.next_tide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préparer la prochaine marée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prepare the next tide"
+          }
+        }
+      }
+    },
+    "screen.commerce.short_cargo": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réunissez 20 bois et 5 vivres pour le prochain départ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gather 20 wood and 5 food for the next departure."
+          }
+        }
+      }
+    },
+    "screen.commerce.short_transport": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’escorte disponible doit pouvoir transporter au moins 20 bois."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your available escort must be able to carry at least 20 wood."
+          }
+        }
+      }
+    },
+    "screen.commerce.return_tide": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retour à la marée %@, après les combats."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returning at tide %@, after battles."
+          }
+        }
+      }
+    },
+    "screen.commerce.choose_escort": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répartir l’escorte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assign escorts"
+          }
+        }
+      }
+    },
+    "screen.commerce.escort_strength": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Force de l’escorte : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escort strength: %@"
+          }
+        }
+      }
+    },
+    "screen.commerce.transport": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transport : %@ / 20 nécessaires"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carrying capacity: %@ / 20 required"
+          }
+        }
+      }
+    },
+    "screen.commerce.selection_help": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez une escorte avec assez de transport. Vérifiez aussi la cargaison, le Marché et la disponibilité de l’offre."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose escorts with enough carrying capacity. Check the cargo, Market and offer availability too."
+          }
+        }
+      }
+    },
+    "screen.commerce.departure_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armes, mages, Infirmerie et transport sont fixés au départ. Les survivants reviennent au village ; le paiement est conservé au comptoir jusqu’à récupération."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapons, mages, Infirmary and carrying bonuses are fixed on departure. Survivors return to the village; payment stays at the trading post until collected."
+          }
+        }
+      }
+    },
+    "screen.commerce.send": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyer le convoi"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send convoy"
+          }
+        }
+      }
+    },
+    "screen.commerce.departure_failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le contrat ou l’escorte ne sont plus disponibles. Vérifiez votre sélection."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The contract or escort is no longer available. Check your selection."
           }
         }
       }

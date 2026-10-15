@@ -36,7 +36,7 @@ extension DomainChecks {
         let beforeMigration = inlandQuay.resources
         try storage.save(inlandQuay)
         let coastal = try storage.load(seed: 42, world: world, now: now)!
-        precondition(coastal.version == 11 && coastal.buildings[23] == .expeditionQuay)
+        precondition(coastal.version == VillageState.currentVersion && coastal.buildings[23] == .expeditionQuay)
         precondition(coastal.buildings[10] == displaced && coastal.buildings.count == 12)
         precondition(coastal.resources == beforeMigration)
         for plot in VillageMapMode.townCenter.slots {
@@ -204,7 +204,7 @@ extension DomainChecks {
         json.removeValue(forKey: "weaponUpgrade")
         defaults.set(try JSONSerialization.data(withJSONObject: json), forKey: "village.v2.42")
         let migrated = try storage.load(seed: 42, world: world, now: now)!
-        precondition(migrated.version == 11 && migrated.weaponLevel == 0)
+        precondition(migrated.version == VillageState.currentVersion && migrated.weaponLevel == 0)
         var corrupt = capped
         corrupt.weaponUpgrade = WeaponUpgrade(targetLevel: 4, endsAt: now)
         try storage.save(corrupt)

@@ -9,8 +9,6 @@ struct GameView: View {
         ? .townCenter : .resourceFields
     @State private var selectedResourcePlot = VillageMapMode.resourceFields.initialPlot
     @State private var selectedTownPlot = VillageSession.snapshotTownPlot
-    @State private var showsGuide = ProcessInfo.processInfo.arguments.contains("--snapshot-guide")
-    @State private var opensGuidedPlot = false
 
     var body: some View {
         GeometryReader { viewport in
@@ -27,40 +25,6 @@ struct GameView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .onChange(of: session.state.people) { previous, current in
-            if previous == nil, current != nil { showsGuide = true }
-        }
-        .sheet(isPresented: $showsGuide, onDismiss: {
-            if opensGuidedPlot {
-                opensGuidedPlot = false
-                showsVillageDetails = true
-            }
-        }) {
-            NavigationStack {
-                List {
-                    Section(String(localized: "screen.game.your_next_step", defaultValue: "Votre prochaine étape")) {
-                        Text(guideStep.title).font(.headline)
-                        Text(guideStep.detail)
-                        Button(String(localized: "screen.game.show_me_where", defaultValue: "Voir où agir"), action: followGuide)
-                    }
-                    Section(String(localized: "screen.game.your_first_expedition", defaultValue: "Votre première expédition")) {
-                        Text(String(localized: "screen.game.1_develop_a_woodland_a_field_and_a_deposit_to_produce_all_three_resources", defaultValue: "1. Développez une forêt, un champ et un gisement pour produire les trois ressources."))
-                        Text(String(localized: "screen.game.2_build_the_academy_and_research_a_unit", defaultValue: "2. Construisez la Maison des savoirs et recherchez une unité."))
-                        Text(String(localized: "screen.game.3_build_the_training_grounds_and_train_your_troops", defaultValue: "3. Construisez la Cour des armes et entraînez vos troupes."))
-                        Text(String(localized: "screen.game.4_on_the_world_map_select_a_faction_and_compare_your_strength_before_departing", defaultValue: "4. Sur la carte du monde, choisissez une faction et comparez les forces avant de partir."))
-                    }
-                    Section(String(localized: "screen.game.good_to_know", defaultValue: "À savoir")) {
-                        Text(String(localized: "screen.game.production_continues_while_you_are_away_up_to_the_displayed_limit_the_warehouse_incre", defaultValue: "La production continue pendant votre absence, jusqu’au maximum affiché. L’entrepôt augmente ce maximum."))
-                        Text(String(localized: "screen.game.a_sawmill_farm_or_amber_workshop_requires_a_matching_resource_site_at_level_10_this_b", defaultValue: "Une scierie, une ferme ou un atelier d’ambre nécessite un champ correspondant de niveau 10. Ce bonus n’est pas nécessaire pour commencer à recruter."))
-                        Text(String(localized: "screen.game.attacks_may_cost_units_loot_is_limited_by_surviving_troops_and_available_storage_oppo", defaultValue: "Une attaque peut coûter des unités. Le butin est limité par les survivants et la place dans vos réserves. Les adversaires sont des factions simulées."))
-                    }
-                }
-                .navigationTitle(String(localized: "screen.game.getting_started", defaultValue: "Premiers pas"))
-                .toolbar { ToolbarItem(placement: .confirmationAction) {
-                    Button(String(localized: "screen.game.close", defaultValue: "Fermer")) { showsGuide = false }
-                } }
-            }
-        }
     }
 
     private var accessibilityScreen: some View {
@@ -118,9 +82,6 @@ struct GameView: View {
                 if showsWorld {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
-                            Text(String(localized: "screen.game.your_next_step", defaultValue: "Votre prochaine étape")).font(.title2.bold())
-                            Text(guideStep.title).font(.headline)
-                            Text(guideStep.detail)
                             Text(String(localized: "screen.game.tap_a_faction_on_the_map_to_view_its_defense_and_prepare_an_expedition", defaultValue: "Touchez une faction sur la carte pour consulter sa défense et préparer une expédition."))
                             WorldClockStatus()
                         }
@@ -246,9 +207,10 @@ struct GameView: View {
         }
     }
 
+    @ViewBuilder
     private var header: some View {
-        HStack(alignment: .center, spacing: 8) {
-            if showsWorld || villageMap == .townCenter {
+        if showsWorld || villageMap == .townCenter {
+            HStack {
                 Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
                     .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
@@ -258,21 +220,10 @@ struct GameView: View {
                     .padding(.vertical, 8)
                     .background(Palette.panel, in: .capsule)
                     .contentTransition(.opacity)
+                Spacer(minLength: 0)
             }
-            Spacer(minLength: 0)
-            Button(String(localized: "screen.game.open_guide", defaultValue: "Ouvrir le guide"), systemImage: "book.closed.fill") {
-                showsGuide = true
-            }
-            .labelStyle(.iconOnly)
-            .font(.body.bold())
-            .foregroundStyle(Palette.ocean)
-            .frame(width: typeSize.isAccessibilitySize ? 64 : 44, height: typeSize.isAccessibilitySize ? 64 : 44)
-            .background(Palette.amber, in: .circle)
-            .buttonStyle(.plain)
-            .accessibilityIdentifier("guide.open")
+            .foregroundStyle(Palette.paper)
         }
-        .foregroundStyle(Palette.paper)
-        .accessibilityElement(children: .contain)
     }
 
     private var navigation: some View {
@@ -329,43 +280,6 @@ struct GameView: View {
         }
     }
 
-    private var guideStep: (title: String, detail: String, kind: BuildingKind?, plot: Int?) {
-        if let job = session.state.resourceUpgrade {
-            return (String(localized: "screen.game.your_resource_site_is_developing", defaultValue: "Votre terrain se développe"), String(localized: "screen.game.the_new_level_will_be_ready_after_one_minute_of_work", defaultValue: "Le nouveau niveau sera disponible à la fin de la minute de travaux."), nil, job.plot)
-        }
-        for plot in [0, 2, 4] where session.state.resourceLevel(at: plot) == 0 {
-            return (String(localized: "screen.game.start_all_three_resource_productions", defaultValue: "Lancez vos trois productions"), String(localized: "screen.game.upgrade_this_site_to_level_1_if_resources_are_low_let_production_replenish_your_store", defaultValue: "Améliorez ce champ au niveau 1. Si les ressources manquent, laissez vos productions remplir les réserves."), nil, plot)
-        }
-        if let job = session.state.construction {
-            return (String(localized: "screen.game.construction_is_progressing", defaultValue: "Votre chantier avance"), String(localized: "screen.game.check_the_remaining_time_or_cancel_to_recover_half_the_cost", defaultValue: "Vous pouvez consulter le temps restant ou annuler pour récupérer la moitié du coût."), job.kind, job.plot)
-        }
-        if !session.state.hasBuilding(.academy) {
-            return (String(localized: "screen.game.build_the_academy", defaultValue: "Construisez la Maison des savoirs"), String(localized: "screen.game.choose_this_building_on_an_empty_town_lot", defaultValue: "Choisissez ce bâtiment sur un lot libre du Centre."), .academy, nil)
-        }
-        if session.state.unlockedUnits.isEmpty {
-            return (String(localized: "screen.game.discover_your_first_unit", defaultValue: "Découvrez votre première unité"), String(localized: "screen.game.open_the_academy_to_start_research_or_follow_its_progress", defaultValue: "Ouvrez la Maison des savoirs pour lancer une recherche ou suivre celle en cours."), .academy, nil)
-        }
-        if !session.state.hasBuilding(.warCourt) {
-            return (String(localized: "screen.game.build_the_training_grounds", defaultValue: "Construisez la Cour des armes"), String(localized: "screen.game.this_building_trains_units_discovered_at_the_academy", defaultValue: "Ce bâtiment entraîne les unités découvertes dans la Maison des savoirs."), .warCourt, nil)
-        }
-        if session.state.armyPower == 0 && session.state.army?.raid == nil {
-            return (String(localized: "screen.game.train_your_first_troops", defaultValue: "Entraînez vos premières troupes"), String(localized: "screen.game.open_the_training_grounds_and_recruit_several_units_before_your_expedition", defaultValue: "Ouvrez la Cour des armes et recrutez plusieurs unités avant votre expédition."), .warCourt, nil)
-        }
-        return (String(localized: "screen.game.explore_neighboring_factions", defaultValue: "Explorez les factions voisines"), String(localized: "screen.game.compare_your_strength_with_their_defense_launch_an_expedition_and_read_the_report_on", defaultValue: "Comparez votre force à leur défense, lancez une expédition et consultez le rapport au retour."), nil, nil)
-    }
-
-    private func followGuide() {
-        let step = guideStep
-        showsGuide = false
-        guard step.kind != nil || step.plot != nil else { showsWorld = true; return }
-        let mode: VillageMapMode = step.kind == nil ? .resourceFields : .townCenter
-        let plot = step.plot ?? session.state.buildings.first(where: { $0.value == step.kind })?.key
-            ?? VillageMapMode.townCenter.slots.first(where: { session.state.buildings[$0] == nil }) ?? 10
-        selectVillageMap(mode)
-        if mode == .resourceFields { selectedResourcePlot = plot } else { selectedTownPlot = plot }
-        session.plot = plot
-        opensGuidedPlot = true
-    }
 }
 
 #Preview { GameView().environment(VillageSession()) }

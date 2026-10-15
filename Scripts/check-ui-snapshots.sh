@@ -14,7 +14,7 @@ case "$snapshot_device" in
         device_name='iPhone 18 Pro'
         capture_delay=3
         reference_dir="$project_root/Tests/Snapshots/iPhone18Pro-iOS27"
-        districts=(resources centre upgrade world guide market forge infirmary expeditionQuay)
+        districts=(resources centre upgrade world market forge infirmary expeditionQuay commerce)
         ;;
     ipad)
         device_name='iPad Pro 11-inch (M5)'
@@ -77,14 +77,15 @@ for district in "${districts[@]}"; do
         centre) snapshot_args+=(--snapshot-center) ;;
         upgrade) snapshot_args+=(--snapshot-upgrade) ;;
         world) snapshot_args+=(--snapshot-world) ;;
-        guide) snapshot_args+=(--snapshot-guide) ;;
+        commerce) snapshot_args+=(--snapshot-world --snapshot-commerce) ;;
         market|forge|infirmary|expeditionQuay)
             snapshot_args+=("--snapshot-$district" --snapshot-actions)
             ;;
     esac
     simctl launch "$simulator_id" "$bundle_id" "${snapshot_args[@]}" >/dev/null
     sleep "$capture_delay"
-    simctl io "$simulator_id" screenshot "$output_dir/$district.png" >/dev/null 2>&1
+    # Make hardware cutouts deterministic when Device Hub is shown or hidden.
+    simctl io "$simulator_id" screenshot --mask=black "$output_dir/$district.png" >/dev/null 2>&1
 
     if [[ "$mode" == record ]]; then
         mkdir -p "$reference_dir"

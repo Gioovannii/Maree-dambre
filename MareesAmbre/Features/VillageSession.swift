@@ -39,6 +39,7 @@ final class VillageSession {
                 markUnreadableSave()
                 return
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-new-village") { return }
             state.people = .sauniers
             state.resources = Resources(wood: 180, amber: 40, provisions: 240)
             state.buildings = [
@@ -50,7 +51,9 @@ final class VillageSession {
                 state.construction = ConstructionJob(plot: 14, kind: .academy, startedAt: .now.addingTimeInterval(-30), duration: 60)
             }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-developed")
-                || ProcessInfo.processInfo.arguments.contains("--snapshot-raid") || Self.snapshotBuilding != nil {
+                || ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
+                || ProcessInfo.processInfo.arguments.contains("--snapshot-commerce")
+                || ProcessInfo.processInfo.arguments.contains("--snapshot-defense") || Self.snapshotBuilding != nil {
                 let plots = VillageMapMode.townCenter.slots.filter { $0 != 12 }
                 state.buildings = Dictionary(uniqueKeysWithValues: zip(plots, BuildingKind.constructible))
                 state.buildings[12] = .hall
@@ -62,6 +65,16 @@ final class VillageSession {
                     state.army = ArmyState(units: [.tideguard: 20, .pillager: 8], unlockedUnits: [.tideguard, .pillager])
                 }
                 plot = Self.snapshotTownPlot
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-defense") {
+                // A small garrison makes sending troops out a meaningful defensive risk.
+                state.army = ArmyState(units: [.tideguard: 2, .pillager: 4], unlockedUnits: [.tideguard, .pillager])
+                state.weaponsLevel = 0
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-commerce") {
+                state.army = ArmyState(units: [.tideguard: 2, .pillager: 4], unlockedUnits: [.tideguard, .pillager])
+                state.weaponsLevel = 0
+                state.coastalCampaign = CoastalCampaign(tide: 1)
             }
             return
         }
@@ -121,6 +134,42 @@ final class VillageSession {
         refreshWorld()
         guard state.trade(from: source, to: destination, lots: lots) else { return }
         persist(String(localized: "screen.village_session.trade_completed", defaultValue: "Échange effectué. Les réserves ont été mises à jour."))
+    }
+
+    @discardableResult
+    func sendConvoy(on route: TradeRoute, units: [ArmyUnit: Int]) -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.sendConvoy(on: route, units: units) else { return false }
+        persist(String(localized: "screen.commerce.departed", defaultValue: "Convoi parti. Son escorte rejoindra le village à la marée de retour annoncée."))
+        return true
+    }
+
+    @discardableResult
+    func claimConvoyReward() -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.claimConvoyReward() else { return false }
+        persist(String(localized: "screen.commerce.claimed", defaultValue: "Paiement du contrat ajouté aux réserves."))
+        return true
+    }
+
+    @discardableResult
+    func startCoastalCampaign() -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.startCoastalCampaign() else { return false }
+        persist(String(localized: "screen.defense.started", defaultValue: "Les corsaires approchent. Premier assaut dans deux marées."))
+        return true
+    }
+
+    @discardableResult
+    func advanceCoastalTide() -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.advanceCoastalTide() else { return false }
+        persist(String(localized: "screen.defense.advanced", defaultValue: "La marée a changé. Consultez la menace et le rapport de défense."))
+        return true
     }
 
     func upgradeWeapons() {

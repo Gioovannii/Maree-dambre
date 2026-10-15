@@ -54,6 +54,10 @@ struct VillageBoard: View {
                             .clipped()
                             .accessibilityHidden(true)
 
+                        if mode == .townCenter {
+                            VillagePedestrians()
+                        }
+
                         ForEach(visibleSlots, id: \.self) { plot in
                             plotButton(plot, mapWidth: mapSize.width)
                                 .position(position(for: plot, in: mapSize))
@@ -121,9 +125,9 @@ struct VillageBoard: View {
                     .padding(12)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Palette.panel, in: .rect(cornerRadius: 16))
-                    .overlay {
+                    .overlay(alignment: .center) {
                         RoundedRectangle(cornerRadius: 16)
-                            .strokeBorder(canReceiveMovingBuilding ? .green : selected ? Palette.amber : .clear, lineWidth: 2)
+                            .strokeBorder(accessibilityBorderColor(selected: selected, canReceive: canReceiveMovingBuilding), lineWidth: 2)
                     }
             } else {
                 ZStack {
@@ -262,6 +266,12 @@ struct VillageBoard: View {
                 }
             }
         }
+    }
+
+    private func accessibilityBorderColor(selected: Bool, canReceive: Bool) -> Color {
+        if canReceive { return Color.green }
+        if selected { return Palette.amber }
+        return Color.clear
     }
 
     private func selectPlot(_ plot: Int) {

@@ -43,6 +43,7 @@ struct ConstructionPanel: View {
             } else if let building {
                 buildingDetails(building)
                 if building == .warCourt { ArmyPanel(isTraining: true) }
+                if building == .watchtower { CoastalDefensePanel() }
                 if building == .academy { ResearchPanel() }
                 if building == .market { MarketPanel() }
                 if building == .forge { ForgePanel() }
