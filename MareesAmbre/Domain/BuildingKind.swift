@@ -131,8 +131,8 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .academy: String(localized: "domain.building_kind.new_unit_research", defaultValue: "Recherche de nouvelles unités")
         case .market: String(localized: "domain.building_kind.market_effect", defaultValue: "Échanges locaux et contrats maritimes")
         case .forge: String(localized: "domain.building_kind.forge_effect", defaultValue: "+1 attaque par unité et par recherche · 3 niveaux")
-        case .infirmary: String(localized: "domain.building_kind.infirmary_effect", defaultValue: "Pertes : 10 % en victoire, 35 % en défaite · 5 % avec un mage")
-        case .expeditionQuay: String(localized: "domain.building_kind.quay_effect", defaultValue: "+25 % de transport · butin jusqu’à 90 par ressource")
+        case .infirmary: String(localized: "domain.building_kind.infirmary_effect", defaultValue: "Pertes : \((0.1).formatted(.percent.precision(.fractionLength(0)))) en victoire, \((0.35).formatted(.percent.precision(.fractionLength(0)))) en défaite · \((0.05).formatted(.percent.precision(.fractionLength(0)))) avec un mage")
+        case .expeditionQuay: String(localized: "domain.building_kind.quay_effect", defaultValue: "+\((0.25).formatted(.percent.precision(.fractionLength(0)))) de transport · butin jusqu’à 90 par ressource")
         }
     }
 

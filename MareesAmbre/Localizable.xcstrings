@@ -721,13 +721,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pertes : 10 % en victoire, 35 % en défaite · 5 % avec un mage"
+            "value": "Pertes : %@ en victoire, %@ en défaite · %@ avec un mage"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Losses: 10% on victory, 35% on defeat · 5% with a mage"
+            "value": "Losses: %@ on victory, %@ on defeat · %@ with a mage"
           }
         }
       }
@@ -823,13 +823,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "+25 % de transport · butin jusqu’à 90 par ressource"
+            "value": "+%@ de transport · butin jusqu’à 90 par ressource"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "+25% carrying capacity · up to 90 loot per resource"
+            "value": "+%@ carrying capacity · up to 90 loot per resource"
           }
         }
       }

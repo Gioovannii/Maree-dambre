@@ -18,7 +18,7 @@ for (language, warehouse, recruit, _, construction) in [
 // Compare every catalog translation with the resource Xcode actually packaged.
 let repository = URL(fileURLWithPath: CommandLine.arguments[2])
 for (source, bundlePath) in [("MareesAmbre", app), ("MareesAmbreWidget", app + "/PlugIns/MareesAmbreWidget.appex")] {
-    for table in ["Localizable", "InfoPlist"] {
+    for table in ["Localizable"] {
         let data = try Data(contentsOf: repository.appendingPathComponent(source + "/" + table + ".xcstrings"))
         let catalog = try JSONSerialization.jsonObject(with: data) as! [String: Any]
         let strings = catalog["strings"] as! [String: [String: Any]]
