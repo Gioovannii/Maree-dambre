@@ -6,35 +6,25 @@ struct TideLevelBadge: View {
     let level: Int
     var symbol: String? = nil
 
+    var selected = false
+
     var body: some View {
-        HStack(spacing: 6) {
-            if let symbol {
-                Image(systemName: symbol)
-                    .font(.caption.bold())
-            }
-            // The number alone stays legible at small sizes; the capsule already
-            // communicates that this is a level marker and avoids “N0” reading
-            // like the word “NO” on compact screens.
+        HStack(spacing: 4) {
+            if let symbol { Image(systemName: symbol) }
             Text(String(localized: "screen.tide_level_badge.value", defaultValue: "\(String(level))"))
-                .font(.subheadline.bold())
                 .monospacedDigit()
+            if selected { Image(systemName: "checkmark") }
         }
-        .foregroundStyle(Palette.paper)
-        .padding(.horizontal, symbol == nil ? 12 : 10)
-        .frame(minHeight: symbol == nil ? 29 : 38)
-        .background {
-            Capsule()
-                .fill(LinearGradient(
-                    colors: [Palette.panel, Color(red: 0.02, green: 0.34, blue: 0.40)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ))
-        }
-        .overlay {
-            Capsule()
-                .strokeBorder(Palette.amber, lineWidth: 1.5)
-        }
-        .shadow(color: Palette.ocean.opacity(0.55), radius: 3, y: 2)
+        .font(.subheadline.bold())
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
+        .foregroundStyle(selected ? Palette.ocean : Palette.paper)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .frame(minWidth: 28, minHeight: 28)
+        .background(selected ? Palette.amber : Palette.panel, in: .capsule)
+        .overlay { Capsule().strokeBorder(selected ? Palette.ocean : Palette.paper, lineWidth: 1) }
+        .shadow(color: Palette.ocean.opacity(0.5), radius: 2, y: 2)
         .accessibilityLabel(String(localized: "screen.tide_level_badge.level_value", defaultValue: "Niveau \(String(level))"))
     }
 }

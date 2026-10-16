@@ -8,6 +8,7 @@ struct VillagePedestrians: View {
     @State private var startedAt = Date.now
 
     private let snapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
+        && !ProcessInfo.processInfo.arguments.contains("--snapshot-animate")
     private static let routes: [[CGPoint]] = [
         [CGPoint(x: 0.49, y: 0.43), CGPoint(x: 0.49, y: 0.51),
          CGPoint(x: 0.50, y: 0.61), CGPoint(x: 0.49, y: 0.74)],
@@ -22,7 +23,7 @@ struct VillagePedestrians: View {
         Color(red: 0.18, green: 0.43, blue: 0.44),
         Color(red: 0.70, green: 0.32, blue: 0.20),
         Color(red: 0.79, green: 0.60, blue: 0.27),
-        Color(red: 0.42, green: 0.40, blue: 0.54)
+        Color(red: 0.32, green: 0.41, blue: 0.32)
     ]
 
     var body: some View {

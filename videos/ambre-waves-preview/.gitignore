@@ -1,0 +1,6 @@
+node_modules/
+.hyperframes/
+.thumbnails/
+proof/
+proof-v2/
+renders/

@@ -8,8 +8,8 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     var assetName: String {
         switch self {
-        case .resourceFields: "ChampsDomaine"
-        case .townCenter: "CentrePlaceCentrale"
+        case .resourceFields: "DomaineAmbreVivant"
+        case .townCenter: "CentreAmbreVivant"
         }
     }
 
@@ -48,8 +48,16 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     func mapPoint(for plot: Int) -> CGPoint {
         if self == .resourceFields {
-            let column = plot == 9 ? 1 : plot % 3
-            return CGPoint(x: 0.24 + Double(column) * 0.26, y: 0.36 + Double(plot / 3) * 0.105)
+            // Follow the estate's clearings rather than imposing a grid on the terrain.
+            let clearings: [CGPoint] = [
+                CGPoint(x: 0.245, y: 0.205), CGPoint(x: 0.69, y: 0.217),
+                CGPoint(x: 0.78, y: 0.335), CGPoint(x: 0.225, y: 0.325),
+                CGPoint(x: 0.825, y: 0.485), CGPoint(x: 0.175, y: 0.465),
+                CGPoint(x: 0.50, y: 0.405), CGPoint(x: 0.75, y: 0.61),
+                CGPoint(x: 0.245, y: 0.63), CGPoint(x: 0.84, y: 0.71)
+            ]
+            guard clearings.indices.contains(plot) else { return CGPoint(x: 0.5, y: 0.5) }
+            return clearings[plot]
         }
         if plot == 12 { return CGPoint(x: 0.50, y: 0.345) }
         if plot == SettlementLayout.expeditionQuayPlot { return CGPoint(x: 0.69, y: 0.785) }

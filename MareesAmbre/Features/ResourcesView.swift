@@ -16,7 +16,8 @@ struct ResourcesView: View {
         }
         .padding(.horizontal, 7)
         .padding(.vertical, 6)
-        .background(Palette.panel.opacity(0.96), in: .rect(cornerRadius: 16))
+        .background(Palette.panel, in: .rect(cornerRadius: 16))
+        .overlay { RoundedRectangle(cornerRadius: 16).strokeBorder(Palette.amber.opacity(0.35), lineWidth: 1) }
     }
 
     private var resourceLayout: AnyLayout {

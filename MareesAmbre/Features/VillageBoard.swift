@@ -47,21 +47,17 @@ struct VillageBoard: View {
                     }
 
                     ZStack {
-                        Image(mode.assetName)
-                            .resizable()
-                            .interpolation(.high)
+                        CoastalDomainScene(mode: mode)
                             .frame(width: mapSize.width, height: mapSize.height)
-                            .clipped()
-                            .accessibilityHidden(true)
 
                         if mode == .townCenter {
                             VillagePedestrians()
                         }
 
                         ForEach(visibleSlots, id: \.self) { plot in
-                            plotButton(plot, mapWidth: mapSize.width)
+                            plotButton(plot, mapWidth: mapSize.width, mapHeight: mapSize.height)
                                 .position(position(for: plot, in: mapSize))
-                                .zIndex(Double(plot / 5 + plot % 5))
+                                .zIndex(mode == .resourceFields ? Double(mode.mapPoint(for: plot).y) : Double(plot / 5 + plot % 5))
                         }
 
                         if mode == .resourceFields {
@@ -71,11 +67,11 @@ struct VillageBoard: View {
                                     .foregroundStyle(Palette.paper)
                                     .padding(.horizontal, 11)
                                     .frame(minHeight: 38)
-                                    .background(Palette.panel.opacity(0.92), in: .capsule)
+                                    .background(Palette.panel, in: .capsule)
                                     .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
                             }
                             .buttonStyle(.plain)
-                            .position(x: mapSize.width * 0.50, y: mapSize.height * 0.79)
+                            .position(x: mapSize.width * 0.50, y: mapSize.height * 0.86)
                             .zIndex(100)
                             .accessibilityHint(String(localized: "screen.village_board.open_the_harbor_and_town_buildings", defaultValue: "Ouvrir le port et les bâtiments du Centre-ville"))
                         }
@@ -95,7 +91,7 @@ struct VillageBoard: View {
         }
     }
 
-    private func plotButton(_ plot: Int, mapWidth: CGFloat) -> some View {
+    private func plotButton(_ plot: Int, mapWidth: CGFloat, mapHeight: CGFloat = .infinity) -> some View {
         let building = session.state.buildings[plot]
         let construction = session.state.construction?.plot == plot ? session.state.construction : nil
         let selected = session.plot == plot
@@ -107,7 +103,7 @@ struct VillageBoard: View {
         // Larger landmarks and smaller, lower badges expose the building silhouettes.
         let baseSize = mode == .townCenter
             ? min(120, max(74, mapWidth * 0.25))
-            : min(112, max(72, mapWidth * 0.24))
+            : min(112, max(44, min(mapWidth * 0.24, mapHeight * 0.11)))
         let size = baseSize * (building == .hall ? 1.2 : 1.0)
         let footprintWidth = size * 0.82
         let footprintHeight = size * 0.34
@@ -140,38 +136,13 @@ struct VillageBoard: View {
                         }
                         .frame(width: size, height: size * 0.72)
                     }
-                    if let site {
-                        Ellipse()
-                            .fill(.black.opacity(0.15))
-                            .frame(width: footprintWidth, height: footprintHeight)
-                            .offset(y: size * 0.27)
-                        Image(site.imageAssetName(for: siteLevel))
-                            .resizable().scaledToFit()
-                            .frame(width: size, height: size)
-                            .overlay(alignment: .bottom) {
-                                TideLevelBadge(level: siteLevel, symbol: site.symbol)
-                                    .overlay {
-                                        if selected {
-                                            Capsule().strokeBorder(Palette.paper, lineWidth: 2)
-                                        }
-                                    }
-                                    .scaleEffect(0.78)
-                                    .offset(x: size * 0.22, y: size * 0.09)
-                            }
-                            .accessibilityHidden(true)
-
-                            .overlay(alignment: .bottom) {
-                                if let job = session.state.resourceUpgrade, job.plot == plot {
-                                    Text(timerInterval: min(Date.now, job.endsAt)...job.endsAt, countsDown: true)
-                                        .font(.caption2.bold()).monospacedDigit().fixedSize()
-                                        .foregroundStyle(Palette.paper)
-                                        .padding(4)
-                                        .background(Palette.ocean, in: .capsule)
-                                        .offset(y: 24)
-                                }
-                            }
-                            .offset(y: -size * 0.06)
-                            .accessibilityHidden(true)
+                    if site != nil {
+                        ResourcePlotMarker(
+                            level: siteLevel, selected: selected,
+                            size: size,
+                            upgrade: session.state.resourceUpgrade.flatMap { $0.plot == plot ? $0 : nil }
+                        )
+                        .accessibilityHidden(true)
                     } else if let construction {
                         TimelineView(.periodic(from: .now, by: 1)) { timeline in
                             ConstructionSiteArt()
@@ -193,15 +164,8 @@ struct VillageBoard: View {
                         BuildingArt(kind: building)
                             .frame(width: size, height: size)
                             .overlay(alignment: .bottom) {
-                                TideLevelBadge(level: 1)
-                                    .overlay {
-                                        if selected {
-                                            Capsule().strokeBorder(Palette.amber, lineWidth: 2.5)
-                                        }
-                                    }
-                                    .shadow(color: selected ? Palette.amber.opacity(0.55) : .clear, radius: 5)
-                                    .scaleEffect(0.72)
-                                    .offset(x: size * 0.25, y: size * 0.12)
+                                TideLevelBadge(level: 1, selected: selected)
+                                    .offset(x: size * (plot == 13 ? -0.22 : 0.22), y: size * 0.05)
                                     .accessibilityHidden(true)
                             }
                             .offset(y: -size * 0.13)
@@ -223,11 +187,12 @@ struct VillageBoard: View {
 
                     if mode == .townCenter, plot == SettlementLayout.expeditionQuayPlot,
                        building == nil, construction == nil, !canReceiveMovingBuilding {
-                        Image(systemName: "sailboat.fill")
-                            .font(.title2.bold()).foregroundStyle(Palette.amber)
-                            .frame(width: 44, height: 44)
-                            .background(Palette.panel, in: .circle)
-                            .overlay { Circle().strokeBorder(Palette.amber, lineWidth: 1.5) }
+                        Label(String(localized: "screen.village_board.quay", defaultValue: "Quai"), systemImage: "sailboat.fill")
+                            .font(.caption.bold()).foregroundStyle(Palette.paper)
+                            .padding(.horizontal, 10)
+                            .frame(minHeight: 38)
+                            .background(Palette.panel, in: .capsule)
+                            .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
                     }
 
                     if session.moveSourcePlot == plot || canReceiveMovingBuilding {

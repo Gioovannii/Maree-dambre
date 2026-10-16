@@ -209,7 +209,7 @@ struct GameView: View {
 
     @ViewBuilder
     private var header: some View {
-        if showsWorld || villageMap == .townCenter {
+        if showsWorld {
             HStack {
                 Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
@@ -223,6 +223,16 @@ struct GameView: View {
                 Spacer(minLength: 0)
             }
             .foregroundStyle(Palette.paper)
+        } else {
+            Text(villageMap == .townCenter ? villageMap.title : String(localized: "screen.game.amber_estate", defaultValue: "Domaine d’Ambre"))
+                .font(.headline).fontDesign(.serif)
+                .foregroundStyle(Palette.paper)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 6)
+                .background(Palette.ocean, in: .capsule)
+                .frame(maxWidth: .infinity)
+
         }
     }
 
@@ -239,7 +249,7 @@ struct GameView: View {
             }
         }
         .padding(4)
-        .background(Palette.panel.opacity(0.96), in: .capsule)
+        .background(Palette.panel, in: .capsule)
     }
 
     private var navigationLayout: AnyLayout {
@@ -255,9 +265,9 @@ struct GameView: View {
                 .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                 .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
                 .frame(maxWidth: .infinity, minHeight: 50)
-                .foregroundStyle(selected ? Palette.ocean : Palette.muted)
+                .foregroundStyle(selected ? Palette.amber : Palette.muted)
                 .background {
-                    if selected { Capsule().fill(Palette.amber) }
+                    if selected { Capsule().fill(Palette.amber.opacity(0.12)) }
                 }
         }
         .buttonStyle(.plain)

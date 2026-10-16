@@ -18,6 +18,8 @@ Les recherches, chantiers, entraînements, productions et expéditions sont enre
   annuler rembourse 50 % du coût, arrondi à l’entier inférieur par ressource.
   Les travaux sont sauvegardés et terminent aussi pendant l’absence.
 
+- **Domaine vivant** : les dix exploitations sont peintes dans le décor ; seuls les niveaux et les chantiers changent. La mer ondule et cinq travailleurs bougent sur place, avec une animation native limitée à 24 images/s, suspendue hors de l’app et désactivée avec Réduire les animations. Stocks, sélection et améliorations restent de vrais contrôles SwiftUI. Voir `docs/LIVING_DOMAIN.md`.
+- **Centre harmonisé** : décor en pierre claire, titres et médaillons partagés avec le domaine, mer animée et passants. Les bâtiments restent déplaçables et les lots inchangés. Voir `docs/CENTER_HARMONIZATION.md`.
 - **Ressources et Centre** : deux cartes plein écran, dix terrains producteurs et douze lots urbains. Chaque bâtiment n’existe qu’en un exemplaire. Un seul chantier peut progresser à la fois ; son annulation rembourse la moitié du coût.
 - **Production** : bois, ambre et vivres s’accumulent jusqu’à la capacité de la réserve, 300 au départ et +500 par Entrepôt. Les fractions et l’heure de dernière production sont sauvegardées.
 - **Armée** : Maison des savoirs, Cour des armes, deux unités propres à chaque peuple, entraînement et raids contre trois factions bots. Le joueur choisit les effectifs envoyés par type et conserve le reste au village. L’écran annonce la force, les pertes prévues et les effectifs gardés avant le départ ; le bonus du mage dépend de sa présence dans l’expédition.

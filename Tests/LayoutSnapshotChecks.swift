@@ -27,7 +27,7 @@ struct LayoutSnapshotChecks {
         let resource = VillageMapMode.resourceFields
         precondition(resource.slots.count == 10, "Resource snapshot changed its slot count")
         let resourcePoints = resource.slots.map(resource.mapPoint(for:))
-        precondition(resourcePoints.allSatisfy { (0.15...0.85).contains($0.x) && (0.22...0.70).contains($0.y) },
+        precondition(resourcePoints.allSatisfy { (0.15...0.85).contains($0.x) && (0.19...0.80).contains($0.y) },
                      "Resource clearings must remain grouped above the bottom controls")
         for (index, a) in resourcePoints.enumerated() {
             for b in resourcePoints.dropFirst(index + 1) {

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=887, height=1774">
+<title>Domaine d’Ambre — étude des vagues</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:887px;height:1774px;overflow:hidden;background:#063a49}
+#stage{position:relative;width:100%;height:100%;overflow:hidden}.clip{position:absolute;inset:0}.painting,.water{position:absolute;inset:0;width:100%;height:100%;display:block}
+</style></head><body>
+<div data-hf-id="hf-gxx2" id="stage" data-composition-id="ambre-waves" data-start="0" data-duration="6" data-fps="30" data-width="887" data-height="1774">
+<section data-hf-id="hf-xg8j" id="living-water" class="clip" data-start="0" data-duration="6" data-track-index="0">
+<img data-hf-id="hf-6zim" class="painting" src="assets/ambre-domain.png" alt="Domaine côtier d’Ambre, champs, forêts et carrières autour du port.">
+<svg data-hf-id="hf-4zqy" class="water" viewBox="0 0 887 1774" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs data-hf-id="hf-mh0t">
+<filter data-hf-id="hf-vnh2" id="soft-edge"><feGaussianBlur data-hf-id="hf-9nt6" stdDeviation="4"/></filter>
+<mask data-hf-id="hf-983x" id="sea-only" maskUnits="userSpaceOnUse" x="0" y="0" width="887" height="1774">
+<g data-hf-id="hf-htrq" fill="white" filter="url(#soft-edge)">
+<path data-hf-id="hf-bq6s" d="M0 0H613L606 40H0Z M0 121H614L639 143 662 156 689 177 671 194 628 196 592 211 564 228 541 238 510 241 476 249 440 240 406 232 365 225 344 210 308 201 254 188 224 190 192 202 167 222 143 228 119 241 88 247 48 253 0 270Z"/>
+<path data-hf-id="hf-12ro" d="M0 1274L33 1281 62 1302 96 1298 99 1315 75 1329 31 1337 0 1358Z"/>
+<path data-hf-id="hf-h12o" d="M432 1308L451 1318 466 1339 489 1352 515 1364 508 1391 492 1404 505 1435 540 1450 576 1454 604 1481 624 1504 656 1513 698 1504 723 1519 753 1525 785 1541 814 1563 849 1566 887 1588V1617H599L580 1581 581 1540 563 1514 519 1510 490 1520 452 1517 422 1509 396 1493 381 1468 376 1434 396 1414 418 1390 414 1361Z"/>
+<path data-hf-id="hf-xe2m" d="M287 1534L319 1530 307 1560 301 1594 288 1616 254 1618 228 1604 212 1583 240 1568Z"/>
+<path data-hf-id="hf-ocrp" d="M278 1719H740L760 1741 812 1756 856 1762 887 1757V1774H278Z"/>
+</g><g data-hf-id="hf-2cnw" fill="black">
+<rect data-hf-id="hf-yk3h" x="60" y="38" width="770" height="86"/><rect data-hf-id="hf-5dpv" x="306" y="124" width="279" height="72"/>
+<path data-hf-id="hf-vio9" d="M23 208L18 181 61 105 91 121 118 177 139 214 105 226 58 225Z"/>
+<rect data-hf-id="hf-ycxv" x="294" y="1506" width="297" height="91" rx="45"/><rect data-hf-id="hf-9uyc" x="39" y="1611" width="808" height="111" rx="56"/>
+</g></mask>
+<filter data-hf-id="hf-c3ds" id="swell" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+<feTurbulence data-hf-id="hf-lht5" type="fractalNoise" baseFrequency="0.014 0.065" numOctaves="2" seed="14" result="noise"/>
+<feOffset data-hf-id="hf-1k59" id="water-phase" in="noise" dx="0" dy="8" result="moving-noise"/>
+<feDisplacementMap data-hf-id="hf-e3qs" in="SourceGraphic" in2="moving-noise" scale="19" xChannelSelector="R" yChannelSelector="G"/>
+</filter>
+<filter id="worker-soft"><feGaussianBlur stdDeviation="2"/></filter>
+<mask id="worker-mask-1"><ellipse cx="382" cy="724" rx="23" ry="34" fill="white" filter="url(#worker-soft)"/></mask>
+<mask id="worker-mask-2"><ellipse cx="615" cy="1050" rx="23" ry="35" fill="white" filter="url(#worker-soft)"/></mask>
+<mask id="worker-mask-3"><ellipse cx="232" cy="1106" rx="23" ry="34" fill="white" filter="url(#worker-soft)"/></mask>
+<mask id="worker-mask-4"><ellipse cx="714" cy="395" rx="20" ry="29" fill="white" filter="url(#worker-soft)"/></mask>
+<mask id="worker-mask-5"><ellipse cx="677" cy="850" rx="19" ry="32" fill="white" filter="url(#worker-soft)"/></mask>
+</defs>
+<g data-hf-id="hf-0pmf" mask="url(#sea-only)"><image data-hf-id="hf-o7t7" id="water-image" href="assets/ambre-domain.png" width="887" height="1774" filter="url(#swell)"/></g>
+<g mask="url(#sea-only)" fill="none" stroke="#d2ffff" stroke-width="1.4" stroke-linecap="round">
+<g id="foam-near" opacity="0.3"><path d="M437 1397q15 -5 28 0m-27 33q18 -4 32 0m43 43q17 -5 31 -1M150 158q20 -7 39 -2m-5 23q15 -4 28 -1M656 1576q22 -8 40 -2"/></g>
+<g id="foam-far" opacity="0.16"><path d="M348 209q23 -7 40 -2m83 -7q17 -5 30 0M345 1738q20 -6 38 -1m61 14q20 -5 36 -1m89 -12q22 -7 40 -2"/></g></g>
+<g mask="url(#worker-mask-1)"><image id="worker-1" href="assets/ambre-domain.png" width="887" height="1774"/></g>
+<g mask="url(#worker-mask-2)"><image id="worker-2" href="assets/ambre-domain.png" width="887" height="1774"/></g>
+<g mask="url(#worker-mask-3)"><image id="worker-3" href="assets/ambre-domain.png" width="887" height="1774"/></g>
+<g mask="url(#worker-mask-4)"><image id="worker-4" href="assets/ambre-domain.png" width="887" height="1774"/></g>
+<g mask="url(#worker-mask-5)"><image id="worker-5" href="assets/ambre-domain.png" width="887" height="1774"/></g>
+</svg></section></div>
+<script>
+// Deterministic six-second cycle; the external viewer alone owns autoplay.
+const phase={value:0};
+const waterPhase=document.getElementById('water-phase');
+const workers=[{id:1,x:382,y:752,p:0},{id:2,x:615,y:1079,p:1.1},{id:3,x:232,y:1134,p:2.2},{id:4,x:714,y:419,p:0.7},{id:5,x:677,y:877,p:1.6}];
+const applyWater=()=>{
+ const angle=phase.value*Math.PI*2;
+ waterPhase.setAttribute('dx',(28*Math.sin(angle)).toFixed(4));
+ waterPhase.setAttribute('dy',(15*Math.cos(angle)).toFixed(4));
+ document.getElementById('foam-near').setAttribute('transform',`translate(${6*Math.sin(angle)},${3*Math.cos(angle)})`);
+ document.getElementById('foam-near').setAttribute('opacity',0.19+0.13*Math.sin(angle+0.6));
+ document.getElementById('foam-far').setAttribute('transform',`translate(${9*Math.sin(angle+1)},${4*Math.cos(angle+1)})`);
+ workers.forEach(w=>document.getElementById('worker-'+w.id).setAttribute('transform',`rotate(${2.8*Math.sin(2*angle+w.p)} ${w.x} ${w.y})`));
+};
+const tl=gsap.timeline({paused:true});
+tl.fromTo(phase,{value:0},{value:1,duration:6,ease:'none',onUpdate:applyWater},0);
+window.__timelines=window.__timelines||{};
+window.__timelines['ambre-waves']=tl;tl.seek(0);applyWater();
+</script></body></html>

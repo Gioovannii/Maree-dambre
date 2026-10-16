@@ -1,6 +1,57 @@
 {
   "sourceLanguage": "fr",
   "strings": {
+    "screen.village_board.quay": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quai"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quay"
+          }
+        }
+      }
+    },
+    "screen.game.amber_estate": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domaine d’Ambre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber Estate"
+          }
+        }
+      }
+    },
+    "screen.game.tap_a_resource_plot": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez une parcelle pour l’améliorer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a plot to upgrade it"
+          }
+        }
+      }
+    },
     "domain.army_state.defeat": {
       "extractionState": "manual",
       "localizations": {
