@@ -40,7 +40,8 @@ extension DomainChecks {
         precondition(village.availableArmy == [.tideguard: 1])
         precondition(village.resources == Resources(wood: 92, amber: 7, provisions: 20))
         precondition(village.buildings == buildings && village.resourceLevels == fields)
-        precondition(village.coastalCampaign?.tide == 2 && village.coastalCampaign?.enemyPower == 36)
+        precondition(village.coastalCampaign?.tide == 2 && village.coastalCampaign?.enemyPower == 60,
+                     "The next tribe's grown level strengthens its assault")
         precondition(village.coastalCampaign?.tidesUntilAssault == 3)
         let settled = village
         precondition(village.advanceCoastalTide())

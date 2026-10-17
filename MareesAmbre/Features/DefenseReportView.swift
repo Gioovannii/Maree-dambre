@@ -10,6 +10,9 @@ struct DefenseReportView: View {
                   : String(localized: "screen.defense.breached", defaultValue: "Défense percée"),
                   systemImage: report.won ? "checkmark.shield.fill" : "exclamationmark.shield.fill")
                 .font(.headline)
+            if let attackerName = report.attackerName {
+                Text(String(localized: "screen.defense.report_attacker", defaultValue: "Attaquant : \(String(attackerName))"))
+            }
             Text(String(localized: "screen.defense.comparison", defaultValue: "Défense : \(String(report.garrisonPower)) · Assaut : \(String(report.enemyPower))"))
             Text(String(localized: "screen.defense.fortifications", defaultValue: "Fortifications et peuple : \(String(report.fortificationPower)) points inclus dans la défense."))
                 .font(.footnote).foregroundStyle(Palette.muted)

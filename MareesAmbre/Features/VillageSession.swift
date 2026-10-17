@@ -134,7 +134,8 @@ final class VillageSession {
     func raid(_ targetID: Int, units: [ArmyUnit: Int]? = nil) -> Bool {
         refreshWorld()
         guard state.raid(targetID: targetID, units: units) else { return false }
-        persist(String(localized: "screen.village_session.expedition_departed_returns_in_value_seconds", defaultValue: "Expédition partie. Retour dans \(String(Int(state.raidDuration))) secondes."))
+        let duration = state.bots.first(where: { $0.id == targetID }).map { state.raidDuration(to: $0) } ?? state.raidDuration
+        persist(String(localized: "screen.village_session.expedition_departed_returns_in_value_seconds", defaultValue: "Expédition partie. Retour dans \(String(Int(duration))) secondes."))
         return true
     }
 

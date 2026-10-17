@@ -86,6 +86,23 @@
         }
       }
     },
+    "domain.army_state.combat_report": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ contre %@. Forces : %@ en attaque contre %@ en défense. %@ perte(s). Butin stocké : %@ bois, %@ ambre, %@ vivres."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ against %@. Strength: %@ attacking against %@ defending. %@ loss(es). Loot stored: %@ wood, %@ amber, %@ food."
+          }
+        }
+      }
+    },
     "domain.army_state.victory": {
       "extractionState": "manual",
       "localizations": {
@@ -1833,6 +1850,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Defense: %@"
+          }
+        }
+      }
+    },
+    "screen.army.target_distance_and_roundtrip": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ · Distance : %@ cases · Aller-retour : %@ s"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ · Distance: %@ tiles · Round trip: %@ s"
           }
         }
       }
@@ -6042,13 +6076,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choisissez les troupes envoyées et celles qui restent au village. Aller-retour : %@ secondes. Une cible se repose 10 minutes après le retour."
+            "value": "Choisissez les troupes envoyées et celles qui restent au village. Les cibles lointaines demandent plus de temps. Une cible se repose 10 minutes après le retour."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose which troops to send and which to keep in the village. Round trip: %@ seconds. A target recovers 10 minutes after the return."
+            "value": "Choose which troops to send and which to keep in the village. Distant targets take longer. A target recovers 10 minutes after the return."
           }
         }
       }
@@ -6450,13 +6484,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ouvrez la campagne côtière quand votre garnison est prête. Les corsaires progressent avec vos décisions."
+            "value": "Ouvrez la campagne quand votre garnison est prête. Les tribus voisines attaquent à tour de rôle."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Open the coastal campaign when your garrison is ready. Corsairs advance with your decisions."
+            "value": "Open the campaign when your garrison is ready. Neighboring tribes take turns attacking."
           }
         }
       }
@@ -6603,13 +6637,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les pillards corsaires convoitent les réserves de Port d’Ambre."
+            "value": "Les tribus voisines convoitent les réserves de Port d’Ambre."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Corsair raiders covet Amber Harbor’s reserves."
+            "value": "Neighboring tribes covet Amber Harbor’s reserves."
           }
         }
       }
@@ -6705,13 +6739,47 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ pillards · Force %@ · Arrivée à la marée %@"
+            "value": "%@ assaillants · Force %@ · Arrivée à la marée %@"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ raiders · Strength %@ · Arriving at tide %@"
+            "value": "%@ attackers · Strength %@ · Arriving at tide %@"
+          }
+        }
+      }
+    },
+    "screen.defense.attacker": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Assaillant : %@ · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attacker: %@ · %@"
+          }
+        }
+      }
+    },
+    "screen.defense.report_attacker": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attaquant : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attacker: %@"
           }
         }
       }
@@ -6739,13 +6807,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Après chaque assaut, deux pillards rejoignent la prochaine vague, jusqu’à 42. Leurs forces ne dépendent pas de votre armée."
+            "value": "Les tribus voisines se relaient. Les voisins plus éloignés et les vagues suivantes envoient une force supérieure."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "After each assault, two raiders join the next wave, up to 42. Their strength does not depend on your army."
+            "value": "Neighboring tribes take turns. More distant neighbors and later waves bring stronger forces."
           }
         }
       }
@@ -6943,13 +7011,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Les corsaires attaquent à cette marée."
+            "value": "Un voisin attaque à cette marée."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The corsairs attack at this tide."
+            "value": "A neighboring tribe attacks at this tide."
           }
         }
       }

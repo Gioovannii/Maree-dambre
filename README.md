@@ -8,7 +8,7 @@ The current version is a **playable, offline, single-player beta**. Neighbors ar
 
 Open `MareesAmbre.xcodeproj` in Xcode and select the **MareesAmbre** scheme. The app includes a WidgetKit extension for construction Live Activities. French and English are supported.
 
-The current release configuration is **1.0 (build 11)** for both the app and the widget. Select your development team to run on a physical device or create a signed archive.
+The current release configuration is **1.0 (build 12)** for both the app and the widget. Select your development team to run on a physical device or create a signed archive.
 
 ## Playable loop
 
@@ -18,7 +18,7 @@ The current release configuration is **1.0 (build 11)** for both the app and the
 4. Select a neighboring settlement on the world map, choose the troops to send, and launch a raid. Review the returning loot, survivors, and losses.
 5. Prepare the coastal defense campaign and use maritime contracts to trade with an escorted convoy.
 
-Production, construction, research, training, and raids are saved locally and catch up when the app resumes. The first raid returns after two minutes. Defense and trade use player-advanced campaign tides, so an absence does not trigger attacks or advance convoys.
+Production, construction, research, training, and raids are saved locally and catch up when the app resumes. The first raid returns after two minutes; distant expeditions take longer. Defense and trade use player-advanced campaign tides, so an absence does not trigger attacks or advance convoys.
 
 ## Features
 
@@ -29,8 +29,8 @@ Production, construction, research, training, and raids are saved locally and ca
 - **Production and storage:** wood, amber, and food accumulate up to the shared storage limit: 300 initially, then 300 + 500 per warehouse level. Fractional production and the last production timestamp are preserved.
 - **Army:** two units per clan, research, recruitment, and selective troop deployment. Troops left behind defend the village. Expedition preparation shows estimated strength, losses, and the remaining garrison; a mage only affects an expedition when sent with it.
 - **Twelve upgradable buildings:** each level improves its effect. The forge researches ten weapon levels separately for each unit type, limited by the forge level. Each weapon level adds one attack and defense point. Expedition bonuses are fixed at departure; weapon research also completes offline. See [Progression](docs/PROGRESSION.md) and [Building rules](docs/BATIMENTS.md).
-- **World map:** a fictional 200 × 200 tile archipelago with illustrated terrain, small settlements, simulated neighbor names, and clan details in settlement panels. The ocean texture has visible moving swell. The three factions grow every six hours, up to level 10 and 64 tiles. Map movement and zoom are local. See [World map design](docs/WORLD_HARMONIZATION.md).
-- **Coastal defense:** opt in after building the training yard and recruiting a unit. The first attack arrives after two campaign tides, then every three tides. The watchtower adds 20 defense per level. The player decides when each tide advances.
+- **World map:** a fictional 200 × 200 tile archipelago with illustrated terrain, twelve simulated neighbors across three tribes, and clan details in settlement panels. Neighbors range from nearby to 90 tiles away, with raid strength and return time scaling by distance. Their territories grow every six hours. Map movement and zoom are local. See [World map design](docs/WORLD_HARMONIZATION.md).
+- **Coastal defense:** opt in after building the training yard and recruiting a unit. The nearest neighbor leads the first attack after two campaign tides; tribes then take turns, with later waves growing stronger. The watchtower adds 20 defense per level. The player decides when each tide advances.
 - **Maritime contracts:** accessible through the market or world screen. Send wood and food along a safe or exposed route, choose an escort, and collect amber. Survivors return after combat; unclaimed payments remain available when storage is full.
 - **Persistent village:** the initial world seed depends on the UTC week, but an existing village survives week changes. Save validation protects unreadable data and migrates older saves.
 - **Construction Live Activities:** remaining construction time appears on the Lock Screen and Dynamic Island.
@@ -113,7 +113,7 @@ See [Beta testing notes](docs/TESTFLIGHT.md) for the test scope and tester instr
 
 ## Current limits and direction
 
-The three neighboring factions are simulated opponents. Raids resolve locally, without animated travel to the target or manual combat control. There are no player accounts, shared multiplayer, cross-device synchronization, additional player villages, map trade routes, alliances, outposts, or leaderboards yet. Balance is provisional.
+Twelve neighboring settlements across three tribes are simulated opponents. Raids and defense resolve locally, without animated travel to the target or manual combat control. There are no player accounts, shared multiplayer, cross-device synchronization, additional player villages, map trade routes, alliances, outposts, or leaderboards yet. Balance is provisional.
 
 The endgame target is a **Wonder requiring at least ten villages and coordinated deliveries to one construction city**. The distribution of villages between players and the detailed project rules still need definition. See [Wonder design](docs/MERVEILLE.md).
 

@@ -10,10 +10,15 @@ struct CoastalDefensePanel: View {
                 .font(.headline)
             Text(String(localized: "screen.defense.power", defaultValue: "Défense disponible : \(String(session.state.garrisonDefense))"))
             if let campaign = session.state.coastalCampaign {
+                if let attackerID = campaign.attackerID,
+                   let attacker = session.state.bots.first(where: { $0.id == attackerID }) {
+                    Text(String(localized: "screen.defense.attacker", defaultValue: "Assaillant : \(String(WorldNeighbor.name(for: attacker, seed: session.world.seed))) · \(String(attacker.displayName))"))
+                        .font(.subheadline.bold())
+                }
                 Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
                     .accessibilityIdentifier("defense.incoming")
             } else {
-                Text(String(localized: "screen.defense.intro", defaultValue: "Ouvrez la campagne côtière quand votre garnison est prête. Les corsaires progressent avec vos décisions."))
+                Text(String(localized: "screen.defense.intro", defaultValue: "Ouvrez la campagne quand votre garnison est prête. Les tribus voisines attaquent à tour de rôle."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
             Button {

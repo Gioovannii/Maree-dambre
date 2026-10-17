@@ -1,7 +1,7 @@
 import Foundation
 
 struct VillageState: Codable, Equatable {
-    static let currentVersion = 14
+    static let currentVersion = 15
     var version: Int
     let seed: Int
     var resources: Resources
@@ -137,6 +137,14 @@ struct VillageState: Codable, Equatable {
         if version < 12 { version = 12 }
         if version < 13 { version = 13 }
         if version < 14 { version = 14 }
+        if version < 15 {
+            let existingIDs = Set(bots.map(\.id))
+            let occupied = Set(bots.flatMap(\.territory))
+            bots.append(contentsOf: BotFaction.starting.filter {
+                !existingIDs.contains($0.id) && !occupied.contains($0.capital)
+            })
+            version = 15
+        }
     }
 
     private mutating func relocateQuayToWaterfront() {
@@ -346,7 +354,7 @@ struct VillageState: Codable, Equatable {
         occupied.insert(.home)
         for _ in 0..<intervals {
             for index in bots.indices {
-                bots[index].level = min(10, bots[index].level + 1)
+                bots[index].level = min(bots[index].maximumLevel, bots[index].level + 1)
                 guard bots[index].territory.count < 64 else { continue }
                 let candidates = bots[index].territory.flatMap { tile in
                     [TileCoordinate(x: tile.x + 1, y: tile.y), TileCoordinate(x: tile.x, y: tile.y + 1),

@@ -9,6 +9,7 @@ struct DefenseReport: Codable, Equatable {
     var won: Bool
     var losses: [ArmyUnit: Int]
     var stolen: Resources
+    var attackerName: String? = nil
 
     var lossCount: Int { losses.values.reduce(0, +) }
     var isValid: Bool {

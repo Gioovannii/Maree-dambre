@@ -27,9 +27,10 @@ struct RaidPreparationView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text(currentTarget.displayName).font(.headline)
+                    Text(WorldNeighbor.name(for: currentTarget, seed: session.world.seed)).font(.headline)
+                    Text(String(localized: "world.neighbor.tribe", defaultValue: "\(String(currentTarget.displayName)) · Voisin simulé (IA)"))
                     Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(defense))"))
-                    Text(String(localized: "screen.raid.duration", defaultValue: "Aller-retour : \(String(Int(session.state.raidDuration))) secondes."))
+                    Text(String(localized: "screen.raid.duration", defaultValue: "Aller-retour : \(String(Int(session.state.raidDuration(to: currentTarget)))) secondes."))
                 }
                 .listRowBackground(Palette.panel)
                 Section(String(localized: "screen.raid.choose_units", defaultValue: "Choisir les troupes")) {

@@ -15,7 +15,7 @@ struct WorldSelectionPanel: View {
                 Text(String(localized: "world.neighbor.tribe", defaultValue: "\(String(owner.displayName)) · Voisin simulé (IA)"))
                     .foregroundStyle(Palette.muted)
                 Text(String(localized: "screen.world.level_value_defense_value_value_locations", defaultValue: "Niveau \(String(owner.level)) · Défense \(String(10 + min(10, owner.level) * 4)) · \(String(owner.territory.count)) lieux"))
-                Text(String(localized: "screen.world.your_power_value_round_trip_value_s", defaultValue: "Votre force : \(String(session.state.armyPower)) · Aller-retour : \(String(Int(session.state.raidDuration))) s"))
+                Text(String(localized: "screen.world.your_power_value_round_trip_value_s", defaultValue: "Votre force : \(String(session.state.armyPower)) · Aller-retour : \(String(Int(session.state.raidDuration(to: owner)))) s"))
                 Button(String(localized: "screen.world.view_expeditions", defaultValue: "Voir les expéditions"), systemImage: "sailboat.fill", action: onShowMissions)
                     .buttonStyle(.borderedProminent)
                     .foregroundStyle(Palette.ocean)

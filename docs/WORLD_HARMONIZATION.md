@@ -55,7 +55,7 @@ Prompt du sol :
 
 ## Limites
 
-Le monde conserve les trois voisins simulés du prototype. La colonisation,
+Le monde conserve les trois voisins initiaux du prototype et ajoute neuf voisins simulés répartis sur l’archipel. La colonisation,
 les échanges entre joueurs et la Merveille ne sont pas implémentés par cette
 refonte. Les performances sur appareil physique et la lisibilité d’une région
 plus peuplée restent à mesurer.

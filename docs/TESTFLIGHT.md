@@ -1,4 +1,4 @@
-# TestFlight beta — 1.0 (11)
+# TestFlight beta — 1.0 (12)
 
 ## Scope
 
@@ -28,8 +28,9 @@ Suggested text for TestFlight's **What to Test** field:
 > number, a screenshot, and the steps that caused any problem. Use TestFlight's
 > feedback feature to send your report.
 >
-> This beta is single-player and stores progress on your device. The neighboring
-> settlements are simulated opponents. Multiplayer and colonization are planned.
+> This beta is single-player and stores progress on your device. The twelve
+> neighboring settlements are simulated opponents. Multiplayer and colonization
+> are planned.
 
 ## Release checks
 
@@ -61,4 +62,12 @@ physical-device testing or several days of progression and balance feedback.
 Build 9 also introduced ten-level building progression, increasing costs and
 timers, separate weapon upgrades per unit type, and the harmonized archipelago.
 
-Build 10 was already present in App Store Connect, so this release uses build 11.
+## Build 12 changes
+
+- Expanded the world from three to twelve simulated neighbors, including targets up to 90 tiles away.
+- Raid duration and enemy strength scale with target distance and level.
+- Defense campaigns now name the attacking neighbor and rotate among the tribes.
+- Raid reports show attack strength, defense strength, losses, and the loot actually stored.
+- App and widget aligned at version 1.0, build 12.
+
+Build 11 was already present in App Store Connect, so this release uses build 12.

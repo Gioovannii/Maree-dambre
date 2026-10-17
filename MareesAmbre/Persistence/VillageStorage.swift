@@ -36,7 +36,8 @@ struct VillageStorage {
               hasValidTiming(state),
               state.buildings[12] == .hall,
               state.buildings.allSatisfy({ (0..<25).contains($0.key) && ($0.value != .hall || $0.key == 12) }),
-              state.bots.map(\.id) == [0, 1, 2],
+              (3...BotFaction.starting.count).contains(state.bots.count),
+              state.bots.map(\.id) == Array(0..<state.bots.count),
               state.bots.allSatisfy({ $0.capital.isValid && $0.territory.count <= 64 && $0.territory.contains($0.capital) && $0.territory.allSatisfy(\.isValid) }) else {
             throw CocoaError(.coderReadCorrupt)
         }

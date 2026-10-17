@@ -52,12 +52,16 @@ struct ArmyPanel: View {
             Text(String(localized: "screen.army.garrison_count", defaultValue: "Unités au village : \(String(session.state.availableArmy.values.reduce(0, +)))"))
                 .accessibilityIdentifier("raid.garrisonCount")
             Text(String(localized: "screen.army.available_power_value", defaultValue: "Force disponible : \(String(session.state.armyPower))")).font(.headline)
-            Text(String(localized: "screen.army.expedition_rules", defaultValue: "Choisissez les troupes envoyées et celles qui restent au village. Aller-retour : \(String(Int(session.state.raidDuration))) secondes. Une cible se repose 10 minutes après le retour."))
+            Text(String(localized: "screen.army.expedition_rules", defaultValue: "Choisissez les troupes envoyées et celles qui restent au village. Les cibles lointaines demandent plus de temps. Une cible se repose 10 minutes après le retour."))
                 .font(.footnote).foregroundStyle(Palette.muted)
             ForEach(session.state.bots) { bot in
                 VStack(alignment: .leading, spacing: 6) {
-                    Text(bot.displayName).font(.headline)
+                    Text(WorldNeighbor.name(for: bot, seed: session.world.seed)).font(.headline)
+                    Text(String(localized: "world.neighbor.tribe", defaultValue: "\(String(bot.displayName)) · Voisin simulé (IA)"))
+                        .font(.caption).foregroundStyle(Palette.muted)
                     Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(10 + min(10, bot.level) * 4))"))
+                    Text(String(localized: "screen.army.target_distance_and_roundtrip", defaultValue: "Niveau \(String(bot.level)) · Distance : \(String(bot.distanceFromHome)) cases · Aller-retour : \(String(Int(session.state.raidDuration(to: bot)))) s"))
+                        .font(.caption).foregroundStyle(Palette.muted)
                     Button(String(localized: "screen.army.prepare_attack", defaultValue: "Préparer l’attaque")) { target = bot }
                         .buttonStyle(.bordered)
                         .disabled(!session.state.canRaid(bot))

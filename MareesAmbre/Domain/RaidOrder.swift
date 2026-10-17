@@ -2,7 +2,10 @@ import Foundation
 
 struct RaidOrder: Codable, Equatable {
     var targetDisplayName: String {
-        BotFaction.starting.first(where: { $0.id == targetID })?.displayName ?? targetName
+        targetName
+    }
+    var attackPower: Int {
+        units.reduce(0) { $0 + ($1.key.attack + (weaponLevels?[$1.key] ?? attackUpgrade ?? 0)) * $1.value }
     }
 
     let targetID: Int

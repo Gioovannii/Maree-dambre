@@ -9,7 +9,7 @@ struct CoastalDefenseView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text(String(localized: "screen.defense.corsairs", defaultValue: "Les pillards corsaires convoitent les réserves de Port d’Ambre."))
+                    Text(String(localized: "screen.defense.corsairs", defaultValue: "Les tribus voisines convoitent les réserves de Port d’Ambre."))
                     Text(String(localized: "screen.defense.clock_rules", defaultValue: "Une marée avance uniquement avec votre accord. Production, construction et recrutement gardent leurs délais actuels. Aucun assaut ne se résout pendant votre absence."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                 }
@@ -25,10 +25,15 @@ struct CoastalDefenseView: View {
                         Text(campaign.isHighTide
                              ? String(localized: "screen.defense.high_tide", defaultValue: "Marée haute")
                              : String(localized: "screen.defense.low_tide", defaultValue: "Marée basse"))
+                        if let attackerID = campaign.attackerID,
+                           let attacker = session.state.bots.first(where: { $0.id == attackerID }) {
+                            Text(String(localized: "screen.defense.attacker", defaultValue: "Assaillant : \(String(WorldNeighbor.name(for: attacker, seed: session.world.seed))) · \(String(attacker.displayName))"))
+                                .font(.headline)
+                        }
                         Text(String(localized: "screen.defense.arrival", defaultValue: "\(String(campaign.enemyCount)) pillards · Force \(String(campaign.enemyPower)) · Arrivée à la marée \(String(campaign.nextAssaultTide))"))
                         Text(String(localized: "screen.defense.warning", defaultValue: "Il reste \(String(campaign.tidesUntilAssault)) marée(s) pour préparer la garnison."))
                             .accessibilityIdentifier("defense.warning")
-                        Text(String(localized: "screen.defense.scaling", defaultValue: "Après chaque assaut, deux pillards rejoignent la prochaine vague, jusqu’à 42. Leurs forces ne dépendent pas de votre armée."))
+                        Text(String(localized: "screen.defense.scaling", defaultValue: "Les tribus voisines se relaient. Les voisins plus éloignés et les vagues suivantes envoient une force supérieure."))
                             .font(.footnote).foregroundStyle(Palette.muted)
                     }
                     .listRowBackground(Palette.panel)
@@ -63,7 +68,7 @@ struct CoastalDefenseView: View {
                 Section {
                     if let campaign = session.state.coastalCampaign {
                         if confirmsAssault && campaign.tidesUntilAssault == 1 {
-                            Text(String(localized: "screen.defense.confirm_title", defaultValue: "Les corsaires attaquent à cette marée."))
+                            Text(String(localized: "screen.defense.confirm_title", defaultValue: "Un voisin attaque à cette marée."))
                                 .font(.headline)
                             Text(String(localized: "screen.defense.confirm_message", defaultValue: "Les troupes actuellement au village défendront le port. Le résultat et les pertes seront sauvegardés."))
                                 .font(.footnote).foregroundStyle(Palette.muted)
