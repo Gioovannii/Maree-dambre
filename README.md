@@ -1,80 +1,122 @@
 # Les Marées d’Ambre
 
-Prototype iOS solo et hors ligne. Ouvrir `MareesAmbre.xcodeproj` et choisir le schéma **MareesAmbre**.
+A native iOS strategy and village-building game set in a sunlit coastal archipelago. Build your village, grow its economy, train troops, and prepare expeditions from a living, illustrated domain.
 
-## Boucle jouable
+The current version is a **playable, offline, single-player beta**. Neighbors are simulated locally. Shared multiplayer, colonization, and the endgame Wonder are planned features.
 
-1. Améliorer les champs et augmenter les réserves, visibles sous la forme stock / capacité.
-2. Développer les bâtiments du Centre et l’Entrepôt. À plus long terme, amener un champ au niveau 10 débloque le bâtiment producteur associé.
-3. Construire la Maison des savoirs, rechercher une unité, puis bâtir la Cour des armes pour l’entraîner.
-4. Depuis Monde, attaquer une des trois factions locales. Après l’expédition, récupérer le butin et le rapport de pertes.
+## Run the project
 
-Les recherches, chantiers, entraînements, productions et expéditions sont enregistrés localement et rattrapés au retour dans le jeu. Le premier raid revient après deux minutes. Les factions et leur progression sont simulées sur l’appareil ; il n’y a ni compte, ni service Firebase, ni multijoueur.
+Open `MareesAmbre.xcodeproj` in Xcode and select the **MareesAmbre** scheme. The app includes a WidgetKit extension for construction Live Activities. French and English are supported.
 
-## Systèmes
+The current release configuration is **1.0 (build 10)** for both the app and the widget. Select your development team to run on a physical device or create a signed archive.
 
-- **Amélioration des champs et bâtiments** : dix niveaux, coûts et délais croissants. La production
-  précédente continue jusqu’à la fin. Champs et bâtiments partagent un seul chantier ;
-  annuler rembourse 50 % du coût, arrondi à l’entier inférieur par ressource.
-  Les travaux sont sauvegardés et terminent aussi pendant l’absence.
+## Playable loop
 
-- **Domaine vivant** : les dix exploitations sont peintes dans le décor ; seuls les niveaux et les chantiers changent. La mer ondule à 24 images/s et sept passants marchent sur les chemins et le pont à 30 images/s. Les silhouettes fixes ont été retirées du décor. Les animations se suspendent hors de l’app et respectent Réduire les animations. Stocks, sélection et améliorations restent de vrais contrôles SwiftUI. Voir `docs/LIVING_DOMAIN.md`.
-- **Centre harmonisé** : décor en pierre claire, titres et médaillons partagés avec le domaine, mer animée et passants. Les bâtiments restent déplaçables et les lots inchangés. Voir `docs/CENTER_HARMONIZATION.md`.
-- **Ressources et Centre** : deux cartes plein écran, dix terrains producteurs et douze lots urbains. Chaque bâtiment n’existe qu’en un exemplaire. Un seul chantier peut progresser à la fois ; son annulation rembourse la moitié du coût.
-- **Production** : bois, ambre et vivres s’accumulent jusqu’à la capacité de la réserve, 300 au départ puis 300 + 500 par niveau d’Entrepôt. Les fractions et l’heure de dernière production sont sauvegardées.
-- **Armée** : Maison des savoirs, Cour des armes, deux unités propres à chaque peuple, entraînement et raids contre trois factions bots. Le joueur choisit les effectifs envoyés par type et conserve le reste au village. L’écran annonce la force, les pertes prévues et les effectifs gardés avant le départ ; le bonus du mage dépend de sa présence dans l’expédition.
-- **Douze bâtiments améliorables** : chaque niveau renforce leur effet. La Forge recherche dix niveaux d’armes séparément par type d’unité (+1 attaque et défense par niveau), dans la limite du niveau de la Forge. Les effets des raids sont fixés au départ ; les recherches d’armes se terminent aussi hors ligne. Voir [la progression](docs/PROGRESSION.md) pour les coûts, durées et capacités, et `docs/BATIMENTS.md` pour les règles des bâtiments.
-- **Monde** : carte fictive de 200 × 200 cases, mer turquoise, côtes ivoire et végétation illustrée dans le style du Centre. Petits villages et pseudonymes des voisins simulés, tribus dans les fiches, déplacements et zoom locaux. Les factions gagnent un niveau et étendent leur territoire toutes les six heures, jusqu’au niveau 10 et 64 cases. Voir [l’harmonisation de la carte](docs/WORLD_HARMONIZATION.md).
-- **Démarrage** : prologue et choix d’un clan, puis accès direct au village. Le guide en modale a été retiré ; le futur onboarding TipKit avec un personnage et un chat dédié est reporté à la fin. La graine initiale dépend de la semaine UTC, mais le village reste le même ensuite, même au changement de semaine.
-- **Live Activity** : les chantiers affichent le temps restant dans la Dynamic Island et sur l’écran verrouillé.
+1. Upgrade resource fields and grow your reserves. The resource bar shows current stock and storage capacity.
+2. Develop the town center and warehouse. Reaching level 10 in a field unlocks its associated production building.
+3. Build the House of Knowledge, research a unit, and build the training yard to recruit it.
+4. Select a neighboring settlement on the world map, choose the troops to send, and launch a raid. Review the returning loot, survivors, and losses.
+5. Prepare the coastal defense campaign and use maritime contracts to trade with an escorted convoy.
 
-## Vérifier la base
+Production, construction, research, training, and raids are saved locally and catch up when the app resumes. The first raid returns after two minutes. Defense and trade use player-advanced campaign tides, so an absence does not trigger attacks or advance convoys.
 
-Sur iPad, les fenêtres d’au moins 700 × 600 points affichent la carte et les détails
-côte à côte. Les parcelles se sélectionnent sans quitter la carte. La carte garde
-ses proportions ; les fenêtres plus étroites utilisent la présentation compacte.
-Contrôler Ressources, Centre, recherche, recrutement et Monde en portrait et paysage,
-puis en fenêtre réduite, avant de publier une version iPad.
+## Features
 
-Avec les tailles de texte d’accessibilité, les stocks s’affichent en colonne et
-les écrans principaux deviennent défilants. Les parcelles apparaissent dans une
-liste avec leurs noms complets ; leur sélection et le déplacement des bâtiments
-conservent les mêmes actions. Contrôler aussi ces parcours à la plus grande taille
-de texte, puis rétablir le réglage du simulateur avant les comparaisons de captures.
+- **Field and building progression:** ten upgrade levels with increasing costs and construction times. The previous level remains active until completion. Fields and town buildings share one construction slot; cancellation refunds 50% of the paid cost, rounded down per resource. Construction also finishes while the app is closed.
+- **Living domain:** ten painted resource plots with interactive levels and construction markers. Animated water and pedestrians follow the roads and bridge. Animations pause when the app is inactive and respect Reduce Motion. Stocks, selections, and upgrades use native SwiftUI controls. See [Living domain](docs/LIVING_DOMAIN.md).
+- **Town center:** limestone architecture, shared visual styling, animated water, and pedestrians. Buildings can be moved between the twelve town plots, with one instance of each building. See [Town center design](docs/CENTER_HARMONIZATION.md).
+- **Clear navigation:** separate Resources, Town, World, and Missions tabs. On compact screens, the Resources shortcut to the town sits above the bottom navigation bar.
+- **Production and storage:** wood, amber, and food accumulate up to the shared storage limit: 300 initially, then 300 + 500 per warehouse level. Fractional production and the last production timestamp are preserved.
+- **Army:** two units per clan, research, recruitment, and selective troop deployment. Troops left behind defend the village. Expedition preparation shows estimated strength, losses, and the remaining garrison; a mage only affects an expedition when sent with it.
+- **Twelve upgradable buildings:** each level improves its effect. The forge researches ten weapon levels separately for each unit type, limited by the forge level. Each weapon level adds one attack and defense point. Expedition bonuses are fixed at departure; weapon research also completes offline. See [Progression](docs/PROGRESSION.md) and [Building rules](docs/BATIMENTS.md).
+- **World map:** a fictional 200 × 200 tile archipelago with illustrated terrain, small settlements, simulated neighbor names, and clan details in settlement panels. The ocean texture has visible moving swell. The three factions grow every six hours, up to level 10 and 64 tiles. Map movement and zoom are local. See [World map design](docs/WORLD_HARMONIZATION.md).
+- **Coastal defense:** opt in after building the training yard and recruiting a unit. The first attack arrives after two campaign tides, then every three tides. The watchtower adds 20 defense per level. The player decides when each tide advances.
+- **Maritime contracts:** accessible through the market or world screen. Send wood and food along a safe or exposed route, choose an escort, and collect amber. Survivors return after combat; unclaimed payments remain available when storage is full.
+- **Persistent village:** the initial world seed depends on the UTC week, but an existing village survives week changes. Save validation protects unreadable data and migrates older saves.
+- **Construction Live Activities:** remaining construction time appears on the Lock Screen and Dynamic Island.
 
-Lancer `sh Scripts/check-domain.sh` pour les règles de ressources, constructions, migration des sauvegardes, entraînement, raids, pertes, butin et reprise hors ligne.
+## Verification
 
-Les validations refusent aussi les dates hors de l’intervalle `Date.distantPast...Date.distantFuture`, les fractions de production invalides et les chantiers qui écraseraient un bâtiment ou sortiraient des emplacements autorisés. Les données refusées sont conservées pour le diagnostic.
+Run the domain and session checks from the repository root:
 
-Lancer `sh Scripts/check-session.sh` pour la reprise réelle de la session, les mises à jour automatiques et la protection des sauvegardes illisibles. Ces vérifications utilisent des préférences isolées ; elles ne touchent pas à une partie existante. Une sauvegarde illisible reste intacte tant que le joueur ne fonde pas un nouveau village. À cette action, une copie des données originales est conservée sous une clé `village.unreadable.<graine>.<identifiant>` avant toute nouvelle sauvegarde. Cette copie sert au diagnostic ; l’app ne propose pas encore sa restauration.
+```sh
+sh Scripts/check-domain.sh
+sh Scripts/check-session.sh
+sh Scripts/check-worldmap.sh
+sh Scripts/check-coastline.sh
+```
 
-Pour contrôler l’avertissement de sauvegarde illisible visuellement, lancer avec `--ui-snapshot --snapshot-save-recovery`. Le mode `--ui-snapshot` fige aussi l’animation de l’eau pour rendre les captures comparables.
+These cover resources, construction, progression, save migration and validation, recruitment, troop selection, raids, losses, loot, defense, commerce, world generation, and offline recovery. Session checks use isolated preferences and do not modify an existing game.
 
-Lancer `zsh Scripts/check-ui-snapshots.sh verify` pour comparer les neuf captures iPhone aux références : Ressources, Centre, amélioration, Monde, marché, forge, infirmerie, quai et contrats maritimes. Lancer `SNAPSHOT_DEVICE=ipad zsh Scripts/check-ui-snapshots.sh verify` pour les trois captures iPad. Les scripts détectent Xcode et le simulateur iOS 27.0 correspondant ; `DEVELOPER_DIR` et `SIMULATOR_ID` permettent de les choisir explicitement. La langue de l’app est fixée au français et la date de la barre d’état est figée. Après contrôle visuel d’un changement voulu, le mode `record` actualise les références. Pour contrôler un chantier visuellement, lancer le simulateur avec `--ui-snapshot --snapshot-center --snapshot-construction`. Pour tester la fondation sans toucher aux sauvegardes, utiliser `--ui-snapshot --snapshot-new-village`.
+Save validation rejects out-of-range dates, invalid production fractions, and construction jobs that overwrite a building or use an invalid plot. An unreadable save stays intact until the player explicitly starts a new village. That action preserves a diagnostic copy under `village.unreadable.<seed>.<identifier>`; restoring that copy is not yet available in the app.
 
-Pour voir les douze bâtiments sans toucher à une sauvegarde, lancer avec `--ui-snapshot --snapshot-center --snapshot-developed`. Les arguments `--ui-snapshot --snapshot-market`, `--ui-snapshot --snapshot-forge`, `--ui-snapshot --snapshot-infirmary` ou `--ui-snapshot --snapshot-expeditionQuay` ouvrent leurs panneaux dans une partie de démonstration. Ajouter `--snapshot-actions` pour cadrer le bas de la fiche et ses commandes.
+Check packaged French and English translations after building:
 
-Avant une bêta, faire une partie neuve sur iPhone jusqu’au premier raid, sans imposer un champ niveau 10 avant le combat. Noter les temps d’attente, les points où les ressources manquent et si l’écran explique clairement le prochain objectif. Mesurer ensuite la progression vers les niveaux élevés et l’agrandissement de la réserve. Aucun système en ligne n’est nécessaire pour ce test.
+```sh
+sh Scripts/check-localization.sh /absolute/path/to/MareesAmbre.app
+```
 
-## Limites de cette version
+### Visual checks
 
-La campagne côtière s’ouvre volontairement depuis Monde → Organiser la défense,
-après construction de la Cour des armes et recrutement d’une unité. Le premier
-assaut arrive après deux marées, les suivants toutes les trois marées. Le joueur
-décide chaque passage ; les absences ne font avancer aucune attaque. La Tour de
-garde ajoute 20 de défense par niveau à la garnison du port. Les expéditions et productions
-gardent leurs délais réels. Le Marché et le Monde donnent accès aux contrats maritimes : 20 bois et 5 vivres
-au départ, escorte choisie, route sûre de trois marées (18 ambres) ou route
-exposée de deux marées (26 ambres, force ennemie 24). Les escortes reviennent après
-les combats ; les paiements restent au comptoir si la réserve est pleine. Chaque
-route propose une offre toutes les six marées. Routes sur la carte, alliances,
-avant-postes, merveille et classements restent à développer.
+On iPad, windows at least 700 × 600 points show the map and details side by side. Smaller windows use the compact layout. Check Resources, Town, research, recruitment, and World in portrait, landscape, and a reduced window before distributing an iPad build.
 
-La cible de fin de partie est une Merveille nécessitant au moins dix villages
-et des livraisons coordonnées vers une ville de construction. Le seuil est fixé ;
-la répartition des villages entre joueurs et les règles du projet restent à préciser.
-Voir [la conception de la Merveille](docs/MERVEILLE.md).
+At accessibility text sizes, resources stack vertically and the main screens scroll. Plots are presented as a list with full names, while selection and building movement retain the same actions. Check the largest text size and VoiceOver, then restore the simulator settings before comparing screenshots.
 
-Le manifeste `PrivacyInfo.xcprivacy` déclare l’utilisation de `UserDefaults` pour les sauvegardes locales (motif Apple `CA92.1`), sans suivi ni collecte de données. Vérifier sa présence dans une archive avec `python3 Scripts/check-archive.py /chemin/vers/MareesAmbre.xcarchive`, puis effectuer la validation de distribution signée dans Xcode avant un envoi.
+The screenshot scripts discover Xcode and the matching iOS 27.0 simulator, fix the app language to French, and freeze the status bar. Override `DEVELOPER_DIR` or `SIMULATOR_ID` to select a specific installation or device.
 
-Les raids sont des résolutions locales abstraites : pas de déplacement animé jusqu’à la capitale, pas de contrôle manuel du combat, de fondation de nouveaux villages, de classement, de compte joueur ou de synchronisation entre appareils. Les coûts et forces des factions sont un premier équilibrage à valider en jouant.
+```sh
+# Nine iPhone references: resources, town, upgrade, world, market,
+# forge, infirmary, quay, and maritime contracts.
+zsh Scripts/check-ui-snapshots.sh verify
+
+# Three iPad references.
+SNAPSHOT_DEVICE=ipad zsh Scripts/check-ui-snapshots.sh verify
+```
+
+Use `record` instead of `verify` only after visually reviewing an intentional change. Not all references are necessarily current after a UI change; inspect differences before updating them.
+
+Launch arguments provide isolated demo scenarios:
+
+| Arguments | Scenario |
+| --- | --- |
+| `--ui-snapshot` | Deterministic demo village with frozen animations |
+| `--ui-snapshot --snapshot-world` | World map |
+| `--ui-snapshot --snapshot-world --snapshot-animate` | World map with live water animation |
+| `--ui-snapshot --snapshot-center --snapshot-construction` | Town construction |
+| `--ui-snapshot --snapshot-new-village` | Village founding without changing real saves |
+| `--ui-snapshot --snapshot-save-recovery` | Unreadable-save warning |
+| `--ui-snapshot --snapshot-center --snapshot-developed` | All twelve town buildings |
+| `--ui-snapshot --snapshot-market` | Market panel |
+| `--ui-snapshot --snapshot-forge` | Forge panel |
+| `--ui-snapshot --snapshot-infirmary` | Infirmary panel |
+| `--ui-snapshot --snapshot-expeditionQuay` | Expedition quay panel |
+
+Add `--snapshot-actions` to frame a panel's lower actions. Demo arguments are for development and do not represent normal launch behavior.
+
+## TestFlight beta
+
+This build is intended to test the first solo loop, visual clarity, waiting times, and balance with a small initial tester group. It does not require an online game server.
+
+Before wider distribution, play from a fresh installation through the first raid on a physical iPhone. Close and reopen the app during construction, research, training, and an expedition. Verify the return of troops and resources, construction Live Activities while the app is suspended, the town shortcut, and water motion. Repeat the important navigation paths on iPad and at the largest text size. Longer sessions are still needed to assess high-level progression and storage growth.
+
+Create a Release archive for a generic iOS device, then check its packaged metadata:
+
+```sh
+python3 Scripts/check-archive.py /absolute/path/to/MareesAmbre.xcarchive
+```
+
+The privacy manifest declares app-only `UserDefaults` access for local saves (Apple reason `CA92.1`), with no tracking or data collection. The local archive check verifies bundle metadata, matching app/widget versions, extension embedding, and the manifest. Apple's signed distribution validation is also required.
+
+Use Xcode Organizer to validate and upload the archive to App Store Connect. Once Apple finishes processing it, select the build for the intended TestFlight group. Uploading an archive alone does not make it available to testers; external testing may require beta review.
+
+See [Beta testing notes](docs/TESTFLIGHT.md) for the test scope and tester instructions.
+
+## Current limits and direction
+
+The three neighboring factions are simulated opponents. Raids resolve locally, without animated travel to the target or manual combat control. There are no player accounts, shared multiplayer, cross-device synchronization, additional player villages, map trade routes, alliances, outposts, or leaderboards yet. Balance is provisional.
+
+The endgame target is a **Wonder requiring at least ten villages and coordinated deliveries to one construction city**. The distribution of villages between players and the detailed project rules still need definition. See [Wonder design](docs/MERVEILLE.md).
+
+The opening currently leads from the prologue and clan choice directly to the village. Contextual onboarding is planned. A fresh-player test should establish whether the next objective is clear without guidance.
+
+Most detailed design documents are currently written in French.

@@ -62,3 +62,10 @@ cart area and bridge to prevent static figures being left behind.
 Original UI-removal edit:
 
 Precise production edit of this exact game screenshot: REMOVE ALL USER INTERFACE and reconstruct the artwork beneath it. Remove top resource bar and icons/numbers, title and decorative lines, all ten floating level circles and their numbers, selected gold circle, harbor button, bottom navigation panel, all text. Repaint those small areas seamlessly with ocean/terrain matching surroundings. Preserve EVERYTHING ELSE at EXACT pixel-relative positions: identical framing, 1:2 portrait aspect, ten productive areas (3 timber groves, 5 farms, 2 amber quarries), every farmer and miner and their poses and positions, trees, buildings, cart, bridge, coastline, sea, boats, paths, sunlight, colors, sharpness and perspective. Do not redesign, add, move or remove any world object. This will be a static game background with native interactive UI added separately; absolutely no text/numbers/UI left in the result, and exact source framing is essential for animated overlay registration. Output same portrait composition only.
+
+## Harbor shortcut placement
+
+On compact resource screens, `Quais & Centre` belongs to the GameView HUD,
+above the tab bar, rather than an absolute position in the full-screen artwork.
+The embedded tablet map retains its map shortcut. The shared button has a
+44-point minimum height and the accessibility identifier `village.openTown`.

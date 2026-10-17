@@ -26,3 +26,8 @@ zoom sans changement de sélection, glissement et retour depuis Missions.
 Les grandes tailles de texte utilisent une légende en colonne ; la fiche de
 sélection est à droite sur iPad. Performance et lisibilité avec une population
 plus dense restent à contrôler sur appareil.
+
+La mer utilise désormais l’asset `ArchipelMer` et une déformation douce des UV,
+sans points lumineux procéduraux ni halo côtier large. `--snapshot-animate`
+permet de contrôler son mouvement dans une partie de démonstration isolée ;
+les captures ordinaires restent figées et Réduire les animations coupe le mouvement.

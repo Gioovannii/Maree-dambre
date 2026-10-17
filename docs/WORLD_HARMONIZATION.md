@@ -12,8 +12,8 @@ affleurements suivent les cases de forêt et d’ambre. Le décor est une textur
 calculée en fond, pas une image fixe portant de fausses destinations.
 
 Le terrain est dessiné dans une texture transparente de 3 200 × 3 200 pixels,
-au-dessus de la mer SpriteKit existante. Des lavis colorés nuancent les plaines ;
-les rivages superposent hauts-fonds turquoise, sable et écume. L’atlas est découpé
+au-dessus de la mer SpriteKit. Des lavis colorés nuancent les plaines ;
+les rivages ont une transition turquoise fine, du sable et de l’écume. L’atlas est découpé
 et réduit en mémoire avant peinture ; la texture finale est mise en cache pour
 la dernière graine, puis réutilisée pendant le déplacement et le zoom.
 
@@ -59,3 +59,18 @@ Le monde conserve les trois voisins simulés du prototype. La colonisation,
 les échanges entre joueurs et la Merveille ne sont pas implémentés par cette
 refonte. Les performances sur appareil physique et la lisibilité d’une région
 plus peuplée restent à mesurer.
+
+## Correction de la mer
+
+La surface utilise `MareesAmbre/Assets.xcassets/ArchipelMer.imageset/ArchipelMer.png`,
+une texture de mer peinte générée avec ImageGen intégré, à partir de la même
+référence du Centre, sans transparence. `WorldSeaSurface` la répète dans les
+coordonnées du monde et lui applique une houle visible à l’échelle régionale.
+La déformation et le courant ont été renforcés après un premier aperçu trop discret ;
+des variations douces de lumière accompagnent la houle. Les taches lumineuses
+sinusoïdales et le halo turquoise large ont été supprimés. Les rivages ont été
+affinés pour éviter l’aspect de bassins bordés d’un anneau lumineux.
+
+Prompt de la mer :
+
+> Use case: stylized-concept. Asset type: seamless top-down OCEAN WATER MATERIAL for the Mediterranean fantasy world map of Les Marées d’Ambre. The reference is STYLE ONLY: match the beautiful blue sea in the reference coastal village. Produce an entirely water-filled square, true orthographic overhead view, richly painted high-end game illustration, clear azure and medium cobalt blue water with a very subtle turquoise undertone, small delicate irregular wind ripples and fine muted pale blue highlights, subtle depth and moving-water appearance. Small-scale texture suitable for repeating under a zoomable world map. Natural softly intertwined irregular ripples, no regular wave rows, no foam, no large waves, no circular caustic blobs, no glowing spots, no broad light patches, no sparkling stars, no horizon, no land, no coast, no objects, no boats, no rocks, no UI, no text, no gradient toward the borders. Even color and lighting across the whole material. The texture must tile seamlessly on every edge, subdued contrast to keep the villages and terrain readable. Clean blue sea, not teal swimming-pool water.

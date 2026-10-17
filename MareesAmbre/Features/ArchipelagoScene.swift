@@ -16,7 +16,9 @@ final class ArchipelagoScene: SKScene {
     private var selectedTile = TileCoordinate.home
     private let unit: CGFloat = 24
     private var seaMotion: Float {
-        reducedMotion || ProcessInfo.processInfo.arguments.contains("--ui-snapshot") ? 0 : 1
+        let arguments = ProcessInfo.processInfo.arguments
+        let frozenSnapshot = arguments.contains("--ui-snapshot") && !arguments.contains("--snapshot-animate")
+        return reducedMotion || frozenSnapshot ? 0 : 1
     }
     var reducedMotion = false {
         didSet { childNode(withName: "sea").flatMap { $0 as? SKSpriteNode }?.shader?.uniformNamed("u_motion")?.floatValue = seaMotion }
@@ -26,23 +28,7 @@ final class ArchipelagoScene: SKScene {
         super.init(size: size)
         scaleMode = .resizeFill
         backgroundColor = UIColor(red: 0.025, green: 0.16, blue: 0.24, alpha: 1)
-        let sea = SKSpriteNode(color: .white, size: CGSize(width: 12000, height: 12000))
-        sea.position = CGPoint(x: 2400, y: -2400)
-        sea.name = "sea"
-        sea.zPosition = -1
-        sea.shader = SKShader(source: """
-        void main() {
-            vec2 p = v_tex_coord * 120.0;
-            float wave = sin(p.x * 2.4 + sin(p.y * 1.8) + u_time * u_motion * 0.3);
-            float shimmer = pow(max(0.0, wave * sin(p.y * 3.0 - u_time * u_motion * 0.2)), 12.0);
-            float depth = sin(p.x * 0.17 + p.y * 0.21) * 0.5 + 0.5;
-            vec3 deep = mix(vec3(0.035, 0.29, 0.40), vec3(0.045, 0.43, 0.52), depth);
-            vec3 water = deep + vec3(0.015, 0.045, 0.055) * (wave * 0.5 + 0.5);
-            gl_FragColor = vec4(water + shimmer * vec3(0.10, 0.20, 0.19), 1.0);
-        }
-        """)
-        sea.shader?.addUniform(SKUniform(name: "u_motion", float: seaMotion))
-        addChild(sea)
+        addChild(WorldSeaSurface.make(motion: seaMotion))
         addChild(viewpoint)
         loading.text = String(localized: "screen.archipelago_scene.preparing_the_archipelago", defaultValue: "Préparation de l’archipel…")
         loading.fontSize = 15

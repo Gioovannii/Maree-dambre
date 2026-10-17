@@ -124,7 +124,8 @@ struct GameView: View {
                 Palette.ocean.ignoresSafeArea()
                 VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
                              onPlotSelected: { showsVillageDetails = true },
-                             onTownSelected: { selectVillageMap(.townCenter) })
+                             onTownSelected: { selectVillageMap(.townCenter) },
+                             showsTownShortcut: false)
                 .id(villageMap)
                 .ignoresSafeArea()
 
@@ -134,6 +135,9 @@ struct GameView: View {
                     Spacer(minLength: 4)
                     constructionStatus
                         .frame(maxWidth: 560)
+                    if villageMap == .resourceFields {
+                        TownShortcutButton { selectVillageMap(.townCenter) }
+                    }
                     navigation
                         .frame(maxWidth: 560)
                 }

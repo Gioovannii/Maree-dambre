@@ -6,6 +6,7 @@ struct VillageBoard: View {
     let onPlotSelected: () -> Void
     let onTownSelected: () -> Void
     var preservesMapProportions = false
+    var showsTownShortcut = true
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -58,20 +59,10 @@ struct VillageBoard: View {
                                 .zIndex(mode == .resourceFields ? Double(mode.mapPoint(for: plot).y) : Double(plot / 5 + plot % 5))
                         }
 
-                        if mode == .resourceFields {
-                            Button(action: onTownSelected) {
-                                Label(String(localized: "screen.village_board.quay_town", defaultValue: "Quais & Centre"), systemImage: "sailboat.fill")
-                                    .font(.caption.bold())
-                                    .foregroundStyle(Palette.paper)
-                                    .padding(.horizontal, 11)
-                                    .frame(minHeight: 38)
-                                    .background(Palette.panel, in: .capsule)
-                                    .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.8), lineWidth: 1.5) }
-                            }
-                            .buttonStyle(.plain)
-                            .position(x: mapSize.width * 0.50, y: mapSize.height * 0.86)
-                            .zIndex(100)
-                            .accessibilityHint(String(localized: "screen.village_board.open_the_harbor_and_town_buildings", defaultValue: "Ouvrir le port et les bâtiments du Centre-ville"))
+                        if mode == .resourceFields && showsTownShortcut {
+                            TownShortcutButton(action: onTownSelected)
+                                .position(x: mapSize.width * 0.50, y: mapSize.height * 0.86)
+                                .zIndex(100)
                         }
                     }
                     .frame(width: mapSize.width, height: mapSize.height)

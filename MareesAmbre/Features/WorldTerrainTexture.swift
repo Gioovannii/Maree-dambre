@@ -78,23 +78,21 @@ enum WorldTerrainTexture {
         let image = UIGraphicsImageRenderer(size: CGSize(width: extent, height: extent), format: format).image { renderer in
             let ctx = renderer.cgContext
             ctx.setLineJoin(.round); ctx.setLineCap(.round)
-            for band in stride(from: 12, through: 1, by: -1) {
-                ctx.addPath(coast)
-                ctx.setStrokeColor(UIColor(red: 0.35, green: 0.82, blue: 0.75, alpha: 0.055).cgColor)
-                ctx.setLineWidth(scale * CGFloat(band) * 0.26)
-                ctx.strokePath()
-            }
+            ctx.addPath(coast)
+            ctx.setStrokeColor(UIColor(red: 0.25, green: 0.65, blue: 0.69, alpha: 0.35).cgColor)
+            ctx.setLineWidth(scale * 0.8)
+            ctx.strokePath()
             ctx.saveGState()
             ctx.setShadow(offset: CGSize(width: 2, height: 7), blur: 6, color: UIColor(red: 0.01, green: 0.18, blue: 0.22, alpha: 0.5).cgColor)
             ctx.addPath(land); ctx.setFillColor(UIColor(red: 0.88, green: 0.79, blue: 0.59, alpha: 1).cgColor); ctx.fillPath()
             ctx.restoreGState()
-            ctx.addPath(coast); ctx.setStrokeColor(UIColor(red: 0.94, green: 0.91, blue: 0.77, alpha: 0.9).cgColor); ctx.setLineWidth(scale * 0.6); ctx.strokePath()
+            ctx.addPath(coast); ctx.setStrokeColor(UIColor(red: 0.94, green: 0.91, blue: 0.77, alpha: 0.9).cgColor); ctx.setLineWidth(scale * 0.3); ctx.strokePath()
             ctx.saveGState(); ctx.addPath(land); ctx.clip()
             WorldTerrainArtwork.meadow(in: ctx, side: extent, seed: world.seed, ground: ground)
             // Limestone faces, warm sand and a sunlit lip give the coast its depth.
-            for (width, color) in [(scale * 0.8, UIColor(red: 0.57, green: 0.54, blue: 0.36, alpha: 0.6)),
-                                   (scale * 0.55, UIColor(red: 0.85, green: 0.76, blue: 0.54, alpha: 1)),
-                                   (scale * 0.16, UIColor(red: 1, green: 0.94, blue: 0.76, alpha: 1))] {
+            for (width, color) in [(scale * 0.55, UIColor(red: 0.57, green: 0.54, blue: 0.36, alpha: 0.6)),
+                                   (scale * 0.32, UIColor(red: 0.85, green: 0.76, blue: 0.54, alpha: 1)),
+                                   (scale * 0.10, UIColor(red: 1, green: 0.94, blue: 0.76, alpha: 1))] {
                 ctx.addPath(coast); ctx.setStrokeColor(color.cgColor); ctx.setLineWidth(width); ctx.strokePath()
             }
             let capitals = [TileCoordinate.home] + BotFaction.starting.map(\.capital)
