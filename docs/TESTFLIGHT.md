@@ -1,4 +1,4 @@
-# TestFlight beta — 1.0 (10)
+# TestFlight beta — 1.0 (11)
 
 ## Scope
 
@@ -50,13 +50,15 @@ Suggested text for TestFlight's **What to Test** field:
 Automated checks cover the first raid path and save recovery. They do not replace
 physical-device testing or several days of progression and balance feedback.
 
-## Build 10 changes
+## Build 11 changes
 
 - Visible ocean swell with an illustrated water texture on the world map.
 - Refined coastlines without the broad turquoise glow.
 - Resources-to-town shortcut positioned above the bottom tabs on compact screens.
-- App and widget aligned at version 1.0, build 10.
+- App and widget aligned at version 1.0, build 11.
 - English repository README and beta testing instructions.
 
 Build 9 also introduced ten-level building progression, increasing costs and
 timers, separate weapon upgrades per unit type, and the harmonized archipelago.
+
+Build 10 was already present in App Store Connect, so this release uses build 11.
