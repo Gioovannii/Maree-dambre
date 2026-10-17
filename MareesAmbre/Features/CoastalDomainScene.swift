@@ -22,9 +22,6 @@ struct CoastalDomainScene: View {
                         let time = snapshot ? snapshotTime : timeline.date.timeIntervalSince(epoch).truncatingRemainder(dividingBy: 6)
                         Canvas { context, canvasSize in
                             drawWater(context: context, size: canvasSize, time: time)
-                            if mode == .resourceFields {
-                                drawWorkers(context: context, size: canvasSize, time: time)
-                            }
                             drawFoam(context: context, size: canvasSize, time: time)
                         }
                     }
@@ -58,26 +55,6 @@ struct CoastalDomainScene: View {
             let dx = (4.5 * sin(y * 0.028 + phase) + 1.5 * sin(y * 0.07 - phase * 2)) / 887 * size.width
             let dy = 2.0 * cos(y * 0.035 - phase) / 1774 * size.height
             band.draw(image, in: CGRect(x: dx, y: dy, width: size.width, height: size.height))
-        }
-    }
-
-    private func drawWorkers(context: GraphicsContext, size: CGSize, time: Double) {
-        let image = context.resolve(Image(mode.assetName))
-        let scaleX = size.width / 887
-        let scaleY = size.height / 1774
-        let workers: [(x: Double, y: Double, feet: Double, phase: Double)] = [
-            (382, 724, 752, 0), (615, 1050, 1079, 1.1), (232, 1106, 1134, 2.2),
-            (714, 395, 419, 0.7), (677, 850, 877, 1.6)
-        ]
-        for worker in workers {
-            var patch = context
-            let region = CGRect(x: (worker.x - 23) * scaleX, y: (worker.y - 35) * scaleY,
-                                width: 46 * scaleX, height: 70 * scaleY)
-            patch.clip(to: Path(ellipseIn: region))
-            patch.translateBy(x: worker.x * scaleX, y: worker.feet * scaleY)
-            patch.rotate(by: .degrees(2.8 * sin(time * .pi * 2 / 3 + worker.phase)))
-            patch.translateBy(x: -worker.x * scaleX, y: -worker.feet * scaleY)
-            patch.draw(image, in: CGRect(origin: .zero, size: size))
         }
     }
 

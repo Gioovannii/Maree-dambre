@@ -42,6 +42,7 @@ struct ConstructionPanel: View {
                 constructionDetails(job)
             } else if let building {
                 buildingDetails(building)
+                BuildingUpgradePanel(kind: building, plot: session.plot)
                 if building == .warCourt { ArmyPanel(isTraining: true) }
                 if building == .watchtower { CoastalDefensePanel() }
                 if building == .academy { ResearchPanel() }
@@ -99,7 +100,7 @@ struct ConstructionPanel: View {
                     Text(kind.purpose)
                         .font(.subheadline)
                         .fixedSize(horizontal: false, vertical: true)
-                    Label(session.state.meetsProductionRequirement(kind) ? kind.productionText : String(localized: "screen.construction.production_inactive", defaultValue: "Production inactive"), systemImage: kind.defenseStrength > 0 ? "shield.fill" : "arrow.up.right")
+                    Label(session.state.meetsProductionRequirement(kind) ? session.state.buildingEffect(kind, level: session.state.buildingLevel(kind)) : String(localized: "screen.construction.production_inactive", defaultValue: "Production inactive"), systemImage: kind.defenseStrength > 0 ? "shield.fill" : "arrow.up.right")
                         .font(.subheadline.bold()).foregroundStyle(Palette.amber)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -133,6 +134,8 @@ struct ConstructionPanel: View {
                 .background(Palette.ocean, in: .rect(cornerRadius: 18))
                 Text(String(localized: "screen.construction.construction_in_progress", defaultValue: "Chantier en cours"))
                     .font(.title3.bold())
+                Text(String(localized: "progression.building.target", defaultValue: "Niveau visé : \(String(job.level))"))
+                    .font(.headline).foregroundStyle(Palette.amber)
                 Text(String(localized: "screen.construction.value_is_taking_shape_on_this_plot", defaultValue: "\(String(job.kind.name)) prend forme sur cette parcelle."))
                     .font(.subheadline).foregroundStyle(Palette.muted)
                 ProgressView(value: progress)
@@ -181,6 +184,8 @@ struct ConstructionPanel: View {
                 Text(String(localized: "screen.construction.cost_value_wood_value_amber_value_food", defaultValue: "Coût : \(String(kind.cost.wood)) bois · \(String(kind.cost.amber)) ambre · \(String(kind.cost.provisions)) vivres"))
                     .font(.footnote).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
+                Text(String(localized: "progression.duration", defaultValue: "Durée : \(String(GameProgression.durationText(session.state.constructionDuration(for: 1))))"))
+                    .font(.footnote).foregroundStyle(Palette.muted)
                 Label(canBuild ? String(localized: "screen.construction.build_here", defaultValue: "Choisir l’emplacement") : reason,
                       systemImage: canBuild ? "hammer.fill" : "lock.fill")
                     .font(.subheadline.bold())

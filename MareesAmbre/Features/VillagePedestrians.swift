@@ -3,13 +3,14 @@ import SwiftUI
 /// Decorative residents follow the paved corridors, clear of every buildable lot.
 /// One canvas and one clock keep this independent of the village simulation.
 struct VillagePedestrians: View {
+    var mode: VillageMapMode = .townCenter
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var startedAt = Date.now
 
     private let snapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
         && !ProcessInfo.processInfo.arguments.contains("--snapshot-animate")
-    private static let routes: [[CGPoint]] = [
+    private static let townRoutes: [[CGPoint]] = [
         [CGPoint(x: 0.49, y: 0.43), CGPoint(x: 0.49, y: 0.51),
          CGPoint(x: 0.50, y: 0.61), CGPoint(x: 0.49, y: 0.74)],
         [CGPoint(x: 0.08, y: 0.40), CGPoint(x: 0.11, y: 0.49),
@@ -19,6 +20,20 @@ struct VillagePedestrians: View {
         [CGPoint(x: 0.17, y: 0.61), CGPoint(x: 0.37, y: 0.61),
          CGPoint(x: 0.50, y: 0.61), CGPoint(x: 0.78, y: 0.61)]
     ]
+    // Feet positions registered to the 887 × 1774 background. Follow the dirt
+    // corridors outside fences; never take a straight shortcut across a plot.
+    private static let resourceRoutes: [[CGPoint]] = [
+        [(472, 286), (439, 310), (407, 336), (376, 365), (367, 394),
+         (375, 425), (405, 461), (435, 495), (449, 526), (433, 557), (416, 583)],
+        [(117, 399), (167, 419), (222, 441), (280, 455), (337, 456), (375, 425)],
+        [(239, 729), (280, 750), (326, 777), (376, 804), (422, 823),
+         (469, 811), (514, 788), (558, 764), (602, 741)],
+        [(475, 864), (525, 899), (568, 935), (570, 966), (552, 994),
+         (526, 1022), (516, 1055), (518, 1095), (506, 1132)],
+        [(449, 1197), (414, 1214), (376, 1234), (337, 1254)]
+    ].map { points in
+        points.map { CGPoint(x: CGFloat($0.0) / 887, y: CGFloat($0.1) / 1774) }
+    }
     private static let coats: [Color] = [
         Color(red: 0.18, green: 0.43, blue: 0.44),
         Color(red: 0.70, green: 0.32, blue: 0.20),
@@ -29,9 +44,9 @@ struct VillagePedestrians: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30,
                                 paused: reduceMotion || snapshot || scenePhase != .active)) { timeline in
-            let time = reduceMotion || snapshot ? 0 : max(0, timeline.date.timeIntervalSince(startedAt))
+            let time = reduceMotion ? 0 : snapshot ? snapshotTime : max(0, timeline.date.timeIntervalSince(startedAt))
             Canvas { context, size in
-                for resident in 0..<8 {
+                for resident in 0..<(mode == .resourceFields ? 7 : 8) {
                     drawResident(resident, time: time, size: size, context: context)
                 }
             }
@@ -40,8 +55,15 @@ struct VillagePedestrians: View {
         .accessibilityHidden(true)
     }
 
+    private var snapshotTime: Double {
+        let argument = ProcessInfo.processInfo.arguments.first { $0.hasPrefix("--snapshot-motion-phase=") }
+        guard let value = argument?.split(separator: "=").last.flatMap({ Double($0) }), value.isFinite else { return 0 }
+        return min(360, max(0, value))
+    }
+
     private func drawResident(_ index: Int, time: Double, size: CGSize, context: GraphicsContext) {
-        let route = Self.routes[index % Self.routes.count]
+        let routes = mode == .resourceFields ? Self.resourceRoutes : Self.townRoutes
+        let route = routes[index % routes.count]
         let lengths = zip(route, route.dropFirst()).map { start, end in
             hypot((end.x - start.x) * size.width, (end.y - start.y) * size.height)
         }

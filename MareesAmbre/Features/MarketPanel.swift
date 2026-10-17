@@ -13,7 +13,7 @@ struct MarketPanel: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "screen.market.title", defaultValue: "Échanger des ressources"))
                 .font(.title2.bold())
-            Text(String(localized: "screen.market.rules", defaultValue: "L’ambre vaut deux fois le bois ou les vivres. Le marché conserve la moitié de la valeur échangée. Un échange est refusé si la réserve d’arrivée est pleine."))
+            Text(String(localized: "progression.market.rules", defaultValue: "L’ambre vaut deux fois le bois ou les vivres. Vous récupérez \(session.state.tradeEfficiency.formatted(.percent.precision(.fractionLength(1)))) de la valeur donnée. Améliorer le Marché augmente ce rendement. La réserve d’arrivée doit avoir assez de place."))
                 .font(.footnote).foregroundStyle(Palette.muted)
             LabeledContent(String(localized: "screen.market.give", defaultValue: "Donner")) {
                 Picker(String(localized: "screen.market.give", defaultValue: "Donner"), selection: $source) {

@@ -1,3 +1,5 @@
+import Foundation
+
 enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
     case woodland, cropland, amberVein
     static let maximumLevel = 10
@@ -59,6 +61,10 @@ enum ResourceSiteKind: String, CaseIterable, Identifiable, Sendable {
     }
 
     func cost(for nextLevel: Int) -> Resources {
+        GameProgression.scaled(legacyCost(for: min(10, max(1, nextLevel))), level: nextLevel, growth: 1.08)
+    }
+
+    func legacyCost(for nextLevel: Int) -> Resources {
         switch self {
         case .woodland: Resources(wood: 5 * nextLevel, amber: 0, provisions: nextLevel / 3)
         case .cropland: Resources(wood: 4 * nextLevel, amber: 0, provisions: 2 * nextLevel)

@@ -45,7 +45,7 @@ extension VillageState {
     }
 
     func defensePower(for units: [ArmyUnit: Int]) -> Int {
-        units.reduce(0) { $0 + ($1.key.defense + weaponLevel) * $1.value } + automaticDefense
+        units.reduce(0) { $0 + defenseStrength(of: $1.key) * $1.value } + automaticDefense
     }
 
     var garrisonDefense: Int { defensePower(for: availableArmy) }

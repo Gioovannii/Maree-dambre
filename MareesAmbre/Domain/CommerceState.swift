@@ -46,7 +46,8 @@ extension VillageState {
         guard canSendConvoy(on: route, units: units), let campaign = coastalCampaign else { return nil }
         let order = ConvoyOrder(route: route, departedAtTide: campaign.tide, units: units.filter { $0.value > 0 },
                                 attackUpgrade: weaponLevel, transportBonusPercent: transportBonusPercent,
-                                victoryLossRate: victoryLossRate(for: units), defeatLossRate: defeatLossRate)
+                                victoryLossRate: victoryLossRate(for: units), defeatLossRate: defeatLossRate,
+                                weaponLevels: Dictionary(uniqueKeysWithValues: units.filter { $0.value > 0 }.keys.map { ($0, weaponLevel(for: $0)) }))
         return ConvoyReport(order: order)
     }
 

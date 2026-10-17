@@ -37,7 +37,7 @@ struct CoastalDefenseView: View {
                     Text(String(localized: "screen.defense.power", defaultValue: "Défense disponible : \(String(session.state.garrisonDefense))"))
                         .font(.headline).accessibilityIdentifier("defense.power")
                     ForEach(ArmyUnit.allCases.filter { session.state.availableArmy[$0, default: 0] > 0 }) { unit in
-                        Text(String(localized: "screen.defense.unit_power", defaultValue: "\(String(unit.name)) : \(String(session.state.availableArmy[unit, default: 0])) · Défense par unité : \(String(unit.defense + session.state.weaponLevel))"))
+                        Text(String(localized: "screen.defense.unit_power", defaultValue: "\(String(unit.name)) : \(String(session.state.availableArmy[unit, default: 0])) · Défense par unité : \(String(session.state.defenseStrength(of: unit)))"))
                     }
                     Text(String(localized: "screen.defense.fortifications", defaultValue: "Fortifications et peuple : \(String(session.state.automaticDefense)) points inclus dans la défense."))
                     Text(String(localized: "screen.defense.garrison_rules", defaultValue: "Toutes les troupes présentes défendent le port. Les unités en expédition ou encore en formation ne participent pas. La Tour ajoute 20 de défense ; les armes ajoutent 1 par niveau et par unité."))

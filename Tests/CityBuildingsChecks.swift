@@ -97,30 +97,33 @@ extension DomainChecks {
 
         var forge = VillageState(seed: 42)
         forge.resources = Resources(wood: 1000, amber: 1000, provisions: 1000)
-        precondition(!forge.upgradeWeapons(now: now))
+        precondition(!forge.upgradeWeapons(for: .reedrunner, now: now))
         forge.buildings[10] = .forge
+        forge.buildingLevels = [.forge: 3]
         forge.army = ArmyState(units: [.reedrunner: 3])
         for level in 1...3 {
-            let start = now.addingTimeInterval(Double(level * 60))
-            let cost = forge.weaponUpgradeCost
+            let start = now.addingTimeInterval(Double(level * 600))
+            let cost = forge.weaponUpgradeCost(for: .reedrunner)
             let stock = forge.resources
-            precondition(forge.upgradeWeapons(now: start))
+            precondition(forge.upgradeWeapons(for: .reedrunner, now: start))
+            let end = forge.weaponUpgrade!.endsAt
             precondition(forge.resources == Resources(wood: stock.wood - cost.wood,
                 amber: stock.amber - cost.amber, provisions: stock.provisions - cost.provisions))
-            precondition(!forge.upgradeWeapons(now: start))
+            precondition(!forge.upgradeWeapons(for: .reedrunner, now: start))
             try storage.save(forge)
             forge = try storage.load(seed: 42, world: world, now: start)!
-            forge.updateWeaponUpgrade(now: start.addingTimeInterval(59))
-            precondition(forge.weaponLevel == level - 1)
-            forge.updateWeaponUpgrade(now: start.addingTimeInterval(60))
-            precondition(forge.weaponLevel == level && forge.armyPower == (5 + level) * 3)
+            forge.updateWeaponUpgrade(now: end.addingTimeInterval(-1))
+            precondition(forge.weaponLevel(for: .reedrunner) == level - 1)
+            forge.updateWeaponUpgrade(now: end)
+            precondition(forge.weaponLevel(for: .reedrunner) == level && forge.armyPower == (5 + level) * 3)
         }
         let capped = forge
-        precondition(!forge.upgradeWeapons(now: now.addingTimeInterval(300)) && forge == capped)
+        precondition(!forge.upgradeWeapons(for: .reedrunner, now: now.addingTimeInterval(3000)) && forge == capped)
         forge.bots[0].level = 2
         forge.resources = Resources(wood: 0, amber: 0, provisions: 0)
         precondition(forge.raid(targetID: 0, now: now.addingTimeInterval(300)))
         forge.weaponsLevel = 0
+        forge.unitWeaponLevels = nil
         forge.buildings = [12: .hall]
         forge.updateArmy(now: now.addingTimeInterval(420))
         precondition(forge.availableArmy[.reedrunner] == 3 && forge.resources.wood > 0,
@@ -183,7 +186,7 @@ extension DomainChecks {
         offline.buildings[10] = .forge
         offline.bots[0].level = 2
         offline.army = ArmyState(units: [.reedrunner: 3])
-        precondition(offline.upgradeWeapons(now: now))
+        precondition(offline.upgradeWeapons(for: .reedrunner, now: now))
         precondition(offline.raid(targetID: 0, now: now))
         var online = offline
         for second in stride(from: 1, through: 120, by: 1) {
@@ -191,7 +194,7 @@ extension DomainChecks {
         }
         _ = offline.updateInRealTime(now: now.addingTimeInterval(120), on: world)
         precondition(offline.resources == online.resources && offline.army == online.army
-            && offline.weaponLevel == online.weaponLevel && offline.weaponLevel == 1
+            && offline.unitWeaponLevels == online.unitWeaponLevels && offline.weaponLevel(for: .reedrunner) == 1
             && offline.weaponUpgrade == online.weaponUpgrade)
         // Fractional accrual can differ by floating point rounding after 120 updates.
         precondition(abs(offline.productionRemainder!.wood - online.productionRemainder!.wood) < 1e-8)

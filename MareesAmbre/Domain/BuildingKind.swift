@@ -55,7 +55,7 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .warCourt: String(localized: "domain.building_kind.trains_units_unlocked_at_the_academy", defaultValue: "Entraîne les unités débloquées par la Maison des savoirs.")
         case .academy: String(localized: "domain.building_kind.researches_doctrines_that_unlock_new_units", defaultValue: "Étudie les doctrines qui débloquent de nouvelles unités.")
         case .market: String(localized: "domain.building_kind.market_purpose", defaultValue: "Échange les surplus et organise les contrats maritimes du village.")
-        case .forge: String(localized: "domain.building_kind.forge_purpose", defaultValue: "Améliore les armes de toutes les troupes, en trois recherches successives.")
+        case .forge: String(localized: "domain.building_kind.forge_purpose", defaultValue: "Améliore les armes de chaque type d’unité grâce à des recherches distinctes.")
         case .infirmary: String(localized: "domain.building_kind.infirmary_purpose", defaultValue: "Soigne les blessés et réduit les pertes en expédition et en défense du port.")
         case .expeditionQuay: String(localized: "domain.building_kind.quay_purpose", defaultValue: "Organise le transport du butin des prochaines expéditions.")
         }
@@ -130,7 +130,7 @@ enum BuildingKind: String, Codable, CaseIterable, Identifiable {
         case .warCourt: String(localized: "domain.building_kind.troop_training", defaultValue: "Entraînement des troupes")
         case .academy: String(localized: "domain.building_kind.new_unit_research", defaultValue: "Recherche de nouvelles unités")
         case .market: String(localized: "domain.building_kind.market_effect", defaultValue: "Échanges locaux et contrats maritimes")
-        case .forge: String(localized: "domain.building_kind.forge_effect", defaultValue: "+1 attaque par unité et par recherche · 3 niveaux")
+        case .forge: String(localized: "domain.building_kind.forge_effect", defaultValue: "Recherche d’armes par type d’unité")
         case .infirmary: String(localized: "domain.building_kind.infirmary_effect", defaultValue: "Pertes : \((0.1).formatted(.percent.precision(.fractionLength(0)))) en victoire, \((0.35).formatted(.percent.precision(.fractionLength(0)))) en défaite · \((0.05).formatted(.percent.precision(.fractionLength(0)))) avec un mage")
         case .expeditionQuay: String(localized: "domain.building_kind.quay_effect", defaultValue: "+\((0.25).formatted(.percent.precision(.fractionLength(0)))) de transport · butin jusqu’à 90 par ressource")
         }

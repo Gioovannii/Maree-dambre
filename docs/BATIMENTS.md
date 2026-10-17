@@ -4,6 +4,10 @@ Les bâtiments se placent uniquement sur les lots du Centre-ville, à raison d�
 
 ## Jouables dans le prototype
 
+Les douze bâtiments sont améliorables jusqu’au niveau 10. Les effets ci-dessous
+correspondent au niveau 1 ; [la stratégie de progression](PROGRESSION.md) décrit
+leurs effets par niveau, les coûts, les durées et la capacité de l’Entrepôt.
+
 | Bâtiment | Rôle actuel | Effet |
 | --- | --- | --- |
 | Maison des Veilleurs | Cœur du village, présent au départ | +2 bois, +1 ambre et +2 vivres par heure |
@@ -15,33 +19,34 @@ Les bâtiments se placent uniquement sur les lots du Centre-ville, à raison d�
 | Maison des savoirs | Recherche | Débloque les deux unités du peuple choisi, une minute par unité |
 | Cour des armes | Recrutement | Entraîne jusqu’à 20 unités, 30 secondes par unité ; file unique, limite de 100 |
 | Marché | Échanges et contrats | Dépannage immédiat par lots de 20 ; contrats maritimes avec cargaison, escorte et paiement différé |
-| Forge | Amélioration des armes | Trois recherches de 60 s ; chaque niveau ajoute 1 attaque et 1 défense par unité |
+| Forge | Amélioration des armes | Recherches séparées par type d’unité ; +1 attaque et défense par niveau, dans la limite du niveau de la Forge |
 | Infirmerie | Soins après combat | Pertes de 10 % en victoire (5 % avec un mage), 35 % en défaite |
 | Quai d’expédition | Transport et départs | +25 % de transport, cumulable avec le bonus humain ; plafond de butin porté de 60 à 90 par ressource |
 
-Les douze types correspondent désormais aux douze lots du Centre-ville, Maison des Veilleurs comprise. Les quatre nouveaux bâtiments utilisent le chantier urbain habituel (60 s, exemplaire unique, annulation remboursée à 50 %), sans prérequis de champ au niveau 10.
+Les douze types correspondent aux douze lots du Centre-ville, Maison des Veilleurs comprise. Leur construction initiale dure 60 s avant bonus de la Maison des Veilleurs ; les améliorations suivantes coûtent davantage et prennent plus de temps. Un seul chantier est disponible ; annuler rembourse 50 % du coût payé. Marché, Forge, Infirmerie et Quai ne demandent pas de champ au niveau 10.
 
 ### Échanges du Marché
 
-Un lot donne 20 bois contre 10 vivres ou 5 ambres, 20 vivres contre 10 bois ou 5 ambres, ou 20 ambres contre 20 bois ou 20 vivres. On peut échanger de 1 à 10 lots à la fois. L’aperçu annonce exactement les quantités avant confirmation. Un stock insuffisant ou une réserve d’arrivée trop petite refuse tout l’échange, sans dépense ni perte. Les échanges sont immédiats et sauvegardés ; aucune boucle d’échange ne crée de ressources.
+Au niveau 1, un lot donne 20 bois contre 10 vivres ou 5 ambres, 20 vivres contre 10 bois ou 5 ambres, ou 20 ambres contre 20 bois ou 20 vivres. Le rendement augmente avec le niveau du Marché. On peut échanger de 1 à 10 lots à la fois. L’aperçu annonce exactement les quantités avant confirmation. Un stock insuffisant ou une réserve d’arrivée trop petite refuse tout l’échange, sans dépense ni perte. Les échanges sont immédiats et sauvegardés ; aucune boucle d’échange ne crée de ressources.
 
 ### Recherches de la Forge et raids
 
-Les niveaux d’armes 1, 2 et 3 coûtent respectivement 40/20/30, 80/40/60 et 120/60/90 (bois/ambre/vivres). Une seule recherche d’armes progresse à la fois, indépendamment du chantier et des doctrines de la Maison des savoirs. Les coûts sont payés au lancement ; la recherche se termine aussi hors ligne. Le bâtiment reste au niveau 1 : les trois niveaux concernent les armes, et apparaissent dans son panneau.
+Chaque type d’unité débloqué possède ses propres armes de niveau 0 à 10. La Forge doit atteindre le niveau visé. Les deux premiers niveaux coûtent 40/20/30 puis 64/32/48 (bois/ambre/vivres) et durent 60 puis 90 s avant le bonus de la Maison des savoirs. Une seule recherche d’armes progresse à la fois, indépendamment du chantier et des doctrines. Les coûts sont payés au lancement ; la recherche se termine aussi hors ligne. Le panneau distingue l’amélioration du bâtiment et l’équipement de chaque type d’unité.
 
 L’attaque, les taux de pertes, le bonus de transport et le plafond de butin sont enregistrés au départ de chaque nouveau raid. Une recherche ou un bâtiment terminé pendant son trajet profite au raid suivant. En victoire les pertes s’arrondissent vers le bas par type d’unité, en défaite vers le haut. Le Quai ne change pas la durée ni le temps de récupération des factions ; les survivants et les réserves restent les limites réelles du butin.
 
-Les sauvegardes des versions 2 à 12 migrent vers la version 13 avec les migrations
-antérieures conservées. La campagne côtière reste inactive jusqu’au choix du joueur.
-Les anciennes expéditions conservent leurs règles antérieures ; les armes absentes
-commencent au niveau 0. Les tests couvrent les échanges, recherches, bonus figés au
-départ, reprise hors ligne, migration et sauvegarde d’un Centre complet.
+Les sauvegardes migrent vers la version 14 avec les migrations antérieures conservées.
+Les bâtiments existants commencent au niveau 1 ; les anciens niveaux d’armes communs
+restent acquis à tous les types. Les travaux déjà payés et les anciennes expéditions
+conservent leurs règles et échéances. La campagne côtière reste inactive jusqu’au
+choix du joueur. Les tests couvrent les échanges, recherches, bonus figés au départ,
+reprise hors ligne, migration et sauvegarde d’un Centre complet.
 
 ### Garnison et défense du port
 
 Le Lancier apporte 10 de défense, le Pillard 3, le Gardien 14, le Mage 4, le
 Guerrier 7 et l’Archer 12, avant le bonus d’armes. La tour ajoute 20 et le peuple
-des récifs 1. Les troupes en expédition et en formation sont exclues. Les pertes
+des récifs 1. La tour apporte ensuite 20 de défense par niveau. Les troupes en expédition et en formation sont exclues. Les pertes
 utilisent les mêmes taux et arrondis que les raids, avec les mages et l’Infirmerie
 présents au moment de l’assaut. À égalité, le port tient.
 
@@ -62,14 +67,15 @@ d’accepter un autre contrat. Aucune progression commerciale pendant une absenc
 
 Les champs de niveau 10 sont une condition de production et de construction : forêt pour la Scierie, culture pour la Ferme, veine d’ambre pour l’Atelier d’ambre. Les coûts de champs sont réglés pour qu’un village neuf puisse atteindre son premier seuil en quelques heures, et non en plusieurs jours.
 
-Ces bâtiments sont au niveau 1 dans le prototype. Le marqueur numérique en verre de mer et ambre indique ce niveau ; l’amélioration des bâtiments urbains viendra avec les mécaniques correspondantes.
+Le marqueur numérique en verre de mer et ambre indique le niveau réellement acquis.
+Le niveau suivant et son effet sont annoncés dans la fiche avant confirmation.
 
 ## Suite prévue, à construire quand leur mécanique sera jouable
 
 | Bâtiment | Rôle envisagé |
 | --- | --- |
 | Caserne | Entraînement et garnison des troupes |
-| Spécialisations d’armes | Étendre les recherches de la Forge avec des choix par unité |
+| Spécialisations d’armes | Étendre l’équipement par type avec des choix de spécialisation |
 | Maison des éclaireurs | Missions de reconnaissance de la carte |
 | Maison des colons | Préparation de nouveaux villages |
 | Missions côtières | Étendre le Quai d’expédition au-delà des raids actuels |

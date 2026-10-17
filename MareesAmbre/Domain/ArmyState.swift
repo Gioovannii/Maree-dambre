@@ -26,10 +26,14 @@ struct ArmyState: Codable, Equatable {
                   raid.units.values.allSatisfy({ (0...100).contains($0) }),
                   raid.units.values.reduce(0, +) > 0 else { return false }
             guard (0...3).contains(raid.attackUpgrade ?? 0),
-                  [0.05, 0.1, 0.15, 0.2].contains(raid.victoryLossRate ?? 0.2),
-                  [0.35, 0.5].contains(raid.defeatLossRate ?? 0.5),
-                  [0, 20, 25, 45].contains(raid.transportBonusPercent ?? 0),
-                  [60, 90].contains(raid.lootLimit ?? 60) else { return false }
+                  (0.01...0.2).contains(raid.victoryLossRate ?? 0.2),
+                  (0.2...0.5).contains(raid.defeatLossRate ?? 0.5),
+                  (0...90).contains(raid.transportBonusPercent ?? 0),
+                  (60...270).contains(raid.lootLimit ?? 60) else { return false }
+            if let levels = raid.weaponLevels {
+                guard Set(levels.keys) == Set(raid.units.keys),
+                      levels.values.allSatisfy({ (0...GameProgression.maximumWeaponLevel).contains($0) }) else { return false }
+            }
         }
         return units.values.reduce(0, +) + (training?.count ?? 0)
             + (raid?.units.values.reduce(0, +) ?? 0) + (convoy?.units.values.reduce(0, +) ?? 0) <= 100
@@ -62,12 +66,14 @@ extension VillageState {
     var victoryLossRate: Double { victoryLossRate(for: availableArmy) }
     func victoryLossRate(for units: [ArmyUnit: Int]) -> Double {
         let mage = units[.tideMage, default: 0] > 0
-        return hasBuilding(.infirmary) ? (mage ? 0.05 : 0.1) : (mage ? 0.15 : 0.2)
+        guard hasBuilding(.infirmary) else { return mage ? 0.15 : 0.2 }
+        return max(0.01, 0.1 - 0.005 * Double(buildingLevel(.infirmary) - 1) - (mage ? 0.05 : 0))
     }
-    var defeatLossRate: Double { hasBuilding(.infirmary) ? 0.35 : 0.5 }
-    var transportBonusPercent: Int { (people == .sauniers ? 20 : 0) + (hasBuilding(.expeditionQuay) ? 25 : 0) }
-    var raidLootLimit: Int { hasBuilding(.expeditionQuay) ? 90 : 60 }
-    func attackStrength(of unit: ArmyUnit) -> Int { unit.attack + weaponLevel }
+    var defeatLossRate: Double { hasBuilding(.infirmary) ? 0.35 - 0.01 * Double(buildingLevel(.infirmary) - 1) : 0.5 }
+    var transportBonusPercent: Int { (people == .sauniers ? 20 : 0) + (hasBuilding(.expeditionQuay) ? 25 + 5 * (buildingLevel(.expeditionQuay) - 1) : 0) }
+    var raidLootLimit: Int { hasBuilding(.expeditionQuay) ? 90 + 20 * (buildingLevel(.expeditionQuay) - 1) : 60 }
+    func attackStrength(of unit: ArmyUnit) -> Int { unit.attack + weaponLevel(for: unit) }
+    func defenseStrength(of unit: ArmyUnit) -> Int { unit.defense + weaponLevel(for: unit) }
 
     var unlockedUnits: Set<ArmyUnit> {
         if let unlocked = army?.unlockedUnits { return unlocked }
@@ -94,7 +100,7 @@ extension VillageState {
         resources.provisions -= unit.researchCost.provisions
         var troops = army ?? ArmyState()
         troops.unlockedUnits = unlockedUnits
-        troops.research = TrainingOrder(unit: unit, count: 1, endsAt: now.addingTimeInterval(60))
+        troops.research = TrainingOrder(unit: unit, count: 1, endsAt: now.addingTimeInterval(unitResearchDuration))
         army = troops
         return true
     }
@@ -121,7 +127,7 @@ extension VillageState {
         resources.amber -= unit.cost.amber * count
         resources.provisions -= unit.cost.provisions * count
         var troops = army ?? ArmyState()
-        troops.training = TrainingOrder(unit: unit, count: count, endsAt: now.addingTimeInterval(Double(count * 30)))
+        troops.training = TrainingOrder(unit: unit, count: count, endsAt: now.addingTimeInterval(ceil(Double(count) * trainingSecondsPerUnit)))
         army = troops
         return true
     }
@@ -147,7 +153,8 @@ extension VillageState {
         troops.raid = RaidOrder(targetID: bot.id, targetName: bot.name, units: deployed,
                                defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(raidDuration),
                                attackUpgrade: weaponLevel, victoryLossRate: victoryLossRate(for: deployed), defeatLossRate: defeatLossRate,
-                               transportBonusPercent: transportBonusPercent, lootLimit: raidLootLimit)
+                               transportBonusPercent: transportBonusPercent, lootLimit: raidLootLimit,
+                               weaponLevels: Dictionary(uniqueKeysWithValues: deployed.keys.map { ($0, weaponLevel(for: $0)) }))
         for (unit, count) in deployed {
             let remaining = troops.units[unit, default: 0] - count
             if remaining == 0 { troops.units.removeValue(forKey: unit) }
@@ -170,7 +177,7 @@ extension VillageState {
             troops.training = nil
         }
         if let raid = troops.raid, now >= raid.returnsAt {
-            let power = raid.units.reduce(0) { $0 + ($1.key.attack + (raid.attackUpgrade ?? 0)) * $1.value }
+            let power = raid.units.reduce(0) { $0 + ($1.key.attack + (raid.weaponLevels?[$1.key] ?? raid.attackUpgrade ?? 0)) * $1.value }
             let won = power > raid.defense
             var losses = 0
             var capacity = 0

@@ -5,6 +5,11 @@ struct ConstructionJob: Codable, Equatable, Sendable {
     let kind: BuildingKind
     let startedAt: Date
     let duration: TimeInterval
+    var targetLevel: Int? = nil
+    var paidCost: Resources? = nil
+
+    var level: Int { targetLevel ?? 1 }
+    var cost: Resources { paidCost ?? kind.cost }
 
     var endsAt: Date { startedAt.addingTimeInterval(duration) }
 

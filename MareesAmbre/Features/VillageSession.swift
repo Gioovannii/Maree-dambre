@@ -51,6 +51,7 @@ final class VillageSession {
                 state.construction = ConstructionJob(plot: 14, kind: .academy, startedAt: .now.addingTimeInterval(-30), duration: 60)
             }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-developed")
+                || ProcessInfo.processInfo.arguments.contains("--snapshot-progression")
                 || ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
                 || ProcessInfo.processInfo.arguments.contains("--snapshot-commerce")
                 || ProcessInfo.processInfo.arguments.contains("--snapshot-defense") || Self.snapshotBuilding != nil {
@@ -65,6 +66,13 @@ final class VillageSession {
                     state.army = ArmyState(units: [.tideguard: 20, .pillager: 8], unlockedUnits: [.tideguard, .pillager])
                 }
                 plot = Self.snapshotTownPlot
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-progression") {
+                state.buildingLevels = [.forge: 3, .warehouse: 2]
+                state.weaponsLevel = nil
+                state.unitWeaponLevels = [.tideguard: 1, .pillager: 0]
+                state.army = ArmyState(units: [.tideguard: 20, .pillager: 8], unlockedUnits: [.tideguard, .pillager])
+                state.resources = Resources(wood: 900, amber: 600, provisions: 800)
             }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-defense") {
                 // A small garrison makes sending troops out a meaningful defensive risk.
@@ -119,7 +127,7 @@ final class VillageSession {
     func research(_ unit: ArmyUnit) {
         refreshWorld()
         guard state.research(unit) else { return }
-        persist(String(localized: "screen.village_session.research_started_value_ready_in_one_minute", defaultValue: "Recherche lancée : \(String(unit.name)). Fin dans une minute."))
+        persist(String(localized: "progression.research.started", defaultValue: "Recherche lancée : \(String(unit.name)) · \(String(GameProgression.durationText(state.unitResearchDuration)))."))
     }
 
     @discardableResult
@@ -172,17 +180,24 @@ final class VillageSession {
         return true
     }
 
-    func upgradeWeapons() {
+    func upgradeWeapons(for unit: ArmyUnit) {
         refreshWorld()
-        guard state.upgradeWeapons() else { return }
-        persist(String(localized: "screen.village_session.weapons_research_started", defaultValue: "Recherche d’armes lancée. Fin dans une minute."))
+        guard state.upgradeWeapons(for: unit) else { return }
+        persist(String(localized: "progression.weapons.started", defaultValue: "Recherche d’armes lancée pour \(String(unit.name)) · \(String(GameProgression.durationText(state.weaponUpgradeDuration(for: unit))))."))
+    }
+
+    func upgradeSelectedBuilding() {
+        refreshWorld()
+        guard state.upgradeBuilding(at: plot), let job = state.construction else { return }
+        ConstructionActivityController.start(for: job)
+        persist(String(localized: "progression.building.started", defaultValue: "\(String(job.kind.name)) : niveau \(String(job.level)) en chantier · \(String(GameProgression.durationText(job.duration)))."))
     }
 
     func developSelectedResource() {
         refreshWorld()
         guard state.developResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return }
         if let job = state.resourceUpgrade { ConstructionActivityController.start(for: job) }
-        persist(String(localized: "screen.village_session.value_upgrade_started_ready_in_one_minute", defaultValue: "\(String(kind.name)) : amélioration lancée. Fin dans une minute."))
+        persist(String(localized: "progression.resource.started", defaultValue: "\(String(kind.name)) : amélioration lancée · \(String(GameProgression.durationText(state.resourceUpgrade?.effectiveDuration ?? 60)))."))
     }
 
     func cancelResourceUpgrade() {
@@ -196,7 +211,7 @@ final class VillageSession {
         refreshWorld()
         guard state.build(kind, at: plot) else { return }
         if let job = state.construction { ConstructionActivityController.start(for: job) }
-        persist(String(localized: "screen.village_session.value_construction_started_ready_in_one_minute", defaultValue: "\(String(kind.name)) : chantier lancé. Fin dans une minute."))
+        persist(String(localized: "progression.construction.started", defaultValue: "\(String(kind.name)) : chantier lancé · \(String(GameProgression.durationText(state.construction?.duration ?? 60)))."))
     }
 
     func cancelConstruction() {

@@ -5,9 +5,11 @@ struct ResourceUpgrade: Codable, Equatable, Sendable {
     let targetLevel: Int
     let startedAt: Date
     let cost: Resources
+    var duration: TimeInterval? = nil
 
-    var endsAt: Date { startedAt.addingTimeInterval(60) }
+    var effectiveDuration: TimeInterval { duration ?? 60 }
+    var endsAt: Date { startedAt.addingTimeInterval(effectiveDuration) }
     func progress(at date: Date) -> Double {
-        min(1, max(0, date.timeIntervalSince(startedAt) / 60))
+        min(1, max(0, date.timeIntervalSince(startedAt) / effectiveDuration))
     }
 }

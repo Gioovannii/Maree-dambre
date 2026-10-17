@@ -20,7 +20,7 @@ enum ConstructionActivityController {
     }
 
     static func start(for job: ConstructionJob) {
-        start(name: job.kind.name, symbol: job.kind.symbol, startedAt: job.startedAt, endsAt: job.endsAt)
+        start(name: String(localized: "screen.construction_activity.value_level_value", defaultValue: "\(String(job.kind.name)) · Niveau \(String(job.level))"), symbol: job.kind.symbol, startedAt: job.startedAt, endsAt: job.endsAt)
     }
 
     private static func start(name: String, symbol: String, startedAt: Date, endsAt: Date) {

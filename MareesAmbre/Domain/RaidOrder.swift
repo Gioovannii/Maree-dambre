@@ -15,4 +15,5 @@ struct RaidOrder: Codable, Equatable {
     var defeatLossRate: Double? = nil
     var transportBonusPercent: Int? = nil
     var lootLimit: Int? = nil
+    var weaponLevels: [ArmyUnit: Int]? = nil
 }

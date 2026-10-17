@@ -50,9 +50,7 @@ struct VillageBoard: View {
                         CoastalDomainScene(mode: mode)
                             .frame(width: mapSize.width, height: mapSize.height)
 
-                        if mode == .townCenter {
-                            VillagePedestrians()
-                        }
+                        VillagePedestrians(mode: mode)
 
                         ForEach(visibleSlots, id: \.self) { plot in
                             plotButton(plot, mapWidth: mapSize.width, mapHeight: mapSize.height)
@@ -164,7 +162,7 @@ struct VillageBoard: View {
                         BuildingArt(kind: building)
                             .frame(width: size, height: size)
                             .overlay(alignment: .bottom) {
-                                TideLevelBadge(level: 1, selected: selected)
+                                TideLevelBadge(level: session.state.buildingLevel(at: plot), selected: selected)
                                     .offset(x: size * (plot == 13 ? -0.22 : 0.22), y: size * 0.05)
                                     .accessibilityHidden(true)
                             }
@@ -264,6 +262,9 @@ struct VillageBoard: View {
         }
         if let construction = session.state.construction, construction.plot == plot {
             return String(localized: "screen.village_board.construction_of_value_value_percent_complete", defaultValue: "Chantier de \(String(construction.kind.name)), \(String(Int(construction.progress(at: .now) * 100))) pour cent terminé")
+        }
+        if let building = session.state.buildings[plot] {
+            return String(localized: "progression.building.accessibility", defaultValue: "\(String(building.name)), niveau \(String(session.state.buildingLevel(at: plot)))")
         }
         let building = session.state.buildings[plot]
         let terrain = VillageState.ground(at: plot)

@@ -48,7 +48,7 @@ struct ResourceSitePanel: View {
                         Text(String(localized: "screen.resource_site.cost_value_wood_value_amber_value_food", defaultValue: "Coût : \(String(cost.wood)) bois · \(String(cost.amber)) ambre · \(String(cost.provisions)) vivres"))
                             .font(.subheadline).foregroundStyle(Palette.muted)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text(String(localized: "screen.resource_site.duration_1_minute", defaultValue: "Durée : 1 minute"))
+                        Text(String(localized: "progression.duration", defaultValue: "Durée : \(String(GameProgression.durationText(session.state.resourceUpgradeDuration(for: nextLevel))))"))
                             .font(.subheadline).foregroundStyle(Palette.muted)
                         if session.state.construction != nil || session.state.resourceUpgrade != nil {
                             Text(String(localized: "screen.resource_site.finish_or_cancel_the_current_construction_before_starting_this_upgrade", defaultValue: "Terminez ou annulez le chantier en cours avant de commencer cette amélioration."))

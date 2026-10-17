@@ -3,7 +3,8 @@ import SwiftUI
 struct GameView: View {
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
-    @State private var showsWorld = ProcessInfo.processInfo.arguments.contains("--snapshot-world")
+    @State private var showsWorld = ProcessInfo.processInfo.arguments.contains("--snapshot-world") && !ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
+    @State private var showsMissions = ProcessInfo.processInfo.arguments.contains("--snapshot-missions") || ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
     @State private var showsVillageDetails = ProcessInfo.processInfo.arguments.contains("--snapshot-upgrade") || VillageSession.snapshotBuilding != nil
     @State private var villageMap: VillageMapMode = ProcessInfo.processInfo.arguments.contains("--snapshot-center") || VillageSession.snapshotBuilding != nil
         ? .townCenter : .resourceFields
@@ -20,6 +21,8 @@ struct GameView: View {
                 tabletScreen
             } else if showsWorld {
                 worldScreen
+            } else if showsMissions {
+                missionsScreen
             } else {
                 villageScreen
             }
@@ -34,7 +37,9 @@ struct GameView: View {
                 navigation
                 constructionStatus
                 if showsWorld {
-                    WorldPanel()
+                    WorldPanel(onShowMissions: showMissions, mapHeight: 320)
+                } else if showsMissions {
+                    MissionsPanel()
                 } else {
                     VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
                                  onPlotSelected: { showsVillageDetails = true },
@@ -61,7 +66,12 @@ struct GameView: View {
             Group {
                 if showsWorld {
                     ScrollView {
-                        WorldPanel()
+                        WorldPanel(onShowMissions: showMissions, mapHeight: 500, showsSelection: false)
+                            .padding(20)
+                    }
+                } else if showsMissions {
+                    ScrollView {
+                        MissionsPanel()
                             .padding(20)
                     }
                 } else {
@@ -82,10 +92,15 @@ struct GameView: View {
                 if showsWorld {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
-                            Text(String(localized: "screen.game.tap_a_faction_on_the_map_to_view_its_defense_and_prepare_an_expedition", defaultValue: "Touchez une faction sur la carte pour consulter sa défense et préparer une expédition."))
+                            WorldSelectionPanel(onShowMissions: showMissions)
                             WorldClockStatus()
                         }
                         .padding(20)
+                    }
+                } else if showsMissions {
+                    ScrollView {
+                        WorldClockStatus()
+                            .padding(20)
                     }
                 } else {
                     PlotDetailScreen(mode: villageMap, isEmbedded: true)
@@ -152,7 +167,7 @@ struct GameView: View {
                             .frame(width: 28, height: 28)
                             .background(Palette.amber, in: Circle())
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(String(localized: "screen.game.construction_value", defaultValue: "CHANTIER · \(String(job.kind.name.uppercased()))"))
+                            Text(String(localized: "progression.construction.status", defaultValue: "CHANTIER · \(String(job.kind.name.uppercased())) · N\(String(job.level))"))
                                 .font(.caption2.bold()).tracking(1.2)
                             Text(remaining > 0 ? String(localized: "screen.game.finishes_in_value_s", defaultValue: "Termine dans \(String(remaining)) s") : String(localized: "screen.game.finishing_construction", defaultValue: "Achèvement en cours"))
                                 .font(.caption.bold()).foregroundStyle(Palette.amber)
@@ -180,7 +195,29 @@ struct GameView: View {
                 topControls
                     .frame(maxWidth: 560)
                 ScrollView {
-                    WorldPanel()
+                    WorldPanel(onShowMissions: showMissions, mapHeight: min(480, max(280, geometry.size.height - 350)))
+                        .frame(maxWidth: 720)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 16)
+                }
+                .scrollIndicators(.hidden)
+                navigation
+                    .frame(maxWidth: 560)
+            }
+            .padding(.horizontal, 12)
+            .padding(.top, 7)
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .background(Palette.ocean.ignoresSafeArea())
+        }
+    }
+
+    private var missionsScreen: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 10) {
+                topControls
+                    .frame(maxWidth: 560)
+                ScrollView {
+                    MissionsPanel()
                         .frame(maxWidth: 720)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 16)
@@ -209,9 +246,9 @@ struct GameView: View {
 
     @ViewBuilder
     private var header: some View {
-        if showsWorld {
+        if showsWorld || showsMissions {
             HStack {
-                Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : villageMap.title)
+                Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : showsMissions ? String(localized: "screen.game.missions", defaultValue: "Missions") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
                     .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                     .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
@@ -238,14 +275,19 @@ struct GameView: View {
 
     private var navigation: some View {
         navigationLayout {
-            navigationButton(String(localized: "screen.game.resources", defaultValue: "Ressources"), symbol: "leaf.fill", selected: !showsWorld && villageMap == .resourceFields) {
+            navigationButton(String(localized: "screen.game.resources", defaultValue: "Ressources"), symbol: "leaf.fill", selected: !showsWorld && !showsMissions && villageMap == .resourceFields) {
                 selectVillageMap(.resourceFields)
             }
-            navigationButton(String(localized: "screen.game.town", defaultValue: "Centre"), symbol: "building.2.fill", selected: !showsWorld && villageMap == .townCenter) {
+            navigationButton(String(localized: "screen.game.town", defaultValue: "Centre"), symbol: "building.2.fill", selected: !showsWorld && !showsMissions && villageMap == .townCenter) {
                 selectVillageMap(.townCenter)
             }
             navigationButton(String(localized: "screen.game.world", defaultValue: "Monde"), symbol: "map.fill", selected: showsWorld) {
                 showsWorld = true
+                showsMissions = false
+            }
+            navigationButton(String(localized: "screen.game.missions", defaultValue: "Missions"), symbol: "sailboat.fill", selected: showsMissions) {
+                showsWorld = false
+                showsMissions = true
             }
         }
         .padding(4)
@@ -260,11 +302,15 @@ struct GameView: View {
 
     private func navigationButton(_ title: String, symbol: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Label(title, systemImage: symbol)
-                .font(.caption.bold())
-                .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
-                .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
-                .frame(maxWidth: .infinity, minHeight: 50)
+            VStack(spacing: 4) {
+                Image(systemName: symbol)
+                    .font(.system(size: 16, weight: .semibold))
+                Text(title)
+                    .font(.caption2.bold())
+                    .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
+                    .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
+            }
+                .frame(maxWidth: .infinity, minHeight: 54)
                 .foregroundStyle(selected ? Palette.amber : Palette.muted)
                 .background {
                     if selected { Capsule().fill(Palette.amber.opacity(0.12)) }
@@ -277,10 +323,16 @@ struct GameView: View {
 
     private func selectVillageMap(_ mode: VillageMapMode) {
         showsWorld = false
+        showsMissions = false
         if session.moveSourcePlot != nil || session.pendingBuilding != nil { session.cancelPlacement() }
         guard villageMap != mode else { return }
         villageMap = mode
         session.plot = mode == .resourceFields ? selectedResourcePlot : selectedTownPlot
+    }
+
+    private func showMissions() {
+        showsWorld = false
+        showsMissions = true
     }
 
     private var selectedPlotBinding: Binding<Int> {

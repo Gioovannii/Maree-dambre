@@ -24,7 +24,9 @@ struct VillageStorage {
         guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
         guard (2...VillageState.currentVersion).contains(state.version), state.seed == seed,
-              (0...VillageState.maximumWeaponLevel).contains(state.weaponLevel),
+              (0...3).contains(state.weaponLevel),
+              (state.buildingLevels ?? [:]).allSatisfy({ state.hasBuilding($0.key) && (1...GameProgression.maximumBuildingLevel).contains($0.value) }),
+              (state.unitWeaponLevels ?? [:]).values.allSatisfy({ (0...VillageState.maximumWeaponLevel).contains($0) }),
               state.army?.isValid ?? true,
               state.coastalCampaign?.isValid ?? true,
               state.hasValidCommerce,
@@ -40,16 +42,30 @@ struct VillageStorage {
         }
         var migrated = state
         if let job = state.construction {
-            guard (0..<25).contains(job.plot), job.kind != .hall,
-                  state.buildings[job.plot] == nil, job.duration.isFinite, job.duration > 0,
-                  state.version < 8 || !state.hasBuilding(job.kind) else {
+            guard (0..<25).contains(job.plot), job.duration.isFinite, (1...86_400).contains(job.duration),
+                  state.resourceUpgrade == nil, (1...GameProgression.maximumBuildingLevel).contains(job.level) else {
                 throw CocoaError(.coderReadCorrupt)
+            }
+            if job.level == 1 {
+                guard job.kind != .hall, state.buildings[job.plot] == nil,
+                      state.version < 8 || !state.hasBuilding(job.kind),
+                      job.paidCost == nil || job.paidCost == job.kind.cost else { throw CocoaError(.coderReadCorrupt) }
+            } else {
+                guard state.buildings[job.plot] == job.kind,
+                      job.level == state.buildingLevel(job.kind) + 1,
+                      job.paidCost == job.kind.cost(for: job.level) else { throw CocoaError(.coderReadCorrupt) }
             }
         }
         if let job = state.weaponUpgrade {
             guard state.hasBuilding(.forge), (1...VillageState.maximumWeaponLevel).contains(job.targetLevel),
-                  job.targetLevel == state.weaponLevel + 1, job.endsAt.timeIntervalSince1970.isFinite else {
+                  job.endsAt.timeIntervalSince1970.isFinite else {
                 throw CocoaError(.coderReadCorrupt)
+            }
+            if let unit = job.unit {
+                guard state.unlockedUnits.contains(unit), job.targetLevel == state.weaponLevel(for: unit) + 1,
+                      state.buildingLevel(.forge) >= job.targetLevel else { throw CocoaError(.coderReadCorrupt) }
+            } else {
+                guard job.targetLevel <= 3, job.targetLevel == state.weaponLevel + 1 else { throw CocoaError(.coderReadCorrupt) }
             }
         }
         if let job = state.resourceUpgrade {
@@ -58,7 +74,8 @@ struct VillageStorage {
                   (1...ResourceSiteKind.maximumLevel).contains(job.targetLevel),
                   job.targetLevel == state.resourceLevel(at: job.plot) + 1,
                   job.startedAt.timeIntervalSince1970.isFinite,
-                  job.cost == kind.cost(for: job.targetLevel) else {
+                  job.effectiveDuration.isFinite, (1...86_400).contains(job.effectiveDuration),
+                  job.cost == (job.duration == nil ? kind.legacyCost(for: job.targetLevel) : kind.cost(for: job.targetLevel)) else {
                 throw CocoaError(.coderReadCorrupt)
             }
         }
@@ -74,6 +91,7 @@ struct VillageStorage {
             throw CocoaError(.coderReadCorrupt)
         }
         if let job = migrated.construction, state.version >= 8,
+           !(job.kind == .hall && job.plot == 12 && job.level > 1),
            !VillageState.canPlace(job.kind, at: job.plot) {
             throw CocoaError(.coderReadCorrupt)
         }

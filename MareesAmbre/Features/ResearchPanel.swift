@@ -30,7 +30,7 @@ struct ResearchPanel: View {
                     } else {
                         Text(String(localized: "screen.research.value_wood_value_amber_value_food", defaultValue: "\(String(unit.researchCost.wood)) bois · \(String(unit.researchCost.amber)) ambre · \(String(unit.researchCost.provisions)) vivres"))
                             .font(.footnote)
-                        Button(String(localized: "screen.research.research_1_min", defaultValue: "Rechercher · 1 min")) { session.research(unit) }
+                        Button(String(localized: "progression.research.action", defaultValue: "Rechercher · \(String(GameProgression.durationText(session.state.unitResearchDuration)))")) { session.research(unit) }
                             .buttonStyle(.borderedProminent)
                             .foregroundStyle(Palette.ocean)
                             .disabled(!session.state.canResearch(unit))

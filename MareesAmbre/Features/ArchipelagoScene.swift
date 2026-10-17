@@ -5,7 +5,7 @@ import UIKit
 final class ArchipelagoScene: SKScene {
     private let viewpoint = SKCameraNode()
     private let markers = SKNode()
-    private let selection = SKShapeNode(circleOfRadius: 38)
+    private let selection = SKShapeNode(ellipseOf: CGSize(width: 48, height: 30))
     private let route = SKShapeNode()
     private var currentSeed: Int?
     private var terrainTask: Task<Void, Never>?
@@ -13,6 +13,7 @@ final class ArchipelagoScene: SKScene {
     private var dragStart: CGPoint?
     private var zoomStart: CGFloat?
     private var locations: [TileCoordinate] = []
+    private var selectedTile = TileCoordinate.home
     private let unit: CGFloat = 24
     private var seaMotion: Float {
         reducedMotion || ProcessInfo.processInfo.arguments.contains("--ui-snapshot") ? 0 : 1
@@ -34,9 +35,10 @@ final class ArchipelagoScene: SKScene {
             vec2 p = v_tex_coord * 120.0;
             float wave = sin(p.x * 2.4 + sin(p.y * 1.8) + u_time * u_motion * 0.3);
             float shimmer = pow(max(0.0, wave * sin(p.y * 3.0 - u_time * u_motion * 0.2)), 12.0);
-            vec3 deep = vec3(0.025, 0.19, 0.29);
-            vec3 water = deep + vec3(0.02, 0.08, 0.09) * (wave * 0.5 + 0.5);
-            gl_FragColor = vec4(water + shimmer * vec3(0.07, 0.12, 0.12), 1.0);
+            float depth = sin(p.x * 0.17 + p.y * 0.21) * 0.5 + 0.5;
+            vec3 deep = mix(vec3(0.035, 0.29, 0.40), vec3(0.045, 0.43, 0.52), depth);
+            vec3 water = deep + vec3(0.015, 0.045, 0.055) * (wave * 0.5 + 0.5);
+            gl_FragColor = vec4(water + shimmer * vec3(0.10, 0.20, 0.19), 1.0);
         }
         """)
         sea.shader?.addUniform(SKUniform(name: "u_motion", float: seaMotion))
@@ -53,13 +55,13 @@ final class ArchipelagoScene: SKScene {
         viewpoint.position = point(.home)
         markers.zPosition = 5
         addChild(markers)
-        selection.strokeColor = .systemYellow
-        selection.lineWidth = 3
+        selection.strokeColor = WorldMapStyle.amber
+        selection.lineWidth = 1.6
         selection.fillColor = .clear
-        selection.zPosition = 8
+        selection.zPosition = 4.5
         addChild(selection)
-        route.strokeColor = UIColor.systemYellow.withAlphaComponent(0.65)
-        route.lineWidth = 3
+        route.strokeColor = WorldMapStyle.amber.withAlphaComponent(0.75)
+        route.lineWidth = 1.8
         route.zPosition = 4
         addChild(route)
     }
@@ -91,45 +93,25 @@ final class ArchipelagoScene: SKScene {
         }
         markers.removeAllChildren()
         locations = [.home] + bots.map(\.capital)
-        addVillage(tile: .home, name: String(localized: "screen.archipelago_scene.amber_harbor", defaultValue: "PORT D’AMBRE"), asset: "MaisonVeilleurs", color: .systemYellow)
+        addVillage(tile: .home, name: String(localized: "screen.world.amber_harbor", defaultValue: "Port d’Ambre"), asset: "MaisonVeilleurs", color: WorldMapStyle.amber)
         for bot in bots {
-            let color = [UIColor.systemOrange, .systemCyan, .systemPurple][bot.id % 3]
+            let color = WorldMapStyle.factionColor(bot.id)
             for tile in bot.territory {
                 let patch = SKShapeNode(circleOfRadius: 13)
                 patch.position = point(tile)
-                patch.fillColor = color.withAlphaComponent(0.22)
-                patch.strokeColor = .clear
+                patch.fillColor = color.withAlphaComponent(0.10)
+                patch.strokeColor = color.withAlphaComponent(0.4)
+                patch.lineWidth = 0.8
                 markers.addChild(patch)
             }
-            addVillage(tile: bot.capital, name: bot.displayName.uppercased(), asset: ["CourArmes", "MaisonSavoirs", "Ferme"][bot.id % 3], color: color)
+            addVillage(tile: bot.capital, name: WorldNeighbor.name(for: bot, seed: world.seed), asset: ["CourArmes", "MaisonSavoirs", "Ferme"][bot.id % 3], color: color)
         }
         select(selected, focus: false)
     }
 
     private func addVillage(tile: TileCoordinate, name: String, asset: String, color: UIColor) {
-        let node = SKNode()
-        node.name = "village"
+        let node = WorldVillageMarker.make(name: name, asset: asset, color: color, isHome: tile == .home)
         node.position = point(tile)
-        let halo = SKShapeNode(ellipseOf: CGSize(width: 95, height: 45))
-        halo.fillColor = color.withAlphaComponent(0.2)
-        halo.strokeColor = color.withAlphaComponent(0.8)
-        node.addChild(halo)
-        let building = SKSpriteNode(imageNamed: asset)
-        building.size = CGSize(width: 100, height: 100)
-        building.position.y = 30
-        node.addChild(building)
-        let label = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
-        label.text = name
-        label.fontSize = 22
-        label.fontColor = .white
-        label.position.y = -28
-        let plate = SKShapeNode(rectOf: CGSize(width: max(130, label.frame.width + 22), height: 30), cornerRadius: 12)
-        plate.position.y = -22
-        plate.fillColor = UIColor(red: 0.03, green: 0.12, blue: 0.17, alpha: 0.95)
-        plate.strokeColor = color.withAlphaComponent(0.6)
-        node.addChild(plate)
-        node.addChild(label)
-        node.setScale(max(1, viewpoint.xScale / 2.4))
         markers.addChild(node)
     }
 
@@ -138,6 +120,8 @@ final class ArchipelagoScene: SKScene {
     }
 
     func select(_ tile: TileCoordinate, focus: Bool = true) {
+        selectedTile = tile
+        updateVillageMarkers()
         selection.position = point(tile)
         let path = CGMutablePath()
         if tile != .home {
@@ -172,15 +156,35 @@ final class ArchipelagoScene: SKScene {
     func zoom(_ factor: CGFloat, ended: Bool = true) {
         if zoomStart == nil { zoomStart = viewpoint.xScale }
         viewpoint.setScale(min(8, max(0.8, (zoomStart ?? 2.4) / factor)))
-        for node in markers.children where node.name == "village" {
-            node.setScale(max(1, viewpoint.xScale / 2.4))
-        }
+        updateVillageMarkers()
         if ended { zoomStart = nil }
     }
 
     func overview() {
         viewpoint.removeAllActions()
-        viewpoint.position = CGPoint(x: 105 * unit, y: -103 * unit)
-        viewpoint.setScale(max(1.5, 850 / max(size.width, 1)))
+        let points = locations.map(point)
+        guard let minX = points.map(\.x).min(), let maxX = points.map(\.x).max(),
+              let minY = points.map(\.y).min(), let maxY = points.map(\.y).max() else { return }
+        viewpoint.position = CGPoint(x: (minX + maxX) / 2, y: (minY + maxY) / 2)
+        // Leave room for nameplates at the edges of the regional overview.
+        let horizontalScale = (maxX - minX) / max(size.width - 180, 100)
+        let verticalScale = (maxY - minY) / max(size.height - 140, 100)
+        viewpoint.setScale(min(8, max(1.5, max(horizontalScale, verticalScale))))
+        updateVillageMarkers()
+    }
+
+    private func updateVillageMarkers() {
+        for node in markers.children where node.name == "village" {
+            let isSelected = node.position == point(selectedTile)
+            // Around 30 screen points at regional zoom; shrink further when
+            // zoomed out so villages do not obscure the surrounding territory.
+            node.setScale(min(4, max(0.5, viewpoint.xScale * 0.8)))
+            let hideName = viewpoint.xScale > 5 && !isSelected
+            node.childNode(withName: "name")?.isHidden = hideName
+            node.childNode(withName: "namePlate")?.isHidden = hideName
+            node.zPosition = isSelected ? 1 : 0
+        }
+        selection.setScale(viewpoint.xScale * 0.8)
+        route.lineWidth = viewpoint.xScale * 1.2
     }
 }

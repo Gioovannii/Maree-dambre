@@ -636,13 +636,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "+1 attaque par unité et par recherche · 3 niveaux"
+            "value": "Recherche d’armes par type d’unité"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "+1 attack per unit per research level · 3 levels"
+            "value": "Weapon research per unit type"
           }
         }
       }
@@ -653,13 +653,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Améliore les armes de toutes les troupes, en trois recherches successives."
+            "value": "Améliore les armes de chaque type d’unité grâce à des recherches distinctes."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Improve every unit’s weapons through three successive research levels."
+            "value": "Improve weapons for each unit type through separate research."
           }
         }
       }
@@ -3469,6 +3469,23 @@
         }
       }
     },
+    "screen.game.missions": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missions"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missions"
+          }
+        }
+      }
+    },
     "screen.game.resources": {
       "extractionState": "manual",
       "localizations": {
@@ -5573,6 +5590,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Neighboring Shores"
+          }
+        }
+      }
+    },
+    "screen.missions.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Préparez vos expéditions et suivez le retour de vos troupes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prepare expeditions and track your troops on their way home."
           }
         }
       }
@@ -7715,6 +7749,652 @@
           "stringUnit": {
             "state": "translated",
             "value": "The contract or escort is no longer available. Check your selection."
+          }
+        }
+      }
+    },
+    "progression.effect.hall": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ bois · +%@ ambre · +%@ vivres / h · Durée des chantiers : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ wood · +%@ amber · +%@ food / h · Construction duration: %@"
+          }
+        }
+      }
+    },
+    "progression.effect.production": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ %@ / h"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ %@ / h"
+          }
+        }
+      }
+    },
+    "progression.effect.storage": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capacité de réserve : %@ par ressource"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage capacity: %@ per resource"
+          }
+        }
+      }
+    },
+    "progression.effect.defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ de défense du port"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ harbor defense"
+          }
+        }
+      }
+    },
+    "progression.effect.training": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraînement : %@ par unité"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training: %@ per unit"
+          }
+        }
+      }
+    },
+    "progression.effect.research": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquer une unité : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock a unit: %@"
+          }
+        }
+      }
+    },
+    "progression.effect.market": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valeur conservée à l’échange : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Value retained when trading: %@"
+          }
+        }
+      }
+    },
+    "progression.effect.forge": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche des armes jusqu’au niveau %@ par type d’unité"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapon research up to level %@ per unit type"
+          }
+        }
+      }
+    },
+    "progression.effect.infirmary": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pertes sans mage : %@ en victoire · %@ en défaite"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Losses without a mage: %@ on victory · %@ on defeat"
+          }
+        }
+      }
+    },
+    "progression.effect.quay": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ de transport · butin jusqu’à %@ par ressource"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ carrying capacity · up to %@ loot per resource"
+          }
+        }
+      }
+    },
+    "progression.building.level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ / %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ / %@"
+          }
+        }
+      }
+    },
+    "progression.building.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au niveau %@ : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At level %@: %@"
+          }
+        }
+      }
+    },
+    "progression.building.upgrade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorer au niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade to level %@"
+          }
+        }
+      }
+    },
+    "progression.building.maximum": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bâtiment au niveau maximal"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building at maximum level"
+          }
+        }
+      }
+    },
+    "progression.building.target": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau visé : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target level: %@"
+          }
+        }
+      }
+    },
+    "progression.building.started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : niveau %@ en chantier · %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: level %@ upgrade started · %@."
+          }
+        }
+      }
+    },
+    "progression.building.accessibility": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, level %@"
+          }
+        }
+      }
+    },
+    "progression.duration": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration: %@"
+          }
+        }
+      }
+    },
+    "progression.storage_required": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorez l’Entrepôt pour pouvoir stocker les ressources nécessaires."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade the Warehouse to store the required resources."
+          }
+        }
+      }
+    },
+    "progression.forge.explanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez le type d’unité à équiper. Chaque niveau ajoute 1 point d’attaque et de défense à ses unités actuelles et futures. Le niveau de la Forge limite celui des armes. Les troupes déjà parties conservent leur équipement de départ."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a unit type to equip. Each level adds 1 attack and defense to its current and future units. The Forge level limits weapon levels. Troops already deployed keep their departure equipment."
+          }
+        }
+      }
+    },
+    "progression.forge.legacy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche commune déjà engagée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previously started shared research"
+          }
+        }
+      }
+    },
+    "progression.weapons.level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armes : niveau %@ / %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapons: level %@ / %@"
+          }
+        }
+      }
+    },
+    "progression.weapons.stats": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attaque : %@ · Défense : %@ par unité"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Attack: %@ · Defense: %@ per unit"
+          }
+        }
+      }
+    },
+    "progression.weapons.upgrade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorer les armes au niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade weapons to level %@"
+          }
+        }
+      }
+    },
+    "progression.weapons.forge_required": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requiert la Forge au niveau %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requires Forge level %@."
+          }
+        }
+      }
+    },
+    "progression.weapons.busy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminez la recherche d’armes en cours."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish the current weapon research."
+          }
+        }
+      }
+    },
+    "progression.weapons.started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche d’armes lancée pour %@ · %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weapon research started for %@ · %@."
+          }
+        }
+      }
+    },
+    "progression.research.started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recherche lancée : %@ · %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research started: %@ · %@."
+          }
+        }
+      }
+    },
+    "progression.resource.started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : amélioration lancée · %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: upgrade started · %@."
+          }
+        }
+      }
+    },
+    "progression.construction.started": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ : chantier lancé · %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: construction started · %@."
+          }
+        }
+      }
+    },
+    "progression.training.action": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entraîner · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Train · %@"
+          }
+        }
+      }
+    },
+    "progression.research.action": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rechercher · %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research · %@"
+          }
+        }
+      }
+    },
+    "progression.market.rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’ambre vaut deux fois le bois ou les vivres. Vous récupérez %@ de la valeur donnée. Améliorer le Marché augmente ce rendement. La réserve d’arrivée doit avoir assez de place."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amber is worth twice as much as wood or food. You receive %@ of the value given. Upgrade the Market to improve this return. The receiving storage must have enough space."
+          }
+        }
+      }
+    },
+    "progression.effect.academy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquer une unité : %@ · Durée des recherches d’armes : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock a unit: %@ · Weapon research duration: %@"
+          }
+        }
+      }
+    },
+    "progression.construction.status": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CHANTIER · %@ · N%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CONSTRUCTION · %@ · L%@"
+          }
+        }
+      }
+    },
+    "world.map.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorez l’archipel et découvrez vos voisins."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore the archipelago and discover your neighbors."
+          }
+        }
+      }
+    },
+    "world.neighbor.destination": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, voisin simulé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@, simulated neighbor"
+          }
+        }
+      }
+    },
+    "world.neighbor.tribe": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Voisin simulé (IA)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Simulated neighbor (AI)"
           }
         }
       }

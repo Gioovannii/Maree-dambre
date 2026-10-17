@@ -1,7 +1,7 @@
 import Foundation
 
 struct VillageState: Codable, Equatable {
-    static let currentVersion = 13
+    static let currentVersion = 14
     var version: Int
     let seed: Int
     var resources: Resources
@@ -19,11 +19,14 @@ struct VillageState: Codable, Equatable {
     var weaponUpgrade: WeaponUpgrade?
     var coastalCampaign: CoastalCampaign?
     var commerce: CommerceState?
+    var buildingLevels: [BuildingKind: Int]?
+    var unitWeaponLevels: [ArmyUnit: Int]?
 
     private enum CodingKeys: String, CodingKey {
         case version, seed, resources, buildings, resourceLevels, bots, people
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
         case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
+        case buildingLevels, unitWeaponLevels
     }
 
     init(from decoder: Decoder) throws {
@@ -45,6 +48,8 @@ struct VillageState: Codable, Equatable {
         weaponUpgrade = try values.decodeIfPresent(WeaponUpgrade.self, forKey: .weaponUpgrade)
         coastalCampaign = try values.decodeIfPresent(CoastalCampaign.self, forKey: .coastalCampaign)
         commerce = try values.decodeIfPresent(CommerceState.self, forKey: .commerce)
+        buildingLevels = try values.decodeIfPresent([BuildingKind: Int].self, forKey: .buildingLevels)
+        unitWeaponLevels = try values.decodeIfPresent([ArmyUnit: Int].self, forKey: .unitWeaponLevels)
     }
 
     init(seed: Int) {
@@ -131,6 +136,7 @@ struct VillageState: Codable, Equatable {
         }
         if version < 12 { version = 12 }
         if version < 13 { version = 13 }
+        if version < 14 { version = 14 }
     }
 
     private mutating func relocateQuayToWaterfront() {
@@ -197,7 +203,7 @@ struct VillageState: Codable, Equatable {
     func canMoveBuilding(from source: Int, to destination: Int) -> Bool {
         guard let kind = buildings[source], kind != .hall,
               buildings[destination] == nil,
-              construction?.plot != destination,
+              construction?.plot != destination, construction?.plot != source,
               Self.canPlace(kind, at: destination) else { return false }
         return true
     }
@@ -234,7 +240,8 @@ struct VillageState: Codable, Equatable {
         resources.wood -= cost.wood
         resources.amber -= cost.amber
         resources.provisions -= cost.provisions
-        resourceUpgrade = ResourceUpgrade(plot: plot, targetLevel: nextLevel, startedAt: now, cost: cost)
+        resourceUpgrade = ResourceUpgrade(plot: plot, targetLevel: nextLevel, startedAt: now, cost: cost,
+                                          duration: resourceUpgradeDuration(for: nextLevel))
         return true
     }
 
@@ -263,13 +270,17 @@ struct VillageState: Codable, Equatable {
         resources.wood -= kind.cost.wood
         resources.amber -= kind.cost.amber
         resources.provisions -= kind.cost.provisions
-        construction = ConstructionJob(plot: plot, kind: kind, startedAt: now, duration: 60)
+        construction = ConstructionJob(plot: plot, kind: kind, startedAt: now,
+                                       duration: constructionDuration(for: 1), targetLevel: 1, paidCost: kind.cost)
         return true
     }
 
     mutating func updateConstruction(now: Date = .now) {
         guard let job = construction, now >= job.endsAt else { return }
         buildings[job.plot] = job.kind
+        var levels = buildingLevels ?? [:]
+        levels[job.kind] = job.level
+        buildingLevels = levels
         construction = nil
     }
 
@@ -277,9 +288,9 @@ struct VillageState: Codable, Equatable {
         updateConstruction(now: now)
         guard let job = construction else { return nil }
         construction = nil
-        resources.wood = min(999_999, resources.wood + job.kind.cost.wood / 2)
-        resources.amber = min(999_999, resources.amber + job.kind.cost.amber / 2)
-        resources.provisions = min(999_999, resources.provisions + job.kind.cost.provisions / 2)
+        resources.wood = min(999_999, resources.wood + job.cost.wood / 2)
+        resources.amber = min(999_999, resources.amber + job.cost.amber / 2)
+        resources.provisions = min(999_999, resources.provisions + job.cost.provisions / 2)
         return job
     }
 
@@ -287,9 +298,9 @@ struct VillageState: Codable, Equatable {
         var total = Resources(wood: 0, amber: 0, provisions: 0)
         for building in buildings.values {
             guard version < 7 || meetsProductionRequirement(building) else { continue }
-            total.wood += building.yield.wood
-            total.amber += building.yield.amber
-            total.provisions += building.yield.provisions
+            total.wood += building.yield.wood * buildingLevel(building)
+            total.amber += building.yield.amber * buildingLevel(building)
+            total.provisions += building.yield.provisions * buildingLevel(building)
         }
         for plot in VillageMapMode.resourceFields.slots {
             guard let kind = ResourceSiteKind.at(plot) else { continue }
@@ -303,11 +314,11 @@ struct VillageState: Codable, Equatable {
     }
 
     var storageCapacity: Int {
-        300 + buildings.values.reduce(0) { $0 + $1.storageIncrease }
+        300 + buildings.values.reduce(0) { $0 + $1.storageIncrease * buildingLevel($1) }
     }
 
     var automaticDefense: Int {
-        buildings.values.reduce(0) { $0 + $1.defenseStrength } + (people?.baseDefenseBonus ?? 0)
+        buildings.values.reduce(0) { $0 + $1.defenseStrength * buildingLevel($1) } + (people?.baseDefenseBonus ?? 0)
     }
 
     mutating func updateInRealTime(now: Date = .now, on world: WorldMap) -> Int {

@@ -8,6 +8,7 @@ struct DomainChecks {
         try checkRaidSelection()
         try checkCoastalDefense()
         try checkCommerce()
+        try checkProgression()
         let seed = 202639
         var game = GameState(seed: seed)
         precondition(game == GameState(seed: seed), "Same seed must produce same start")
@@ -200,7 +201,8 @@ struct DomainChecks {
         freshStart.people = .sauniers
         var playTime = Date.now
         let playStartedAt = playTime
-        while freshStart.resourceLevel(at: 0) < ResourceSiteKind.maximumLevel {
+        // Military progress must be available before maxing an economic field.
+        while freshStart.resourceLevel(at: 0) < 2 {
             if freshStart.canDevelopResource(at: 0) {
                 precondition(freshStart.developResource(at: 0, now: playTime))
             } else {
@@ -208,7 +210,7 @@ struct DomainChecks {
                 _ = freshStart.updateInRealTime(now: playTime, on: world)
             }
             precondition(playTime.timeIntervalSince(playStartedAt) < 6 * 3_600,
-                         "A fresh village must reach the first level-10 field before the first faction upgrade")
+                         "The initial economy must not block access to the first troops")
         }
         while !freshStart.canBuild(.academy, at: 10) {
             playTime = playTime.addingTimeInterval(60)
@@ -240,6 +242,8 @@ struct DomainChecks {
         playTime = playTime.addingTimeInterval(61)
         freshStart.updateArmy(now: playTime)
         precondition(freshStart.raid(targetID: 0, now: playTime))
+        precondition(playTime.timeIntervalSince(playStartedAt) < 3_600,
+                     "The first raid must remain reachable without a level-10 field")
         let savedFirstRaid = try JSONDecoder().decode(VillageState.self, from: JSONEncoder().encode(freshStart))
         precondition(savedFirstRaid.army?.isValid == true, "The first raid must remain valid when loading its save")
         var occupiedSite = freshStart
@@ -343,7 +347,7 @@ struct DomainChecks {
         print("PASS: two units per people, restricted research, legacy troops, reef protection and human transport")
         print("PASS: field timer, shared construction slot, 50% refund, save/resume and delayed production")
         print("PASS: training costs, offline completion, raid losses, loot, cooldown, save/resume and no duplicate rewards")
-        print("PASS: a new village can develop, research, train and launch its first raid within six hours")
+        print("PASS: a new village can develop, research, train and launch its first raid within one hour without maxing a field")
         print("PASS: 40,000 tiles, unique city buildings, resource sites, offline production and legacy migration")
         print("PASS: deterministic start, legal actions, costs, cap, serialization, UTC week boundaries")
     }

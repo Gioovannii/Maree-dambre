@@ -117,7 +117,7 @@ struct SessionChecks {
         precondition(state.build(.market, at: 14, now: departure))
         precondition(state.research(.pillager, now: departure))
         precondition(state.train(.tideguard, count: 2, now: departure))
-        precondition(state.upgradeWeapons(now: departure))
+        precondition(state.upgradeWeapons(for: .tideguard, now: departure))
         precondition(state.raid(targetID: 0, now: departure))
         try storage.save(state)
 
@@ -126,7 +126,7 @@ struct SessionChecks {
         precondition(session.state.hasBuilding(.market) && session.state.construction == nil)
         precondition(session.state.unlockedUnits.contains(.pillager) && session.state.army?.research == nil)
         precondition(session.state.availableArmy[.tideguard] == 5 && session.state.army?.training == nil)
-        precondition(session.state.weaponLevel == 1 && session.state.weaponUpgrade == nil)
+        precondition(session.state.weaponLevel(for: .tideguard) == 1 && session.state.weaponUpgrade == nil)
         precondition(session.state.army?.raid == nil && session.state.army?.report != nil)
         precondition(session.state.army?.raidedUntil[0] == departure.addingTimeInterval(720))
         let stocks = session.state.resources
@@ -134,7 +134,7 @@ struct SessionChecks {
         let relaunched = VillageSession(storage: storage)
         relaunched.refreshAfterSceneChange()
         precondition(relaunched.state.resources == stocks && relaunched.state.army == army)
-        precondition(relaunched.state.hasBuilding(.market) && relaunched.state.weaponLevel == 1)
+        precondition(relaunched.state.hasBuilding(.market) && relaunched.state.weaponLevel(for: .tideguard) == 1)
     }
 
     @MainActor
@@ -224,7 +224,7 @@ struct SessionChecks {
         precondition(!relaunched.claimConvoyReward(), "No silent overflow into a full amber reserve")
         let awaitingPayment = VillageSession(storage: storage)
         precondition(awaitingPayment.state.commerce?.report?.pendingAmber == 26)
-        awaitingPayment.upgradeWeapons()
+        awaitingPayment.upgradeWeapons(for: .tideguard)
         precondition(awaitingPayment.state.weaponUpgrade != nil)
         precondition(awaitingPayment.claimConvoyReward() && awaitingPayment.state.resources.amber == 298)
         let settled = awaitingPayment.state

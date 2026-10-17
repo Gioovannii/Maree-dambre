@@ -13,7 +13,7 @@ struct DefenseReport: Codable, Equatable {
     var lossCount: Int { losses.values.reduce(0, +) }
     var isValid: Bool {
         (2...1_000_000).contains(tide) && (24...252).contains(enemyPower)
-            && (0...2_000).contains(garrisonPower) && (0...21).contains(fortificationPower)
+            && (0...3_000).contains(garrisonPower) && (0...201).contains(fortificationPower)
             && fortificationPower <= garrisonPower && won == (garrisonPower >= enemyPower)
             && losses.values.allSatisfy { (1...100).contains($0) } && lossCount <= 100
             && [stolen.wood, stolen.amber, stolen.provisions].allSatisfy { (0...90).contains($0) }

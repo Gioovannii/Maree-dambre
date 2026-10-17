@@ -21,12 +21,12 @@ struct ArmyPanel: View {
                     Label(String(localized: "screen.army.available_units", defaultValue: "\(String(unit.name)) · \(String(session.state.availableArmy[unit, default: 0])) disponible(s)"), systemImage: unit.emblem)
                         .font(.headline)
                     Text(String(localized: "screen.army.power_value_carries_value_resources", defaultValue: "Force \(String(session.state.attackStrength(of: unit))) · Transport \(String(unit.carrying)) ressources"))
-                    Text(String(localized: "screen.army.unit_defense", defaultValue: "Défense du port : \(String(unit.defense + session.state.weaponLevel)) par unité"))
+                    Text(String(localized: "screen.army.unit_defense", defaultValue: "Défense du port : \(String(session.state.defenseStrength(of: unit))) par unité"))
                     if !session.state.unlockedUnits.contains(unit) {
                         Label(String(localized: "screen.army.unlock_at_the_academy", defaultValue: "À débloquer à la Maison des savoirs"), systemImage: "lock.fill")
                     }
                     Text(String(localized: "screen.army.training_cost", defaultValue: "Coût : \(String(unit.cost.wood * count)) bois · \(String(unit.cost.amber * count)) ambre · \(String(unit.cost.provisions * count)) vivres"))
-                    Button(String(localized: "screen.army.train", defaultValue: "Entraîner · \(String(count * 30)) s")) { session.train(unit, count: count) }
+                    Button(String(localized: "progression.training.action", defaultValue: "Entraîner · \(String(GameProgression.durationText(ceil(Double(count) * session.state.trainingSecondsPerUnit))))")) { session.train(unit, count: count) }
                         .buttonStyle(.borderedProminent)
                         .foregroundStyle(Palette.ocean)
                         .disabled(!session.state.canTrain(unit, count: count))
