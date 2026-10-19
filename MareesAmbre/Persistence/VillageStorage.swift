@@ -23,10 +23,62 @@ struct VillageStorage {
     func load(seed: Int, world: WorldMap, now: Date = .now) throws -> VillageState? {
         guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
-        guard (2...VillageState.currentVersion).contains(state.version), state.seed == seed,
+        let all = [state] + (state.otherVillages ?? [])
+        guard all.count <= VillageState.maximumSettlements,
+              Set(all.map(\.location)).count == all.count,
+              all.filter({ $0.location == .home }).count == 1,
+              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.seed == seed && $0.people == state.people }) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        var migrated = try validateVillage(state, world: world, now: now)
+        migrated.otherVillages = try state.otherVillages?.map { try validateVillage($0, world: world, now: now) }
+        guard all.allSatisfy({ village in
+            guard village.location.isValid, world.terrain(at: village.location) != .sea,
+                  village.expansion?.isValid ?? true,
+                  village.shipment?.isValid ?? true,
+                  village.availableArmy.values.reduce(0, +) + (village.army?.training?.count ?? 0)
+                    + (village.army?.raid?.units.values.reduce(0, +) ?? 0)
+                    + (village.army?.convoy?.units.values.reduce(0, +) ?? 0) + village.foundingEscortCount + village.shipmentEscortCount <= 100 else { return false }
+            if village.location == .home { return village.settlementRole == nil && !village.isRefuge }
+            return village.settlementRole != nil && village.expansion == nil
+                && village.isRefuge == village.isRefugeSite(village.location)
+                && (!village.isRefuge || village.coastalCampaign == nil)
+        }), all.compactMap({ $0.expansion?.voyage }).count <= 1 else { throw CocoaError(.coderReadCorrupt) }
+        guard all.indices.allSatisfy({ i in all.indices.allSatisfy { j in i == j || all[i].location.distance(to: all[j].location) >= 8 } }) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        guard all.allSatisfy({ source in
+            guard let shipment = source.shipment else { return true }
+            guard shipment.destination != source.location, all.contains(where: { $0.location == shipment.destination }),
+                  source.hasBuilding(.expeditionQuay),
+                  shipment.arrivesAt.timeIntervalSince(shipment.departedAt) == source.shipmentDuration(to: shipment.destination),
+                  shipment.returnsAt.timeIntervalSince(shipment.departedAt) == source.shipmentDuration(to: shipment.destination) * 2 else { return false }
+            let clock = source.lastProductionAt ?? .distantPast
+            return (!shipment.escortReturned || clock >= shipment.returnsAt)
+                && (shipment.unloaded == Resources(wood: 0, amber: 0, provisions: 0) || clock >= shipment.arrivesAt)
+        }) else { throw CocoaError(.coderReadCorrupt) }
+        if let voyage = all.compactMap({ $0.expansion?.voyage }).first {
+            guard all.count < VillageState.maximumSettlements,
+                  world.terrain(at: voyage.destination) != .sea,
+                  all.allSatisfy({ $0.location.distance(to: voyage.destination) >= 8 }),
+                  voyage.isRefuge == state.isRefugeSite(voyage.destination) else { throw CocoaError(.coderReadCorrupt) }
+        }
+        if state.version < 19 { migrated.beginProtection(now: now) }
+        if migrated != state { try? save(migrated) }
+        return migrated
+    }
+
+    private func validateVillage(_ state: VillageState, world: WorldMap, now: Date) throws -> VillageState {
+        guard (2...VillageState.currentVersion).contains(state.version), state.seed == world.seed,
               (0...3).contains(state.weaponLevel),
               (state.buildingLevels ?? [:]).allSatisfy({ state.hasBuilding($0.key) && (1...GameProgression.maximumBuildingLevel).contains($0.value) }),
               (state.unitWeaponLevels ?? [:]).values.allSatisfy({ (0...VillageState.maximumWeaponLevel).contains($0) }),
+              (state.mailbox?.count ?? 0) <= VillageState.maximumMailPerVillage,
+              Set((state.mailbox ?? []).map(\.id)).count == (state.mailbox?.count ?? 0),
+              (state.mailbox ?? []).allSatisfy({ $0.isValid && $0.village == state.location }),
+              state.nextBotAttackAt.map({ $0 >= .distantPast && $0 <= .distantFuture }) ?? true,
+              state.beginnerProtection?.isValid ?? true,
+              state.beginnerProtection == nil || state.people != nil,
               state.army?.isValid ?? true,
               state.coastalCampaign?.isValid ?? true,
               state.hasValidCommerce,
@@ -96,7 +148,6 @@ struct VillageStorage {
            !VillageState.canPlace(job.kind, at: job.plot) {
             throw CocoaError(.coderReadCorrupt)
         }
-        if migrated != state { try? save(migrated) }
         return migrated
     }
     func save(_ state: VillageState) throws {

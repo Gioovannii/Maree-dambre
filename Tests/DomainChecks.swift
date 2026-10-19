@@ -9,6 +9,12 @@ struct DomainChecks {
         try checkCoastalDefense()
         try checkCommerce()
         try checkProgression()
+        try checkGuideProgress()
+        try checkExpansion()
+        try checkShipments()
+        try checkMailbox()
+        try checkBeginnerProtection()
+        try checkScheduledBotAttacks()
         let seed = 202639
         var game = GameState(seed: seed)
         precondition(game == GameState(seed: seed), "Same seed must produce same start")
@@ -179,7 +185,20 @@ struct DomainChecks {
         military.updateArmy(now: epoch.addingTimeInterval(240))
         precondition(military.availableArmy[.tideguard] == 4)
         precondition(military.resources == Resources(wood: 68, amber: 55, provisions: 40))
+        precondition(military.army?.raidReport?.isValid == true)
+        precondition(military.army?.raidReport?.attackPower == 32)
+        precondition(military.army?.raidReport?.defensePower == 14)
+        precondition(military.army?.raidReport?.unitsSent == [.tideguard: 4])
+        precondition(military.army?.raidReport?.returnedCount == 4)
+        precondition(military.army?.raidReport?.stolen == Resources(wood: 20, amber: 20, provisions: 20))
         let settled = military
+        var legacyReportSave = try JSONSerialization.jsonObject(with: JSONEncoder().encode(settled)) as! [String: Any]
+        var legacyArmy = legacyReportSave["army"] as! [String: Any]
+        legacyArmy.removeValue(forKey: "raidReport")
+        legacyReportSave["army"] = legacyArmy
+        let restoredLegacyReport = try JSONDecoder().decode(VillageState.self, from: JSONSerialization.data(withJSONObject: legacyReportSave))
+        precondition(restoredLegacyReport.army?.raidReport == nil && restoredLegacyReport.army?.report == settled.army?.report,
+                     "Older saved reports remain available when no structured report exists")
         military.updateArmy(now: epoch.addingTimeInterval(241))
         precondition(military == settled, "A returned raid must never award loot twice")
         precondition(!military.raid(targetID: 0, now: epoch.addingTimeInterval(241)))
@@ -350,5 +369,38 @@ struct DomainChecks {
         print("PASS: a new village can develop, research, train and launch its first raid within one hour without maxing a field")
         print("PASS: 40,000 tiles, unique city buildings, resource sites, offline production and legacy migration")
         print("PASS: deterministic start, legal actions, costs, cap, serialization, UTC week boundaries")
+    }
+}
+
+
+extension DomainChecks {
+    static func checkGuideProgress() throws {
+        var village = VillageState(seed: 42)
+        precondition(VillageGuideStep.next(in: village) == .fields && !village.hasCompletedGuide)
+        village.resourceLevels = [0: 1]
+        village.buildings[10] = .academy
+        village.buildings[11] = .warCourt
+        village.army = ArmyState(units: [.tideguard: 3], unlockedUnits: [.tideguard])
+        village.recordGuideProgress()
+        precondition(VillageGuideStep.next(in: village) == .raid)
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        precondition(village.raid(targetID: 0, now: now))
+        village.recordGuideProgress()
+        precondition(!village.hasCompletedGuide, "A departure alone does not finish the main objectives")
+        village.updateArmy(now: now.addingTimeInterval(120))
+        village.recordGuideProgress()
+        precondition(village.hasCompletedGuide && village.completedGuideObjectives.count == 6)
+        village.army = nil
+        let restored = try JSONDecoder().decode(VillageState.self, from: JSONEncoder().encode(village))
+        precondition(restored.hasCompletedGuide, "Troop losses and relaunch must not reset initial-chapter progress")
+        var legacyJSON = try JSONSerialization.jsonObject(with: JSONEncoder().encode(VillageState(seed: 42))) as! [String: Any]
+        legacyJSON.removeValue(forKey: "guideObjectives")
+        let legacy = try JSONDecoder().decode(VillageState.self, from: JSONSerialization.data(withJSONObject: legacyJSON))
+        precondition(!legacy.hasCompletedGuide && legacy.guideObjectives == nil)
+        var oldReport = village
+        oldReport.guideObjectives = nil
+        oldReport.army = ArmyState(report: "Legacy battle report")
+        precondition(oldReport.hasCompletedGuide, "Existing reports count without requiring a new raid")
+        print("PASS: six initial guide objectives, return required, monotonic completion and legacy saves")
     }
 }

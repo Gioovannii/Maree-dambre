@@ -40,6 +40,7 @@ extension DomainChecks {
         precondition(safe.advanceCoastalTide() && safe.army?.convoy != nil)
         precondition(safe.advanceCoastalTide() && safe.army?.convoy == nil)
         precondition(safe.commerce?.report?.successful == true && safe.commerce?.report?.lossCount == 0)
+        precondition(safe.allMail.filter { if case .commerce = $0.content { true } else { false } }.count == 1)
         precondition(safe.commerce?.report?.returnedCount == 1 && safe.commerce?.report?.pendingAmber == 18)
         let returned = safe.army
         safe.settleConvoy(at: 3)

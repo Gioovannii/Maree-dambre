@@ -5,6 +5,7 @@ struct ArmyState: Codable, Equatable {
     var training: TrainingOrder?
     var raid: RaidOrder?
     var report: String?
+    var raidReport: RaidReport?
     var raidedUntil: [Int: Date] = [:]
     var unlockedUnits: Set<ArmyUnit>?
     var research: TrainingOrder?
@@ -20,6 +21,7 @@ struct ArmyState: Codable, Equatable {
         if let research {
             guard research.count == 1, research.endsAt.timeIntervalSince1970.isFinite else { return false }
         }
+        if let raidReport, !raidReport.isValid { return false }
         if let raid {
             guard (0...BotFaction.maximumStartingID).contains(raid.targetID), (14...92).contains(raid.defense),
                   raid.returnsAt.timeIntervalSince1970.isFinite,
@@ -64,7 +66,8 @@ extension VillageState {
     var trainableUnits: [ArmyUnit] { ArmyUnit.allCases.filter { peopleUnits.contains($0) || unlockedUnits.contains($0) } }
     var raidDuration: TimeInterval { people == .roseaux ? 90 : 120 }
     func raidDuration(to bot: BotFaction) -> TimeInterval {
-        bot.id < 3 ? raidDuration : raidDuration + TimeInterval(bot.distanceFromHome * 2)
+        if location == .home { return bot.id < 3 ? raidDuration : raidDuration + TimeInterval(bot.distanceFromHome * 2) }
+        return raidDuration + TimeInterval(location.distance(to: bot.capital) * 2)
     }
     var victoryLossRate: Double { victoryLossRate(for: availableArmy) }
     func victoryLossRate(for units: [ArmyUnit: Int]) -> Double {
@@ -85,6 +88,8 @@ extension VillageState {
         if let training = army?.training { unlocked.insert(training.unit) }
         if let raid = army?.raid { unlocked.formUnion(raid.units.keys) }
         if let convoy = army?.convoy { unlocked.formUnion(convoy.units.keys) }
+        if let shipment { unlocked.formUnion(shipment.units.keys) }
+        if let escort = expansion?.voyage?.escort { unlocked.insert(escort) }
         return unlocked
     }
 
@@ -118,7 +123,7 @@ extension VillageState {
               (1...20).contains(count), army?.training == nil else { return false }
         let total = availableArmy.values.reduce(0, +) + (army?.raid?.units.values.reduce(0, +) ?? 0)
             + (army?.convoy?.units.values.reduce(0, +) ?? 0)
-        return total + count <= 100 && resources.wood >= unit.cost.wood * count
+        return total + foundingEscortCount + shipmentEscortCount + count <= 100 && resources.wood >= unit.cost.wood * count
             && resources.amber >= unit.cost.amber * count && resources.provisions >= unit.cost.provisions * count
     }
 
@@ -184,12 +189,14 @@ extension VillageState {
             let power = raid.attackPower
             let won = power > raid.defense
             var losses = 0
+            var lossesByUnit: [ArmyUnit: Int] = [:]
             var capacity = 0
             for (unit, count) in raid.units {
                 let victoryRate = raid.victoryLossRate ?? (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)
                 let lost = won ? min(count, max(0, Int(floor(Double(count) * victoryRate + 1e-9))))
                     : min(count, Int(ceil(Double(count) * (raid.defeatLossRate ?? 0.5) - 1e-9)))
                 losses += lost
+                if lost > 0 { lossesByUnit[unit] = lost }
                 troops.units[unit, default: 0] += count - lost
                 capacity += (count - lost) * unit.carrying
             }
@@ -202,7 +209,14 @@ extension VillageState {
             resources.wood += wood
             resources.amber += amber
             resources.provisions += provisions
+            troops.raidReport = RaidReport(targetName: raid.targetDisplayName, attackPower: power,
+                                           defensePower: raid.defense, unitsSent: raid.units,
+                                           losses: lossesByUnit,
+                                           stolen: Resources(wood: wood, amber: amber, provisions: provisions))
             troops.report = String(localized: "domain.army_state.combat_report", defaultValue: "\(String(won ? String(localized: "domain.army_state.victory", defaultValue: "Victoire") : String(localized: "domain.army_state.defeat", defaultValue: "Défaite"))) contre \(String(raid.targetDisplayName)). Forces : \(String(power)) en attaque contre \(String(raid.defense)) en défense. \(String(losses)) perte(s). Butin stocké : \(String(wood)) bois, \(String(amber)) ambre, \(String(provisions)) vivres.")
+            if let report = troops.raidReport {
+                receiveMail(.raid(report), key: "raid.\(raid.targetID).\(raid.returnsAt.timeIntervalSinceReferenceDate)", at: raid.returnsAt)
+            }
             troops.raid = nil
         }
         army = troops

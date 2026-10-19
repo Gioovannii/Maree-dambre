@@ -75,6 +75,7 @@ extension VillageState {
     mutating func settleConvoy(at tide: Int) {
         guard var troops = army, let convoy = troops.convoy, tide >= convoy.returnsAtTide else { return }
         let report = ConvoyReport(order: convoy)
+        receiveMail(.commerce(report), key: "commerce.\(convoy.departedAtTide)", at: lastProductionAt ?? .now)
         for (unit, count) in convoy.units {
             troops.units[unit, default: 0] += count - report.losses(of: unit)
         }

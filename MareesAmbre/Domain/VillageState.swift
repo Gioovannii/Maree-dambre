@@ -1,7 +1,7 @@
 import Foundation
 
 struct VillageState: Codable, Equatable {
-    static let currentVersion = 15
+    static let currentVersion = 19
     var version: Int
     let seed: Int
     var resources: Resources
@@ -9,6 +9,7 @@ struct VillageState: Codable, Equatable {
     var resourceLevels: [Int: Int]?
     var bots: [BotFaction]
     var people: People?
+    var guideObjectives: Set<VillageGuideStep>?
     var lastProductionAt: Date?
     var productionRemainder: ProductionRemainder?
     var lastBotExpansionAt: Date?
@@ -22,11 +23,24 @@ struct VillageState: Codable, Equatable {
     var buildingLevels: [BuildingKind: Int]?
     var unitWeaponLevels: [ArmyUnit: Int]?
 
+    // The selected village is the root; inactive villages are flat snapshots.
+    // Each snapshot has its own economy, queues and army, without nested domains.
+    var settlementLocation: TileCoordinate?
+    var settlementRole: SettlementRole?
+    var settlementRefuge: Bool?
+    var otherVillages: [VillageState]?
+    var expansion: ExpansionProgress?
+    var shipment: SettlementShipment?
+    var mailbox: [GameMail]?
+    var beginnerProtection: BeginnerProtection?
+    var nextBotAttackAt: Date?
+
     private enum CodingKeys: String, CodingKey {
         case version, seed, resources, buildings, resourceLevels, bots, people
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
         case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
-        case buildingLevels, unitWeaponLevels
+        case buildingLevels, unitWeaponLevels, guideObjectives
+        case settlementLocation, settlementRole, settlementRefuge, otherVillages, expansion, shipment, mailbox, beginnerProtection, nextBotAttackAt
     }
 
     init(from decoder: Decoder) throws {
@@ -38,6 +52,7 @@ struct VillageState: Codable, Equatable {
         resourceLevels = try values.decodeIfPresent([Int: Int].self, forKey: .resourceLevels)
         bots = try values.decode([BotFaction].self, forKey: .bots)
         people = try values.decodeIfPresent(People.self, forKey: .people)
+        guideObjectives = try values.decodeIfPresent(Set<VillageGuideStep>.self, forKey: .guideObjectives)
         lastProductionAt = try values.decodeIfPresent(Date.self, forKey: .lastProductionAt)
         productionRemainder = try values.decodeIfPresent(ProductionRemainder.self, forKey: .productionRemainder)
         lastBotExpansionAt = try values.decodeIfPresent(Date.self, forKey: .lastBotExpansionAt)
@@ -50,6 +65,15 @@ struct VillageState: Codable, Equatable {
         commerce = try values.decodeIfPresent(CommerceState.self, forKey: .commerce)
         buildingLevels = try values.decodeIfPresent([BuildingKind: Int].self, forKey: .buildingLevels)
         unitWeaponLevels = try values.decodeIfPresent([ArmyUnit: Int].self, forKey: .unitWeaponLevels)
+        settlementLocation = try values.decodeIfPresent(TileCoordinate.self, forKey: .settlementLocation)
+        settlementRole = try values.decodeIfPresent(SettlementRole.self, forKey: .settlementRole)
+        settlementRefuge = try values.decodeIfPresent(Bool.self, forKey: .settlementRefuge)
+        otherVillages = try values.decodeIfPresent([VillageState].self, forKey: .otherVillages)
+        expansion = try values.decodeIfPresent(ExpansionProgress.self, forKey: .expansion)
+        shipment = try values.decodeIfPresent(SettlementShipment.self, forKey: .shipment)
+        mailbox = try values.decodeIfPresent([GameMail].self, forKey: .mailbox)
+        beginnerProtection = try values.decodeIfPresent(BeginnerProtection.self, forKey: .beginnerProtection)
+        nextBotAttackAt = try values.decodeIfPresent(Date.self, forKey: .nextBotAttackAt)
     }
 
     init(seed: Int) {
@@ -58,6 +82,7 @@ struct VillageState: Codable, Equatable {
         resources = Resources()
         buildings = [12: .hall]
         resourceLevels = [:]
+        mailbox = []
         bots = BotFaction.starting
         people = nil
         lastProductionAt = .now
@@ -145,6 +170,10 @@ struct VillageState: Codable, Equatable {
             })
             version = 15
         }
+        if version < 16 { version = 16 }
+        if version < 17 { version = 17 }
+        if version < 18 { importLegacyMail(now: now); version = 18 }
+        if version < 19 { version = 19 }
     }
 
     private mutating func relocateQuayToWaterfront() {
@@ -318,7 +347,13 @@ struct VillageState: Codable, Equatable {
             total.amber += yield.amber * level
             total.provisions += yield.provisions * level
         }
-        return people?.adjustedProduction(total) ?? total
+        var adjusted = people?.adjustedProduction(total) ?? total
+        switch settlementRole {
+        case .production: adjusted.wood += adjusted.wood / 5
+        case .commerce: adjusted.amber += adjusted.amber / 5
+        case .outpost, nil: break
+        }
+        return adjusted
     }
 
     var storageCapacity: Int {
@@ -326,10 +361,10 @@ struct VillageState: Codable, Equatable {
     }
 
     var automaticDefense: Int {
-        buildings.values.reduce(0) { $0 + $1.defenseStrength * buildingLevel($1) } + (people?.baseDefenseBonus ?? 0)
+        buildings.values.reduce(0) { $0 + $1.defenseStrength * buildingLevel($1) } + (people?.baseDefenseBonus ?? 0) + (settlementRole == .outpost ? 20 : 0)
     }
 
-    mutating func updateInRealTime(now: Date = .now, on world: WorldMap) -> Int {
+    mutating func updateInRealTime(now: Date = .now, on world: WorldMap, protectedLocations: [TileCoordinate] = [.home], advanceBots: Bool = true) -> Int {
         guard world.seed == seed else { return 0 }
         let prior = lastProductionAt ?? now
         let elapsed = max(0, now.timeIntervalSince(prior))
@@ -346,12 +381,13 @@ struct VillageState: Codable, Equatable {
         }
 
         // Bot territory progresses on six-hour world intervals, including while the app is closed.
+        guard advanceBots else { lastBotExpansionAt = now; return Int(elapsed) }
         let botDate = lastBotExpansionAt ?? now
         let intervals = max(0, Int(min(86_400_000, now.timeIntervalSince(botDate)) / (6 * 3600)))
         guard intervals > 0 else { return Int(elapsed) }
         lastBotExpansionAt = botDate.addingTimeInterval(Double(intervals * 6 * 3600))
         var occupied = Set(bots.flatMap(\.territory))
-        occupied.insert(.home)
+        occupied.formUnion(protectedLocations)
         for _ in 0..<intervals {
             for index in bots.indices {
                 bots[index].level = min(bots[index].maximumLevel, bots[index].level + 1)
@@ -360,7 +396,10 @@ struct VillageState: Codable, Equatable {
                     [TileCoordinate(x: tile.x + 1, y: tile.y), TileCoordinate(x: tile.x, y: tile.y + 1),
                      TileCoordinate(x: tile.x - 1, y: tile.y), TileCoordinate(x: tile.x, y: tile.y - 1)]
                 }
-                if let next = candidates.first(where: { $0.isValid && world.terrain(at: $0) != .sea && !occupied.contains($0) }) {
+                if let next = candidates.first(where: { candidate in
+                    candidate.isValid && world.terrain(at: candidate) != .sea && !occupied.contains(candidate)
+                        && protectedLocations.allSatisfy { $0.distance(to: candidate) >= 4 }
+                }) {
                     bots[index].territory.append(next)
                     occupied.insert(next)
                 }

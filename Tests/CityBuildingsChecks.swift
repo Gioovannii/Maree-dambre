@@ -173,6 +173,10 @@ extension DomainChecks {
         let stock = defeated.resources
         defeated.updateArmy(now: now.addingTimeInterval(120))
         precondition(defeated.availableArmy[.reedrunner] == 6 && defeated.resources == stock)
+        precondition(defeated.army?.raidReport?.won == false)
+        precondition(defeated.army?.raidReport?.unitsSent == [.reedrunner: 10])
+        precondition(defeated.army?.raidReport?.losses == [.reedrunner: 4])
+        precondition(defeated.army?.raidReport?.stolen == Resources(wood: 0, amber: 0, provisions: 0))
         var mage = VillageState(seed: 42)
         mage.buildings[10] = .infirmary
         mage.army = ArmyState(units: [.tideMage: 20])

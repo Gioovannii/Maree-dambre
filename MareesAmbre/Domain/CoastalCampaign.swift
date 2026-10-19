@@ -1,6 +1,6 @@
 import Foundation
 
-/// This first campaign advances only through explicit player decisions.
+/// Strategic tides can advance manually or when a scheduled coastal assault arrives.
 /// Production and expedition clocks remain independent of strategic tides.
 struct CoastalCampaign: Codable, Equatable {
     var tide = 0
@@ -8,20 +8,22 @@ struct CoastalCampaign: Codable, Equatable {
     var report: DefenseReport?
     var attackerID: Int? = nil
     var attackerPower: Int? = nil
+    var protectedTides: Int? = nil
 
-    var nextAssaultTide: Int { 2 + assaultsResolved * 3 }
+    var nextAssaultTide: Int { 2 + assaultsResolved * 3 + (protectedTides ?? 0) }
     var tidesUntilAssault: Int { nextAssaultTide - tide }
     var enemyCount: Int { enemyPower / 6 }
     var enemyPower: Int { attackerPower ?? (4 + min(19, assaultsResolved) * 2) * 6 }
     var isHighTide: Bool { tide.isMultiple(of: 2) }
     var isValid: Bool {
-        guard (0...333_333).contains(assaultsResolved), (0...1_000_000).contains(tide),
+        guard (0...1_000_000).contains(protectedTides ?? 0), (0...333_333).contains(assaultsResolved), (0...1_000_000).contains(tide),
               tide < nextAssaultTide, (1...3).contains(tidesUntilAssault),
               attackerID.map({ (0...BotFaction.maximumStartingID).contains($0) }) ?? true,
               attackerPower.map({ (24...252).contains($0) && $0.isMultiple(of: 6) }) ?? true else { return false }
         if let report {
             return report.isValid && assaultsResolved > 0
-                && report.tide == 2 + (assaultsResolved - 1) * 3
+                && report.tide >= 2 + (assaultsResolved - 1) * 3
+                && report.tide <= 2 + (assaultsResolved - 1) * 3 + (protectedTides ?? 0)
                 && report.tide <= tide
                 && (attackerPower != nil || report.enemyPower == (4 + min(19, assaultsResolved - 1) * 2) * 6)
         }
@@ -44,7 +46,7 @@ extension ArmyUnit {
 
 extension VillageState {
     var canStartCoastalCampaign: Bool {
-        coastalCampaign == nil && people != nil && hasBuilding(.warCourt)
+        !isRefuge && coastalCampaign == nil && people != nil && hasBuilding(.warCourt)
             && availableArmy.values.contains(where: { $0 > 0 })
     }
 
@@ -67,8 +69,10 @@ extension VillageState {
         return true
     }
 
-    var defensePreview: DefenseReport? {
-        guard let campaign = coastalCampaign, campaign.isValid else { return nil }
+    var defensePreview: DefenseReport? { defensePreview(at: .now) }
+
+    func defensePreview(at now: Date) -> DefenseReport? {
+        guard !isUnderProtection(at: now), let campaign = coastalCampaign, campaign.isValid else { return nil }
         let won = garrisonDefense >= campaign.enemyPower
         let rate = won ? victoryLossRate : defeatLossRate
         var losses: [ArmyUnit: Int] = [:]
@@ -91,10 +95,12 @@ extension VillageState {
     }
 
     @discardableResult
-    mutating func advanceCoastalTide() -> Bool {
-        guard var campaign = coastalCampaign, campaign.isValid, campaign.tide < 1_000_000 else { return false }
-        if campaign.tidesUntilAssault == 1 {
-            guard let report = defensePreview else { return false }
+    mutating func advanceCoastalTide(now: Date = .now) -> Bool {
+        guard !isRefuge, var campaign = coastalCampaign, campaign.isValid, campaign.tide < 1_000_000 else { return false }
+        if campaign.tidesUntilAssault == 1 && isUnderProtection(at: now) {
+            campaign.protectedTides = (campaign.protectedTides ?? 0) + 1
+        } else if campaign.tidesUntilAssault == 1 {
+            guard let report = defensePreview(at: now) else { return false }
             var troops = army ?? ArmyState()
             for (unit, count) in report.losses {
                 let remaining = troops.units[unit, default: 0] - count
@@ -105,8 +111,10 @@ extension VillageState {
             resources.wood -= report.stolen.wood
             resources.amber -= report.stolen.amber
             resources.provisions -= report.stolen.provisions
+            receiveMail(.defense(report), key: "defense.\(report.tide)", at: now)
             campaign.report = report
             campaign.assaultsResolved += 1
+            if nextBotAttackAt != nil { nextBotAttackAt = now.addingTimeInterval(Self.botAttackInterval) }
             let attackers = bots.sorted { $0.distanceFromHome < $1.distanceFromHome }
             if !attackers.isEmpty {
                 let next = attackers[campaign.assaultsResolved % attackers.count]
