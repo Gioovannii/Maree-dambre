@@ -17,6 +17,7 @@ final class VillageSession {
     private(set) var state: VillageState
     let world: WorldMap
     var plot = VillageMapMode.resourceFields.initialPlot
+    var guidedStep: VillageGuideStep?
     var selectedTile = TileCoordinate.home
     private(set) var message = String(localized: "screen.village_session.choose_an_empty_plot_to_build", defaultValue: "Choisissez un emplacement libre pour construire.")
     private(set) var pendingBuilding: BuildingKind?
@@ -84,6 +85,56 @@ final class VillageSession {
                 state.weaponsLevel = 0
                 state.coastalCampaign = CoastalCampaign(tide: 1)
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-expansion") {
+                state.buildings[12] = .hall
+                for kind in [BuildingKind.academy, .warehouse, .expeditionQuay] {
+                    guard !state.hasBuilding(kind) else { continue }
+                    if let plot = VillageMapMode.townCenter.slots.first(where: { state.buildings[$0] == nil && VillageState.canPlace(kind, at: $0) }) {
+                        state.buildings[plot] = kind
+                    }
+                }
+                state.buildingLevels = [.hall: 5, .academy: 3, .warehouse: 3, .expeditionQuay: 2]
+                state.resources = Resources(wood: 1800, amber: 1600, provisions: 1800)
+                state.expansion = ExpansionProgress(researched: true, settlersReady: true)
+                state.army = ArmyState(units: [.tideguard: 15], unlockedUnits: [.tideguard])
+                selectedTile = state.suggestedSettlementSites(on: world).last ?? .home
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-colony"),
+               state.found(at: selectedTile, role: .production, escort: .tideguard, on: world),
+               let arrival = state.expansion?.voyage?.arrivesAt {
+                state.updateDomain(now: arrival, on: world)
+                _ = state.switchSettlement(to: selectedTile)
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-shipment"),
+               state.found(at: selectedTile, role: .production, escort: .tideguard, on: world),
+               let arrival = state.expansion?.voyage?.arrivesAt {
+                state.updateDomain(now: arrival, on: world)
+                state.resources = Resources(wood: 400, amber: 200, provisions: 350)
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-raid-report") || ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail") {
+                // Use the real departure and return rules, isolated from the player's save.
+                state.army = ArmyState(units: [.tideguard: 25, .pillager: 10], unlockedUnits: [.tideguard, .pillager])
+                let departed = Date(timeIntervalSince1970: 1_800_000_000)
+                if state.raid(targetID: 9, units: [.tideguard: 20, .pillager: 10], now: departed),
+                   let returning = state.army?.raid?.returnsAt {
+                    state.updateArmy(now: returning)
+                }
+            }
+
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-bot-attacks") {
+                state.lastProductionAt = Date(timeIntervalSince1970: 1_792_358_400)
+                state.scheduleBotAttacks(now: state.lastProductionAt!)
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-protection") {
+                state.beginProtection(now: Date(timeIntervalSince1970: 1_792_358_400))
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail") {
+                let date = Date(timeIntervalSince1970: 1_800_000_000)
+                state.receiveMail(.welcome, key: "welcome", at: date)
+                _ = state.startCoastalCampaign()
+                _ = state.advanceCoastalTide(now: date.addingTimeInterval(900))
+                _ = state.advanceCoastalTide(now: date.addingTimeInterval(1800))
+            }
             return
         }
         do {
@@ -91,6 +142,8 @@ final class VillageSession {
         } catch {
             markUnreadableSave()
         }
+        state.scheduleBotAttacks()
+        selectedTile = state.location
         refreshWorld()
         productionTask = Task { [weak self] in
             while !Task.isCancelled {
@@ -115,7 +168,73 @@ final class VillageSession {
             hasUnreadableSave = false
         }
         state.people = people
+        state.receiveMail(.welcome, key: "welcome", at: .now)
+        state.beginProtection()
+        state.scheduleBotAttacks()
         persist(String(localized: "screen.village_session.value_now_watch_over_amber_harbor", defaultValue: "\(String(people.name)) veille désormais sur Port d’Ambre."))
+    }
+
+    func settlementName(at location: TileCoordinate) -> String {
+        location == state.location ? state.settlementName
+            : state.otherVillages?.first(where: { $0.location == location })?.settlementName ?? ""
+    }
+
+    func researchNavigation() {
+        refreshWorld()
+        guard state.researchNavigation() else { return }
+        persist(String(localized: "expansion.research.started", defaultValue: "Recherche de navigation lancée."))
+    }
+
+    func prepareSettlers() {
+        refreshWorld()
+        guard state.prepareSettlers() else { return }
+        persist(String(localized: "expansion.settlers.started", defaultValue: "Préparation des colons lancée."))
+    }
+
+    @discardableResult
+    func foundColony(at tile: TileCoordinate, role: SettlementRole, escort: ArmyUnit) -> Bool {
+        refreshWorld()
+        guard state.found(at: tile, role: role, escort: escort, on: world) else { return false }
+        persist(String(localized: "expansion.departed", defaultValue: "Les colons et leur escorte ont pris la mer."))
+        return true
+    }
+
+    func switchSettlement(to location: TileCoordinate) {
+        refreshWorld()
+        guard state.switchSettlement(to: location) else { return }
+        pendingBuilding = nil
+        moveSourcePlot = nil
+        guidedStep = nil
+        plot = VillageMapMode.resourceFields.initialPlot
+        selectedTile = location
+        persist(String(localized: "expansion.switched", defaultValue: "Implantation sélectionnée."))
+    }
+
+    @discardableResult
+    func sendShipment(to destination: TileCoordinate, cargo: Resources, units: [ArmyUnit: Int]) -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.sendShipment(to: destination, cargo: cargo, units: units) else { return false }
+        persist(String(localized: "shipment.departed", defaultValue: "Ravitaillement parti. La cargaison sera livrée à l’arrivée et l’escorte reviendra au village de départ."))
+        return true
+    }
+
+    func extendProtection() {
+        guard !hasUnreadableSave else { return }
+        refreshWorld()
+        guard state.extendProtection() else { return }
+        persist(String(localized: "protection.extended", defaultValue: "La protection de tous vos villages est prolongée de 48 heures. Cette prolongation unique est consommée."))
+    }
+
+    func markMailRead(_ id: String) {
+        guard !hasUnreadableSave, state.markMailRead(id) else { return }
+        save()
+    }
+
+    func markAllMailRead() {
+        guard !hasUnreadableSave, state.unreadMailCount > 0 else { return }
+        state.markAllMailRead()
+        save()
     }
 
     func train(_ unit: ArmyUnit, count: Int) {
@@ -278,7 +397,8 @@ final class VillageSession {
     func refreshWorld(now: Date = .now) {
         guard !isUISnapshot, !hasUnreadableSave else { return }
         let previous = state
-        let seconds = state.updateInRealTime(now: now, on: world)
+        state.updateDomain(now: now, on: world)
+        let seconds = max(0, Int(now.timeIntervalSince(previous.lastProductionAt ?? now)))
         if previous.weaponUpgrade != nil, state.weaponUpgrade == nil {
             message = String(localized: "screen.village_session.weapons_research_complete", defaultValue: "Armes améliorées. Le bonus s’applique aux prochaines expéditions.")
         }
@@ -292,6 +412,10 @@ final class VillageSession {
             ConstructionActivityController.end()
         } else if state.construction == nil && state.resourceUpgrade == nil {
             ConstructionActivityController.end()
+        }
+        if state.settlementCount > previous.settlementCount {
+            message = String(localized: "expansion.founded", defaultValue: "Votre colonie est fondée ! Retrouvez-la dans le sélecteur d’implantations ou sur la carte.")
+            guidedStep = nil
         }
         guard seconds > 0 || state != previous else { return }
         save()
@@ -319,6 +443,8 @@ final class VillageSession {
     }
     private func save() {
         guard !isUISnapshot, !hasUnreadableSave else { return }
+        state.recordGuideProgress()
+        if let guidedStep, VillageGuideStep.next(in: state) != guidedStep { self.guidedStep = nil }
         do {
             try storage.save(state)
         } catch {

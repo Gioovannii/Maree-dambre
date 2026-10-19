@@ -201,6 +201,9 @@ struct ConstructionPanel: View {
         }
         .buttonStyle(.plain)
         .disabled(!canBuild)
+        .modifier(GuidedActionModifier(step: kind == .academy ? .academy : .barracks,
+                                      isTarget: kind == .academy || kind == .warCourt))
+        .id(kind == .academy || kind == .warCourt ? "guide.action.\(kind.rawValue)" : kind.rawValue)
         .accessibilityHint(canBuild ? String(localized: "screen.construction.build_on_the_selected_plot", defaultValue: "Construire sur la parcelle sélectionnée") : reason)
     }
 }

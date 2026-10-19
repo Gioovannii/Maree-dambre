@@ -16,8 +16,13 @@ struct SessionChecks {
         try checkCompletedActionsAfterRelaunch()
         try checkSelectedRaidAfterRelaunch()
         try checkCoastalCampaignAfterRelaunch()
+        try checkScheduledAttackAfterRelaunch()
         try checkConvoyAfterRelaunch()
         try checkFreshStart()
+        try checkFoundingAfterRelaunch()
+        try checkShipmentAfterRelaunch()
+        try checkMailboxAfterRelaunch()
+        try checkProtectionAfterRelaunch()
         print("PASS: unreadable and unsupported saves survive automatic ticks, scene changes and relaunch")
         print("PASS: explicit new game preserves the original bytes and resumes saving without duplicate backups")
         print("PASS: failed backup blocks replacement; fresh starts and offline upgrades still save normally")
@@ -25,6 +30,117 @@ struct SessionChecks {
         print("PASS: selected raid persists its garrison, accepts training and merges survivors after relaunch")
         print("PASS: coastal threat survives relaunch and offline ticks; defensive losses settle once through the actual session")
         print("PASS: convoys and escrow survive relaunch, return after defense, preserve full-storage payments and never duplicate troops or rewards")
+    }
+
+    @MainActor
+    private static func checkProtectionAfterRelaunch() throws {
+        let suite = "MareesAmbre.ProtectionSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        var initial = shipmentFixture(now: .now)
+        initial.beginProtection()
+        let start = initial.beginnerProtection!.startedAt
+        try storage.save(initial)
+        let session = VillageSession(storage: storage)
+        session.extendProtection()
+        let deadline = start.addingTimeInterval(120 * 3600)
+        precondition(session.state.beginnerProtection?.endsAt == deadline)
+        session.switchSettlement(to: session.state.otherVillages![0].location)
+        let reopened = VillageSession(storage: storage)
+        precondition(!reopened.hasUnreadableSave)
+        precondition(reopened.state.beginnerProtection?.extensionUsed == true)
+        precondition(reopened.state.beginnerProtection?.endsAt == deadline)
+        reopened.extendProtection()
+        precondition(reopened.state.beginnerProtection?.endsAt == deadline)
+        precondition(reopened.state.otherVillages!.allSatisfy { $0.beginnerProtection == nil })
+        print("PASS: domain-wide protection and single extension persist through the actual session, switching and relaunch")
+    }
+
+    @MainActor
+    private static func checkMailboxAfterRelaunch() throws {
+        let suite = "MareesAmbre.MailSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        var initial = shipmentFixture(now: .now)
+        initial.receiveMail(.welcome, key: "welcome", at: .now)
+        initial.otherVillages![0].receiveMail(.welcome, key: "welcome", at: .now)
+        let colonyMail = initial.otherVillages![0].mailbox![0]
+        try storage.save(initial)
+        let session = VillageSession(storage: storage)
+        precondition(session.state.unreadMailCount == 2)
+        session.markMailRead(colonyMail.id)
+        let reopened = VillageSession(storage: storage)
+        precondition(reopened.state.unreadMailCount == 1)
+        precondition(reopened.state.allMail.first { $0.id == colonyMail.id }!.isRead)
+        reopened.switchSettlement(to: colonyMail.village)
+        reopened.markAllMailRead()
+        let restored = VillageSession(storage: storage)
+        precondition(restored.state.unreadMailCount == 0 && restored.state.allMail.count == 2)
+        print("PASS: actual mailbox read status, mark-all-read and global inbox survive village switching and relaunch")
+    }
+
+    @MainActor
+    private static func checkShipmentAfterRelaunch() throws {
+        let suite = "MareesAmbre.ShipmentSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        let initial = shipmentFixture(now: .now)
+        let target = initial.otherVillages![0].location
+        try storage.save(initial)
+        let session = VillageSession(storage: storage)
+        precondition(session.sendShipment(to: target, cargo: Resources(wood: 40, amber: 20, provisions: 30), units: [.tideguard: 5]))
+        let returns = session.state.shipment!.returnsAt
+        let reopened = VillageSession(storage: storage)
+        precondition(!reopened.hasUnreadableSave && reopened.state.shipmentEscortCount == 5)
+        reopened.switchSettlement(to: target)
+        reopened.refreshWorld(now: returns)
+        let restored = VillageSession(storage: storage)
+        precondition(!restored.hasUnreadableSave && restored.state.location == target)
+        precondition(restored.state.resources.wood >= 40 && restored.state.resources.amber >= 20 && restored.state.resources.provisions >= 30)
+        let capital = restored.state.otherVillages!.first { $0.location == .home }!
+        precondition(capital.availableArmy[.tideguard] == 100 && capital.shipment!.isComplete)
+        let settled = restored.state
+        restored.refreshWorld(now: returns)
+        precondition(restored.state == settled)
+        print("PASS: actual session shipment, switching during transit, offline cargo delivery, escort return and relaunch without duplication")
+    }
+
+    @MainActor
+    private static func checkFoundingAfterRelaunch() throws {
+        let suite = "MareesAmbre.FoundingSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        var village = VillageState(seed: 42)
+        village.people = .sauniers
+        for kind in [BuildingKind.academy, .warehouse, .expeditionQuay] {
+            let plot = VillageMapMode.townCenter.slots.first { village.buildings[$0] == nil && VillageState.canPlace(kind, at: $0) }!
+            village.buildings[plot] = kind
+        }
+        village.buildingLevels = [.hall: 5, .academy: 3, .warehouse: 3, .expeditionQuay: 2]
+        village.resources = Resources(wood: 1800, amber: 1600, provisions: 1800)
+        village.army = ArmyState(units: [.tideguard: 10], unlockedUnits: [.tideguard])
+        village.expansion = ExpansionProgress(researched: true, settlersReady: true)
+        try storage.save(village)
+        let session = VillageSession(storage: storage)
+        let site = session.state.suggestedSettlementSites(on: session.world).last!
+        precondition(session.foundColony(at: site, role: .production, escort: .tideguard))
+        let arrival = session.state.expansion!.voyage!.arrivesAt
+        let reopened = VillageSession(storage: storage)
+        precondition(reopened.state.expansion?.voyage?.destination == site)
+        reopened.refreshWorld(now: arrival)
+        precondition(reopened.state.settlementCount == 2)
+        reopened.switchSettlement(to: site)
+        let selected = VillageSession(storage: storage)
+        precondition(selected.state.location == site && selected.state.settlementCount == 2)
+        precondition(!selected.hasUnreadableSave && selected.state.isRefuge)
+        precondition(selected.state.otherVillages?.first?.availableArmy[.tideguard] == 5)
+        selected.refreshWorld(now: arrival.addingTimeInterval(3600))
+        precondition(selected.state.settlementCount == 2)
+        print("PASS: actual session founding, offline arrival, selected colony persistence and separate capital garrison")
     }
 
     @MainActor
@@ -168,6 +284,32 @@ struct SessionChecks {
     }
 
     @MainActor
+    private static func checkScheduledAttackAfterRelaunch() throws {
+        let suite = "MareesAmbre.ScheduledSessionChecks.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        var state = VillageState(seed: 42)
+        state.people = .sauniers
+        try storage.save(state)
+        let session = VillageSession(storage: storage)
+        let due = session.state.nextBotAttackAt!
+        let reopened = VillageSession(storage: storage)
+        precondition(reopened.state.nextBotAttackAt == due)
+        let returnDate = due.addingTimeInterval(14 * 86_400)
+        reopened.refreshWorld(now: returnDate)
+        precondition(reopened.state.coastalCampaign?.assaultsResolved == 1)
+        precondition(reopened.state.nextBotAttackAt == returnDate.addingTimeInterval(86_400))
+        let restored = VillageSession(storage: storage)
+        precondition(!restored.hasUnreadableSave)
+        precondition(restored.state.coastalCampaign?.assaultsResolved == 1)
+        precondition(restored.state.nextBotAttackAt == reopened.state.nextBotAttackAt)
+        restored.refreshWorld(now: returnDate)
+        precondition(restored.state.coastalCampaign?.assaultsResolved == 1)
+        print("PASS: actual session schedules, resolves one offline assault, saves report and preserves deadline after relaunch")
+    }
+
+    @MainActor
     private static func checkCoastalCampaignAfterRelaunch() throws {
         let suite = "MareesAmbre.CoastalSessionChecks.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
@@ -183,7 +325,7 @@ struct SessionChecks {
         let threatened = session.state.coastalCampaign
         let relaunched = VillageSession(storage: storage)
         precondition(relaunched.state.coastalCampaign == threatened)
-        relaunched.refreshWorld(now: .now.addingTimeInterval(14 * 86_400))
+        relaunched.refreshWorld(now: .now.addingTimeInterval(3600))
         precondition(relaunched.state.coastalCampaign == threatened)
         let preview = relaunched.state.defensePreview
         precondition(relaunched.advanceCoastalTide())
@@ -216,7 +358,7 @@ struct SessionChecks {
         let active = session.state.army?.convoy
         let relaunched = VillageSession(storage: storage)
         precondition(relaunched.state.army?.convoy == active && relaunched.state.availableArmy[.tideguard] == 1)
-        relaunched.refreshWorld(now: .now.addingTimeInterval(7 * 86_400))
+        relaunched.refreshWorld(now: .now.addingTimeInterval(3600))
         precondition(relaunched.state.army?.convoy == active && relaunched.state.coastalCampaign?.tide == 0)
         precondition(relaunched.advanceCoastalTide() && relaunched.advanceCoastalTide())
         precondition(relaunched.state.army?.convoy == nil && relaunched.state.commerce?.report?.pendingAmber == 26)

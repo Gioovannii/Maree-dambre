@@ -14,19 +14,30 @@ case "$snapshot_device" in
         device_name='iPhone 18 Pro'
         capture_delay=3
         reference_dir="$project_root/Tests/Snapshots/iPhone18Pro-iOS27"
-        districts=(resources centre upgrade world market forge infirmary expeditionQuay commerce)
+        districts=(resources centre upgrade world market forge infirmary expeditionQuay commerce raidReport expansion expansionDeparture colony shipment shipmentDeparture mailbox mailDetail protection)
         ;;
     ipad)
         device_name='iPad Pro 11-inch (M5)'
         capture_delay=5
         reference_dir="$project_root/Tests/Snapshots/iPad11-iOS27"
-        districts=(resources centre world)
+        districts=(resources centre world expansion mailbox mailDetail protection)
         ;;
     *)
         print -u2 'SNAPSHOT_DEVICE must be iphone or ipad'
         exit 2
         ;;
 esac
+
+# Restrict a run to one or more comma-separated screens.
+if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
+    districts=("${(@s:,:)SNAPSHOT_SCREEN}")
+    for district in "${districts[@]}"; do
+        case "$district" in
+            resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks) ;;
+            *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
+        esac
+    done
+fi
 
 if [[ "$mode" != verify && "$mode" != record ]]; then
     print -u2 "Usage: $0 [verify|record]"
@@ -78,6 +89,16 @@ for district in "${districts[@]}"; do
         upgrade) snapshot_args+=(--snapshot-upgrade) ;;
         world) snapshot_args+=(--snapshot-world) ;;
         commerce) snapshot_args+=(--snapshot-world --snapshot-commerce) ;;
+        botAttacks) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-bot-attacks) ;;
+        protection) snapshot_args+=(--snapshot-developed --snapshot-protection) ;;
+        mailbox) snapshot_args+=(--snapshot-developed --snapshot-mailbox) ;;
+        mailDetail) snapshot_args+=(--snapshot-developed --snapshot-mail-detail) ;;
+        shipmentDeparture) snapshot_args+=(--snapshot-expansion --snapshot-shipment --snapshot-shipment-departure) ;;
+        shipment) snapshot_args+=(--snapshot-expansion --snapshot-shipment) ;;
+        colony) snapshot_args+=(--snapshot-expansion --snapshot-colony) ;;
+        expansionDeparture) snapshot_args+=(--snapshot-expansion --snapshot-expansion-departure) ;;
+        expansion) snapshot_args+=(--snapshot-expansion) ;;
+        raidReport) snapshot_args+=(--snapshot-developed --snapshot-raid-report) ;;
         market|forge|infirmary|expeditionQuay)
             snapshot_args+=("--snapshot-$district" --snapshot-actions)
             ;;

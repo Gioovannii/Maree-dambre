@@ -14,6 +14,7 @@ struct PlotDetailScreen: View {
 
     var body: some View {
         NavigationStack {
+            ScrollViewReader { proxy in
             ScrollView {
                 VStack(spacing: 20) {
                     if !isEmbedded {
@@ -44,6 +45,13 @@ struct PlotDetailScreen: View {
             }
             .scrollIndicators(.hidden)
             .defaultScrollAnchor(ProcessInfo.processInfo.arguments.contains("--snapshot-actions") ? .bottom : .top)
+            .task(id: session.guidedStep) {
+                guard let step = session.guidedStep else { return }
+                await Task.yield()
+                let anchor = step == .academy ? "guide.action.academy" : step == .barracks ? "guide.action.warCourt" : "guide.action"
+                proxy.scrollTo(anchor, anchor: .center)
+            }
+            }
             .background(Palette.ocean.ignoresSafeArea())
             .navigationTitle(mode == .resourceFields ? String(localized: "screen.plot_detail.upgrade", defaultValue: "Amélioration") : session.state.construction?.plot == session.plot ? (session.state.construction?.kind.name ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")) : (session.state.buildings[session.plot]?.name ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")))
             .navigationBarTitleDisplayMode(.inline)

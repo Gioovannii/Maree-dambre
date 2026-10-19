@@ -53,6 +53,7 @@ struct RaidPreparationView: View {
                         .accessibilityIdentifier("raid.remainingSummary")
                     Text(String(localized: "screen.raid.remaining_defense", defaultValue: "Défense du port après départ : \(String(session.state.defensePower(for: remainingUnits)))"))
                         .accessibilityIdentifier("raid.remainingDefense")
+                    Text(String(localized: "unit.stats.selected_transport", defaultValue: "Capacité au départ, bonus inclus : \(String(session.state.convoyCapacity(for: deployed))) ressources"))
                     if let campaign = session.state.coastalCampaign {
                         Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
                             .font(.footnote)
@@ -73,6 +74,7 @@ struct RaidPreparationView: View {
                         .buttonStyle(.borderedProminent).foregroundStyle(Palette.ocean)
                         .disabled(!session.state.canRaid(currentTarget, units: deployed))
                         .accessibilityIdentifier("raid.send")
+                        .modifier(GuidedActionModifier(step: .raid, anchor: "send"))
                 }
                 .listRowBackground(Palette.panel)
             }

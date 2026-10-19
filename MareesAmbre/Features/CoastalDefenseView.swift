@@ -8,9 +8,13 @@ struct CoastalDefenseView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if session.state.beginnerProtection != nil {
+                    Section { BeginnerProtectionPanel() }.listRowBackground(Palette.panel)
+                }
                 Section {
+                    ScheduledBotAttackPanel()
                     Text(String(localized: "screen.defense.corsairs", defaultValue: "Les tribus voisines convoitent les réserves de Port d’Ambre."))
-                    Text(String(localized: "screen.defense.clock_rules", defaultValue: "Une marée avance uniquement avec votre accord. Production, construction et recrutement gardent leurs délais actuels. Aucun assaut ne se résout pendant votre absence."))
+                    Text(String(localized: "screen.defense.clock_rules_scheduled", defaultValue: "Les assauts réguliers font avancer les marées jusqu’au combat et au retour des convois concernés. Vous pouvez aussi avancer une marée manuellement. Un combat repousse le prochain assaut régulier de 24 h."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                 }
                 .listRowBackground(Palette.panel)
@@ -30,9 +34,14 @@ struct CoastalDefenseView: View {
                             Text(String(localized: "screen.defense.attacker", defaultValue: "Assaillant : \(String(WorldNeighbor.name(for: attacker, seed: session.world.seed))) · \(String(attacker.displayName))"))
                                 .font(.headline)
                         }
+                        if !session.state.isUnderProtection() {
                         Text(String(localized: "screen.defense.arrival", defaultValue: "\(String(campaign.enemyCount)) pillards · Force \(String(campaign.enemyPower)) · Arrivée à la marée \(String(campaign.nextAssaultTide))"))
                         Text(String(localized: "screen.defense.warning", defaultValue: "Il reste \(String(campaign.tidesUntilAssault)) marée(s) pour préparer la garnison."))
                             .accessibilityIdentifier("defense.warning")
+                        } else {
+                            Text(String(localized: "protection.tides", defaultValue: "Les marées et les convois continuent. Les assauts contre votre village sont reportés jusqu’à la fin de la protection."))
+                                .foregroundStyle(Palette.amber)
+                        }
                         Text(String(localized: "screen.defense.scaling", defaultValue: "Les tribus voisines se relaient. Les voisins plus éloignés et les vagues suivantes envoient une force supérieure."))
                             .font(.footnote).foregroundStyle(Palette.muted)
                     }
@@ -67,7 +76,7 @@ struct CoastalDefenseView: View {
                 }
                 Section {
                     if let campaign = session.state.coastalCampaign {
-                        if confirmsAssault && campaign.tidesUntilAssault == 1 {
+                        if confirmsAssault && campaign.tidesUntilAssault == 1 && !session.state.isUnderProtection() {
                             Text(String(localized: "screen.defense.confirm_title", defaultValue: "Un voisin attaque à cette marée."))
                                 .font(.headline)
                             Text(String(localized: "screen.defense.confirm_message", defaultValue: "Les troupes actuellement au village défendront le port. Le résultat et les pertes seront sauvegardés."))
@@ -91,10 +100,10 @@ struct CoastalDefenseView: View {
                             .accessibilityIdentifier("defense.cancel")
                         } else {
                             Button {
-                                if campaign.tidesUntilAssault == 1 { confirmsAssault = true }
+                                if campaign.tidesUntilAssault == 1 && !session.state.isUnderProtection() { confirmsAssault = true }
                                 else { session.advanceCoastalTide() }
                             } label: {
-                                AdaptiveActionLabel(title: campaign.tidesUntilAssault == 1
+                                AdaptiveActionLabel(title: campaign.tidesUntilAssault == 1 && !session.state.isUnderProtection()
                                       ? String(localized: "screen.defense.advance_and_defend", defaultValue: "Passer la marée et défendre")
                                       : String(localized: "screen.defense.advance", defaultValue: "Passer la marée"), systemImage: "water.waves")
                             }

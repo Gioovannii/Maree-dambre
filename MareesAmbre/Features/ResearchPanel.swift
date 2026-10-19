@@ -24,7 +24,7 @@ struct ResearchPanel: View {
                     Label(unit.name, systemImage: unit.emblem).font(.headline)
                     Text(unit.role).font(.subheadline.bold()).foregroundStyle(Palette.amber)
                     Text(unit.description).font(.subheadline).foregroundStyle(Palette.muted)
-                    Text(String(localized: "screen.research.power_value_carrying_capacity_value", defaultValue: "Force \(String(session.state.attackStrength(of: unit))) · Transport \(String(unit.carrying))")).font(.subheadline)
+                    ArmyUnitStatsView(unit: unit)
                     if session.state.unlockedUnits.contains(unit) {
                         Label(String(localized: "screen.research.doctrine_learned", defaultValue: "Doctrine acquise"), systemImage: "checkmark.seal.fill")
                     } else {
@@ -34,8 +34,10 @@ struct ResearchPanel: View {
                             .buttonStyle(.borderedProminent)
                             .foregroundStyle(Palette.ocean)
                             .disabled(!session.state.canResearch(unit))
+                            .modifier(GuidedActionModifier(step: .research, isTarget: unit == session.state.peopleUnits.first))
                     }
                 }
+                .id(unit == session.state.peopleUnits.first ? "guide.action" : unit.rawValue)
                 .padding(12).frame(maxWidth: .infinity, alignment: .leading)
                 .background(Palette.ocean, in: .rect(cornerRadius: 14))
             }

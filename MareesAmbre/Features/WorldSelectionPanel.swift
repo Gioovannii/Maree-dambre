@@ -2,13 +2,27 @@ import SwiftUI
 
 struct WorldSelectionPanel: View {
     @Environment(VillageSession.self) private var session
+    @State private var showsExpansion = false
+    @State private var showsShipment = false
+    var onShowVillage: () -> Void = {}
+    private var selectedVillage: VillageState? {
+        session.selectedTile == session.state.location ? session.state : session.state.otherVillages?.first { $0.location == session.selectedTile }
+    }
     var onShowMissions: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if session.selectedTile == .home {
-                Label(String(localized: "screen.world.amber_harbor", defaultValue: "Port d’Ambre"), systemImage: "house.fill").font(.title3.bold())
-                Text(String(localized: "screen.world.your_village_available_power_value", defaultValue: "Votre village · Force disponible : \(String(session.state.armyPower))"))
+            if let village = selectedVillage {
+                Label(session.settlementName(at: session.selectedTile), systemImage: "house.fill").font(.title3.bold())
+                Text(String(localized: "screen.world.your_village_available_power_value", defaultValue: "Votre village · Force disponible : \(String(village.armyPower))"))
+                if session.selectedTile != session.state.location {
+                    Button(String(localized: "expansion.visit", defaultValue: "Gérer cette implantation")) { session.switchSettlement(to: session.selectedTile); onShowVillage() }
+                        .buttonStyle(.borderedProminent).foregroundStyle(Palette.ocean)
+                }
+                if session.selectedTile != session.state.location {
+                    Button(String(localized: "shipment.prepare", defaultValue: "Préparer un ravitaillement"), systemImage: "shippingbox.fill") { showsShipment = true }
+                        .buttonStyle(.bordered)
+                }
                 Text(String(localized: "screen.world.select_a_faction_to_discover_your_neighbors", defaultValue: "Sélectionnez un pavillon pour découvrir vos voisins.")).foregroundStyle(Palette.muted)
             } else if let owner = session.state.bots.first(where: { $0.territory.contains(session.selectedTile) }) {
                 Label(WorldNeighbor.name(for: owner, seed: session.world.seed), systemImage: "flag.fill").font(.title3.bold()).foregroundStyle(WorldCanvas.factionColor(owner.id))
@@ -23,9 +37,14 @@ struct WorldSelectionPanel: View {
                 Label(session.world.terrain(at: session.selectedTile).name, systemImage: "location.fill").font(.headline)
                 Text(String(localized: "screen.world.unclaimed_land_attacks_target_neighboring_factions", defaultValue: "Lieu libre · Les attaques ciblent les pavillons voisins.")).foregroundStyle(Palette.muted)
             }
+            Button(String(localized: "expansion.navigation", defaultValue: "Colonisation"), systemImage: "person.3.fill") { showsExpansion = true }
+                .buttonStyle(.bordered).tint(Palette.amber)
+                .accessibilityIdentifier("world.colonization")
             Text(String(localized: "screen.world_panel.position", defaultValue: "Position \(String(session.selectedTile.x)), \(String(session.selectedTile.y))"))
                 .font(.caption).foregroundStyle(Palette.muted)
         }
+        .sheet(isPresented: $showsShipment) { ShipmentView(destination: session.selectedTile) }
+        .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .font(.subheadline)
         .padding(16).frame(maxWidth: .infinity, alignment: .leading)
         .background(Palette.panel, in: .rect(cornerRadius: 20))

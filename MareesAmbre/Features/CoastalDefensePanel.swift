@@ -9,7 +9,11 @@ struct CoastalDefensePanel: View {
             Label(String(localized: "screen.defense.title", defaultValue: "Défense du port"), systemImage: "shield.lefthalf.filled")
                 .font(.headline)
             Text(String(localized: "screen.defense.power", defaultValue: "Défense disponible : \(String(session.state.garrisonDefense))"))
-            if let campaign = session.state.coastalCampaign {
+            ScheduledBotAttackPanel()
+            if session.state.isUnderProtection() {
+                Label(String(localized: "protection.assaults_paused", defaultValue: "Assauts suspendus pendant votre protection"), systemImage: "shield.fill")
+                    .font(.subheadline).foregroundStyle(Palette.amber)
+            } else if let campaign = session.state.coastalCampaign {
                 if let attackerID = campaign.attackerID,
                    let attacker = session.state.bots.first(where: { $0.id == attackerID }) {
                     Text(String(localized: "screen.defense.attacker", defaultValue: "Assaillant : \(String(WorldNeighbor.name(for: attacker, seed: session.world.seed))) · \(String(attacker.displayName))"))
@@ -17,7 +21,7 @@ struct CoastalDefensePanel: View {
                 }
                 Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
                     .accessibilityIdentifier("defense.incoming")
-            } else {
+            } else if session.state.nextBotAttackAt == nil {
                 Text(String(localized: "screen.defense.intro", defaultValue: "Ouvrez la campagne quand votre garnison est prête. Les tribus voisines attaquent à tour de rôle."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }

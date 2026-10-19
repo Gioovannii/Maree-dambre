@@ -1,10 +1,15 @@
 import SwiftUI
+import TipKit
 
 struct GameView: View {
+    @State private var showsMailbox = ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail")
+    @State private var showsShipment = ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
+    @State private var showsExpansion = ProcessInfo.processInfo.arguments.contains("--snapshot-expansion") && !ProcessInfo.processInfo.arguments.contains("--snapshot-colony") && !ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
+    @State private var showsGuide = ProcessInfo.processInfo.arguments.contains("--snapshot-guide")
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var showsWorld = ProcessInfo.processInfo.arguments.contains("--snapshot-world") && !ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
-    @State private var showsMissions = ProcessInfo.processInfo.arguments.contains("--snapshot-missions") || ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
+    @State private var showsMissions = ProcessInfo.processInfo.arguments.contains("--snapshot-protection") || ProcessInfo.processInfo.arguments.contains("--snapshot-missions") || ProcessInfo.processInfo.arguments.contains("--snapshot-raid") || ProcessInfo.processInfo.arguments.contains("--snapshot-raid-report")
     @State private var showsVillageDetails = ProcessInfo.processInfo.arguments.contains("--snapshot-upgrade") || VillageSession.snapshotBuilding != nil
     @State private var villageMap: VillageMapMode = ProcessInfo.processInfo.arguments.contains("--snapshot-center") || VillageSession.snapshotBuilding != nil
         ? .townCenter : .resourceFields
@@ -17,6 +22,8 @@ struct GameView: View {
                 PrologueView(saveRecoveryMessage: session.saveRecoveryMessage, onChoose: session.choosePeople)
             } else if typeSize.isAccessibilitySize {
                 accessibilityScreen
+            } else if showsMailbox {
+                mailboxScreen
             } else if viewport.size.width >= 700 && viewport.size.height >= 600 {
                 tabletScreen
             } else if showsWorld {
@@ -27,7 +34,51 @@ struct GameView: View {
                 villageScreen
             }
         }
+        .sheet(isPresented: $showsShipment) { ShipmentView() }
+        .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
+        .overlay(alignment: .bottomTrailing) {
+            if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2 {
+                GeometryReader { viewport in
+                    VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
+                                            maximumHeight: max(160, min(420, viewport.size.height - 160)),
+                                            isExpanded: $showsGuide) {
+                        showsGuide = false
+                        let step = VillageGuideStep.next(in: session.state)
+                        if step == .complete {
+                            showsMailbox = false
+                            showsWorld = true
+                            showsMissions = false
+                            showsExpansion = true
+                        }
+                        switch step.destination {
+                        case "resources": selectVillageMap(.resourceFields)
+                        case "town": if step != .complete { selectVillageMap(.townCenter) }
+                        default: showMissions()
+                        }
+                        session.guidedStep = step
+                        if step != .raid && step != .complete {
+                            let mode: VillageMapMode = step == .fields ? .resourceFields : .townCenter
+                            let kind: BuildingKind = (step == .academy || step == .research) ? .academy : .warCourt
+                            let target: Int? = step == .fields
+                                ? mode.slots.first(where: { session.state.canDevelopResource(at: $0) }) ?? mode.slots.first
+                                : session.state.buildings.first(where: { $0.value == kind })?.key
+                                    ?? mode.slots.first(where: { session.state.canBuild(kind, at: $0) })
+                                    ?? mode.slots.first(where: { session.state.buildings[$0] == nil && VillageState.canPlace(kind, at: $0) })
+                            if let target {
+                                session.plot = target
+                                if mode == .resourceFields { selectedResourcePlot = target }
+                                else { selectedTownPlot = target }
+                                showsVillageDetails = typeSize.isAccessibilitySize || viewport.size.width < 700 || viewport.size.height < 600
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, typeSize.isAccessibilitySize ? 12 : 88)
+                }
+            }
+        }
     }
 
     private var accessibilityScreen: some View {
@@ -37,9 +88,11 @@ struct GameView: View {
                 navigation
                 constructionStatus
                 if showsWorld {
-                    WorldPanel(onShowMissions: showMissions, mapHeight: 320)
+                    WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 320)
                 } else if showsMissions {
                     MissionsPanel()
+                } else if showsMailbox {
+                    MailboxPanel()
                 } else {
                     VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
                                  onPlotSelected: { showsVillageDetails = true },
@@ -66,7 +119,7 @@ struct GameView: View {
             Group {
                 if showsWorld {
                     ScrollView {
-                        WorldPanel(onShowMissions: showMissions, mapHeight: 500, showsSelection: false)
+                        WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 500, showsSelection: false)
                             .padding(20)
                     }
                 } else if showsMissions {
@@ -92,7 +145,7 @@ struct GameView: View {
                 if showsWorld {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 16) {
-                            WorldSelectionPanel(onShowMissions: showMissions)
+                            WorldSelectionPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions)
                             WorldClockStatus()
                         }
                         .padding(20)
@@ -199,7 +252,7 @@ struct GameView: View {
                 topControls
                     .frame(maxWidth: 560)
                 ScrollView {
-                    WorldPanel(onShowMissions: showMissions, mapHeight: min(480, max(280, geometry.size.height - 350)))
+                    WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: min(480, max(280, geometry.size.height - 350)))
                         .frame(maxWidth: 720)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 16)
@@ -244,15 +297,36 @@ struct GameView: View {
                 hourlyProduction: session.state.production,
                 storageCapacity: session.state.storageCapacity
             )
-            header
+            if !showsMailbox { header }
+            if session.state.settlementCount > 1 {
+                Menu {
+                    ForEach(session.state.ownedLocations, id: \.self) { location in
+                        Button {
+                            session.switchSettlement(to: location)
+                        } label: {
+                            let name = session.settlementName(at: location)
+                            Label(name + " · \(location.x), \(location.y)", systemImage: location == session.state.location ? "checkmark.circle.fill" : "house.fill")
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Label(session.state.settlementName, systemImage: session.state.isRefuge ? "shield.fill" : "building.2.crop.circle.fill")
+                        Image(systemName: "chevron.down").font(.caption.bold())
+                    }
+                    .font(.subheadline.bold()).padding(.horizontal, 12).frame(minHeight: 44)
+                    .background(Palette.panel, in: .capsule)
+                }
+                .tint(Palette.amber)
+                .accessibilityIdentifier("settlement.switch")
+            }
         }
     }
 
     @ViewBuilder
     private var header: some View {
-        if showsWorld || showsMissions {
+        if showsWorld || showsMissions || showsMailbox {
             HStack {
-                Text(showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : showsMissions ? String(localized: "screen.game.missions", defaultValue: "Missions") : villageMap.title)
+                Text(showsMailbox ? String(localized: "mail.title", defaultValue: "Messagerie") : showsWorld ? String(localized: "screen.game.the_archipelago", defaultValue: "L’archipel") : showsMissions ? String(localized: "screen.game.missions", defaultValue: "Missions") : villageMap.title)
                     .font(.headline.bold()).fontDesign(.serif)
                     .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                     .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
@@ -277,55 +351,46 @@ struct GameView: View {
         }
     }
 
+    private var currentSection: GameSection {
+        if showsMailbox { return .mailbox }
+        if showsWorld { return .world }
+        if showsMissions { return .missions }
+        return villageMap == .resourceFields ? .resources : .town
+    }
+
     private var navigation: some View {
-        navigationLayout {
-            navigationButton(String(localized: "screen.game.resources", defaultValue: "Ressources"), symbol: "leaf.fill", selected: !showsWorld && !showsMissions && villageMap == .resourceFields) {
-                selectVillageMap(.resourceFields)
-            }
-            navigationButton(String(localized: "screen.game.town", defaultValue: "Centre"), symbol: "building.2.fill", selected: !showsWorld && !showsMissions && villageMap == .townCenter) {
-                selectVillageMap(.townCenter)
-            }
-            navigationButton(String(localized: "screen.game.world", defaultValue: "Monde"), symbol: "map.fill", selected: showsWorld) {
+        GameNavigationBar(selected: currentSection, unreadCount: session.state.unreadMailCount) { section in
+            switch section {
+            case .resources: selectVillageMap(.resourceFields)
+            case .town: selectVillageMap(.townCenter)
+            case .missions: showMissions()
+            case .world:
                 showsWorld = true
                 showsMissions = false
-            }
-            navigationButton(String(localized: "screen.game.missions", defaultValue: "Missions"), symbol: "sailboat.fill", selected: showsMissions) {
+                showsMailbox = false
+            case .mailbox:
                 showsWorld = false
-                showsMissions = true
+                showsMissions = false
+                showsMailbox = true
             }
         }
-        .padding(4)
-        .background(Palette.panel, in: .capsule)
     }
 
-    private var navigationLayout: AnyLayout {
-        typeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(spacing: 5))
-            : AnyLayout(HStackLayout(spacing: 5))
-    }
-
-    private func navigationButton(_ title: String, symbol: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Image(systemName: symbol)
-                    .font(.system(size: 16, weight: .semibold))
-                Text(title)
-                    .font(.caption2.bold())
-                    .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
-                    .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
+    private var mailboxScreen: some View {
+        VStack(spacing: 10) {
+            topControls.frame(maxWidth: 720)
+            ScrollView {
+                MailboxPanel().padding(.vertical, 12)
+                    .frame(maxWidth: 720).frame(maxWidth: .infinity)
             }
-                .frame(maxWidth: .infinity, minHeight: 54)
-                .foregroundStyle(selected ? Palette.amber : Palette.muted)
-                .background {
-                    if selected { Capsule().fill(Palette.amber.opacity(0.12)) }
-                }
+            navigation.frame(maxWidth: 720)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(title)
-        .accessibilityAddTraits(selected ? .isSelected : [])
+        .padding(.horizontal, 12).padding(.top, 7)
+        .background(Palette.ocean.ignoresSafeArea())
     }
 
     private func selectVillageMap(_ mode: VillageMapMode) {
+        showsMailbox = false
         showsWorld = false
         showsMissions = false
         if session.moveSourcePlot != nil || session.pendingBuilding != nil { session.cancelPlacement() }
@@ -335,6 +400,7 @@ struct GameView: View {
     }
 
     private func showMissions() {
+        showsMailbox = false
         showsWorld = false
         showsMissions = true
     }

@@ -9,6 +9,7 @@ struct RaidTroopSelectionRow: View {
         VStack(alignment: .leading, spacing: 8) {
             Label(selection.unit.name, systemImage: selection.unit.emblem)
                 .font(.headline)
+            ArmyUnitStatsView(unit: selection.unit)
             Stepper(value: $selection.count, in: 0...max(0, available)) {
                 Text(String(localized: "screen.raid.sent_count", defaultValue: "Envoyées : \(String(selection.count))"))
             }

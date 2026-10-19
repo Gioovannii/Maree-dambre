@@ -5,6 +5,7 @@ struct ArmyPanel: View {
     @Environment(VillageSession.self) private var session
     @State private var count = 1
     @State private var target: BotFaction?
+    @State private var reportDestination: RaidReportDestination?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -20,8 +21,7 @@ struct ArmyPanel: View {
                         .accessibilityHidden(true)
                     Label(String(localized: "screen.army.available_units", defaultValue: "\(String(unit.name)) · \(String(session.state.availableArmy[unit, default: 0])) disponible(s)"), systemImage: unit.emblem)
                         .font(.headline)
-                    Text(String(localized: "screen.army.power_value_carries_value_resources", defaultValue: "Force \(String(session.state.attackStrength(of: unit))) · Transport \(String(unit.carrying)) ressources"))
-                    Text(String(localized: "screen.army.unit_defense", defaultValue: "Défense du port : \(String(session.state.defenseStrength(of: unit))) par unité"))
+                    ArmyUnitStatsView(unit: unit)
                     if !session.state.unlockedUnits.contains(unit) {
                         Label(String(localized: "screen.army.unlock_at_the_academy", defaultValue: "À débloquer à la Maison des savoirs"), systemImage: "lock.fill")
                     }
@@ -30,7 +30,9 @@ struct ArmyPanel: View {
                         .buttonStyle(.borderedProminent)
                         .foregroundStyle(Palette.ocean)
                         .disabled(!session.state.canTrain(unit, count: count))
+                        .modifier(GuidedActionModifier(step: .train, isTarget: unit == session.state.trainableUnits.first(where: { session.state.unlockedUnits.contains($0) })))
                 }
+                .id(unit == session.state.trainableUnits.first(where: { session.state.unlockedUnits.contains($0) }) ? "guide.action" : unit.rawValue)
                 .font(.subheadline).padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Palette.panel, in: .rect(cornerRadius: 14))
@@ -41,6 +43,35 @@ struct ArmyPanel: View {
             }
             }
             if !isTraining {
+            if let report = session.state.army?.raidReport {
+                Text(String(localized: "screen.army.latest_report", defaultValue: "Dernier rapport")).font(.headline)
+                Button {
+                    reportDestination = RaidReportDestination(report: report)
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: report.won ? "checkmark.shield.fill" : "exclamationmark.shield.fill")
+                            .font(.title2).foregroundStyle(report.won ? Color.mint : Color.orange)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(report.targetName).font(.headline).foregroundStyle(Palette.paper)
+                            Text(report.won ? String(localized: "screen.raid_report.victory", defaultValue: "Victoire")
+                                 : String(localized: "screen.raid_report.defeat", defaultValue: "Défaite"))
+                                .font(.subheadline.bold()).foregroundStyle(report.won ? Color.mint : Color.orange)
+                            Label(String(localized: "battle.report.open", defaultValue: "Ouvrir le rapport"), systemImage: "doc.text.magnifyingglass")
+                                .font(.caption.bold()).foregroundStyle(Palette.amber)
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right").foregroundStyle(Palette.amber)
+                    }
+                    .padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Palette.panel, in: .rect(cornerRadius: 18))
+                    .overlay { RoundedRectangle(cornerRadius: 18).strokeBorder(Palette.amber.opacity(0.4)) }
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("raid.openReport")
+            } else if let report = session.state.army?.report {
+                Text(String(localized: "screen.army.latest_report", defaultValue: "Dernier rapport")).font(.headline)
+                Text(report).font(.subheadline)
+            }
             if let convoy = session.state.army?.convoy {
                 Text(String(localized: "screen.commerce.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour à la marée \(String(convoy.returnsAtTide))"))
             }
@@ -66,15 +97,13 @@ struct ArmyPanel: View {
                         .buttonStyle(.bordered)
                         .disabled(!session.state.canRaid(bot))
                         .accessibilityIdentifier("raid.prepare.\(bot.id)")
+                        .modifier(GuidedActionModifier(step: .raid, isTarget: bot.id == session.state.bots.first?.id, anchor: "prepare"))
                     if let until = session.state.army?.raidedUntil[bot.id], until > Date.now {
                         Text(String(localized: "screen.army.target_available_at_value", defaultValue: "Cible disponible à \(String(until.formatted(date: .omitted, time: .shortened)))")).font(.caption)
                     }
                 }
             }
-            if let report = session.state.army?.report {
-                Text(String(localized: "screen.army.latest_report", defaultValue: "Dernier rapport")).font(.headline)
-                Text(report).font(.subheadline)
-            }
+
             }
         }
         .tint(Palette.amber)
@@ -83,6 +112,19 @@ struct ArmyPanel: View {
                 session.refreshWorld()
                 do { try await Task.sleep(for: .seconds(1)) } catch { return }
             }
+        }
+        .onAppear {
+            if !isTraining, ProcessInfo.processInfo.arguments.contains("--snapshot-raid-report"),
+               let report = session.state.army?.raidReport {
+                var snapshotTransaction = Transaction(animation: nil)
+                snapshotTransaction.disablesAnimations = true
+                withTransaction(snapshotTransaction) {
+                    reportDestination = RaidReportDestination(report: report)
+                }
+            }
+        }
+        .sheet(item: $reportDestination) { destination in
+            RaidReportSheet(report: destination.report)
         }
         .sheet(item: $target) { bot in
             RaidPreparationView(target: bot)

@@ -63,6 +63,8 @@ struct ResourceSitePanel: View {
                         .tint(Palette.amber)
                         .foregroundStyle(Palette.ocean)
                         .disabled(!session.state.canDevelopResource(at: session.plot))
+                        .modifier(GuidedActionModifier(step: .fields))
+                        .id("guide.action")
                     }
                     .padding(16)
                     .background(Palette.ocean, in: .rect(cornerRadius: 18))

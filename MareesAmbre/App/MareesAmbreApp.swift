@@ -1,4 +1,5 @@
 import SwiftUI
+import TipKit
 
 @main
 struct MareesAmbreApp: App {
@@ -8,6 +9,7 @@ struct MareesAmbreApp: App {
         WindowGroup {
             GameView()
                 .environment(session)
+                .task { try? Tips.configure() }
                 .onChange(of: scenePhase) { _, _ in session.refreshAfterSceneChange() }
         }
     }
