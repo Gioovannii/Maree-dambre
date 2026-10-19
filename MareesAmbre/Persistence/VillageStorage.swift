@@ -27,7 +27,7 @@ struct VillageStorage {
         guard all.count <= VillageState.maximumSettlements,
               Set(all.map(\.location)).count == all.count,
               all.filter({ $0.location == .home }).count == 1,
-              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.seed == seed && $0.people == state.people }) else {
+              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.hero == nil && $0.seed == seed && $0.people == state.people }) else {
             throw CocoaError(.coderReadCorrupt)
         }
         var migrated = try validateVillage(state, world: world, now: now)
@@ -78,6 +78,8 @@ struct VillageStorage {
               (state.mailbox ?? []).allSatisfy({ $0.isValid && $0.village == state.location }),
               state.nextBotAttackAt.map({ $0 >= .distantPast && $0 <= .distantFuture }) ?? true,
               state.beginnerProtection?.isValid ?? true,
+              state.hero?.isValid ?? true,
+              state.hero == nil || state.people != nil,
               state.beginnerProtection == nil || state.people != nil,
               state.army?.isValid ?? true,
               state.coastalCampaign?.isValid ?? true,

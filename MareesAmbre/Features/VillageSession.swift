@@ -125,6 +125,10 @@ final class VillageSession {
                 state.lastProductionAt = Date(timeIntervalSince1970: 1_792_358_400)
                 state.scheduleBotAttacks(now: state.lastProductionAt!)
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-hero-profile") {
+                _ = state.customizeHero(portrait: .captainWoman, name: "Élyne")
+                state.hero?.experience = 145
+            }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-protection") {
                 state.beginProtection(now: Date(timeIntervalSince1970: 1_792_358_400))
             }
@@ -153,6 +157,13 @@ final class VillageSession {
                 self.refreshWorld()
             }
         }
+    }
+
+    @discardableResult
+    func customizeHero(portrait: HeroPortrait, name: String) -> Bool {
+        guard state.customizeHero(portrait: portrait, name: name) else { return false }
+        save()
+        return true
     }
 
     func choosePeople(_ people: People) {
@@ -296,6 +307,7 @@ final class VillageSession {
         guard !hasUnreadableSave else { return false }
         refreshWorld()
         guard state.advanceCoastalTide() else { return false }
+        state.awardHeroExperience()
         persist(String(localized: "screen.defense.advanced", defaultValue: "La marée a changé. Consultez la menace et le rapport de défense."))
         return true
     }

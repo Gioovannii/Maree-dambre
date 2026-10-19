@@ -17,6 +17,7 @@ struct SessionChecks {
         try checkSelectedRaidAfterRelaunch()
         try checkCoastalCampaignAfterRelaunch()
         try checkScheduledAttackAfterRelaunch()
+        try checkHeroAfterRelaunch()
         try checkConvoyAfterRelaunch()
         try checkFreshStart()
         try checkFoundingAfterRelaunch()
@@ -281,6 +282,33 @@ struct SessionChecks {
         let stocks = relaunched.state.resources
         let restored = VillageSession(storage: storage)
         precondition(restored.state.availableArmy[.tideguard] == 12 && restored.state.resources == stocks)
+    }
+
+    @MainActor
+    private static func checkHeroAfterRelaunch() throws {
+        let suite = "MareesAmbre.HeroSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        let state = shipmentFixture(now: .now)
+        try storage.save(state)
+        let session = VillageSession(storage: storage)
+        precondition(session.customizeHero(portrait: .captainWoman, name: "Élyne"))
+        session.switchSettlement(to: state.otherVillages![0].location)
+        let restored = VillageSession(storage: storage)
+        precondition(!restored.hasUnreadableSave && restored.state.hero?.name == "Élyne")
+        precondition(restored.customizeHero(portrait: .captainMan, name: "Maël"))
+        restored.switchSettlement(to: .home)
+        let capital = VillageSession(storage: storage)
+        precondition(capital.state.hero?.portrait == .captainMan && capital.state.hero?.name == "Maël")
+        precondition(capital.raid(0, units: [.tideguard: 5]))
+        capital.refreshWorld(now: .now.addingTimeInterval(3600))
+        precondition(capital.state.hero?.totalExperience == 20)
+        let returned = VillageSession(storage: storage)
+        precondition(returned.state.hero?.totalExperience == 20)
+        returned.refreshWorld(now: capital.state.lastProductionAt!)
+        precondition(returned.state.hero?.totalExperience == 20)
+        print("PASS: actual session saves hero customization, combat XP and daily limits across relaunch and village changes")
     }
 
     @MainActor

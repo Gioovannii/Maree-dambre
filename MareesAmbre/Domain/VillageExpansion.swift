@@ -96,6 +96,7 @@ extension VillageState {
     /// Advances all local economies and the shared map, then settles arrival once.
     mutating func updateDomain(now: Date = .now, on world: WorldMap) {
         guard world.seed == seed, now >= (lastProductionAt ?? now) else { return }
+        initializeHeroProgression(now: now)
         let prior = lastProductionAt ?? now
         let villages = [self] + (otherVillages ?? [])
         let events = villages.flatMap { village -> [Date] in
@@ -111,6 +112,7 @@ extension VillageState {
         }
         resolveScheduledAttacks(now: now)
         notifyProtectionExpiry(now: now)
+        awardHeroExperience()
     }
 
     private mutating func advanceDomain(now: Date, on world: WorldMap) {
@@ -169,9 +171,11 @@ extension VillageState {
         var current = self
         current.otherVillages = nil
         current.beginnerProtection = nil
+        current.hero = nil
         others.append(current)
         next.otherVillages = others
         next.beginnerProtection = beginnerProtection
+        next.hero = hero
         next.bots = bots
         self = next
         return true

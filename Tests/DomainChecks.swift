@@ -15,6 +15,8 @@ struct DomainChecks {
         try checkMailbox()
         try checkBeginnerProtection()
         try checkScheduledBotAttacks()
+        try checkHero()
+        try checkHeroExperience()
         let seed = 202639
         var game = GameState(seed: seed)
         precondition(game == GameState(seed: seed), "Same seed must produce same start")

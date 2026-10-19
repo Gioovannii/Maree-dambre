@@ -33,7 +33,7 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     districts=("${(@s:,:)SNAPSHOT_SCREEN}")
     for district in "${districts[@]}"; do
         case "$district" in
-            resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks) ;;
+            resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile) ;;
             *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
         esac
     done
@@ -89,6 +89,8 @@ for district in "${districts[@]}"; do
         upgrade) snapshot_args+=(--snapshot-upgrade) ;;
         world) snapshot_args+=(--snapshot-world) ;;
         commerce) snapshot_args+=(--snapshot-world --snapshot-commerce) ;;
+        hero) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero) ;;
+        heroProfile) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile) ;;
         botAttacks) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-bot-attacks) ;;
         protection) snapshot_args+=(--snapshot-developed --snapshot-protection) ;;
         mailbox) snapshot_args+=(--snapshot-developed --snapshot-mailbox) ;;

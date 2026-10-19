@@ -21,6 +21,10 @@ struct MailDetailSheet: View {
                         }
                     }
                     content
+                    if let gain = mail.heroExperienceGain, gain > 0 {
+                        Label(String(localized: "hero.report_xp", defaultValue: "+\(String(gain)) XP de commandement"), systemImage: "star.circle.fill")
+                            .font(.headline).foregroundStyle(Palette.amber)
+                    }
                 }
                 .padding(20).frame(maxWidth: 650, alignment: .leading).frame(maxWidth: .infinity)
             }

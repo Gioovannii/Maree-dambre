@@ -11543,6 +11543,414 @@
           }
         }
       }
+    },
+    "hero.role": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Capitaine des marées"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Captain of the tides"
+          }
+        }
+      }
+    },
+    "hero.shared": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un même personnage vous accompagne dans tous vos villages."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The same character accompanies you across all your villages."
+          }
+        }
+      }
+    },
+    "hero.not_combat_ready": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre personnage est sauvegardé. Sa participation aux combats, son expérience et son équipement arriveront dans une prochaine étape."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your character is saved. Combat participation, experience and equipment will arrive in a later step."
+          }
+        }
+      }
+    },
+    "hero.edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnaliser"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customize"
+          }
+        }
+      }
+    },
+    "hero.choose": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qui mènera vos expéditions ?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Who will lead your expeditions?"
+          }
+        }
+      }
+    },
+    "hero.cosmetic": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisissez votre personnage. Les deux portraits offrent les mêmes possibilités. Vous pourrez modifier ce choix gratuitement."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your character. Both portraits offer the same possibilities. You can change this choice for free."
+          }
+        }
+      }
+    },
+    "hero.woman": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Héroïne"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heroine"
+          }
+        }
+      }
+    },
+    "hero.man": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Héros"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hero"
+          }
+        }
+      }
+    },
+    "hero.name_label": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom du personnage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Character name"
+          }
+        }
+      }
+    },
+    "hero.name_placeholder": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 1 à 24 caractères"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 to 24 characters"
+          }
+        }
+      }
+    },
+    "hero.name_rule": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De 1 à 24 caractères, sans retour à la ligne."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 to 24 characters, with no line breaks."
+          }
+        }
+      }
+    },
+    "hero.save": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistrer mon personnage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save my character"
+          }
+        }
+      }
+    },
+    "hero.cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuler"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "hero.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre capitaine"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your captain"
+          }
+        }
+      }
+    },
+    "hero.recruit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choisir votre capitaine"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose your captain"
+          }
+        }
+      }
+    },
+    "hero.panel_hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personnage et personnalisation"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Character and customization"
+          }
+        }
+      }
+    },
+    "hero.level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@"
+          }
+        }
+      }
+    },
+    "hero.maximum_level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau maximum atteint"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum level reached"
+          }
+        }
+      }
+    },
+    "hero.level_progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@ XP vers le prochain niveau"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@ XP towards the next level"
+          }
+        }
+      }
+    },
+    "hero.total_xp": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expérience totale : %@ XP"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total experience: %@ XP"
+          }
+        }
+      }
+    },
+    "hero.command_experience": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre capitaine gagne de l’expérience de commandement grâce aux actions de vos villages. Les niveaux ne donnent pas encore de bonus de combat."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your captain gains command experience through the actions of your villages. Levels do not grant combat bonuses yet."
+          }
+        }
+      }
+    },
+    "hero.xp_rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combat gagné : 20 XP · Défaite : 5 XP · Colonie fondée : 75 XP. Un seul raid récompensé par voisin et par jour, et une défense par village et par jour (jours UTC). Les anciens rapports ne donnent pas d’XP."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Battle won: 20 XP · Defeat: 5 XP · Colony founded: 75 XP. Only one rewarded raid per neighbor per day, and one defense per village per day (UTC days). Old reports grant no XP."
+          }
+        }
+      }
+    },
+    "hero.panel_level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ · %@ XP"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ · %@ XP"
+          }
+        }
+      }
+    },
+    "hero.report_xp": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ XP de commandement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ command XP"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

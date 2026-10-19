@@ -34,9 +34,10 @@ struct VillageState: Codable, Equatable {
     var mailbox: [GameMail]?
     var beginnerProtection: BeginnerProtection?
     var nextBotAttackAt: Date?
+    var hero: PlayerHero?
 
     private enum CodingKeys: String, CodingKey {
-        case version, seed, resources, buildings, resourceLevels, bots, people
+        case version, seed, resources, buildings, resourceLevels, bots, people, hero
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
         case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
         case buildingLevels, unitWeaponLevels, guideObjectives
@@ -74,6 +75,7 @@ struct VillageState: Codable, Equatable {
         mailbox = try values.decodeIfPresent([GameMail].self, forKey: .mailbox)
         beginnerProtection = try values.decodeIfPresent(BeginnerProtection.self, forKey: .beginnerProtection)
         nextBotAttackAt = try values.decodeIfPresent(Date.self, forKey: .nextBotAttackAt)
+        hero = try values.decodeIfPresent(PlayerHero.self, forKey: .hero)
     }
 
     init(seed: Int) {

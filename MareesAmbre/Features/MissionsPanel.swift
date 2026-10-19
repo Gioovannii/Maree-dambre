@@ -8,6 +8,7 @@ struct MissionsPanel: View {
                 .font(.subheadline).foregroundStyle(Palette.muted)
             BeginnerProtectionPanel()
             if session.state.nextBotAttackAt != nil { CoastalDefensePanel() }
+            HeroPanel()
             FoundingMissionStatus()
             ShipmentPanel()
             WorldClockStatus()
