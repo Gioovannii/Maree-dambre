@@ -2,6 +2,7 @@ import Foundation
 
 enum GameMailContent: Codable, Equatable {
     case welcome
+    case heroMission(HeroMissionReport)
     case protectionStarted(Date), protectionExtended(Date), protectionEnded
     case raid(RaidReport)
     case defense(DefenseReport)
@@ -14,6 +15,7 @@ enum GameMailContent: Codable, Equatable {
     }
     var isValid: Bool {
         switch self {
+        case .heroMission(let report): report.isValid
         case .welcome, .protectionEnded: true
         case .protectionStarted(let end), .protectionExtended(let end): end >= .distantPast && end <= .distantFuture
         case .raid(let report): report.isValid

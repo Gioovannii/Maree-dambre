@@ -112,6 +112,7 @@ extension VillageState {
         }
         resolveScheduledAttacks(now: now)
         notifyProtectionExpiry(now: now)
+        settleHeroMission(now: now)
         awardHeroExperience()
     }
 

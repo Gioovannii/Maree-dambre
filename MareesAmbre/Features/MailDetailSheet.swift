@@ -42,6 +42,7 @@ struct MailDetailSheet: View {
     }
     @ViewBuilder private var content: some View {
         switch mail.content {
+        case .heroMission(let report): HeroMissionReportView(report: report)
         case .welcome:
             Text(String(localized: "mail.welcome.body", defaultValue: "Bienvenue dans l’archipel. Développez vos ressources, préparez votre défense et explorez les rivages pour choisir votre prochaine implantation. Retrouvez ici les nouvelles du domaine, les rapports de combat et les livraisons de vos villages."))
                 .font(.body).fixedSize(horizontal: false, vertical: true)

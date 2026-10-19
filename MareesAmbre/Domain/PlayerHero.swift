@@ -7,9 +7,11 @@ struct PlayerHero: Codable, Equatable {
     var experienceStartedAt: Date?
     var rewardDay: Int?
     var rewardKeys: Set<String>?
+    var missions: HeroMissions?
 
     var isValid: Bool {
         Self.normalizedName(name) == name
+            && (missions?.isValid ?? true)
             && (0...HeroProgression.maximumExperience).contains(experience ?? 0)
             && (experienceStartedAt.map { $0 >= .distantPast && $0 <= .distantFuture } ?? true)
             && (rewardDay.map { (-1_000_000...1_000_000).contains($0) } ?? true)

@@ -3,6 +3,7 @@ import SwiftUI
 extension GameMailContent {
     var title: String {
         switch self {
+        case .heroMission: String(localized: "hero.mission.completed", defaultValue: "Mission du héros terminée")
         case .welcome: String(localized: "mail.welcome.title", defaultValue: "Bienvenue sur vos rivages")
         case .protectionStarted: String(localized: "protection.mail.started", defaultValue: "Vos villages sont protégés pendant 72 heures")
         case .protectionExtended: String(localized: "protection.mail.extended", defaultValue: "Protection prolongée de 48 heures")
@@ -23,6 +24,7 @@ extension GameMailContent {
     var summary: String {
         switch self {
         case .protectionStarted, .protectionExtended, .protectionEnded: String(localized: "protection.domain", defaultValue: "Tous vos villages")
+        case .heroMission(let report): report.mission.title
         case .welcome: String(localized: "mail.welcome.summary", defaultValue: "Le conseil du port vous accompagne dans vos premiers pas.")
         case .raid(let report): report.targetName
         case .defense(let report): report.attackerName ?? String(localized: "mail.garrison", defaultValue: "La garnison")
@@ -33,6 +35,7 @@ extension GameMailContent {
     }
     var symbol: String {
         switch self {
+        case .heroMission: "sailboat.fill"
         case .welcome: "envelope.open.fill"
         case .protectionStarted, .protectionExtended, .protectionEnded: "shield.lefthalf.filled"
         case .raid: "flag.fill"

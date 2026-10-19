@@ -30,6 +30,10 @@ struct VillageStorage {
               (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.hero == nil && $0.seed == seed && $0.people == state.people }) else {
             throw CocoaError(.coderReadCorrupt)
         }
+        if let voyage = state.hero?.missions?.voyage {
+            guard all.contains(where: { $0.location == voyage.origin }),
+                  voyage.startedAt >= (state.hero?.experienceStartedAt ?? .distantPast) else { throw CocoaError(.coderReadCorrupt) }
+        }
         var migrated = try validateVillage(state, world: world, now: now)
         migrated.otherVillages = try state.otherVillages?.map { try validateVillage($0, world: world, now: now) }
         guard all.allSatisfy({ village in

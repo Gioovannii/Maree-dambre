@@ -12070,6 +12070,482 @@
           }
         }
       }
+    },
+    "hero.mission.discover": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La coque oubliée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The forgotten hull"
+          }
+        }
+      }
+    },
+    "hero.mission.recover": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramener la barque"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bring the boat home"
+          }
+        }
+      }
+    },
+    "hero.mission.repair": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une nouvelle voile"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A new sail"
+          }
+        }
+      }
+    },
+    "hero.mission.survey": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartographier les criques"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chart the coves"
+          }
+        }
+      }
+    },
+    "hero.mission.rescue": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Secourir un équipage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rescue a crew"
+          }
+        }
+      }
+    },
+    "hero.mission.discover_body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorez un ancien mouillage. Une coque semble encore pouvoir naviguer."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore an old anchorage. One hull might still be seaworthy."
+          }
+        }
+      }
+    },
+    "hero.mission.recover_body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramenez la barque à l’abri et récupérez les pièces nécessaires à sa remise en état."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bring the boat to shelter and collect the parts needed to restore it."
+          }
+        }
+      }
+    },
+    "hero.mission.repair_body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réparez la coque et installez une voile. Votre capitaine disposera de sa propre barque."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repair the hull and fit a sail. Your captain will have a personal boat."
+          }
+        }
+      }
+    },
+    "hero.mission.survey_body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relevez les passages entre les récifs et récupérez du matériel maritime."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chart passages between the reefs and recover maritime supplies."
+          }
+        }
+      }
+    },
+    "hero.mission.rescue_body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rejoignez un navire échoué et aidez son équipage à regagner la côte."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reach a stranded ship and help its crew return to shore."
+          }
+        }
+      }
+    },
+    "hero.mission.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missions personnelles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal missions"
+          }
+        }
+      }
+    },
+    "hero.mission.boat_owned": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barque personnelle"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal boat"
+          }
+        }
+      }
+    },
+    "hero.mission.boat_bonus": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La durée de vos missions personnelles est réduite d’un quart. Les armées conservent leurs délais."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal missions take a quarter less time. Army travel times stay the same."
+          }
+        }
+      }
+    },
+    "hero.mission.chapter": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre premier bateau · Étape %@ sur 3"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first boat · Step %@ of 3"
+          }
+        }
+      }
+    },
+    "hero.mission.material_stock": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matériel maritime : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maritime supplies: %@"
+          }
+        }
+      }
+    },
+    "hero.mission.offline": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La mission continue pendant votre absence. Les récompenses et le rapport seront enregistrés au retour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The mission continues while you are away. Rewards and the report will be saved on return."
+          }
+        }
+      }
+    },
+    "hero.mission.single": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une seule mission à la fois pour tous vos villages. Les coûts sont prélevés au départ ; les missions vont jusqu’à leur terme."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One mission at a time across all your villages. Costs are paid at departure; missions run to completion."
+          }
+        }
+      }
+    },
+    "hero.mission.xp_gain": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ XP"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ XP"
+          }
+        }
+      }
+    },
+    "hero.mission.material_gain": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matériel maritime : +%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maritime supplies: +%@"
+          }
+        }
+      }
+    },
+    "hero.mission.boat_ready": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre barque est réparée !"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your boat is repaired!"
+          }
+        }
+      }
+    },
+    "hero.mission.duration_boat": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée avec votre barque"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration with your boat"
+          }
+        }
+      }
+    },
+    "hero.mission.reward_xp": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Récompense : %@ XP"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reward: %@ XP"
+          }
+        }
+      }
+    },
+    "hero.mission.boat_unlock": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloque votre barque et les missions maritimes"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlocks your boat and maritime missions"
+          }
+        }
+      }
+    },
+    "hero.mission.repair_cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : 5 unités de matériel maritime et ressources du village sélectionné."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: 5 maritime supplies plus resources from the selected village."
+          }
+        }
+      }
+    },
+    "hero.mission.start": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lancer la mission"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start mission"
+          }
+        }
+      }
+    },
+    "hero.mission.insufficient": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources ou matériel insuffisants dans ce village."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough resources or supplies in this village."
+          }
+        }
+      }
+    },
+    "hero.mission.departed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mission du héros lancée. Le résultat sera disponible à son retour."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hero mission started. The result will be available on return."
+          }
+        }
+      }
+    },
+    "hero.mission.completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mission du héros terminée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hero mission completed"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
