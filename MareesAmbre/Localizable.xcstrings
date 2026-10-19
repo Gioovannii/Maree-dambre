@@ -13328,6 +13328,227 @@
           }
         }
       }
+    },
+    "absence.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendant votre absence"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "While you were away"
+          }
+        }
+      }
+    },
+    "absence.duration": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre domaine a continué de vivre pendant environ %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your domain kept going for about %@."
+          }
+        }
+      }
+    },
+    "absence.stocks": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évolution des stocks du domaine"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Domain stock changes"
+          }
+        }
+      }
+    },
+    "absence.net_help": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Variation nette des réserves de tous vos villages : production conservée, butins, livraisons, fondations et pillages compris. Ce n’est pas la production totale."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Net change across all village stores, including retained production, loot, deliveries, founding and plunder. This is not total production."
+          }
+        }
+      }
+    },
+    "absence.work": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Travaux et recherches terminés : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed construction and research: %@"
+          }
+        }
+      }
+    },
+    "absence.training": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recrues formées : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recruits trained: %@"
+          }
+        }
+      }
+    },
+    "absence.villages": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveaux villages : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New villages: %@"
+          }
+        }
+      }
+    },
+    "absence.full": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réserves pleines : %@. Vous pouvez libérer de la place à votre rythme."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full resource stores: %@. Make room whenever it suits you."
+          }
+        }
+      }
+    },
+    "absence.quiet": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun nouveau rapport de mission ou de combat."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new mission or battle reports."
+          }
+        }
+      }
+    },
+    "absence.reports": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nouveaux rapports : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New reports: %@"
+          }
+        }
+      }
+    },
+    "absence.messages": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrir les rapports dans Messages"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open reports in Messages"
+          }
+        }
+      }
+    },
+    "absence.saved": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les rapports restent disponibles dans Messages après la fermeture de ce bilan."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reports remain available in Messages after you close this summary."
+          }
+        }
+      }
+    },
+    "absence.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reprendre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

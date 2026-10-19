@@ -33,7 +33,7 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     districts=("${(@s:,:)SNAPSHOT_SCREEN}")
     for district in "${districts[@]}"; do
         case "$district" in
-            storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
+            absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
             *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
         esac
     done
@@ -85,6 +85,7 @@ for district in "${districts[@]}"; do
     simctl terminate "$simulator_id" "$bundle_id" >/dev/null 2>&1 || true
     snapshot_args=(--ui-snapshot -AppleLanguages '(fr)' -AppleLocale fr_FR)
     case "$district" in
+        absence) snapshot_args+=(--snapshot-developed --snapshot-absence) ;;
         storage) snapshot_args+=(--snapshot-developed --snapshot-storage) ;;
         centre) snapshot_args+=(--snapshot-center) ;;
         upgrade) snapshot_args+=(--snapshot-upgrade) ;;

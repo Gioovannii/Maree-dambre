@@ -292,6 +292,14 @@ struct GameView: View {
 
     private var topControls: some View {
         VStack(spacing: 6) {
+            if let summary = session.absenceSummary {
+                AbsenceSummaryBanner(summary: summary) {
+                    showsVillageDetails = false
+                    showsWorld = false
+                    showsMissions = false
+                    showsMailbox = true
+                }
+            }
             ResourcesView(
                 resources: session.state.resources,
                 hourlyProduction: session.state.production,

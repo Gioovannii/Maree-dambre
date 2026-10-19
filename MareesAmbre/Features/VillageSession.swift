@@ -14,6 +14,7 @@ final class VillageSession {
         }
         return VillageMapMode.townCenter.slots.filter { $0 != 12 }[index]
     }
+    private(set) var absenceSummary: AbsenceSummary?
     private(set) var state: VillageState
     let world: WorldMap
     var plot = VillageMapMode.resourceFields.initialPlot
@@ -167,6 +168,21 @@ final class VillageSession {
                 _ = state.startCoastalCampaign()
                 _ = state.advanceCoastalTide(now: date.addingTimeInterval(900))
                 _ = state.advanceCoastalTide(now: date.addingTimeInterval(1800))
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-absence") {
+                let start = Date(timeIntervalSince1970: 1_800_000_000)
+                state.lastProductionAt = start
+                state.beginProtection(now: start)
+                if let warehouse = state.buildings.first(where: { $0.value == .warehouse })?.key {
+                    state.construction = ConstructionJob(plot: warehouse, kind: .warehouse, startedAt: start,
+                                                         duration: 60, targetLevel: 2)
+                }
+                state.army?.training = TrainingOrder(unit: .tideguard, count: 3, endsAt: start.addingTimeInterval(60))
+                _ = state.customizeHero(portrait: .captainWoman, name: "Élyne", now: start)
+                _ = state.startHeroMission(.discoverWreck, now: start)
+                let before = state
+                state.updateDomain(now: start.addingTimeInterval(4 * 3600), on: world)
+                absenceSummary = AbsenceSummary.between(before, and: state, now: start.addingTimeInterval(4 * 3600))
             }
             return
         }
@@ -457,6 +473,7 @@ final class VillageSession {
         guard !isUISnapshot, !hasUnreadableSave else { return }
         let previous = state
         state.updateDomain(now: now, on: world)
+        if let summary = AbsenceSummary.between(previous, and: state, now: now) { absenceSummary = summary }
         let seconds = max(0, Int(now.timeIntervalSince(previous.lastProductionAt ?? now)))
         if previous.weaponUpgrade != nil, state.weaponUpgrade == nil {
             message = String(localized: "screen.village_session.weapons_research_complete", defaultValue: "Armes améliorées. Le bonus s’applique aux prochaines expéditions.")
@@ -515,6 +532,8 @@ final class VillageSession {
         hasUnreadableSave = true
         message = String(localized: "screen.village_session.unreadable_save_recovery", defaultValue: "Votre sauvegarde est illisible. Fonder un village démarrera une nouvelle partie et conservera une copie de la sauvegarde précédente sur cet appareil.")
     }
+
+    func dismissAbsenceSummary() { absenceSummary = nil }
 
     func refreshAfterSceneChange() { refreshWorld() }
 }

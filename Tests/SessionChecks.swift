@@ -12,6 +12,7 @@ struct SessionChecks {
         invalidClock.lastProductionAt = Date(timeIntervalSince1970: -1e100)
         try await checkUnreadableSave(JSONEncoder().encode(invalidClock))
         try checkBackupFailure()
+        try checkAbsenceSummaryAfterRelaunch()
         try checkOfflineResume()
         try checkCompletedActionsAfterRelaunch()
         try checkSelectedRaidAfterRelaunch()
@@ -33,6 +34,32 @@ struct SessionChecks {
         print("PASS: selected raid persists its garrison, accepts training and merges survivors after relaunch")
         print("PASS: coastal threat survives relaunch and offline ticks; defensive losses settle once through the actual session")
         print("PASS: convoys and escrow survive relaunch, return after defense, preserve full-storage payments and never duplicate troops or rewards")
+    }
+
+    @MainActor
+    private static func checkAbsenceSummaryAfterRelaunch() throws {
+        let suite = "MareesAmbre.AbsenceSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        let now = Date.now
+        var initial = shipmentFixture(now: now.addingTimeInterval(-3600))
+        initial.beginProtection(now: now.addingTimeInterval(-3600))
+        initial.army?.units = [.tideguard: 5]
+        initial.army?.training = TrainingOrder(unit: .tideguard, count: 3, endsAt: now.addingTimeInterval(-1800))
+        try storage.save(initial)
+        let session = VillageSession(storage: storage)
+        precondition(session.absenceSummary?.trainedUnits == 3)
+        let summary = session.absenceSummary
+        let unread = session.state.unreadMailCount
+        session.refreshWorld(now: now.addingTimeInterval(1))
+        precondition(session.absenceSummary == summary)
+        session.dismissAbsenceSummary()
+        precondition(session.absenceSummary == nil && session.state.unreadMailCount == unread)
+        let reopened = VillageSession(storage: storage)
+        precondition(reopened.absenceSummary == nil)
+        precondition(reopened.state.army?.units[.tideguard] == 8)
+        print("PASS: return summary appears once after offline load, survives ticks, dismisses without rewards or read changes, and does not repeat on relaunch")
     }
 
     @MainActor
