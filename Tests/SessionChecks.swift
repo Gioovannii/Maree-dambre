@@ -18,6 +18,7 @@ struct SessionChecks {
         try checkCoastalCampaignAfterRelaunch()
         try checkScheduledAttackAfterRelaunch()
         try checkHeroAfterRelaunch()
+        try checkHeroMissionsAfterRelaunch()
         try checkConvoyAfterRelaunch()
         try checkFreshStart()
         try checkFoundingAfterRelaunch()
@@ -282,6 +283,32 @@ struct SessionChecks {
         let stocks = relaunched.state.resources
         let restored = VillageSession(storage: storage)
         precondition(restored.state.availableArmy[.tideguard] == 12 && restored.state.resources == stocks)
+    }
+
+    @MainActor
+    private static func checkHeroMissionsAfterRelaunch() throws {
+        let suite = "MareesAmbre.HeroVoyageSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        let departure = Date.now.addingTimeInterval(-1200)
+        var state = shipmentFixture(now: departure)
+        precondition(state.customizeHero(portrait: .captainWoman, name: "Élyne", now: departure))
+        precondition(state.startHeroMission(.discoverWreck, now: departure))
+        try storage.save(state)
+        let session = VillageSession(storage: storage)
+        precondition(session.state.hero?.totalExperience == 30 && session.state.hero?.missions?.chapter == 1)
+        precondition(session.startHeroMission(.recoverBoat))
+        let voyage = session.state.hero!.missions!.voyage!
+        precondition(!session.startHeroMission(.recoverBoat))
+        session.switchSettlement(to: state.otherVillages![0].location)
+        let reopened = VillageSession(storage: storage)
+        precondition(reopened.state.hero?.missions?.voyage == voyage)
+        reopened.refreshWorld(now: voyage.endsAt)
+        precondition(reopened.state.hero?.totalExperience == 80 && reopened.state.hero?.missions?.materials == 5)
+        let again = VillageSession(storage: storage)
+        precondition(again.state.hero?.totalExperience == 80 && again.state.hero?.missions?.voyage == nil)
+        print("PASS: actual session completes offline hero voyages, launches once, switches villages and persists rewards")
     }
 
     @MainActor

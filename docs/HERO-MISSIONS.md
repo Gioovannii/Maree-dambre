@@ -15,3 +15,5 @@ The first three steps must be completed in order, once each. Repair unlocks a pe
 Maritime supplies belong to the captain and are capped at 999. XP retains the existing level-20 cap; reports store the actual credited amount after caps. Hero mission XP is granted directly once during settlement and is not granted again by the generic command-XP mail processor. The hero identity, mission, inventory and report persist across relaunch. Old captains default to chapter zero without an active voyage.
 
 Validation rejects invalid chapters, timings, origins, materials or missions not unlocked by the current chapter. Tests cover atomic repair payments, overlapping launch rejection, all chapter transitions, switching villages in transit, offline repair, faster repeatables, report origin, persistence and duplicate prevention.
+
+The hero sheet places its compact portrait and XP above the personal mission panel. It shows the current chapter, resource cost, guaranteed rewards, a live countdown for an active voyage and the last report. The same report is available in Messages. iPhone snapshot cases: `heroMission`, `heroActive`, `heroRepair`, `heroBoat`.

@@ -12,7 +12,9 @@ Level 1 starts at 0 XP. The first level costs 100 XP, and each following level c
 
 Rewards settle once from persisted structured mail events after domain updates, including inactive villages and offline returns. A saved per-mail XP marker prevents repeat grants after reloading or reading reports. A bounded daily key set prevents duplicate daily rewards even if a report is pruned. Progression is initialized for legacy portraits without retroactive credit.
 
-Not implemented yet: physical expedition/defense assignment, level-based combat bonuses and three equipment slots (weapon, outfit, navigation instrument). XP represents command experience across the domain, not simultaneous physical deployment in multiple armies. The sheet explains this and displays no inactive equipment controls.
+Personal hero missions now include the three-step discovery and repair of a boat, followed by two repeatable maritime missions. The boat reduces personal mission durations by one quarter. See HERO-MISSIONS.md for costs, rewards and persistence rules.
+
+Not implemented yet: physical army expedition/defense assignment, level-based combat bonuses and three equipment slots (weapon, outfit, navigation instrument). XP represents command experience across the domain, not simultaneous physical deployment in multiple armies. The sheet explains this and displays no inactive equipment controls.
 
 The RealityKit maquette was removed after evaluating its scope. Full 3D characters and interchangeable armor are outside the current beta scope. Validate the gameplay before commissioning rigged characters.
 

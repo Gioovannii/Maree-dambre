@@ -12,13 +12,18 @@ struct HeroSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     if let hero = session.state.hero, !isEditing {
-                        Image(hero.portrait.assetName).resizable().scaledToFit()
-                            .frame(maxWidth: .infinity).frame(height: 260)
-                            .clipShape(.rect(cornerRadius: 24)).accessibilityHidden(true)
-                        Text(hero.name).font(.largeTitle.bold())
+                        HStack(spacing: 16) {
+                            Image(hero.portrait.assetName).resizable().scaledToFill()
+                                .frame(width: 100, height: 120)
+                                .clipShape(.rect(cornerRadius: 20)).accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(hero.name).font(.largeTitle.bold())
+                                Label(String(localized: "hero.role", defaultValue: "Capitaine des marées"), systemImage: "safari.fill")
+                                    .font(.subheadline).foregroundStyle(Palette.amber)
+                            }
+                        }
                         HeroExperienceView(hero: hero)
-                        Label(String(localized: "hero.role", defaultValue: "Capitaine des marées"), systemImage: "safari.fill")
-                            .foregroundStyle(Palette.amber)
+                        HeroMissionsPanel()
                         Text(String(localized: "hero.shared", defaultValue: "Un même personnage vous accompagne dans tous vos villages."))
                         Text(String(localized: "hero.command_experience", defaultValue: "Votre capitaine gagne de l’expérience de commandement grâce aux actions de vos villages. Les niveaux ne donnent pas encore de bonus de combat."))
                             .font(.footnote).foregroundStyle(Palette.muted)

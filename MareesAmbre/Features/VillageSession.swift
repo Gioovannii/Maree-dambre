@@ -129,6 +129,23 @@ final class VillageSession {
                 _ = state.customizeHero(portrait: .captainWoman, name: "Élyne")
                 state.hero?.experience = 145
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-hero-mission") {
+                let date = Date(timeIntervalSince1970: 1_800_000_000)
+                state.lastProductionAt = date
+                _ = state.customizeHero(portrait: .captainWoman, name: "Élyne", now: date)
+                state.hero?.experienceStartedAt = date
+                state.hero?.experience = 0
+                if ProcessInfo.processInfo.arguments.contains("--snapshot-hero-active") {
+                    _ = state.startHeroMission(.discoverWreck, now: date)
+                } else if ProcessInfo.processInfo.arguments.contains("--snapshot-hero-repair") {
+                    state.hero?.experience = 80
+                    state.hero?.missions = HeroMissions(chapter: 2, materials: 5)
+                } else if ProcessInfo.processInfo.arguments.contains("--snapshot-hero-boat") {
+                    state.hero?.experience = 155
+                    state.hero?.missions = HeroMissions(chapter: 3, materials: 0,
+                        report: HeroMissionReport(mission: .repairBoat, experience: 75, materials: 0))
+                }
+            }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-protection") {
                 state.beginProtection(now: Date(timeIntervalSince1970: 1_792_358_400))
             }
@@ -157,6 +174,15 @@ final class VillageSession {
                 self.refreshWorld()
             }
         }
+    }
+
+    @discardableResult
+    func startHeroMission(_ mission: HeroMissionKind) -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.startHeroMission(mission) else { return false }
+        persist(String(localized: "hero.mission.departed", defaultValue: "Mission du héros lancée. Le résultat sera disponible à son retour."))
+        return true
     }
 
     @discardableResult
