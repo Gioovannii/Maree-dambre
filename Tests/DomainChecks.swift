@@ -15,6 +15,7 @@ struct DomainChecks {
         try checkMailbox()
         try checkBeginnerProtection()
         try checkScheduledBotAttacks()
+        checkStorageForecast()
         checkRaidRest()
         try checkHero()
         try checkHeroExperience()
