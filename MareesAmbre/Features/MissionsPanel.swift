@@ -6,9 +6,9 @@ struct MissionsPanel: View {
         VStack(alignment: .leading, spacing: 18) {
             Text(String(localized: "screen.missions.subtitle", defaultValue: "Préparez vos expéditions et suivez le retour de vos troupes."))
                 .font(.subheadline).foregroundStyle(Palette.muted)
+            HeroPanel()
             BeginnerProtectionPanel()
             if session.state.nextBotAttackAt != nil { CoastalDefensePanel() }
-            HeroPanel()
             FoundingMissionStatus()
             ShipmentPanel()
             WorldClockStatus()

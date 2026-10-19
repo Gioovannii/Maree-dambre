@@ -1,6 +1,6 @@
 # Player captain
 
-The first hero feature uses two original illustrated 2D portraits and a native character sheet. Open it from Missions. Players can choose a female or male captain and a name of 1–24 characters. Portrait and name can be edited for free; both choices have the same gameplay possibilities.
+The first hero feature uses two original illustrated 2D portraits and a native character sheet. Open it from the persistent portrait button beside the main header on all five tabs, or from the first card in Missions. This entry also works when an existing save has no hero yet. Players can choose a female or male captain and a name of 1–24 characters. Portrait and name can be edited for free; both choices have the same gameplay possibilities.
 
 `PlayerHero` is optional for compatibility with existing saves and belongs to the player domain. When switching settlements, it transfers to the selected root and is removed from inactive snapshots. Storage rejects invalid names and duplicated hero state in inactive villages. No automatic creation or changes to old names occur during migration.
 

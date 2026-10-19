@@ -11,13 +11,13 @@ struct HeroPanel: View {
                     .resizable().scaledToFill().frame(width: 64, height: 72)
                     .clipShape(.rect(cornerRadius: 12)).accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(session.state.hero?.name ?? String(localized: "hero.recruit", defaultValue: "Choisir votre capitaine"))
+                    Text(session.state.hero?.name ?? String(localized: "hero.recruit_visible", defaultValue: "Choisir votre héros"))
                         .font(.headline).foregroundStyle(Palette.paper)
                     if let hero = session.state.hero {
                         Text(String(localized: "hero.panel_level", defaultValue: "Niveau \(String(hero.level)) · \(String(hero.totalExperience)) XP"))
                             .font(.caption).foregroundStyle(Palette.amber)
                     } else {
-                        Text(String(localized: "hero.panel_hint", defaultValue: "Personnage et personnalisation"))
+                        Text(String(localized: "hero.panel_hint_visible", defaultValue: "Portrait, nom, niveau et expérience"))
                             .font(.caption).foregroundStyle(Palette.muted)
                     }
                 }

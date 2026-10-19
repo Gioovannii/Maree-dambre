@@ -297,7 +297,10 @@ struct GameView: View {
                 hourlyProduction: session.state.production,
                 storageCapacity: session.state.storageCapacity
             )
-            if !showsMailbox { header }
+            HStack(spacing: 8) {
+                if !showsMailbox { header } else { Spacer(minLength: 0) }
+                HeroAccessButton()
+            }
             if session.state.settlementCount > 1 {
                 Menu {
                     ForEach(session.state.ownedLocations, id: \.self) { location in
