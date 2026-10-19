@@ -14,7 +14,9 @@ Rewards settle once from persisted structured mail events after domain updates, 
 
 Personal hero missions now include the three-step discovery and repair of a boat, followed by two repeatable maritime missions. The boat reduces personal mission durations by one quarter. See HERO-MISSIONS.md for costs, rewards and persistence rules.
 
-Not implemented yet: physical army expedition/defense assignment, level-based combat bonuses and three equipment slots (weapon, outfit, navigation instrument). XP represents command experience across the domain, not simultaneous physical deployment in multiple armies. The sheet explains this and displays no inactive equipment controls.
+The Equipment tab now offers three crafted items: spyglass, sailor outfit and reinforced sail. Each has three tiers, material costs and captain-level requirements. Bonuses affect only personal missions; see HERO-EQUIPMENT.md.
+
+Not implemented yet: physical army expedition/defense assignment and level-based combat bonuses. XP represents command experience across the domain, not simultaneous physical deployment in multiple armies. The sheet explains this and displays no inactive equipment controls.
 
 The RealityKit maquette was removed after evaluating its scope. Full 3D characters and interchangeable armor are outside the current beta scope. Validate the gameplay before commissioning rigged characters.
 

@@ -19,6 +19,7 @@ struct SessionChecks {
         try checkScheduledAttackAfterRelaunch()
         try checkHeroAfterRelaunch()
         try checkHeroMissionsAfterRelaunch()
+        try checkHeroEquipmentAfterRelaunch()
         try checkConvoyAfterRelaunch()
         try checkFreshStart()
         try checkFoundingAfterRelaunch()
@@ -283,6 +284,35 @@ struct SessionChecks {
         let stocks = relaunched.state.resources
         let restored = VillageSession(storage: storage)
         precondition(restored.state.availableArmy[.tideguard] == 12 && restored.state.resources == stocks)
+    }
+
+    @MainActor
+    private static func checkHeroEquipmentAfterRelaunch() throws {
+        let suite = "MareesAmbre.HeroEquipmentSession.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let storage = VillageStorage(defaults: defaults)
+        let now = Date.now.addingTimeInterval(-1)
+        var state = shipmentFixture(now: now)
+        precondition(state.customizeHero(portrait: .captainWoman, name: "Élyne", now: now))
+        state.hero?.experience = 100
+        state.hero?.missions = HeroMissions(chapter: 3, materials: 20)
+        try storage.save(state)
+        let session = VillageSession(storage: storage)
+        precondition(session.upgradeHeroEquipment(.spyglass))
+        precondition(session.upgradeHeroEquipment(.outfit))
+        precondition(session.state.hero?.missions?.materials == 11)
+        precondition(session.startHeroMission(.surveyCoast))
+        let voyage = session.state.hero!.missions!.voyage!
+        precondition(!session.upgradeHeroEquipment(.sail))
+        session.switchSettlement(to: state.otherVillages![0].location)
+        let reopened = VillageSession(storage: storage)
+        precondition(reopened.state.hero?.missions?.equipment == HeroEquipment(spyglass: 1, outfit: 1, sail: 0))
+        reopened.refreshWorld(now: voyage.endsAt)
+        precondition(reopened.state.hero?.totalExperience == 122 && reopened.state.hero?.missions?.materials == 13)
+        let final = VillageSession(storage: storage)
+        precondition(final.state.hero?.totalExperience == 122 && final.state.hero?.missions?.materials == 13)
+        print("PASS: actual session equipment purchases persist and apply once to missions after switching and relaunch")
     }
 
     @MainActor

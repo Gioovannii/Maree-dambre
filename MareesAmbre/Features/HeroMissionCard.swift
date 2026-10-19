@@ -15,10 +15,10 @@ struct HeroMissionCard: View {
                 Text(String(localized: "hero.mission.duration_boat", defaultValue: "Durée avec votre barque"))
                     .font(.caption).foregroundStyle(Palette.muted)
             }
-            Text(String(localized: "hero.mission.reward_xp", defaultValue: "Récompense : \(String(mission.experience)) XP"))
+            Text(String(localized: "hero.mission.reward_xp", defaultValue: "Récompense : \(String((missions.equipment ?? HeroEquipment()).experience(for: mission))) XP"))
                 .font(.subheadline)
             if mission.materials > 0 {
-                Label(String(localized: "hero.mission.material_gain", defaultValue: "Matériel maritime : +\(String(mission.materials))"), systemImage: "shippingbox.fill")
+                Label(String(localized: "hero.mission.material_gain", defaultValue: "Matériel maritime : +\(String((missions.equipment ?? HeroEquipment()).materials(for: mission)))"), systemImage: "shippingbox.fill")
                     .font(.subheadline)
             }
             if mission == .repairBoat {

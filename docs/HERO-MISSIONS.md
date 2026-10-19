@@ -10,6 +10,8 @@ One personal voyage may run at a time across the player domain. It stays with th
 | Chart the coves | 15 min with boat | 20 | 1 | Free |
 | Rescue a crew | 33 min 45 sec with boat | 40 | 2 | Free |
 
+The table describes rewards and durations before crafted equipment bonuses. The Equipment tab can improve repeatable mission rewards and bring total duration reduction up to 40 percent; see HERO-EQUIPMENT.md.
+
 The first three steps must be completed in order, once each. Repair unlocks a personal boat. Both repeatable missions require it, and their 20/45-minute base durations are reduced by 25 percent. Army, shipment and founding travel times are unaffected. Rewards are guaranteed and announced before departure. There are no random losses, paid skips or cancellation refunds.
 
 Maritime supplies belong to the captain and are capped at 999. XP retains the existing level-20 cap; reports store the actual credited amount after caps. Hero mission XP is granted directly once during settlement and is not granted again by the generic command-XP mail processor. The hero identity, mission, inventory and report persist across relaunch. Old captains default to chapter zero without an active voyage.

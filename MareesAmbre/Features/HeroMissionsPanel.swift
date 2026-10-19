@@ -11,7 +11,7 @@ struct HeroMissionsPanel: View {
             if missions.hasBoat {
                 Label(String(localized: "hero.mission.boat_owned", defaultValue: "Barque personnelle"), systemImage: "sailboat.fill")
                     .font(.headline)
-                Text(String(localized: "hero.mission.boat_bonus", defaultValue: "La durée de vos missions personnelles est réduite d’un quart. Les armées conservent leurs délais."))
+                Text(HeroEquipmentKind.sail.effect(at: missions.equipment?.sail ?? 0))
                     .font(.footnote).foregroundStyle(Palette.muted)
             } else {
                 Text(String(localized: "hero.mission.chapter", defaultValue: "Votre premier bateau · Étape \(String(missions.chapter + 1)) sur 3"))

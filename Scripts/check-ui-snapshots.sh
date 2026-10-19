@@ -33,7 +33,7 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     districts=("${(@s:,:)SNAPSHOT_SCREEN}")
     for district in "${districts[@]}"; do
         case "$district" in
-            resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat) ;;
+            resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
             *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
         esac
     done
@@ -89,6 +89,10 @@ for district in "${districts[@]}"; do
         upgrade) snapshot_args+=(--snapshot-upgrade) ;;
         world) snapshot_args+=(--snapshot-world) ;;
         commerce) snapshot_args+=(--snapshot-world --snapshot-commerce) ;;
+        heroEnhancedMission) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment --snapshot-hero-enhanced-mission) ;;
+        heroEquipment) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment) ;;
+        heroEquipmentLocked) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment --snapshot-equipment-locked) ;;
+        heroEquipmentMax) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment --snapshot-equipment-max) ;;
         heroMission) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-mission) ;;
         heroActive) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-mission --snapshot-hero-active) ;;
         heroRepair) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-mission --snapshot-hero-repair) ;;

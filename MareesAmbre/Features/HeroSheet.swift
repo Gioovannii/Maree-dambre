@@ -3,9 +3,11 @@ import SwiftUI
 struct HeroSheet: View {
     @Environment(VillageSession.self) private var session
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var typeSize
     @State private var portrait: HeroPortrait = .captainWoman
     @State private var name = ""
     @State private var isEditing = false
+    @State private var showsEquipment = ProcessInfo.processInfo.arguments.contains("--snapshot-hero-equipment") && !ProcessInfo.processInfo.arguments.contains("--snapshot-hero-enhanced-mission")
 
     var body: some View {
         NavigationStack {
@@ -23,7 +25,12 @@ struct HeroSheet: View {
                             }
                         }
                         HeroExperienceView(hero: hero)
-                        HeroMissionsPanel()
+                        if typeSize.isAccessibilitySize {
+                            sectionPicker.pickerStyle(.menu).controlSize(.large)
+                        } else {
+                            sectionPicker.pickerStyle(.segmented)
+                        }
+                        if showsEquipment { HeroEquipmentPanel() } else { HeroMissionsPanel() }
                         Text(String(localized: "hero.shared", defaultValue: "Un même personnage vous accompagne dans tous vos villages."))
                         Text(String(localized: "hero.command_experience", defaultValue: "Votre capitaine gagne de l’expérience de commandement grâce aux actions de vos villages. Les niveaux ne donnent pas encore de bonus de combat."))
                             .font(.footnote).foregroundStyle(Palette.muted)
@@ -102,4 +109,12 @@ struct HeroSheet: View {
             }
         }.tint(Palette.amber)
     }
+    private var sectionPicker: some View {
+        Picker(String(localized: "hero.sections", defaultValue: "Fiche du héros"), selection: $showsEquipment) {
+            Text(String(localized: "screen.game.missions", defaultValue: "Missions")).tag(false)
+            Text(String(localized: "hero.equipment.title", defaultValue: "Équipement")).tag(true)
+        }
+        .accessibilityIdentifier("hero.sections")
+    }
+
 }

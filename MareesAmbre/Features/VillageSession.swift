@@ -146,6 +146,18 @@ final class VillageSession {
                         report: HeroMissionReport(mission: .repairBoat, experience: 75, materials: 0))
                 }
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-hero-equipment") {
+                state.hero?.experience = 450
+                state.hero?.missions = HeroMissions(chapter: 3, materials: 20,
+                    equipment: HeroEquipment(spyglass: 1, outfit: 1, sail: 1))
+                if ProcessInfo.processInfo.arguments.contains("--snapshot-equipment-locked") {
+                    state.hero?.experience = 30
+                    state.hero?.missions = HeroMissions(chapter: 1, materials: 2)
+                } else if ProcessInfo.processInfo.arguments.contains("--snapshot-equipment-max") {
+                    state.hero?.experience = 1000
+                    state.hero?.missions?.equipment = HeroEquipment(spyglass: 3, outfit: 3, sail: 3)
+                }
+            }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-protection") {
                 state.beginProtection(now: Date(timeIntervalSince1970: 1_792_358_400))
             }
@@ -174,6 +186,15 @@ final class VillageSession {
                 self.refreshWorld()
             }
         }
+    }
+
+    @discardableResult
+    func upgradeHeroEquipment(_ kind: HeroEquipmentKind) -> Bool {
+        guard !hasUnreadableSave else { return false }
+        refreshWorld()
+        guard state.upgradeHeroEquipment(kind) else { return false }
+        persist(String(localized: "hero.equipment.saved", defaultValue: "Équipement amélioré : \(String(kind.title))."))
+        return true
     }
 
     @discardableResult

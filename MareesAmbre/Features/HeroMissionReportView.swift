@@ -12,6 +12,10 @@ struct HeroMissionReportView: View {
             if report.materials > 0 {
                 Label(String(localized: "hero.mission.material_gain", defaultValue: "Matériel maritime : +\(String(report.materials))"), systemImage: "shippingbox.fill")
             }
+            if (report.equipment?.highestLevel ?? 0) > 0 {
+                Text(String(localized: "hero.equipment.report_bonus", defaultValue: "Bonus d’équipement inclus dans ces récompenses."))
+                    .font(.caption).foregroundStyle(Palette.muted)
+            }
             if report.boatUnlocked {
                 Label(String(localized: "hero.mission.boat_ready", defaultValue: "Votre barque est réparée !"), systemImage: "sailboat.fill")
                     .foregroundStyle(Palette.amber)

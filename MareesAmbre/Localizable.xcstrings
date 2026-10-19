@@ -12597,6 +12597,346 @@
           }
         }
       }
+    },
+    "hero.equipment.xp_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ XP sur les missions personnelles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%@ XP from personal missions"
+          }
+        }
+      }
+    },
+    "hero.equipment.material_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matériel maritime par mission : +%@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maritime supplies per mission: +%@"
+          }
+        }
+      }
+    },
+    "hero.equipment.speed_effect": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durée initiale réduite de %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original duration reduced by %@"
+          }
+        }
+      }
+    },
+    "hero.equipment.unmade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "À fabriquer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not crafted"
+          }
+        }
+      }
+    },
+    "hero.equipment.tier": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %@ sur 3"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %@ of 3"
+          }
+        }
+      }
+    },
+    "hero.equipment.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prochain niveau : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next level: %@"
+          }
+        }
+      }
+    },
+    "hero.equipment.cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coût : %@ unités de matériel maritime"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cost: %@ maritime supplies"
+          }
+        }
+      }
+    },
+    "hero.equipment.required_level": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau du héros requis : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Required hero level: %@"
+          }
+        }
+      }
+    },
+    "hero.equipment.craft": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fabriquer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Craft"
+          }
+        }
+      }
+    },
+    "hero.equipment.upgrade": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Améliorer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade"
+          }
+        }
+      }
+    },
+    "hero.equipment.boat_required": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réparez d’abord votre barque."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repair your boat first."
+          }
+        }
+      }
+    },
+    "hero.equipment.busy": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disponible au retour de votre mission."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available when your mission returns."
+          }
+        }
+      }
+    },
+    "hero.equipment.requirements": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rassemblez le matériel et atteignez le niveau requis."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gather supplies and reach the required level."
+          }
+        }
+      }
+    },
+    "hero.equipment.maximum": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Équipement au niveau maximum"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipment at maximum level"
+          }
+        }
+      }
+    },
+    "hero.equipment.stock": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matériel maritime : %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maritime supplies: %@"
+          }
+        }
+      }
+    },
+    "hero.equipment.rules": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque équipement améliore vos missions personnelles. Trois niveaux, débloqués aux niveaux 2, 4 et 6 du héros. Les bonus ne s’appliquent pas aux armées."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each item improves your personal missions. Three tiers unlock at hero levels 2, 4 and 6. Bonuses do not apply to armies."
+          }
+        }
+      }
+    },
+    "hero.sections": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fiche du héros"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hero profile"
+          }
+        }
+      }
+    },
+    "hero.equipment.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Équipement"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipment"
+          }
+        }
+      }
+    },
+    "hero.equipment.saved": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Équipement amélioré : %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipment upgraded: %@."
+          }
+        }
+      }
+    },
+    "hero.equipment.report_bonus": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bonus d’équipement inclus dans ces récompenses."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipment bonuses are included in these rewards."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
