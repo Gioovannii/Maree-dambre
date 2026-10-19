@@ -12546,6 +12546,57 @@
           }
         }
       }
+    },
+    "hero.equipment.spyglass": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longue-vue"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spyglass"
+          }
+        }
+      }
+    },
+    "hero.equipment.outfit": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tenue de marin"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sailor outfit"
+          }
+        }
+      }
+    },
+    "hero.equipment.sail": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voile renforcée"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reinforced sail"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

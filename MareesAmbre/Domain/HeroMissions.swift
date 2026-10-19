@@ -5,19 +5,22 @@ struct HeroMissions: Codable, Equatable {
     var materials = 0
     var voyage: HeroVoyage?
     var report: HeroMissionReport?
+    var equipment: HeroEquipment?
     var hasBoat: Bool { chapter == 3 }
     var available: [HeroMissionKind] {
         hasBoat ? [.surveyCoast, .rescueCrew] : HeroMissionKind.allCases.filter { $0.chapter == chapter }
     }
     func duration(for mission: HeroMissionKind) -> TimeInterval {
-        mission.baseDuration * (hasBoat && mission.chapter == nil ? 0.75 : 1)
+        mission.baseDuration * (hasBoat && mission.chapter == nil ? (equipment ?? HeroEquipment()).durationMultiplier : 1)
     }
     var isValid: Bool {
-        guard (0...3).contains(chapter), (0...999).contains(materials), report?.isValid ?? true else { return false }
+        guard (0...3).contains(chapter), (0...999).contains(materials), report?.isValid ?? true, equipment?.isValid ?? true,
+              hasBoat || (equipment ?? HeroEquipment()).highestLevel == 0 else { return false }
         if let report, let completedChapter = report.mission.chapter, completedChapter >= chapter { return false }
         if let report, report.mission.chapter == nil, !hasBoat { return false }
         if let voyage {
-            guard voyage.isValid, available.contains(voyage.mission), voyage.duration == duration(for: voyage.mission) else { return false }
+            guard voyage.isValid, available.contains(voyage.mission), voyage.duration == duration(for: voyage.mission),
+                  (voyage.equipment ?? HeroEquipment()) == (equipment ?? HeroEquipment()) else { return false }
         }
         return true
     }
@@ -37,7 +40,7 @@ extension VillageState {
     mutating func startHeroMission(_ mission: HeroMissionKind, now: Date = .now) -> Bool {
         guard canStartHeroMission(mission), now >= (lastProductionAt ?? now), now >= (hero?.experienceStartedAt ?? now), var captain = hero else { return false }
         var missions = captain.missions ?? HeroMissions()
-        let voyage = HeroVoyage(mission: mission, origin: location, startedAt: now, duration: missions.duration(for: mission))
+        let voyage = HeroVoyage(mission: mission, origin: location, startedAt: now, duration: missions.duration(for: mission), equipment: missions.equipment)
         guard voyage.isValid else { return false }
         missions.materials -= mission.materialCost
         missions.voyage = voyage
@@ -51,12 +54,13 @@ extension VillageState {
 
     mutating func settleHeroMission(now: Date) {
         guard var captain = hero, var missions = captain.missions, let voyage = missions.voyage, now >= voyage.endsAt else { return }
-        let xp = min(voyage.mission.experience, HeroProgression.maximumExperience - captain.totalExperience)
-        let materials = min(voyage.mission.materials, 999 - missions.materials)
+        let equipment = voyage.equipment ?? HeroEquipment()
+        let xp = min(equipment.experience(for: voyage.mission), HeroProgression.maximumExperience - captain.totalExperience)
+        let materials = min(equipment.materials(for: voyage.mission), 999 - missions.materials)
         captain.experience = captain.totalExperience + xp
         missions.materials += materials
         if voyage.mission.chapter != nil { missions.chapter += 1 }
-        let report = HeroMissionReport(mission: voyage.mission, experience: xp, materials: materials)
+        let report = HeroMissionReport(mission: voyage.mission, experience: xp, materials: materials, equipment: voyage.equipment)
         missions.report = report
         missions.voyage = nil
         captain.missions = missions

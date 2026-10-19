@@ -12,6 +12,7 @@ struct PlayerHero: Codable, Equatable {
     var isValid: Bool {
         Self.normalizedName(name) == name
             && (missions?.isValid ?? true)
+            && level >= HeroEquipmentKind.requiredHeroLevel(for: (missions?.equipment ?? HeroEquipment()).highestLevel)
             && (0...HeroProgression.maximumExperience).contains(experience ?? 0)
             && (experienceStartedAt.map { $0 >= .distantPast && $0 <= .distantFuture } ?? true)
             && (rewardDay.map { (-1_000_000...1_000_000).contains($0) } ?? true)
