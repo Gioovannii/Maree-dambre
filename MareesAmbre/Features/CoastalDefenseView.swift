@@ -11,6 +11,7 @@ struct CoastalDefenseView: View {
                 if session.state.beginnerProtection != nil {
                     Section { BeginnerProtectionPanel() }.listRowBackground(Palette.panel)
                 }
+                Section { RaidReminderPanel() }.listRowBackground(Palette.panel)
                 Section {
                     ScheduledBotAttackPanel()
                     Text(String(localized: "screen.defense.corsairs", defaultValue: "Les tribus voisines convoitent les réserves de Port d’Ambre."))

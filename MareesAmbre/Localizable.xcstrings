@@ -12937,6 +12937,227 @@
           }
         }
       }
+    },
+    "raid.reminder.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos villages se préparent"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your villages are preparing"
+          }
+        }
+      }
+    },
+    "raid.reminder.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un assaut est prévu le %@. Votre garnison défendra automatiquement ; le rapport vous attendra dans Messages."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An assault is planned for %@. Your garrison will defend automatically; the report will await you in Messages."
+          }
+        }
+      }
+    },
+    "raid.rest.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Des nuits tranquilles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peaceful nights"
+          }
+        }
+      }
+    },
+    "raid.rest.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protection nocturne de 22 h à 8 h, puis une heure de préparation : les raids automatiques reprennent à 9 h, heure locale."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Night protection from 10 p.m. to 8 a.m., followed by one preparation hour: automatic raids resume at 9 a.m. local time."
+          }
+        }
+      }
+    },
+    "raid.reminder.explanation": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel facultatif une heure avant le prochain assaut. Au plus un rappel par jour pour tous vos villages, sans son. Aucune présence à l’heure du combat n’est nécessaire."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional reminder one hour before the next assault. At most one silent reminder per day across all your villages. You do not need to be present for the battle."
+          }
+        }
+      }
+    },
+    "raid.reminder.planned": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rappel programmé"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder scheduled"
+          }
+        }
+      }
+    },
+    "raid.reminder.disable": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Désactiver le rappel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disable reminder"
+          }
+        }
+      }
+    },
+    "raid.reminder.enable": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activer un rappel discret"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable a quiet reminder"
+          }
+        }
+      }
+    },
+    "raid.reminder.denied": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les notifications sont désactivées dans les réglages iOS. La protection nocturne reste active."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are disabled in iOS settings. Night protection remains active."
+          }
+        }
+      }
+    },
+    "raid.reminder.retry": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réessayer le rappel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry reminder"
+          }
+        }
+      }
+    },
+    "raid.reminder.failed": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le rappel n’a pas pu être programmé. Vous pouvez réessayer ; votre garnison défendra automatiquement."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The reminder could not be scheduled. You can try again; your garrison will defend automatically."
+          }
+        }
+      }
+    },
+    "raid.reminder.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le prochain rappel sera programmé lorsqu’un nouvel assaut sera annoncé."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The next reminder will be scheduled when a new assault is announced."
+          }
+        }
+      }
+    },
+    "bots.rules_rest": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Au plus un raid automatique par 24 h et par village, après votre protection. Aucune accumulation pendant votre absence. La garnison défend automatiquement ; les rapports attendent dans Messages."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most one automatic raid per 24 hours per village, after your protection. Missed raids do not accumulate while you are away. The garrison defends automatically; reports await in Messages."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -19,7 +19,7 @@ struct ScheduledBotAttackPanel: View {
                 }
                 Text(date, format: .dateTime.day().month().hour().minute())
                     .font(.caption).foregroundStyle(Palette.muted)
-                Text(String(localized: "bots.rules", defaultValue: "Un assaut toutes les 24 h, à partir de 24 h après votre protection. Après une absence, au plus un assaut par village au retour. Le rapport arrive dans Messages."))
+                Text(String(localized: "bots.rules_rest", defaultValue: "Au plus un raid automatique par 24 h et par village, après votre protection. Aucune accumulation pendant votre absence. La garnison défend automatiquement ; les rapports attendent dans Messages."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
         }

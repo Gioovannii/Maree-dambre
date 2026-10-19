@@ -25,6 +25,7 @@ struct CoastalDefensePanel: View {
                 Text(String(localized: "screen.defense.intro", defaultValue: "Ouvrez la campagne quand votre garnison est prête. Les tribus voisines attaquent à tour de rôle."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
+            RaidReminderPanel()
             Button {
                 showsDefense = true
             } label: {
