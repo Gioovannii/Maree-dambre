@@ -97,3 +97,24 @@ Ces coefficients sont un premier équilibrage de prototype. Ils restent à mesur
 avec des joueurs : délai du premier raid, fréquence de réserve pleine, choix
 économiques et militaires, temps d’attente des niveaux élevés. La colonisation et
 le monde multijoueur restent des systèmes futurs.
+
+## Prévoir une absence : bilan des réserves
+
+Le bandeau des ressources ouvre désormais « Mes réserves ». Chaque ressource du
+village sélectionné affiche son stock, sa capacité, sa production horaire et le
+temps estimé avant saturation. Le calcul utilise la place restante divisée par
+la production actuelle ; une ressource pleine est signalée même sans production,
+et une production nulle ne crée pas de fausse échéance.
+
+La durée est arrondie à la minute et ne prédit pas les futurs chantiers, dépenses,
+butins ou livraisons. Les fractions de production déjà accumulées ne sont pas
+incluses dans cette estimation. Les stocks des différents villages restent séparés.
+Une réserve pleine conserve son stock ; la nouvelle production de cette seule
+ressource est suspendue jusqu’à ce qu’une place se libère. Aucun rappel de
+saturation ni nouvelle notification n’est ajouté.
+
+Vérifications : cas de réserve pleine, production nulle, remplissage partiel,
+durée inférieure à une minute et augmentation de capacité couverts par les tests
+de domaine. Compilation simulateur, traductions natives français/anglais et
+captures du bilan sur iPhone/iPad contrôlées. L’écran est défilant et les textes
+n’ont pas de limite de lignes pour les grandes tailles de police.

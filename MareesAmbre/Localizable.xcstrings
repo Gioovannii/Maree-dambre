@@ -13158,6 +13158,176 @@
           }
         }
       }
+    },
+    "storage.forecast.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prévoir mes réserves"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan my storage"
+          }
+        }
+      }
+    },
+    "storage.forecast.intro": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre village continue de produire pendant votre absence. Voici quand chaque réserve devrait se remplir au rythme actuel."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your village keeps producing while you are away. Here is when each resource should reach capacity at the current rate."
+          }
+        }
+      }
+    },
+    "storage.forecast.rate": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production : %@ par heure"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Production: %@ per hour"
+          }
+        }
+      }
+    },
+    "storage.forecast.help": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une réserve pleine ne perd pas son stock : seule la nouvelle production de cette ressource s’arrête. Dépensez vos ressources ou améliorez l’Entrepôt au Centre pour retrouver de la place."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A full store keeps its stock: only new production of that resource stops. Spend resources or upgrade the Warehouse in Town to make more room."
+          }
+        }
+      }
+    },
+    "storage.forecast.estimate": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimation arrondie à la minute, hors futurs chantiers, dépenses, butins et livraisons. Chaque village possède ses propres réserves."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimate rounded to the minute, excluding future construction, spending, loot and deliveries. Each village has its own storage."
+          }
+        }
+      }
+    },
+    "storage.forecast.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes réserves"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My storage"
+          }
+        }
+      }
+    },
+    "storage.forecast.close": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "storage.forecast.no_production": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucune production pour le moment"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No production yet"
+          }
+        }
+      }
+    },
+    "storage.forecast.full": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réserve pleine · production en pause"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage full · production paused"
+          }
+        }
+      }
+    },
+    "storage.forecast.remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pleine dans environ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full in about %@"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

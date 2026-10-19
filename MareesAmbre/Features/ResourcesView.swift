@@ -2,17 +2,31 @@ import SwiftUI
 
 struct ResourcesView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
+    @State private var showsForecast = ProcessInfo.processInfo.arguments.contains("--snapshot-storage")
     let resources: Resources
     let hourlyProduction: Resources
     let storageCapacity: Int
 
     var body: some View {
-        resourceLayout {
-            resource(String(localized: "screen.resources.wood", defaultValue: "Bois"), value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
-            separator
-            resource(String(localized: "screen.resources.amber", defaultValue: "Ambre"), value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
-            separator
-            resource(String(localized: "screen.resources.food", defaultValue: "Vivres"), value: resources.provisions, rate: hourlyProduction.provisions, icon: "basket.fill")
+        Button {
+            showsForecast = true
+        } label: {
+            VStack(spacing: 4) {
+                resourceLayout {
+                    resource(String(localized: "screen.resources.wood", defaultValue: "Bois"), value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
+                    separator
+                    resource(String(localized: "screen.resources.amber", defaultValue: "Ambre"), value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
+                    separator
+                    resource(String(localized: "screen.resources.food", defaultValue: "Vivres"), value: resources.provisions, rate: hourlyProduction.provisions, icon: "basket.fill")
+                }
+                Label(String(localized: "storage.forecast.open", defaultValue: "Prévoir mes réserves"), systemImage: "chevron.right")
+                    .font(.caption2)
+                    .foregroundStyle(Palette.muted)
+            }
+        }
+        .buttonStyle(.plain)
+        .sheet(isPresented: $showsForecast) {
+            StorageForecastSheet(resources: resources, hourlyProduction: hourlyProduction, capacity: storageCapacity)
         }
         .padding(.horizontal, 7)
         .padding(.vertical, 6)
