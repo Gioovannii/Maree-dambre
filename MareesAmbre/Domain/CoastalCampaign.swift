@@ -114,7 +114,7 @@ extension VillageState {
             receiveMail(.defense(report), key: "defense.\(report.tide)", at: now)
             campaign.report = report
             campaign.assaultsResolved += 1
-            if nextBotAttackAt != nil { nextBotAttackAt = now.addingTimeInterval(Self.botAttackInterval) }
+            if nextBotAttackAt != nil { nextBotAttackAt = RaidRestPolicy.attackDate(for: now.addingTimeInterval(Self.botAttackInterval)) }
             let attackers = bots.sorted { $0.distanceFromHome < $1.distanceFromHome }
             if !attackers.isEmpty {
                 let next = attackers[campaign.assaultsResolved % attackers.count]

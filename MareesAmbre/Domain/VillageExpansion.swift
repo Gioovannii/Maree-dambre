@@ -150,7 +150,7 @@ extension VillageState {
         guard let voyage = expansion?.voyage, now >= voyage.arrivesAt, count < Self.maximumSettlements else { return nil }
         var colony = VillageState(seed: seed)
         colony.people = people
-        if nextBotAttackAt != nil && !voyage.isRefuge { colony.nextBotAttackAt = max(now, beginnerProtection?.endsAt ?? now).addingTimeInterval(Self.botAttackInterval) }
+        if nextBotAttackAt != nil && !voyage.isRefuge { colony.nextBotAttackAt = RaidRestPolicy.attackDate(for: max(now, beginnerProtection?.endsAt ?? now).addingTimeInterval(Self.botAttackInterval)) }
         colony.settlementLocation = voyage.destination
         colony.settlementRole = voyage.role
         colony.settlementRefuge = voyage.isRefuge

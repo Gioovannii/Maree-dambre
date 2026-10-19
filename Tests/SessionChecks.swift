@@ -381,10 +381,10 @@ struct SessionChecks {
         let due = session.state.nextBotAttackAt!
         let reopened = VillageSession(storage: storage)
         precondition(reopened.state.nextBotAttackAt == due)
-        let returnDate = due.addingTimeInterval(14 * 86_400)
+        let returnDate = RaidRestPolicy.attackDate(for: due.addingTimeInterval(14 * 86_400))
         reopened.refreshWorld(now: returnDate)
         precondition(reopened.state.coastalCampaign?.assaultsResolved == 1)
-        precondition(reopened.state.nextBotAttackAt == returnDate.addingTimeInterval(86_400))
+        precondition(reopened.state.nextBotAttackAt == RaidRestPolicy.attackDate(for: returnDate.addingTimeInterval(86_400)))
         let restored = VillageSession(storage: storage)
         precondition(!restored.hasUnreadableSave)
         precondition(restored.state.coastalCampaign?.assaultsResolved == 1)

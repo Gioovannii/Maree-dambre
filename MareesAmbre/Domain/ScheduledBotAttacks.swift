@@ -3,9 +3,9 @@ import Foundation
 extension VillageState {
     static let botAttackInterval: TimeInterval = 24 * 3600
 
-    mutating func scheduleBotAttacks(now: Date = .now) {
+    mutating func scheduleBotAttacks(now: Date = .now, calendar: Calendar = .current) {
         guard people != nil else { return }
-        let first = max(now, beginnerProtection?.endsAt ?? now).addingTimeInterval(Self.botAttackInterval)
+        let first = RaidRestPolicy.attackDate(for: max(now, beginnerProtection?.endsAt ?? now).addingTimeInterval(Self.botAttackInterval), calendar: calendar)
         if !isRefuge && nextBotAttackAt == nil { nextBotAttackAt = first }
         for index in (otherVillages ?? []).indices {
             if otherVillages?[index].isRefuge == false && otherVillages?[index].nextBotAttackAt == nil {
@@ -14,26 +14,33 @@ extension VillageState {
         }
     }
 
-    var scheduledBotAttackDate: Date? {
+    var scheduledBotAttackDate: Date? { botAttackDate(protection: beginnerProtection) }
+
+    var nextDomainBotAttackDate: Date? {
+        ([self] + (otherVillages ?? [])).compactMap { $0.botAttackDate(protection: beginnerProtection) }.min()
+    }
+
+    private func botAttackDate(protection: BeginnerProtection?, calendar: Calendar = .current) -> Date? {
         guard !isRefuge, let due = nextBotAttackAt else { return nil }
-        return max(due, beginnerProtection?.endsAt.addingTimeInterval(Self.botAttackInterval) ?? due)
+        return RaidRestPolicy.attackDate(for: max(due, protection?.endsAt.addingTimeInterval(Self.botAttackInterval) ?? due), calendar: calendar)
     }
 
-    mutating func resolveScheduledAttacks(now: Date) {
+    mutating func resolveScheduledAttacks(now: Date, calendar: Calendar = .current) {
         let protection = beginnerProtection
-        resolveLocalAttack(now: now, protection: protection)
+        resolveLocalAttack(now: now, protection: protection, calendar: calendar)
         for index in (otherVillages ?? []).indices {
-            otherVillages?[index].resolveLocalAttack(now: now, protection: protection)
+            otherVillages?[index].resolveLocalAttack(now: now, protection: protection, calendar: calendar)
         }
     }
 
-    private mutating func resolveLocalAttack(now: Date, protection: BeginnerProtection?) {
-        guard !isRefuge, var due = nextBotAttackAt else { return }
-        if let protection, due < protection.endsAt.addingTimeInterval(Self.botAttackInterval) {
-            due = protection.endsAt.addingTimeInterval(Self.botAttackInterval)
-            nextBotAttackAt = due
-        }
+    private mutating func resolveLocalAttack(now: Date, protection: BeginnerProtection?, calendar: Calendar) {
+        guard let due = botAttackDate(protection: protection, calendar: calendar) else { return }
+        nextBotAttackAt = due
         guard now >= due else { return }
+        guard RaidRestPolicy.allowsAutomaticAttack(at: now, calendar: calendar) else {
+            nextBotAttackAt = RaidRestPolicy.attackDate(for: now, calendar: calendar)
+            return
+        }
         let originalProtection = beginnerProtection
         beginnerProtection = protection
         if coastalCampaign == nil {
@@ -48,6 +55,6 @@ extension VillageState {
         }
         beginnerProtection = originalProtection
         // At most one assault per village after an absence; no catch-up backlog.
-        nextBotAttackAt = now.addingTimeInterval(Self.botAttackInterval)
+        nextBotAttackAt = RaidRestPolicy.attackDate(for: now.addingTimeInterval(Self.botAttackInterval), calendar: calendar)
     }
 }

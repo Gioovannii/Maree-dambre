@@ -1,7 +1,7 @@
 import Foundation
 
 func checkScheduledBotAttacks() throws {
-    let now = Date(timeIntervalSince1970: 1_900_000_000)
+    let now = Calendar.current.date(from: DateComponents(year: 2030, month: 3, day: 17, hour: 12))!
     let world = WorldMap(seed: 42)
     var village = shipmentFixture(now: now)
     village.beginProtection(now: now)
