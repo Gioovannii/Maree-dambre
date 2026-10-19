@@ -11,6 +11,7 @@ CHECK_DIR=$(mktemp -d /tmp/marees-checks.XXXXXX)
   MareesAmbre/Domain/Terrain.swift \
   MareesAmbre/Domain/BotFaction.swift \
   MareesAmbre/Domain/TileCoordinate.swift \
+  MareesAmbre/Features/WorldCameraBounds.swift \
   Tests/WorldMapChecks.swift \
   -o "$CHECK_DIR/worldmap-checks"
 

@@ -4,6 +4,7 @@ import Foundation
 @main
 struct WorldMapChecks {
     static func main() {
+        checkCameraBounds()
         let seed = 202639
         let world = WorldMap(seed: seed)
 
@@ -65,5 +66,28 @@ struct WorldMapChecks {
 
         print("PASS: world map generation — \(landTiles) land, \(seaTiles) sea, " +
               "\(forestTiles) forest, \(meadowTiles) meadow, \(amberTiles) amber tiles")
+    }
+
+    static func checkCameraBounds() {
+        let extent: CGFloat = 4800
+        for viewport in [CGSize(width: 390, height: 420), CGSize(width: 1000, height: 500),
+                         CGSize(width: 1200, height: 900), CGSize(width: 7000, height: 6000)] {
+            let bounds = WorldCameraBounds(viewport: viewport, worldSize: CGSize(width: extent, height: extent))
+            for proposedScale: CGFloat in [0.01, 0.8, 2.4, 8, 100] {
+                let scale = bounds.scale(proposedScale)
+                for proposed in [CGPoint(x: -100_000, y: -100_000), CGPoint.zero,
+                                 CGPoint(x: extent, y: -extent), CGPoint(x: 100_000, y: 100_000),
+                                 CGPoint(x: 2400, y: -2400)] {
+                    let center = bounds.position(proposed, scale: scale)
+                    let halfWidth = viewport.width * scale / 2
+                    let halfHeight = viewport.height * scale / 2
+                    precondition(center.x - halfWidth >= -0.0001 && center.x + halfWidth <= extent + 0.0001)
+                    precondition(center.y - halfHeight >= -extent - 0.0001 && center.y + halfHeight <= 0.0001,
+                                 "Pan, focus and zoom must keep the entire visible viewport inside the world")
+                    precondition(bounds.position(center, scale: scale) == center)
+                }
+            }
+        }
+        print("PASS: camera viewport stays inside all four world edges across phone/tablet sizes and zoom levels")
     }
 }

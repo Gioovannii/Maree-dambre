@@ -62,8 +62,11 @@ struct WorldCanvas: View {
                 .font(.caption).foregroundStyle(Palette.muted)
             ScrollView(.horizontal) {
                 HStack {
-                    Button(String(localized: "screen.world_canvas.my_village", defaultValue: "Mon village"), systemImage: "house.fill") { session.selectedTile = .home; scene.select(.home) }
+                    Button(String(localized: "screen.world_canvas.my_village", defaultValue: "Mon village"), systemImage: "house.fill") { session.selectedTile = session.state.location; scene.select(session.state.location) }
                         .accessibilityIdentifier("world.home")
+                    ForEach(session.state.otherVillages ?? [], id: \.location) { village in
+                        Button(village.settlementName, systemImage: "house.fill") { session.selectedTile = village.location; scene.select(village.location) }
+                    }
                     ForEach(session.state.bots) { bot in
                         Button(WorldNeighbor.name(for: bot, seed: session.world.seed), systemImage: "flag.fill") { session.selectedTile = bot.capital; scene.select(bot.capital) }
                             .tint(Self.factionColor(bot.id))
@@ -90,11 +93,12 @@ struct WorldCanvas: View {
         .tint(Palette.amber)
         .onAppear {
             scene.reducedMotion = reduceMotion
-            scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile)
+            scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile, homes: session.state.ownedLocations, origin: session.state.location)
             scene.overview()
         }
         .onChange(of: session.selectedTile) { scene.select(session.selectedTile) }
-        .onChange(of: session.state.bots) { scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile) }
+        .onChange(of: session.state.bots) { scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile, homes: session.state.ownedLocations, origin: session.state.location) }
+        .onChange(of: session.state.ownedLocations) { scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile, homes: session.state.ownedLocations, origin: session.state.location) }
         .onChange(of: reduceMotion) { scene.reducedMotion = reduceMotion }
     }
 

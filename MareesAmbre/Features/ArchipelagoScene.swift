@@ -12,9 +12,28 @@ final class ArchipelagoScene: SKScene {
     private let loading = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
     private var dragStart: CGPoint?
     private var zoomStart: CGFloat?
+    private var origin = TileCoordinate.home
+    private var homes: [TileCoordinate] = [.home]
     private var locations: [TileCoordinate] = []
     private var selectedTile = TileCoordinate.home
     private let unit: CGFloat = 24
+    private var cameraBounds: WorldCameraBounds {
+        let extent = CGFloat(WorldMap.side) * unit
+        return WorldCameraBounds(viewport: size, worldSize: CGSize(width: extent, height: extent))
+    }
+
+    override func didChangeSize(_ oldSize: CGSize) {
+        super.didChangeSize(oldSize)
+        viewpoint.removeAllActions()
+        dragStart = nil
+        zoomStart = nil
+        constrainCamera()
+    }
+
+    private func constrainCamera() {
+        viewpoint.setScale(cameraBounds.scale(viewpoint.xScale))
+        viewpoint.position = cameraBounds.position(viewpoint.position, scale: viewpoint.xScale)
+    }
     private var seaMotion: Float {
         let arguments = ProcessInfo.processInfo.arguments
         let frozenSnapshot = arguments.contains("--ui-snapshot") && !arguments.contains("--snapshot-animate")
@@ -39,6 +58,7 @@ final class ArchipelagoScene: SKScene {
         camera = viewpoint
         viewpoint.setScale(2.4)
         viewpoint.position = point(.home)
+        constrainCamera()
         markers.zPosition = 5
         addChild(markers)
         selection.strokeColor = WorldMapStyle.amber
@@ -54,7 +74,9 @@ final class ArchipelagoScene: SKScene {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    func configure(world: WorldMap, bots: [BotFaction], selected: TileCoordinate) {
+    func configure(world: WorldMap, bots: [BotFaction], selected: TileCoordinate, homes: [TileCoordinate] = [.home], origin: TileCoordinate = .home) {
+        self.origin = origin
+        self.homes = homes
         if currentSeed != world.seed {
             currentSeed = world.seed
             loading.isHidden = false
@@ -78,8 +100,10 @@ final class ArchipelagoScene: SKScene {
             }
         }
         markers.removeAllChildren()
-        locations = [.home] + bots.map(\.capital)
-        addVillage(tile: .home, name: String(localized: "screen.world.amber_harbor", defaultValue: "Port d’Ambre"), asset: "MaisonVeilleurs", color: WorldMapStyle.amber)
+        locations = homes + bots.map(\.capital)
+        for tile in homes {
+        addVillage(tile: tile, name: tile == .home ? String(localized: "screen.world.amber_harbor", defaultValue: "Port d’Ambre") : String(localized: "expansion.colony", defaultValue: "Colonie"), asset: "MaisonVeilleurs", color: WorldMapStyle.amber)
+        }
         for bot in bots {
             let color = WorldMapStyle.factionColor(bot.id)
             for tile in bot.territory {
@@ -96,7 +120,7 @@ final class ArchipelagoScene: SKScene {
     }
 
     private func addVillage(tile: TileCoordinate, name: String, asset: String, color: UIColor) {
-        let node = WorldVillageMarker.make(name: name, asset: asset, color: color, isHome: tile == .home)
+        let node = WorldVillageMarker.make(name: name, asset: asset, color: color, isHome: homes.contains(tile))
         node.position = point(tile)
         markers.addChild(node)
     }
@@ -110,16 +134,17 @@ final class ArchipelagoScene: SKScene {
         updateVillageMarkers()
         selection.position = point(tile)
         let path = CGMutablePath()
-        if tile != .home {
-            let start = point(.home), end = point(tile)
+        if tile != origin {
+            let start = point(origin), end = point(tile)
             path.move(to: start)
             path.addQuadCurve(to: end, control: CGPoint(x: (start.x + end.x) / 2 + 50, y: (start.y + end.y) / 2 + 40))
         }
         route.path = path.copy(dashingWithPhase: 0, lengths: [9, 10])
         if focus {
             viewpoint.removeAllActions()
-            if reducedMotion { viewpoint.position = point(tile) }
-            else { viewpoint.run(.move(to: point(tile), duration: 0.35)) }
+            let destination = cameraBounds.position(point(tile), scale: viewpoint.xScale)
+            if reducedMotion { viewpoint.position = destination }
+            else { viewpoint.run(.move(to: destination, duration: 0.35)) }
         }
     }
 
@@ -134,14 +159,19 @@ final class ArchipelagoScene: SKScene {
         viewpoint.removeAllActions()
         if dragStart == nil { dragStart = viewpoint.position }
         if let start = dragStart {
-            viewpoint.position = CGPoint(x: min(4800, max(0, start.x - translation.width * viewpoint.xScale)), y: min(0, max(-4800, start.y + translation.height * viewpoint.yScale)))
+            viewpoint.position = cameraBounds.position(
+                CGPoint(x: start.x - translation.width * viewpoint.xScale,
+                        y: start.y + translation.height * viewpoint.yScale), scale: viewpoint.xScale)
         }
         if ended { dragStart = nil }
     }
 
     func zoom(_ factor: CGFloat, ended: Bool = true) {
+        guard factor.isFinite, factor > 0 else { return }
+        viewpoint.removeAllActions()
         if zoomStart == nil { zoomStart = viewpoint.xScale }
-        viewpoint.setScale(min(8, max(0.8, (zoomStart ?? 2.4) / factor)))
+        viewpoint.setScale(cameraBounds.scale((zoomStart ?? 2.4) / factor))
+        constrainCamera()
         updateVillageMarkers()
         if ended { zoomStart = nil }
     }
@@ -156,6 +186,7 @@ final class ArchipelagoScene: SKScene {
         let horizontalScale = (maxX - minX) / max(size.width - 180, 100)
         let verticalScale = (maxY - minY) / max(size.height - 140, 100)
         viewpoint.setScale(min(8, max(1.5, max(horizontalScale, verticalScale))))
+        constrainCamera()
         updateVillageMarkers()
     }
 
