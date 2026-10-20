@@ -34,6 +34,15 @@ struct GameView: View {
                 villageScreen
             }
         }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if session.state.people != nil {
+                navigation
+                    .frame(maxWidth: 560)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity)
+            }
+        }
         .sheet(isPresented: $showsShipment) { ShipmentView() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
@@ -85,7 +94,6 @@ struct GameView: View {
         ScrollView {
             VStack(spacing: 16) {
                 topControls
-                navigation
                 constructionStatus
                 if showsWorld {
                     WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 320)
@@ -162,7 +170,6 @@ struct GameView: View {
     private var tabletInspector: some View {
         VStack(spacing: 12) {
             topControls.padding(.horizontal, 12)
-            navigation.padding(.horizontal, 12)
             constructionStatus.padding(.horizontal, 12)
             if showsWorld {
                 ScrollView {
@@ -217,8 +224,6 @@ struct GameView: View {
                     if villageMap == .resourceFields {
                         TownShortcutButton { selectVillageMap(.townCenter) }
                     }
-                    navigation
-                        .frame(maxWidth: 560)
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 7)
@@ -284,8 +289,6 @@ struct GameView: View {
                         .padding(.bottom, 16)
                 }
                 .scrollIndicators(.hidden)
-                navigation
-                    .frame(maxWidth: 560)
             }
             .padding(.horizontal, 12)
             .padding(.top, 7)
@@ -306,8 +309,6 @@ struct GameView: View {
                         .padding(.bottom, 16)
                 }
                 .scrollIndicators(.hidden)
-                navigation
-                    .frame(maxWidth: 560)
             }
             .padding(.horizontal, 12)
             .padding(.top, 7)
@@ -420,7 +421,6 @@ struct GameView: View {
                 MailboxPanel().padding(.vertical, 12)
                     .frame(maxWidth: 720).frame(maxWidth: .infinity)
             }
-            navigation.frame(maxWidth: 720)
         }
         .padding(.horizontal, 12).padding(.top, 7)
         .background(Palette.ocean.ignoresSafeArea())

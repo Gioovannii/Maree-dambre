@@ -46,15 +46,9 @@ struct GameNavigationBar: View {
         }
         .padding(4)
         .background {
-            Capsule()
-                .fill(LinearGradient(
-                    colors: [Palette.amber.opacity(0.24), Palette.panel.opacity(0.88), Palette.ocean.opacity(0.92)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ))
-                .glassEffect(.regular.tint(Palette.amber.opacity(0.16)), in: .capsule)
+            Color.clear
+                .glassEffect(.regular.tint(Palette.amber.opacity(0.08)), in: .capsule)
         }
-        .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.22), lineWidth: 1) }
     }
     private var layout: AnyLayout {
         typeSize.isAccessibilitySize ? AnyLayout(VStackLayout(spacing: 5)) : AnyLayout(HStackLayout(spacing: 2))
