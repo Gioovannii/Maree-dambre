@@ -116,29 +116,11 @@ struct GameView: View {
 
     private var tabletScreen: some View {
         GeometryReader { geometry in
-            Group {
-                if geometry.size.width > geometry.size.height {
-                    HStack(spacing: 0) {
-                        tabletPrimaryContent(size: geometry.size)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        tabletInspector
-                            .frame(width: tabletSidebarWidth(in: geometry.size))
-                    }
-                } else {
-                    VStack(spacing: 0) {
-                        tabletPrimaryContent(size: geometry.size)
-                            .frame(height: tabletPrimaryHeight(in: geometry.size))
-                        Rectangle()
-                            .fill(Palette.amber.opacity(0.4))
-                            .frame(height: 1)
-                            .accessibilityHidden(true)
-                        ScrollView {
-                            tabletInspector
-                                .frame(maxWidth: .infinity, alignment: .top)
-                        }
-                        .scrollIndicators(.hidden)
-                    }
-                }
+            HStack(spacing: 0) {
+                tabletPrimaryContent(size: geometry.size)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                tabletInspector
+                    .frame(width: tabletSidebarWidth(in: geometry.size))
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .background(Palette.ocean.ignoresSafeArea())
@@ -202,10 +184,6 @@ struct GameView: View {
         .background(Palette.ocean)
     }
 
-    private func tabletPrimaryHeight(in size: CGSize) -> CGFloat {
-        min(700, max(480, size.height * 0.54))
-    }
-
     private func tabletWorldMapHeight(in size: CGSize) -> CGFloat {
         if size.width > size.height {
             min(700, max(420, size.height - 120))
@@ -215,8 +193,8 @@ struct GameView: View {
     }
 
     private func tabletSidebarWidth(in size: CGSize) -> CGFloat {
-        let preferred: CGFloat = size.width > size.height ? 400 : 350
-        return min(preferred, max(320, size.width * 0.42))
+        let preferred: CGFloat = size.width > size.height ? 400 : 320
+        return min(preferred, max(300, size.width * 0.40))
     }
 
     private var villageScreen: some View {
