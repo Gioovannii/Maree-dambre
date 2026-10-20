@@ -71,7 +71,8 @@ extension DomainChecks {
         precondition(divided.availableArmy == [.pillager: 2] && divided.army?.raid == away)
         precondition(divided.army?.training?.count == 10, "A defensive battle leaves queued and deployed units intact")
         divided.updateArmy(now: now.addingTimeInterval(300))
-        precondition(divided.availableArmy[.tideguard] == 18 && divided.availableArmy[.pillager] == 2)
+        precondition(divided.availableArmy[.tideguard] == 20 && divided.availableArmy[.pillager] == 2,
+            "The returning decisive raid preserves its 10 troops while the separate coastal defense is resolved")
         precondition(divided.army?.raid == nil && divided.army?.training == nil && divided.army?.isValid == true)
 
         for infirmary in [false, true] {

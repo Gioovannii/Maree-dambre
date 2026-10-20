@@ -29,7 +29,7 @@ struct ArmyState: Codable, Equatable {
                   raid.units.values.reduce(0, +) > 0 else { return false }
             guard (0...3).contains(raid.attackUpgrade ?? 0),
                   (0...0.2).contains(raid.victoryLossRate ?? 0.2),
-                  (0.2...0.8).contains(raid.defeatLossRate ?? 0.5),
+                  (0...0.8).contains(raid.defeatLossRate ?? 0.5),
                   (0...90).contains(raid.transportBonusPercent ?? 0),
                   (60...270).contains(raid.lootLimit ?? 60) else { return false }
             if let levels = raid.weaponLevels {
@@ -196,8 +196,13 @@ extension VillageState {
         if let raid = troops.raid, now >= raid.returnsAt {
             let power = raid.attackPower
             let won = power > raid.defense
-            let victoryRate = raid.victoryLossRate ?? (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)
-            let defeatRate = raid.defeatLossRate ?? 0.5
+            // Older in-flight raids may still carry a fixed casualty rate from a
+            // previous ruleset. Keep any faction/building support already saved,
+            // while ensuring decisive victories use the current power-ratio rule.
+            let victoryRate = min(raid.victoryLossRate ?? 0.2,
+                RaidOrder.casualtyRate(attackPower: power, defense: raid.defense, won: true))
+            let defeatRate = min(raid.defeatLossRate ?? 0.5,
+                RaidOrder.casualtyRate(attackPower: power, defense: raid.defense, won: false))
             let lossesByUnit = RaidOrder.casualties(units: raid.units,
                                                      rate: won ? victoryRate : defeatRate,
                                                      roundUp: !won)

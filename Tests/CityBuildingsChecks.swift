@@ -159,7 +159,8 @@ extension DomainChecks {
         expedition.buildings = [12: .hall]
         expedition.weaponsLevel = 0
         expedition.updateArmy(now: now.addingTimeInterval(120))
-        precondition(expedition.availableArmy[.tideguard] == 27)
+        precondition(expedition.availableArmy[.tideguard] == 30,
+            "A decisive victory returns the whole force even when upgrades change during the expedition")
         precondition(expedition.resources == Resources(wood: 90, amber: 90, provisions: 90))
         let returned = expedition
         expedition.updateArmy(now: now.addingTimeInterval(121))
@@ -172,17 +173,19 @@ extension DomainChecks {
         precondition(defeated.raid(targetID: 0, now: now))
         let stock = defeated.resources
         defeated.updateArmy(now: now.addingTimeInterval(120))
-        precondition(defeated.availableArmy[.reedrunner] == 6 && defeated.resources == stock)
+        precondition(defeated.availableArmy[.reedrunner] == 8 && defeated.resources == stock,
+            "At an even power ratio, infirmary support lowers the loss rate to 14 percent")
         precondition(defeated.army?.raidReport?.won == false)
         precondition(defeated.army?.raidReport?.unitsSent == [.reedrunner: 10])
-        precondition(defeated.army?.raidReport?.losses == [.reedrunner: 4])
+        precondition(defeated.army?.raidReport?.losses == [.reedrunner: 2])
         precondition(defeated.army?.raidReport?.stolen == Resources(wood: 0, amber: 0, provisions: 0))
         var mage = VillageState(seed: 42)
         mage.buildings[10] = .infirmary
         mage.army = ArmyState(units: [.tideMage: 20])
         precondition(mage.victoryLossRate == 0.05 && mage.raid(targetID: 0, now: now))
         mage.updateArmy(now: now.addingTimeInterval(120))
-        precondition(mage.availableArmy[.tideMage] == 19)
+        precondition(mage.availableArmy[.tideMage] == 20,
+            "A decisive victory with infirmary and mage support should not add a fixed casualty")
 
         var offline = VillageState(seed: 42)
         offline.lastProductionAt = now
@@ -202,7 +205,8 @@ extension DomainChecks {
             && offline.weaponUpgrade == online.weaponUpgrade)
         // Fractional accrual can differ by floating point rounding after 120 updates.
         precondition(abs(offline.productionRemainder!.wood - online.productionRemainder!.wood) < 1e-8)
-        precondition(offline.availableArmy[.reedrunner] == 1, "New research must not change a raid already underway")
+        precondition(offline.availableArmy[.reedrunner] == 2,
+            "An even-power raid applies the ratio-based defeat loss without changing its saved weapon level")
 
         var legacy = VillageState(seed: 42)
         legacy.version = 9

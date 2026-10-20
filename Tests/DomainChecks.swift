@@ -356,7 +356,8 @@ struct DomainChecks {
         protected.army = ArmyState()
         protected.army?.raid = RaidOrder(targetID: 0, targetName: "Test", units: [.amberSentry: 20, .tideMage: 1], defense: 14, returnsAt: epoch)
         protected.updateArmy(now: epoch)
-        precondition(protected.availableArmy[.amberSentry] == 17)
+        precondition(protected.availableArmy[.amberSentry] == 20,
+            "A decisive victory should not apply a fixed loss rate")
         precondition(protected.availableArmy[.tideMage] == 1)
         var human = VillageState(seed: seed)
         human.people = .sauniers

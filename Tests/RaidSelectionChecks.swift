@@ -33,6 +33,13 @@ extension DomainChecks {
             "Victory loss rounding applies to the total force, not each unit type")
         precondition(RaidOrder.casualtyRate(attackPower: 200, defense: 40, won: true) == 0,
             "An overwhelmingly strong raid should not lose troops to a fixed victory tax")
+        let overwhelmingPower = 445
+        let smallDefense = 30
+        let overwhelmingLossRate = RaidOrder.casualtyRate(
+            attackPower: overwhelmingPower, defense: smallDefense, won: true)
+        precondition(overwhelmingLossRate == 0
+            && RaidOrder.casualties(units: [.reedrunner: 40], rate: overwhelmingLossRate, roundUp: false).isEmpty,
+            "A 445-power raid against 30 defense should not lose troops on victory")
         precondition(abs(RaidOrder.casualtyRate(attackPower: 80, defense: 50, won: true) - 0.16) < 0.0001,
             "A close victory should still carry some risk")
         precondition(RaidOrder.casualtyRate(attackPower: 10, defense: 50, won: false)
@@ -62,6 +69,15 @@ extension DomainChecks {
         let returned = partial
         partial.updateArmy(now: now.addingTimeInterval(121))
         precondition(partial == returned, "Returning troops and loot must not be duplicated")
+
+        var inFlightLegacyRaid = base
+        inFlightLegacyRaid.army?.raid = RaidOrder(targetID: 0, targetName: "Liora",
+            units: [.tideguard: 40], defense: smallDefense, returnsAt: now,
+            victoryLossRate: 0.2, defeatLossRate: 0.5)
+        inFlightLegacyRaid.army?.units = [:]
+        inFlightLegacyRaid.updateArmy(now: now)
+        precondition(inFlightLegacyRaid.availableArmy[.tideguard] == 40,
+            "An in-flight raid saved with the old fixed loss rate must use the decisive-victory rule when it returns")
 
         for infirmary in [false, true] {
             for sendsMage in [false, true] {
