@@ -25,6 +25,22 @@ Les propositions réutilisent bois, ambre et vivres. Elles n’ajoutent pas une 
 
 Le problème n’est pas que les peuples ont des bonus. C’est que les bonus actuels restent surtout des multiplicateurs de statistiques. Les bâtiments, les unités et les décisions de combat ne donnent pas encore à chaque peuple une stratégie distincte. Les expéditions plus courtes et l’ambre des Roseaux, en particulier, pourraient appartenir à presque n’importe quelle faction.
 
+## Choisir selon son style et son temps disponible
+
+Le choix initial doit permettre au joueur de répondre à deux questions simples : **est-ce que j’aime lancer des offensives, préparer une défense, ou alterner les deux ?** et **à quelle fréquence ai-je envie d’ouvrir le jeu ?** La recommandation de rythme décrit le nombre de décisions intéressantes, pas une obligation de se connecter à heure fixe.
+
+| Style recommandé | Peuple | Rythme conseillé | Ce que le joueur fait souvent | Ce qu’il peut faire en étant absent |
+| --- | --- | --- | --- | --- |
+| **Offensif** | Elfes des Roseaux | Soutenu, pour les joueurs qui aiment préparer plusieurs actions et choisir leurs fenêtres | Repérer une cible, choisir un chenal, lancer des raids rapides et exploiter une désorganisation temporaire | Les pièges déjà préparés fonctionnent automatiquement ; aucune défense ne demande une réaction en direct |
+| **Défensif** | Gardiens de Nacre | Espacé, pour les joueurs qui préfèrent préparer leur village et lire les rapports ensuite | Renforcer les barrières, répartir la garnison et décider quelles pertes éviter | Les protections chargées se déclenchent selon leurs règles visibles ; la récupération ne réclame pas de connexion immédiate |
+| **Équilibré** | Sauniers | Flexible, pour les joueurs qui alternent développement, raids, transport et colonies | Choisir quand convertir ses réserves en armée, en amélioration ou en convoi | Les productions et trajets continuent selon les horloges normales du jeu, sans action de surveillance |
+
+Ce classement est une **recommandation de fantasy et de rythme**, pas une restriction : les trois peuples doivent pouvoir attaquer, se défendre, fonder des villages et terminer la campagne. Un joueur peu disponible peut jouer offensif à son rythme ; il ne doit simplement pas être forcé de répondre à une fenêtre de quelques minutes. Une faction défensive ne doit pas être le seul choix viable pour quelqu’un qui s’absente.
+
+Pour rendre ce choix compréhensible dans l’écran de sélection, afficher pour chaque peuple une phrase de style, un indicateur de rythme (**espacé / flexible / soutenu**) et un exemple d’action. Éviter une note ambiguë du type « difficulté : 3/5 » et ne pas présenter le peuple défensif comme le choix pour les débutants.
+
+La différence doit venir des décisions propres à la faction, pas seulement du temps de raid. Les Roseaux peuvent être offensifs par la reconnaissance et le contrôle de l’engagement ; leurs pièges servent de filet de sécurité, pas de raison de se connecter au moment exact d’une attaque. Les Nacrés misent sur des protections prévisibles, pas sur une défense automatique qui gagne toujours. Les Sauniers gardent la flexibilité par la logistique et les réserves, sans être supérieurs dans chaque catégorie.
+
 ## Inspirations documentées et limites
 
 **Sauniers.** Les salines côtières ont soutenu la conservation du poisson et de la viande, des communautés de travail et des réseaux d’exportation. Le National Park Service décrit la production et l’exportation de sel depuis Padre Island ; le musée maritime de Piran relie les salines du nord de l’Adriatique à l’économie vénitienne. Cela fournit une inspiration concrète pour les réserves, la préparation et l’acheminement, plutôt qu’un simple bonus de récolte. [NPS — The Salt Industry](https://www.nps.gov/pais/learn/historyculture/the-salt-industry.htm), [Musée maritime Sergej Mašera de Piran — développement des salines](https://pomorskimuzej.si/en/books/belo-zlato-krilatega-leva)
