@@ -3,6 +3,7 @@ import TipKit
 
 struct GameView: View {
     @State private var showsBackup = false
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var showsMailbox = ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail")
     @State private var showsShipment = ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
     @State private var showsExpansion = ProcessInfo.processInfo.arguments.contains("--snapshot-expansion") && !ProcessInfo.processInfo.arguments.contains("--snapshot-colony") && !ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
@@ -50,7 +51,8 @@ struct GameView: View {
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
         .overlay(alignment: .bottomTrailing) {
-            if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2 {
+            if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2,
+               horizontalSizeClass != .compact || showsGuide {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
                                             maximumHeight: max(160, min(420, viewport.size.height - 160)),
@@ -209,18 +211,19 @@ struct GameView: View {
 
     private var villageScreen: some View {
         GeometryReader { geometry in
+            VStack(spacing: 0) {
+                topControls.padding(.horizontal, 12).padding(.top, 7).padding(.bottom, 6)
             ZStack {
                 Palette.ocean.ignoresSafeArea()
                 VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
                              onPlotSelected: { showsVillageDetails = true },
                              onTownSelected: { selectVillageMap(.townCenter) },
+                             preservesMapProportions: true,
                              showsTownShortcut: false)
                 .id(villageMap)
                 .ignoresSafeArea()
 
                 VStack(spacing: 8) {
-                    topControls
-                        .frame(maxWidth: 560)
                     Spacer(minLength: 4)
                     constructionStatus
                         .frame(maxWidth: 560)
@@ -232,6 +235,8 @@ struct GameView: View {
                 .padding(.top, 7)
                 .padding(.bottom, 6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .clipped()
             }
             .task {
                 if ProcessInfo.processInfo.arguments.contains("--snapshot-center") {
@@ -322,7 +327,7 @@ struct GameView: View {
 
     private var topControls: some View {
         VStack(spacing: 6) {
-            if let summary = session.absenceSummary {
+            if let summary = session.absenceSummary, horizontalSizeClass != .compact {
                 AbsenceSummaryBanner(summary: summary) {
                     showsVillageDetails = false
                     showsWorld = false
@@ -338,6 +343,23 @@ struct GameView: View {
             HStack(spacing: 8) {
                 if !showsMailbox { header } else { Spacer(minLength: 0) }
                 HeroAccessButton()
+                if horizontalSizeClass == .compact {
+                    if let summary = session.absenceSummary {
+                        AbsenceSummaryBanner(summary: summary, onShowMessages: {
+                            showsVillageDetails = false
+                            showsWorld = false
+                            showsMissions = false
+                            showsMailbox = true
+                        }, compact: true)
+                    }
+                    if session.state.settlementCount < 2 {
+                        Button(String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon"), systemImage: "bubble.left") {
+                            showsGuide = true
+                        }
+                        .labelStyle(.iconOnly)
+                        .frame(minWidth: 44, minHeight: 44)
+                    }
+                }
                 backupButton
             }
             if session.state.settlementCount > 1 {
