@@ -8,7 +8,7 @@ The current version is a **playable, offline, single-player beta**. Neighbors ar
 
 Open `MareesAmbre.xcodeproj` in Xcode and select the **MareesAmbre** scheme. The app includes a WidgetKit extension for construction Live Activities. French and English are supported.
 
-The current release configuration is **1.0 (build 12)** for both the app and the widget. Select your development team to run on a physical device or create a signed archive.
+The current release configuration is **1.0 (build 16)** for both the app and the widget. Select your development team to run on a physical device or create a signed archive.
 
 ## Playable loop
 

@@ -1,11 +1,12 @@
-# TestFlight beta — 1.0 (12)
+# TestFlight beta — 1.0 (16)
 
 ## Scope
 
-This is the first solo village-building loop: production, field and building
-upgrades, research, recruitment, raids, coastal defense, and maritime contracts.
-Neighbors are simulated locally. The game works offline and saves on the device.
-Multiplayer, colonization, additional player villages, and the Wonder are planned.
+This is a broader solo strategy beta: village development, research, recruitment,
+raids, coastal defense, hero missions, equipment, settlement expansion, supply
+shipments, a mailbox, and scheduled attacks. Neighbors are simulated locally.
+The game works offline and saves on the device. Shared multiplayer and the Wonder
+are planned.
 
 Start with a small tester group to measure comprehension, waiting times, save
 reliability, and whether the first session gives players a reason to return.
@@ -14,14 +15,17 @@ reliability, and whether the first session gives players a reason to return.
 
 Suggested text for TestFlight's **What to Test** field:
 
-> Build and upgrade your coastal village, research and train your first troops,
-> then launch an expedition from the world map. Try the coastal defense campaign
-> and maritime contracts once they become available.
+> Develop your village, train and upgrade troops, and raid nearby and distant
+> simulated neighbors. Try the hero missions, found a second settlement, and
+> send supplies between your villages. Check the mailbox for battle reports and
+> test the coastal defense campaign.
 >
-> Please check that your village, timers, troops, and resources return correctly
-> after closing and reopening the app. Explore the Resources, Town, World, and
-> Missions tabs. Look for hidden buttons, unclear actions, unreadable text, or
-> animation problems, especially the town shortcut and the moving ocean.
+> Please check that your villages, timers, troops, and resources return correctly
+> after closing and reopening the app. Test overnight protection, hero missions
+> and equipment, supply delivery, battle previews and reports, and village
+> switching. Explore the Resources, Town, World, and Missions tabs on iPhone and
+> iPad. Report unclear actions, balance problems, unreadable text, or animation
+> issues.
 >
 > Tell us where you got stuck, how long the first expedition took to reach, and
 > what made you want to continue or stop. Include your device, iOS version, build
@@ -29,8 +33,8 @@ Suggested text for TestFlight's **What to Test** field:
 > feedback feature to send your report.
 >
 > This beta is single-player and stores progress on your device. The twelve
-> neighboring settlements are simulated opponents. Multiplayer and colonization
-> are planned.
+> neighboring settlements are simulated opponents; there is no shared world or
+> player-versus-player combat yet.
 
 ## Release checks
 
@@ -42,10 +46,13 @@ Suggested text for TestFlight's **What to Test** field:
 - Validate and upload through App Store Connect; confirm processing succeeds.
 - Assign the processed build to the intended TestFlight group. External testing
   may require beta review and completed beta app/review information.
-- On a physical iPhone, play from a fresh installation through the first raid.
-  Close and reopen during construction, research, recruitment, and the raid.
-- Verify offline completion, a single return of loot and troops, construction
-  Live Activities while suspended, the town shortcut, and ocean animation.
+- On a physical iPhone, play from a fresh installation through the first raid,
+  hero mission, and second settlement.
+- Close and reopen during construction, research, recruitment, a raid, a hero
+  voyage, and a shipment. Confirm each reward and delivery is applied once.
+- Verify overnight protection and scheduled attack timing, battle previews and
+  reports, storage forecasts, return summaries, and village switching.
+- Verify construction Live Activities while suspended and the town shortcut.
 - Check essential navigation on iPad, with VoiceOver, and at the largest text size.
 
 Automated checks cover the first raid path and save recovery. They do not replace
@@ -71,3 +78,18 @@ timers, separate weapon upgrades per unit type, and the harmonized archipelago.
 - App and widget aligned at version 1.0, build 12.
 
 Build 11 was already present in App Store Connect, so this release uses build 12.
+
+## Build 16 changes
+
+- Added guided objectives and a configurable hero with persistent experience,
+  levels, repeatable missions, boat travel, and equipment upgrades.
+- Added persistent settlements, internal resource shipments, a unified mailbox,
+  and scheduled coastal defenses.
+- Added overnight attack protection, quiet raid reminders, storage forecasts,
+  and optional summaries for activity completed while away.
+- Refined faction identities, unit profiles, raid casualty estimates, and the
+  battle preview. Decisive victories no longer apply a fixed casualty tax,
+  including for raids already underway when the rules changed.
+- Adapted iPhone to portrait and redesigned iPad layouts for both orientations,
+  with warm Liquid Glass tab bars.
+- App and widget aligned at version 1.0, build 16.
