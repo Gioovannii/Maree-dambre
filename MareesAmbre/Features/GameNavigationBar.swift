@@ -5,6 +5,7 @@ struct GameNavigationBar: View {
     let unreadCount: Int
     let onSelect: (GameSection) -> Void
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
         layout {
@@ -44,7 +45,20 @@ struct GameNavigationBar: View {
                 .accessibilityIdentifier("navigation.\(String(describing: section))")
             }
         }
-        .padding(4).background(Palette.panel, in: .capsule)
+        .padding(4)
+        .background {
+            if horizontalSizeClass == .regular {
+                Capsule()
+                    .fill(LinearGradient(
+                        colors: [Palette.amber.opacity(0.24), Palette.panel.opacity(0.88), Palette.ocean.opacity(0.92)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ))
+                    .glassEffect(.regular.tint(Palette.amber.opacity(0.16)), in: .capsule)
+            } else {
+                Capsule().fill(Palette.panel)
+            }
+        }
         .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.22), lineWidth: 1) }
     }
     private var layout: AnyLayout {
