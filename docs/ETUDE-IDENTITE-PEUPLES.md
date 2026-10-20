@@ -6,12 +6,7 @@
 
 Les trois peuples ont aujourd’hui des bonus, mais pas encore trois façons assez différentes de jouer. Je recommande de les distinguer autour de trois verbes : **préserver et acheminer** pour les Sauniers, **protéger et soutenir** pour Nacre, **dissimuler et entraver** pour les Roseaux.
 
-Chaque peuple recevrait à terme :
-
-- deux bâtiments qui lui sont réservés, avec des usages complémentaires ;
-- un pouvoir de peuple activable avec un délai de recharge et une contre-mesure ;
-- une unité signature, plus une évolution de rôle pour ses deux unités actuelles ;
-- une faiblesse lisible qui empêche de cumuler économie, attaque, défense et transport au meilleur niveau.
+L’identité doit rester centrée sur **les troupes spéciales et un bonus général facile à comprendre** : par exemple un sort, une réduction du coût de certaines unités, ou une capacité de transport supérieure. Les bonus de production de ressources sont écartés : ils ne rendent pas le style de jeu assez concret. Chaque peuple doit garder des unités offensives et défensives, mais être particulièrement rentable dans son domaine.
 
 Les propositions réutilisent bois, ambre et vivres. Elles n’ajoutent pas une quatrième ressource, une alliance ni un service serveur. Les noms et effets sont originaux au monde de Marée d’ambre ; les références documentaires inspirent des thèmes, elles ne prétendent pas décrire une tradition réelle propre à ces peuples fictifs.
 
@@ -19,9 +14,9 @@ Les propositions réutilisent bois, ambre et vivres. Elles n’ajoutent pas une 
 
 | Peuple | Bonus actuels | Unités actuelles | Identité déjà amorcée |
 | --- | --- | --- | --- | --- |
-| Sauniers, humains | +20 % de transport, +10 % de production de bois | Lancier, Pillard | Logistique et économie |
+| Sauniers, humains | +20 % de capacité de transport, +10 % de production de bois (bonus de production à retirer de l’identité visée) | Lancier, Pillard | Logistique |
 | Gardiens de Nacre, amphibies | Le Mage des marées réduit les pertes de victoire ; petit bonus défensif | Gardien, Mage des marées | Protection |
-| Elfes des Roseaux | Raids plus courts, +10 % d’ambre | Guerrier, Archer | Mobilité |
+| Elfes des Roseaux | Raids plus courts, +10 % d’ambre (bonus de production à retirer de l’identité visée) | Guerrier, Archer | Mobilité |
 
 Le problème n’est pas que les peuples ont des bonus. C’est que les bonus actuels restent surtout des multiplicateurs de statistiques. Les bâtiments, les unités et les décisions de combat ne donnent pas encore à chaque peuple une stratégie distincte. Les expéditions plus courtes et l’ambre des Roseaux, en particulier, pourraient appartenir à presque n’importe quelle faction.
 
@@ -67,19 +62,18 @@ La différence doit venir des décisions propres à la faction, pas seulement du
 
 ## Proposition par peuple
 
-### Sauniers — tenir les réserves, gagner la campagne par la logistique
+### Sauniers — polyvalence et transport
 
-**Fantaisie.** Une société de ports, sauniers et bâtisseurs qui sait survivre aux sièges et ravitailler loin de ses quais. Elle ne gagne pas parce que ses soldats frappent plus fort ; elle gagne parce qu’elle sait protéger ses ressources et garder une armée en mouvement.
+**Fantaisie.** Une société de ports et de bâtisseurs dont les troupes sont polyvalentes et savent acheminer une force loin de leurs quais. Elle ne gagne pas par la production de ressources, mais par le choix du bon corps d’armée et le ravitaillement.
 
 | Élément | Proposition |
 | --- | --- |
-| Bâtiment 1 | **Saline des estacades** : améliore progressivement les vivres ou produit un petit rendement de vivres sur une implantation côtière. À choisir à la construction pour créer un vrai arbitrage. |
-| Bâtiment 2 | **Grenier à sel** : augmente la capacité protégée contre le pillage. Le stock caché ne peut pas financer une action tant qu’il n’est pas rapatrié dans la réserve normale. |
-| Pouvoir | **Réserve enfouie** : avant une attaque annoncée, met temporairement à l’abri une fraction plafonnée du stock exposé. Recharge longue ; ne protège ni les convois ni toutes les ressources. |
-| Unité signature | **Porte-sel** : transport élevé, attaque faible, défense correcte en escorte. Le Pillard existant pourrait devenir son unité de raid plutôt qu’un clone de cette unité. |
-| Contre-jeu | Les réserves protégées ne sont pas disponibles pour payer une amélioration ou une armée. Les Sauniers ont peu de contrôle magique et ne bénéficient pas du meilleur outil de défense brute. |
+| Unité de base | Combattant polyvalent, attaque et défense moyennes, mais recrutement coûteux. |
+| Unité spécialisée | **Porte-sel** : transport élevé, attaque faible, défense correcte en escorte. Le Pillard garde un rôle offensif distinct. |
+| Bonus général | **Convois renforcés** : capacité de transport supérieure pour les expéditions et le déplacement des troupes. C’est le bonus à privilégier ; retirer le bonus de production de bois de l’identité de faction. |
+| Contre-jeu | Leur capacité de transport ne renforce pas leur puissance de combat. Les unités polyvalentes coûtent cher à remplacer et ne sont pas les meilleures dans une spécialité. |
 
-L’identité doit aller au-delà du +20 % de transport actuel : une décision de stockage ou d’itinéraire devrait changer l’issue d’une absence ou d’une expédition.
+Le +20 % de transport actuel est un bon exemple de bonus général immédiatement compréhensible ; il faut vérifier qu’il s’applique aux bons types de voyage et ne rend pas les Sauniers meilleurs dans toutes les expéditions.
 
 ### Gardiens de Nacre — amortir l’impact et sauver les troupes
 
@@ -87,13 +81,12 @@ L’identité doit aller au-delà du +20 % de transport actuel : une décision d
 
 | Élément | Proposition |
 | --- | --- |
-| Bâtiment 1 | **Jardin de nacre** : produit une charge de barrière après un délai visible. La charge absorbe une quantité plafonnée de force lors d’une défense, puis doit se reconstituer. |
-| Bâtiment 2 | **Infirmerie des récifs** (spécialisation de l’Infirmerie existante) : convertit une petite part des pertes en blessés qui reviennent après un délai, au lieu d’effacer les pertes. Un plafond empêche les combats sans coût. |
-| Pouvoir | **Mue nacrée** : renforce la prochaine défense ou expédition annoncée ; le bouclier bloque une part fixe de puissance et ne se cumule pas avec la Tour de garde sans plafond. |
-| Unité signature | **Tisseur de corail** : soutien qui augmente la barrière ou protège une unité alliée, mais contribue peu à l’attaque. Le Mage des marées peut porter ce rôle ; le Gardien garde la ligne. |
-| Contre-jeu | Une barrière dépensée est absente au combat suivant. Les Nacrés ont une capacité de transport et de pillage inférieure aux Sauniers ; le soin prend du temps et ne rend pas immédiatement toute armée. |
+| Unité de base | **Gardien** : combattant résistant, attaque basse à moyenne. |
+| Unité spécialisée | **Tisseur de corail** : soutien qui protège des unités alliées ou améliore la tenue de la garnison, mais contribue peu à l’attaque. Le Mage des marées peut porter le rôle de soutien. Ajouter aussi une unité d’assaut pour qu’ils puissent conquérir. |
+| Bonus général | **Mue nacrée** : sort défensif à charges limitées, qui réduit les pertes du prochain combat annoncé sans rendre la ville imprenable. |
+| Contre-jeu | Une charge dépensée est absente au combat suivant. Leur sort ne protège qu’un combat défini et leur capacité de transport/pillage reste inférieure à celle des Sauniers. |
 
-Le bonus actuel du Mage (réduction des pertes en victoire) s’intègre naturellement ici, mais devrait devenir une capacité de soutien explicite et bien expliquée, pas un bonus invisible qui se cumule à l’Infirmerie.
+Le bonus actuel du Mage (réduction des pertes en victoire) peut évoluer vers ce sort défensif explicite, plutôt que se cumuler à plusieurs bonus passifs.
 
 ### Elfes des Roseaux — contrôler le terrain, tendre des embuscades
 
@@ -101,13 +94,12 @@ Le bonus actuel du Mage (réduction des pertes en victoire) s’intègre naturel
 
 | Élément | Proposition |
 | --- | --- |
-| Bâtiment 1 | **Labyrinthe de mangrove** : masque une partie de la force réellement disponible sur la carte et donne un bonus de défense uniquement aux implantations situées dans un terrain humide. Le joueur adverse garde une fourchette lisible, pas une information entièrement fausse. |
-| Bâtiment 2 | **Jardin des spores** : prépare des pièges défensifs consommés lors d’un assaut. Un piège ralentit ou neutralise temporairement quelques assaillants ; les victimes et la durée sont annoncées dans le rapport. |
-| Pouvoir | **Chenaux trompeurs** : une fois chargé, retarde ou détourne une expédition ennemie qui entre dans une zone défendue. Il donne un avertissement et un délai de réaction, sans effacer une armée en un clic. |
-| Unité signature | **Guetteur à sarbacane** : inflige un effet de poison fictif qui réduit temporairement l’attaque ou retarde le retour d’une unité. Le Guerrier reste l’infanterie ; l’Archer devient reconnaissance et harcèlement. |
-| Contre-jeu | Les pièges sont en nombre limité et visibles comme menace avant l’impact ; ils ne fonctionnent pas sur chaque raid. Les Roseaux ont peu de protection passive des réserves et ne doivent pas aussi avoir le raid le plus rapide et la meilleure économie. |
+| Unité de base | Combattant de raid peu coûteux, attaque élevée, défense basse. |
+| Unité spécialisée | **Guetteur à sarbacane** : réduit temporairement l’attaque ennemie ou retarde son retour ; ajouter une unité de garnison résistante, plus chère ou plus lente, pour assurer la défense des villages. |
+| Bonus général | **Chenaux trompeurs** : sort qui retarde une expédition ennemie entrant dans une zone défendue, avec effet limité, visible et contrable. Alternative plus simple à tester : coût réduit pour les troupes offensives de base. Ne pas cumuler les deux au lancement. |
+| Contre-jeu | Les effets de contrôle ont des charges/durées limitées et n’annulent jamais une armée entière. Les unités de raid fragiles ne remplacent pas la garnison spécialisée. |
 
-Le bonus actuel de durée de raid devrait être remplacé ou plafonné. La mobilité pourrait plutôt réduire le temps de reconnaissance ou permettre de choisir une route ; accélérer tous les raids nourrit peu la fantasy d’embuscade et peut devenir le meilleur bonus dans tous les styles de jeu.
+Le bonus actuel de durée de raid devrait être comparé au sort ou à la réduction de coût, puis remplacé s’il double le rôle de l’unité de raid. Le bonus de production d’ambre ne fait pas partie de l’identité proposée.
 
 ## Capture et poison : règle de plaisir et d’équité
 
@@ -125,18 +117,18 @@ Cette proposition conserve le plaisir d’avoir piégé un ennemi, mais évite q
 
 ## Architecture et équilibre conseillés
 
-1. **Garder les trois ressources.** Les bâtiments spéciaux réutilisent les coûts et effets existants : stockage, production, déplacement, soins, défense. Une ressource propre à chaque peuple rendrait les échanges et la sauvegarde beaucoup plus lourds.
-2. **Remplacer les bonus génériques plutôt que les empiler.** Une capacité spéciale doit prendre la place d’un multiplicateur ennuyeux ; chaque faction ne doit pas finir avec plus de production, plus de vitesse, plus de défense et plus de butin simultanément.
+1. **Garder les trois ressources.** Les unités spéciales et leurs coûts réutilisent bois, ambre et vivres. Une ressource propre à chaque peuple rendrait les échanges et la sauvegarde beaucoup plus lourds.
+2. **Remplacer les bonus de production plutôt que les empiler.** Donner à chaque peuple un bonus général principal — sort, coût d’un type d’unité ou transport — en plus de ses rôles de troupes ; ne pas ajouter de bonus de récolte.
 3. **Limiter les effets par charges et échéances visibles.** Aucun pouvoir ne doit s’activer chaque minute ni résoudre le combat à la place du joueur. Le jeu hors ligne doit résoudre les charges dans le même ordre que ses autres événements datés.
-4. **Donner un contre-jeu à chaque spécialité.** Cache limitée pour les Sauniers ; charges de barrière finies pour Nacre ; pièges visibles, consommables et contournables pour les Roseaux.
+4. **Donner un contre-jeu à chaque spécialité.** Le transport des Sauniers ne renforce pas leurs combats ; le sort défensif de Nacre a des charges limitées ; les effets des Roseaux sont visibles, consommables et contournables.
 5. **Ne pas rendre la spécialité obligatoire.** Coloniser un refuge paisible, construire le deuxième village et accéder à la progression principale doivent rester possibles avec n’importe quel peuple.
 6. **Mesurer les résultats séparément.** À chaque test, comparer la survie des ressources, pertes évitées, durée des expéditions, nombre de troupes temporairement neutralisées, fréquence de défense et facilité à remonter après une défaite.
 
 ## Ordre de prototypage
 
-**Lot 1 — identité sans nouveau contenu lourd.** Remplacer les trois bonus génériques par une capacité passive chacun ; donner à une unité actuelle son rôle signature ; ajouter une fiche comparative des peuples au choix initial.
+**Lot 1 — identité sans nouveau contenu lourd.** Retirer les bonus de production ; fixer pour chaque peuple une unité de base, ses unités spécialisées offensives et défensives, et un seul bonus général ; ajouter une fiche comparative au choix initial.
 
-**Lot 2 — bâtiments spéciaux.** Introduire un bâtiment par peuple, améliorable comme les bâtiments actuels, avec un effet plafonné et une information visible dans son panneau. Vérifier sauvegardes et colonies avant d’ajouter le second.
+**Lot 2 — unités spécialisées.** Ajouter ou adapter une unité offensive et une défensive par peuple, avec coûts, puissance, transport et rôle visibles dans le rapport de combat. Vérifier les compositions complètes avant d’ajouter d’autres bâtiments de faction.
 
 **Lot 3 — pièges, capture, sièges et chef.** Une fois les combats bot lisibles, ajouter les unités d’appui et la capture temporaire. Le chef de conquête pourra alors attaquer une ville développée avec une résistance de siège et plusieurs tentatives, comme prévu dans le chantier précédent ; ses pertes, son coût énorme, le temps de récupération et le contre-jeu des trois peuples devront être visibles avant départ.
 
