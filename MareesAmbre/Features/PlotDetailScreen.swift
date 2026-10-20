@@ -11,6 +11,15 @@ struct PlotDetailScreen: View {
         guard let job = session.state.construction, job.plot == session.plot else { return nil }
         return job
     }
+    private var detailTitle: String {
+        if mode == .resourceFields {
+            return ResourceSiteKind.at(session.plot)?.name
+                ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")
+        }
+        if let selectedConstruction { return selectedConstruction.kind.name }
+        if let selectedBuilding { return selectedBuilding.name }
+        return String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")
+    }
 
     var body: some View {
         NavigationStack {
@@ -53,7 +62,7 @@ struct PlotDetailScreen: View {
             }
             }
             .background(Palette.ocean.ignoresSafeArea())
-            .navigationTitle(mode == .resourceFields ? String(localized: "screen.plot_detail.upgrade", defaultValue: "Amélioration") : session.state.construction?.plot == session.plot ? (session.state.construction?.kind.name ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")) : (session.state.buildings[session.plot]?.name ?? String(localized: "screen.plot_detail.your_plot", defaultValue: "Votre parcelle")))
+            .navigationTitle(detailTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if !isEmbedded { ToolbarItem(placement: .topBarTrailing) {
