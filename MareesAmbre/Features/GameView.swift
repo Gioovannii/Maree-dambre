@@ -2,6 +2,7 @@ import SwiftUI
 import TipKit
 
 struct GameView: View {
+    @State private var showsBackup = false
     @State private var showsMailbox = ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail")
     @State private var showsShipment = ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
     @State private var showsExpansion = ProcessInfo.processInfo.arguments.contains("--snapshot-expansion") && !ProcessInfo.processInfo.arguments.contains("--snapshot-colony") && !ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
@@ -20,6 +21,7 @@ struct GameView: View {
         GeometryReader { viewport in
             if session.state.people == nil {
                 PrologueView(saveRecoveryMessage: session.saveRecoveryMessage, onChoose: session.choosePeople)
+                    .overlay(alignment: .topTrailing) { backupButton.padding() }
             } else if typeSize.isAccessibilitySize {
                 accessibilityScreen
             } else if showsMailbox {
@@ -44,6 +46,7 @@ struct GameView: View {
             }
         }
         .sheet(isPresented: $showsShipment) { ShipmentView() }
+        .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
         .overlay(alignment: .bottomTrailing) {
@@ -335,6 +338,7 @@ struct GameView: View {
             HStack(spacing: 8) {
                 if !showsMailbox { header } else { Spacer(minLength: 0) }
                 HeroAccessButton()
+                backupButton
             }
             if session.state.settlementCount > 1 {
                 Menu {
@@ -394,6 +398,16 @@ struct GameView: View {
         if showsWorld { return .world }
         if showsMissions { return .missions }
         return villageMap == .resourceFields ? .resources : .town
+    }
+
+    private var backupButton: some View {
+        Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive") {
+            showsBackup = true
+        }
+        .labelStyle(.iconOnly)
+        .frame(minWidth: 44, minHeight: 44)
+        .tint(Palette.amber)
+        .accessibilityIdentifier("backup.open")
     }
 
     private var navigation: some View {

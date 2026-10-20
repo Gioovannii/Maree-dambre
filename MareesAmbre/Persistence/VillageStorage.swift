@@ -3,6 +3,50 @@ import Foundation
 struct VillageStorage {
     var defaults: UserDefaults = .standard
 
+    private struct Transfer: Codable {
+        let format: Int
+        let savedAt: Date
+        let village: VillageState
+    }
+
+    func exportBackup(_ state: VillageState, now: Date = .now) throws -> Data {
+        try JSONEncoder().encode(Transfer(format: 1, savedAt: now, village: state))
+    }
+
+    func validateBackup(_ data: Data, now: Date = .now) throws -> VillageState {
+        guard data.count <= 8_000_000 else { throw CocoaError(.fileReadTooLarge) }
+        let transfer = try JSONDecoder().decode(Transfer.self, from: data)
+        guard transfer.format == 1 else { throw CocoaError(.coderReadCorrupt) }
+        // Run the complete existing migration and validation in isolated storage.
+        // A rejected file must never modify the player's live defaults.
+        let suite = "backup.validation.\(UUID().uuidString)"
+        guard let isolated = UserDefaults(suiteName: suite) else { throw CocoaError(.fileReadUnknown) }
+        defer { isolated.removePersistentDomain(forName: suite) }
+        let temporary = VillageStorage(defaults: isolated)
+        try temporary.save(transfer.village)
+        guard let validated = try temporary.load(seed: transfer.village.seed,
+            world: WorldMap(seed: transfer.village.seed), now: now), validated.people != nil else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        return validated
+    }
+
+    func restoreBackup(_ data: Data, now: Date = .now) throws -> VillageState {
+        let validated = try validateBackup(data, now: now)
+        let encoded = try JSONEncoder().encode(validated)
+        let active = activeSeed(now: now)
+        for seed in Set([active, validated.seed]) {
+            if let previous = defaults.data(forKey: "village.v2.\(seed)") {
+                let recovery = "village.beforeRestore.\(UUID().uuidString)"
+                defaults.set(previous, forKey: recovery)
+                guard defaults.data(forKey: recovery) == previous else { throw CocoaError(.fileWriteUnknown) }
+            }
+        }
+        defaults.set(encoded, forKey: "village.v2.\(validated.seed)")
+        defaults.set(validated.seed, forKey: "village.activeSeed")
+        return validated
+    }
+
     func activeSeed(now: Date = .now) -> Int {
         if defaults.object(forKey: "village.activeSeed") != nil {
             return defaults.integer(forKey: "village.activeSeed")

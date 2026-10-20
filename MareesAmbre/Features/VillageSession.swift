@@ -16,7 +16,7 @@ final class VillageSession {
     }
     private(set) var absenceSummary: AbsenceSummary?
     private(set) var state: VillageState
-    let world: WorldMap
+    private(set) var world: WorldMap
     var plot = VillageMapMode.resourceFields.initialPlot
     var guidedStep: VillageGuideStep?
     var selectedTile = TileCoordinate.home
@@ -534,6 +534,31 @@ final class VillageSession {
     }
 
     func dismissAbsenceSummary() { absenceSummary = nil }
+
+    func exportBackup() throws -> Data {
+        guard !hasUnreadableSave else { throw CocoaError(.coderReadCorrupt) }
+        refreshWorld()
+        return try storage.exportBackup(state)
+    }
+
+    func validateBackup(_ data: Data) throws -> VillageState {
+        try storage.validateBackup(data)
+    }
+
+    func restoreBackup(_ data: Data) throws {
+        let restored = try storage.restoreBackup(data)
+        ConstructionActivityController.end()
+        world = WorldMap(seed: restored.seed)
+        state = restored
+        hasUnreadableSave = false
+        absenceSummary = nil
+        guidedStep = nil
+        pendingBuilding = nil
+        moveSourcePlot = nil
+        plot = VillageMapMode.resourceFields.initialPlot
+        selectedTile = restored.location
+        refreshWorld()
+    }
 
     func refreshAfterSceneChange() { refreshWorld() }
 }

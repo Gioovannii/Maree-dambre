@@ -30,6 +30,25 @@ extension DomainChecks {
         base.army = ArmyState(units: [.tideguard: 20, .tideMage: 2, .pillager: 4],
             unlockedUnits: [.tideguard, .tideMage, .pillager])
 
+        let backup = try storage.exportBackup(base, now: now)
+        var previousDevice = VillageState(seed: 43)
+        previousDevice.people = .nacre
+        try storage.save(previousDevice)
+        _ = try storage.validateBackup(backup, now: now)
+        precondition(storage.activeSeed(now: now) == 43, "Preview must not replace the active save")
+        do {
+            _ = try storage.restoreBackup(Data("invalid".utf8), now: now)
+            preconditionFailure("Corrupt backups must be rejected")
+        } catch {}
+        precondition(storage.activeSeed(now: now) == 43)
+        let imported = try storage.restoreBackup(backup, now: now)
+        precondition(imported.seed == 42 && imported.availableArmy == base.availableArmy)
+        precondition(storage.activeSeed(now: now) == 42)
+        precondition(defaults.dictionaryRepresentation().keys.contains { $0.hasPrefix("village.beforeRestore.") },
+            "Restoring a backup must retain the old device save")
+        let reloadedBackup = try storage.load(seed: 42, world: world, now: now)
+        precondition(reloadedBackup == imported)
+
         let invalidSelections: [[ArmyUnit: Int]] = [[:], [.tideguard: 0], [.tideguard: -1],
             [.tideguard: 21], [.tideguard: Int.max], [.tideguard: Int.min],
             [.marshArcher: 1], [.tideguard: 2, .tideMage: -1]]
