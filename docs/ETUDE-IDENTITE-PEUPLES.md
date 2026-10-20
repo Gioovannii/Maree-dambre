@@ -18,7 +18,7 @@ Les propositions réutilisent bois, ambre et vivres. Elles n’ajoutent pas une 
 ## État actuel dans le jeu
 
 | Peuple | Bonus actuels | Unités actuelles | Identité déjà amorcée |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | Sauniers, humains | +20 % de transport, +10 % de production de bois | Lancier, Pillard | Logistique et économie |
 | Gardiens de Nacre, amphibies | Le Mage des marées réduit les pertes de victoire ; petit bonus défensif | Gardien, Mage des marées | Protection |
 | Elfes des Roseaux | Raids plus courts, +10 % d’ambre | Guerrier, Archer | Mobilité |
@@ -37,17 +37,19 @@ Le choix initial doit permettre au joueur de répondre à deux questions simples
 
 ### Une différence visible dans les armées
 
-Le style doit aussi se lire dans les troupes avant même de choisir une cible. L’orientation souhaitée est un compromis **coût ↔ profil de combat** : l’armée offensive est abordable et frappe fort, mais protège mal son village ; l’armée défensive encaisse et garde le terrain, mais attaque peu ; l’armée équilibrée apporte des profils polyvalents au prix d’un recrutement plus coûteux.
+Le style doit se lire dans les **unités de base** et dans le coût relatif de leur recrutement, mais il ne doit pas supprimer des rôles entiers de l’armée. Un peuple offensif garde des unités spécialisées pour défendre son village ; un peuple défensif peut quand même mener une attaque. La spécialité décrit le meilleur rendement et le coût, pas ce que le joueur a le droit de faire.
 
-| Peuple | Profil des troupes | Coût relatif visé | Conséquence de jeu |
+| Peuple | Unité de base | Unités spécialisées à préserver | Coût relatif visé | Conséquence de jeu |
 | --- | --- | --- | --- |
-| **Elfes des Roseaux — offensif** | Attaque élevée, défense basse, mobilité ou reconnaissance utile | Faible à modéré | Remplacer et lever une force de raid est accessible ; une armée laissée en défense ou envoyée contre une garnison préparée risque de lourdes pertes. |
-| **Gardiens de Nacre — défensif** | Défense élevée, attaque basse, soutien et protection des survivants | Modéré | Ils tiennent mieux leur village et amortissent les assauts, mais progressent lentement en conquête et pillent moins efficacement. |
-| **Sauniers — équilibré** | Attaque et défense moyennes, transport/logistique fiables, sans statistique dominante | Élevé | Chaque unité est plus chère, mais elle peut servir dans plusieurs situations ; il faut choisir quand engager une armée polyvalente. |
+| **Elfes des Roseaux — offensif** | Soldat courant peu coûteux, attaque élevée, défense faible ; adapté aux raids | Une unité de garnison résistante, plus chère ou plus lente, et des pièges préparés | Base faible à modéré ; défense spécialisée plus coûteuse | Les raids sont accessibles, mais il faut investir dans la garnison et éviter de laisser la troupe de base encaisser seule les contre-attaques. |
+| **Gardiens de Nacre — défensif** | Combattant de base robuste, attaque basse à moyenne | Une unité d’assaut ou de siège pour attaquer efficacement, et des unités de soutien | Base modéré ; unités d’assaut plus coûteuses | Ils défendent avec efficacité, mais une campagne offensive demande un investissement spécialisé et une préparation plus longue. |
+| **Sauniers — équilibré** | Combattant polyvalent, attaque et défense moyennes | Transporteurs spécialisés et, si utile, une unité dédiée au siège ou à la garnison | Base élevé | Une même armée s’adapte à davantage de situations, mais chaque perte coûte cher et le joueur doit choisir où l’engager. |
 
-« Peu coûteux » ne doit pas signifier « gratuit à perdre » : les Roseaux paient leur avantage par une faible défense et une vulnérabilité en cas de contre-attaque. De même, le prix élevé des Sauniers doit acheter de la polyvalence, pas une supériorité générale. Le profil défensif des Nacrés doit réduire les pertes sans rendre leurs villages imprenables. Comparer le coût total de recrutement et de remplacement, les pertes attendues, le temps de trajet et le butin ; ne pas équilibrer uniquement le coût d’une unité isolée.
+La règle de conception est donc : **chaque peuple dispose d’une défense crédible et d’une option offensive**, mais les coûts et l’efficacité diffèrent. Le joueur offensif n’est jamais condamné à regarder son village tomber faute d’unité défensive ; il doit seulement consacrer davantage de ressources ou de places de garnison à cette protection. Le défenseur peut attaquer en recrutant ses unités d’assaut, mais elles sont moins rentables ou plus coûteuses pour lui.
 
-L’écran de choix devrait afficher ces compromis avec un aperçu simple **Attaque / Défense / Coût**, accompagné d’une phrase sans jargon : « frappe fort mais défend mal », « protège le village mais attaque peu », « polyvalent mais cher ». Les trois peuples doivent conserver au moins une composition viable en attaque comme en défense, même si leur rendement diffère.
+« Peu coûteux » ne doit pas signifier « gratuit à perdre ». Le prix élevé des Sauniers doit acheter de la polyvalence, pas une supériorité générale. La défense des Nacrés doit réduire les pertes sans rendre leurs villages imprenables. Comparer le coût d’une composition complète, son remplacement après pertes, le temps de trajet et le butin ; ne pas équilibrer uniquement le coût d’une unité isolée.
+
+L’écran de choix devrait afficher le profil de l’unité de base (**Attaque / Défense / Coût**) et signaler les unités spécialisées disponibles, accompagné d’une phrase sans jargon : « base offensive, défense spécialisée disponible », « base résistante, assaut spécialisé disponible », « polyvalent, recrutement coûteux ». Les trois peuples doivent conserver au moins une composition viable en attaque comme en défense, même si leur rendement diffère.
 
 Ce classement est une **recommandation de fantasy et de rythme**, pas une restriction : les trois peuples doivent pouvoir attaquer, se défendre, fonder des villages et terminer la campagne. Un joueur peu disponible peut jouer offensif à son rythme ; il ne doit simplement pas être forcé de répondre à une fenêtre de quelques minutes. Une faction défensive ne doit pas être le seul choix viable pour quelqu’un qui s’absente.
 
