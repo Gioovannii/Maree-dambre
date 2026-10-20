@@ -116,54 +116,29 @@ struct GameView: View {
 
     private var tabletScreen: some View {
         GeometryReader { geometry in
-            HStack(spacing: 0) {
-                Group {
-                    if showsWorld {
+            Group {
+                if geometry.size.width > geometry.size.height {
+                    HStack(spacing: 0) {
+                        tabletPrimaryContent(size: geometry.size)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        tabletInspector
+                            .frame(width: tabletSidebarWidth(in: geometry.size))
+                    }
+                } else {
+                    VStack(spacing: 0) {
+                        tabletPrimaryContent(size: geometry.size)
+                            .frame(height: tabletPrimaryHeight(in: geometry.size))
+                        Rectangle()
+                            .fill(Palette.amber.opacity(0.4))
+                            .frame(height: 1)
+                            .accessibilityHidden(true)
                         ScrollView {
-                            WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 500, showsSelection: false)
-                                .padding(20)
+                            tabletInspector
+                                .frame(maxWidth: .infinity, alignment: .top)
                         }
-                    } else if showsMissions {
-                        ScrollView {
-                            MissionsPanel()
-                                .padding(20)
-                        }
-                    } else {
-                        VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
-                                     onPlotSelected: {},
-                                     onTownSelected: { selectVillageMap(.townCenter) },
-                                     preservesMapProportions: true)
-                            .id(villageMap)
+                        .scrollIndicators(.hidden)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
-
-                VStack(spacing: 12) {
-                    topControls.padding(.horizontal, 12)
-                    navigation.padding(.horizontal, 12)
-                    constructionStatus.padding(.horizontal, 12)
-                    if showsWorld {
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 16) {
-                                WorldSelectionPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions)
-                                WorldClockStatus()
-                            }
-                            .padding(20)
-                        }
-                    } else if showsMissions {
-                        ScrollView {
-                            WorldClockStatus()
-                                .padding(20)
-                        }
-                    } else {
-                        PlotDetailScreen(mode: villageMap, isEmbedded: true)
-                            .id(villageMap)
-                    }
-                }
-                .padding(.top, 12)
-                .frame(width: tabletSidebarWidth(in: geometry.size))
-                .background(Palette.ocean)
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .background(Palette.ocean.ignoresSafeArea())
@@ -171,7 +146,72 @@ struct GameView: View {
             .onAppear {
                 session.plot = villageMap == .resourceFields ? selectedResourcePlot : selectedTownPlot
             }
+        }
+    }
+
+    @ViewBuilder
+    private func tabletPrimaryContent(size: CGSize) -> some View {
+        if showsWorld {
+            ScrollView {
+                WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) },
+                           onShowMissions: showMissions,
+                           mapHeight: tabletWorldMapHeight(in: size),
+                           showsSelection: false)
+                    .padding(20)
             }
+            .scrollIndicators(.hidden)
+        } else if showsMissions {
+            ScrollView {
+                MissionsPanel()
+                    .padding(20)
+            }
+            .scrollIndicators(.hidden)
+        } else {
+            VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                         onPlotSelected: {},
+                         onTownSelected: { selectVillageMap(.townCenter) },
+                         preservesMapProportions: true)
+                .id(villageMap)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+        }
+    }
+
+    private var tabletInspector: some View {
+        VStack(spacing: 12) {
+            topControls.padding(.horizontal, 12)
+            navigation.padding(.horizontal, 12)
+            constructionStatus.padding(.horizontal, 12)
+            if showsWorld {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        WorldSelectionPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions)
+                        WorldClockStatus()
+                    }
+                    .padding(20)
+                }
+            } else if showsMissions {
+                WorldClockStatus()
+                    .padding(20)
+            } else {
+                PlotDetailScreen(mode: villageMap, isEmbedded: true)
+                    .id(villageMap)
+            }
+        }
+        .padding(.top, 12)
+        .background(Palette.ocean)
+    }
+
+    private func tabletPrimaryHeight(in size: CGSize) -> CGFloat {
+        min(700, max(480, size.height * 0.54))
+    }
+
+    private func tabletWorldMapHeight(in size: CGSize) -> CGFloat {
+        if size.width > size.height {
+            min(700, max(420, size.height - 120))
+        } else {
+            min(620, max(420, size.width * 0.72))
+        }
     }
 
     private func tabletSidebarWidth(in size: CGSize) -> CGFloat {
