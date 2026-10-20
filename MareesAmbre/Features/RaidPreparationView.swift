@@ -14,6 +14,7 @@ struct RaidPreparationView: View {
         Dictionary(uniqueKeysWithValues: selections.filter { $0.count > 0 }.map { ($0.unit, $0.count) })
     }
     private var deployedCount: Int { deployed.values.reduce(0, +) }
+    private var totalAvailableCount: Int { session.state.availableArmy.values.reduce(0, +) }
     private var remainingCount: Int { session.state.availableArmy.values.reduce(0, +) - deployedCount }
     private var remainingUnits: [ArmyUnit: Int] {
         session.state.availableArmy.reduce(into: [:]) { result, entry in
@@ -34,7 +35,13 @@ struct RaidPreparationView: View {
                 }
                 .listRowBackground(Palette.panel)
                 Section(String(localized: "screen.raid.choose_units", defaultValue: "Choisir les troupes")) {
-                    Button(String(localized: "screen.raid.select_all", defaultValue: "Tout sélectionner"), systemImage: "checkmark.circle", action: selectAll)
+                    Button(action: selectAll) {
+                        Label {
+                            Text("Sélectionner toute l’armée · \(totalAvailableCount)")
+                        } icon: {
+                            Image(systemName: "checkmark.circle")
+                        }
+                    }
                         .accessibilityIdentifier("raid.selectAll")
                     Button(String(localized: "screen.raid.keep_half", defaultValue: "Garder la moitié au village"), systemImage: "shield", action: selectHalf)
                         .accessibilityIdentifier("raid.keepHalf")

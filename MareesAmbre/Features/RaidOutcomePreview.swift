@@ -6,10 +6,18 @@ struct RaidOutcomePreview: View {
     @Environment(VillageSession.self) private var session
 
     var body: some View {
-        Text(session.state.armyPower(for: units) > defense
-             ? String(localized: "screen.army.victory_with_support", defaultValue: "Victoire prévue. Pertes : \(String(session.state.victoryLossRate(for: units).formatted(.percent.precision(.fractionLength(0))))) arrondies à l’entier inférieur par type. Butin : jusqu’à \(String(session.state.raidLootLimit)) de chaque ressource, selon le transport des survivants et la place en réserve.")
-             : String(localized: "screen.army.defeat_with_support", defaultValue: "Défaite prévue. Pertes : \(String(session.state.defeatLossRate.formatted(.percent.precision(.fractionLength(0))))) arrondies à l’entier supérieur par type. Aucun butin."))
-            .font(.footnote)
-            .accessibilityIdentifier("raid.outcome")
+        let won = session.state.armyPower(for: units) > defense
+        let rate = won ? session.state.victoryLossRate(for: units) : session.state.defeatLossRate
+        let losses = RaidOrder.casualties(units: units, rate: rate, roundUp: !won).values.reduce(0, +)
+        VStack(alignment: .leading, spacing: 4) {
+            Text(won ? "Victoire prévue · \(losses) perte(s) sur \(units.values.reduce(0, +)) troupes." : "Défaite prévue · \(losses) perte(s) sur \(units.values.reduce(0, +)) troupes. Aucun butin.")
+            if won {
+                Text("Butin : jusqu’à \(session.state.raidLootLimit) de chaque ressource, selon le transport des survivants et la place en réserve.")
+            }
+            Text("Les pertes sont calculées sur toute l’armée, pas arrondies séparément pour chaque type d’unité.")
+                .foregroundStyle(Palette.muted)
+        }
+        .font(.footnote)
+        .accessibilityIdentifier("raid.outcome")
     }
 }

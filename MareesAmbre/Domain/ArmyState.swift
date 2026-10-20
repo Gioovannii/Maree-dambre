@@ -188,15 +188,15 @@ extension VillageState {
         if let raid = troops.raid, now >= raid.returnsAt {
             let power = raid.attackPower
             let won = power > raid.defense
-            var losses = 0
-            var lossesByUnit: [ArmyUnit: Int] = [:]
+            let victoryRate = raid.victoryLossRate ?? (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)
+            let defeatRate = raid.defeatLossRate ?? 0.5
+            let lossesByUnit = RaidOrder.casualties(units: raid.units,
+                                                     rate: won ? victoryRate : defeatRate,
+                                                     roundUp: !won)
+            let losses = lossesByUnit.values.reduce(0, +)
             var capacity = 0
             for (unit, count) in raid.units {
-                let victoryRate = raid.victoryLossRate ?? (raid.units[.tideMage, default: 0] > 0 ? 0.15 : 0.2)
-                let lost = won ? min(count, max(0, Int(floor(Double(count) * victoryRate + 1e-9))))
-                    : min(count, Int(ceil(Double(count) * (raid.defeatLossRate ?? 0.5) - 1e-9)))
-                losses += lost
-                if lost > 0 { lossesByUnit[unit] = lost }
+                let lost = lossesByUnit[unit, default: 0]
                 troops.units[unit, default: 0] += count - lost
                 capacity += (count - lost) * unit.carrying
             }

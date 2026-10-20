@@ -23,6 +23,14 @@ extension DomainChecks {
             precondition(!invalid.raid(targetID: 0, units: selection, now: now))
             precondition(invalid == base, "Invalid selections cannot consume troops or start a cooldown")
         }
+        let mixedSmallForce: [ArmyUnit: Int] = [.tideguard: 1, .pillager: 1, .tideMage: 1, .marshArcher: 1]
+        let mixedDefeatLosses = RaidOrder.casualties(units: mixedSmallForce, rate: 0.5, roundUp: true)
+        precondition(mixedDefeatLosses.values.reduce(0, +) == 2,
+            "Defeat losses round once across the whole force instead of wiping every small unit type")
+        precondition(mixedDefeatLosses.values.allSatisfy { $0 <= 1 },
+            "A small mixed force should not lose multiple copies of a type it only sent once")
+        precondition(RaidOrder.casualties(units: mixedSmallForce, rate: 0.2, roundUp: false).isEmpty,
+            "Victory loss rounding applies to the total force, not each unit type")
         var unknown = base
         precondition(!unknown.raid(targetID: 99, units: [.tideguard: 2], now: now) && unknown == base)
 
