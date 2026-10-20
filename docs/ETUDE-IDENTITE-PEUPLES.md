@@ -35,6 +35,20 @@ Le choix initial doit permettre au joueur de répondre à deux questions simples
 | **Défensif** | Gardiens de Nacre | Espacé, pour les joueurs qui préfèrent préparer leur village et lire les rapports ensuite | Renforcer les barrières, répartir la garnison et décider quelles pertes éviter | Les protections chargées se déclenchent selon leurs règles visibles ; la récupération ne réclame pas de connexion immédiate |
 | **Équilibré** | Sauniers | Flexible, pour les joueurs qui alternent développement, raids, transport et colonies | Choisir quand convertir ses réserves en armée, en amélioration ou en convoi | Les productions et trajets continuent selon les horloges normales du jeu, sans action de surveillance |
 
+### Une différence visible dans les armées
+
+Le style doit aussi se lire dans les troupes avant même de choisir une cible. L’orientation souhaitée est un compromis **coût ↔ profil de combat** : l’armée offensive est abordable et frappe fort, mais protège mal son village ; l’armée défensive encaisse et garde le terrain, mais attaque peu ; l’armée équilibrée apporte des profils polyvalents au prix d’un recrutement plus coûteux.
+
+| Peuple | Profil des troupes | Coût relatif visé | Conséquence de jeu |
+| --- | --- | --- | --- |
+| **Elfes des Roseaux — offensif** | Attaque élevée, défense basse, mobilité ou reconnaissance utile | Faible à modéré | Remplacer et lever une force de raid est accessible ; une armée laissée en défense ou envoyée contre une garnison préparée risque de lourdes pertes. |
+| **Gardiens de Nacre — défensif** | Défense élevée, attaque basse, soutien et protection des survivants | Modéré | Ils tiennent mieux leur village et amortissent les assauts, mais progressent lentement en conquête et pillent moins efficacement. |
+| **Sauniers — équilibré** | Attaque et défense moyennes, transport/logistique fiables, sans statistique dominante | Élevé | Chaque unité est plus chère, mais elle peut servir dans plusieurs situations ; il faut choisir quand engager une armée polyvalente. |
+
+« Peu coûteux » ne doit pas signifier « gratuit à perdre » : les Roseaux paient leur avantage par une faible défense et une vulnérabilité en cas de contre-attaque. De même, le prix élevé des Sauniers doit acheter de la polyvalence, pas une supériorité générale. Le profil défensif des Nacrés doit réduire les pertes sans rendre leurs villages imprenables. Comparer le coût total de recrutement et de remplacement, les pertes attendues, le temps de trajet et le butin ; ne pas équilibrer uniquement le coût d’une unité isolée.
+
+L’écran de choix devrait afficher ces compromis avec un aperçu simple **Attaque / Défense / Coût**, accompagné d’une phrase sans jargon : « frappe fort mais défend mal », « protège le village mais attaque peu », « polyvalent mais cher ». Les trois peuples doivent conserver au moins une composition viable en attaque comme en défense, même si leur rendement diffère.
+
 Ce classement est une **recommandation de fantasy et de rythme**, pas une restriction : les trois peuples doivent pouvoir attaquer, se défendre, fonder des villages et terminer la campagne. Un joueur peu disponible peut jouer offensif à son rythme ; il ne doit simplement pas être forcé de répondre à une fenêtre de quelques minutes. Une faction défensive ne doit pas être le seul choix viable pour quelqu’un qui s’absente.
 
 Pour rendre ce choix compréhensible dans l’écran de sélection, afficher pour chaque peuple une phrase de style, un indicateur de rythme (**espacé / flexible / soutenu**) et un exemple d’action. Éviter une note ambiguë du type « difficulté : 3/5 » et ne pas présenter le peuple défensif comme le choix pour les débutants.
