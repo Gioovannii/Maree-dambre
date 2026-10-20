@@ -28,8 +28,8 @@ struct ArmyState: Codable, Equatable {
                   raid.units.values.allSatisfy({ (0...100).contains($0) }),
                   raid.units.values.reduce(0, +) > 0 else { return false }
             guard (0...3).contains(raid.attackUpgrade ?? 0),
-                  (0.01...0.2).contains(raid.victoryLossRate ?? 0.2),
-                  (0.2...0.5).contains(raid.defeatLossRate ?? 0.5),
+                  (0...0.2).contains(raid.victoryLossRate ?? 0.2),
+                  (0.2...0.8).contains(raid.defeatLossRate ?? 0.5),
                   (0...90).contains(raid.transportBonusPercent ?? 0),
                   (60...270).contains(raid.lootLimit ?? 60) else { return false }
             if let levels = raid.weaponLevels {
@@ -159,9 +159,17 @@ extension VillageState {
         let deployed = (units ?? availableArmy).filter { $0.value > 0 }
         var troops = army ?? ArmyState()
         let duration = raidDuration(to: bot)
+        let attackPower = armyPower(for: deployed)
+        let defense = 10 + min(10, bot.level) * 4
+        let victorySupport = victoryLossRate(for: deployed) / 0.2
+        let defeatSupport = defeatLossRate / 0.5
         troops.raid = RaidOrder(targetID: bot.id, targetName: bot.pseudonym(seed: seed), units: deployed,
-                               defense: 10 + min(10, bot.level) * 4, returnsAt: now.addingTimeInterval(duration),
-                               attackUpgrade: weaponLevel, victoryLossRate: victoryLossRate(for: deployed), defeatLossRate: defeatLossRate,
+                               defense: defense, returnsAt: now.addingTimeInterval(duration),
+                               attackUpgrade: weaponLevel,
+                               victoryLossRate: RaidOrder.casualtyRate(attackPower: attackPower, defense: defense,
+                                                                      won: true, supportMultiplier: victorySupport),
+                               defeatLossRate: RaidOrder.casualtyRate(attackPower: attackPower, defense: defense,
+                                                                     won: false, supportMultiplier: defeatSupport),
                                transportBonusPercent: transportBonusPercent, lootLimit: raidLootLimit,
                                weaponLevels: Dictionary(uniqueKeysWithValues: deployed.keys.map { ($0, weaponLevel(for: $0)) }))
         for (unit, count) in deployed {

@@ -31,6 +31,13 @@ extension DomainChecks {
             "A small mixed force should not lose multiple copies of a type it only sent once")
         precondition(RaidOrder.casualties(units: mixedSmallForce, rate: 0.2, roundUp: false).isEmpty,
             "Victory loss rounding applies to the total force, not each unit type")
+        precondition(RaidOrder.casualtyRate(attackPower: 200, defense: 40, won: true) == 0,
+            "An overwhelmingly strong raid should not lose troops to a fixed victory tax")
+        precondition(abs(RaidOrder.casualtyRate(attackPower: 80, defense: 50, won: true) - 0.16) < 0.0001,
+            "A close victory should still carry some risk")
+        precondition(RaidOrder.casualtyRate(attackPower: 10, defense: 50, won: false)
+            > RaidOrder.casualtyRate(attackPower: 40, defense: 50, won: false),
+            "Being heavily outmatched should cost more than a narrow defeat")
         var unknown = base
         precondition(!unknown.raid(targetID: 99, units: [.tideguard: 2], now: now) && unknown == base)
 
@@ -39,7 +46,7 @@ extension DomainChecks {
         precondition(partial.raid(targetID: 0, units: [.tideguard: 8, .tideMage: 0], now: now))
         precondition(partial.army?.raid?.units == [.tideguard: 8])
         precondition(partial.availableArmy == [.tideguard: 12, .tideMage: 2, .pillager: 4])
-        precondition(partial.army?.raid?.victoryLossRate == 0.2, "A mage at home cannot protect the expedition")
+        precondition(partial.army?.raid?.victoryLossRate == 0, "A decisive raid should have no fixed casualty tax")
         precondition(partial.army?.isValid == true)
         let underway = partial
         precondition(!partial.raid(targetID: 1, units: [.tideguard: 2], now: now) && partial == underway)
@@ -49,8 +56,8 @@ extension DomainChecks {
         partial.updateArmy(now: now.addingTimeInterval(119))
         precondition(partial.army?.raid != nil && partial.availableArmy == underway.availableArmy)
         partial.updateArmy(now: now.addingTimeInterval(120))
-        precondition(partial.availableArmy == [.tideguard: 19, .tideMage: 2, .pillager: 4])
-        precondition(partial.resources == Resources(wood: 42, amber: 42, provisions: 42),
+        precondition(partial.availableArmy == [.tideguard: 20, .tideMage: 2, .pillager: 4])
+        precondition(partial.resources == Resources(wood: 48, amber: 48, provisions: 48),
             "Only expedition survivors carry loot; the garrison adds no capacity")
         let returned = partial
         partial.updateArmy(now: now.addingTimeInterval(121))
@@ -61,16 +68,19 @@ extension DomainChecks {
                 var supported = base
                 if infirmary { supported.buildings[10] = .infirmary }
                 let selection: [ArmyUnit: Int] = sendsMage ? [.tideguard: 10, .tideMage: 1] : [.tideguard: 10]
-                let expected = infirmary ? (sendsMage ? 0.05 : 0.1) : (sendsMage ? 0.15 : 0.2)
-                precondition(supported.victoryLossRate(for: selection) == expected)
+                let supportRate = infirmary ? (sendsMage ? 0.05 : 0.1) : (sendsMage ? 0.15 : 0.2)
+                let expected = RaidOrder.casualtyRate(attackPower: supported.armyPower(for: selection),
+                    defense: 50, won: true, supportMultiplier: supportRate / 0.2)
+                supported.bots[0].level = 10
+                precondition(supported.victoryLossRate(for: selection) == supportRate)
                 precondition(supported.raid(targetID: 0, units: selection, now: now))
                 precondition(supported.army?.raid?.victoryLossRate == expected)
                 try storage.save(supported)
                 supported = try storage.load(seed: 42, world: world, now: now)!
                 supported.buildings = [12: .hall]
                 supported.updateArmy(now: now.addingTimeInterval(120))
-                let losses = infirmary ? (sendsMage ? 0 : 1) : (sendsMage ? 1 : 2)
-                precondition(supported.availableArmy[.tideguard] == 20 - losses)
+                let losses = RaidOrder.casualties(units: selection, rate: expected, roundUp: false)
+                precondition(supported.availableArmy[.tideguard] == 20 - losses[.tideguard, default: 0])
                 precondition(supported.availableArmy[.tideMage] == 2)
             }
         }
@@ -90,7 +100,8 @@ extension DomainChecks {
         precondition(capacity.availableArmy[.tideguard] == 40 && capacity.army?.isValid == true)
         precondition(!capacity.canTrain(.tideguard, count: 1), "The cap includes deployed troops")
         capacity.updateArmy(now: now.addingTimeInterval(120))
-        precondition(capacity.availableArmy[.tideguard] == 88 && capacity.canTrain(.tideguard, count: 12))
+        precondition(capacity.availableArmy[.tideguard] == 100 && !capacity.canTrain(.tideguard, count: 1),
+            "A decisive raid preserves the full force and does not create artificial training capacity")
 
         var all = base
         precondition(all.raid(targetID: 0, now: now))

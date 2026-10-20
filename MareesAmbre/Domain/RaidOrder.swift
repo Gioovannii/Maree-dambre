@@ -1,6 +1,19 @@
 import Foundation
 
 struct RaidOrder: Codable, Equatable {
+    static func casualtyRate(attackPower: Int, defense: Int, won: Bool, supportMultiplier: Double = 1) -> Double {
+        let ratio = Double(max(0, attackPower)) / Double(max(1, defense))
+        let baseRate: Double
+        if won {
+            // A decisive victory is clean; losses rise smoothly as the battle gets close.
+            baseRate = min(0.2, max(0, 0.2 * (4 - ratio) / 3))
+        } else {
+            // A narrow defeat hurts less than sending a force into overwhelming defenses.
+            baseRate = min(0.8, 0.2 + max(0, 1 - ratio) * 0.6)
+        }
+        return min(0.8, max(0, baseRate * min(1, max(0, supportMultiplier))))
+    }
+
     static func casualties(units: [ArmyUnit: Int], rate: Double, roundUp: Bool) -> [ArmyUnit: Int] {
         let counts = units.filter { $0.value > 0 }
         let total = counts.values.reduce(0, +)

@@ -9,9 +9,9 @@ struct ExpeditionSupportPanel: View {
             Text(String(localized: "screen.expedition_support.next_raids", defaultValue: "Prochaines expéditions"))
                 .font(.title2.bold())
             if kind == .infirmary {
-                LabeledContent(String(localized: "screen.expedition_support.victory_losses", defaultValue: "Pertes en victoire"), value: session.state.victoryLossRate.formatted(.percent))
-                LabeledContent(String(localized: "screen.expedition_support.defeat_losses", defaultValue: "Pertes en défaite"), value: session.state.defeatLossRate.formatted(.percent))
-                Text(String(localized: "screen.expedition_support.rounding", defaultValue: "En victoire, les pertes sont arrondies à l’entier inférieur par type d’unité ; en défaite, à l’entier supérieur. Un mage réduit encore les pertes en victoire."))
+                LabeledContent(String(localized: "screen.expedition_support.victory_losses", defaultValue: "Pertes en victoire serrée"), value: session.state.victoryLossRate.formatted(.percent))
+                LabeledContent(String(localized: "screen.expedition_support.defeat_losses", defaultValue: "Pertes en défaite serrée"), value: session.state.defeatLossRate.formatted(.percent))
+                Text(String(localized: "screen.expedition_support.losses_follow_power_ratio", defaultValue: "Ces taux servent de base aux combats serrés. Plus ta force dépasse la défense, plus tes pertes diminuent ; une victoire écrasante peut ne coûter aucune troupe. Les pertes sont arrondies sur toute l’armée."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             } else {
                 LabeledContent(String(localized: "screen.expedition_support.transport", defaultValue: "Bonus de transport total"), value: (Double(session.state.transportBonusPercent) / 100).formatted(.percent))
