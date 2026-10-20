@@ -115,60 +115,68 @@ struct GameView: View {
     }
 
     private var tabletScreen: some View {
-        HStack(spacing: 0) {
-            Group {
-                if showsWorld {
-                    ScrollView {
-                        WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 500, showsSelection: false)
-                            .padding(20)
-                    }
-                } else if showsMissions {
-                    ScrollView {
-                        MissionsPanel()
-                            .padding(20)
-                    }
-                } else {
-                    VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
-                                 onPlotSelected: {},
-                                 onTownSelected: { selectVillageMap(.townCenter) },
-                                 preservesMapProportions: true)
-                        .id(villageMap)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .clipped()
-
-            VStack(spacing: 12) {
-                topControls.padding(.horizontal, 12)
-                navigation.padding(.horizontal, 12)
-                constructionStatus.padding(.horizontal, 12)
-                if showsWorld {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 16) {
-                            WorldSelectionPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions)
-                            WorldClockStatus()
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                Group {
+                    if showsWorld {
+                        ScrollView {
+                            WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 500, showsSelection: false)
+                                .padding(20)
                         }
-                        .padding(20)
+                    } else if showsMissions {
+                        ScrollView {
+                            MissionsPanel()
+                                .padding(20)
+                        }
+                    } else {
+                        VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                                     onPlotSelected: {},
+                                     onTownSelected: { selectVillageMap(.townCenter) },
+                                     preservesMapProportions: true)
+                            .id(villageMap)
                     }
-                } else if showsMissions {
-                    ScrollView {
-                        WorldClockStatus()
-                            .padding(20)
-                    }
-                } else {
-                    PlotDetailScreen(mode: villageMap, isEmbedded: true)
-                        .id(villageMap)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+
+                VStack(spacing: 12) {
+                    topControls.padding(.horizontal, 12)
+                    navigation.padding(.horizontal, 12)
+                    constructionStatus.padding(.horizontal, 12)
+                    if showsWorld {
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 16) {
+                                WorldSelectionPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions)
+                                WorldClockStatus()
+                            }
+                            .padding(20)
+                        }
+                    } else if showsMissions {
+                        ScrollView {
+                            WorldClockStatus()
+                                .padding(20)
+                        }
+                    } else {
+                        PlotDetailScreen(mode: villageMap, isEmbedded: true)
+                            .id(villageMap)
+                    }
+                }
+                .padding(.top, 12)
+                .frame(width: tabletSidebarWidth(in: geometry.size))
+                .background(Palette.ocean)
             }
-            .padding(.top, 12)
-            .frame(width: 350)
-            .background(Palette.ocean)
-        }
-        .background(Palette.ocean.ignoresSafeArea())
-        .foregroundStyle(Palette.paper)
-        .onAppear {
-            session.plot = villageMap == .resourceFields ? selectedResourcePlot : selectedTownPlot
-        }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .background(Palette.ocean.ignoresSafeArea())
+            .foregroundStyle(Palette.paper)
+            .onAppear {
+                session.plot = villageMap == .resourceFields ? selectedResourcePlot : selectedTownPlot
+            }
+            }
+    }
+
+    private func tabletSidebarWidth(in size: CGSize) -> CGFloat {
+        let preferred: CGFloat = size.width > size.height ? 400 : 350
+        return min(preferred, max(320, size.width * 0.42))
     }
 
     private var villageScreen: some View {
