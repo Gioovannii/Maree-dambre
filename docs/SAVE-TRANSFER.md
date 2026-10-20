@@ -16,7 +16,35 @@ with the incoming seed, and installs the imported domain. Copies are retained in
 local defaults under `village.beforeRestore.*`; there is no recovery browser yet.
 Offline progress then follows the same chronological processing as a normal launch.
 
-Cloud synchronization, conflict selection, and recovery of a save from an erased
-device remain separate work. Signing into the same Apple account does not currently
-download progress. The backup must be exported from an installation that still
-contains the desired game.
+## Private iCloud snapshots
+
+The backup sheet can explicitly upload and restore a CloudKit snapshot using the
+device's iCloud account. No Game Center login is used. Upload requires a successful
+refresh, confirmation, and an unchanged server record change tag. A concurrent
+write or uncertain response disables further uploads until another refresh.
+Restoring uses the same isolated validation and local recovery-copy flow as files.
+No automatic upload, local replacement, or game-state merge occurs.
+
+Container: `iCloud.com.giovanni.mareesambre`, private default database.
+Record type: `DomainBackup`; record ID: `current-domain`; field `snapshot`: Asset.
+Only the app target needs CloudKit entitlements; the widget remains local.
+
+Before TestFlight use, ensure this record type and Asset field exist in the
+container's development schema, then deploy the schema to Production in CloudKit
+Console. Development and Production backups are separate. A successful signed
+build verifies signing, not availability of the Production schema or end-to-end
+transfer. Do not claim cloud recovery is verified until the following passes:
+
+1. On iPhone, upload a known domain and check success and its timestamp.
+2. On iPad with the same iCloud account, refresh, restore and compare villages,
+   armies, hero, mailbox and in-flight jobs; relaunch both devices.
+3. Refresh on both devices, upload a changed game on one, then upload on the
+   other without refreshing. The stale upload must fail rather than overwrite.
+4. Test signed-out iCloud, no connection and a corrupt snapshot. Local progress
+   must remain intact, and file export/import must stay available.
+
+Automatic synchronization and recovery from an erased device without a previously
+uploaded snapshot remain separate work. Existing TestFlight builds cannot upload
+their progress until updated to a build containing this feature.
+
+Reference: [Apple CloudKit optimistic concurrency](https://developer.apple.com/documentation/cloudkit/ckmodifyrecordsoperation/recordsavepolicy/ifserverrecordunchanged).
