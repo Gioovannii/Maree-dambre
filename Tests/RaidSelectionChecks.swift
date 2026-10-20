@@ -3,6 +3,22 @@ import Foundation
 extension DomainChecks {
     static func checkRaidSelection() throws {
         let now = Date(timeIntervalSince1970: 1_800_000_000)
+        var specialty = VillageState(seed: 42)
+        specialty.people = .sauniers
+        let carryingBefore = specialty.transportBonusPercent
+        specialty.buildings[10] = .market
+        precondition(specialty.transportBonusPercent == carryingBefore + 5)
+        specialty.buildingLevels = [.market: 10]
+        precondition(specialty.specialtyTransportBonus == 20)
+        specialty.people = .nacre
+        specialty.buildings[11] = .watchtower
+        precondition(specialty.specialtyDefenseBonus == 5)
+        specialty.people = .roseaux
+        let distantTarget = specialty.bots[9]
+        let beforeAcademy = specialty.raidDuration(to: distantTarget)
+        specialty.buildings[13] = .academy
+        precondition(specialty.raidDuration(to: distantTarget) < beforeAcademy)
+        precondition(specialty.raidDuration(to: specialty.bots[0]) == specialty.raidDuration)
         let world = WorldMap(seed: 42)
         let suite = "RaidSelectionChecks.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!

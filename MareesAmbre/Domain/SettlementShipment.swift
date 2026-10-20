@@ -26,7 +26,7 @@ struct SettlementShipment: Codable, Equatable {
               [departedAt, arrivesAt, returnsAt].allSatisfy({ $0 >= .distantPast && $0 <= .distantFuture }),
               arrivesAt > departedAt, returnsAt > arrivesAt,
               returnsAt.timeIntervalSince(departedAt) <= 86_400,
-              (0...90).contains(transportBonusPercent),
+              (0...110).contains(transportBonusPercent),
               !units.isEmpty, units.values.allSatisfy({ (1...100).contains($0) }),
               units.values.reduce(0, +) <= 100,
               [cargo.wood, cargo.amber, cargo.provisions].allSatisfy({ (0...999_999).contains($0) }),

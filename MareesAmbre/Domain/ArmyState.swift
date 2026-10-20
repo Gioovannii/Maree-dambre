@@ -30,7 +30,7 @@ struct ArmyState: Codable, Equatable {
             guard (0...3).contains(raid.attackUpgrade ?? 0),
                   (0...0.2).contains(raid.victoryLossRate ?? 0.2),
                   (0...0.8).contains(raid.defeatLossRate ?? 0.5),
-                  (0...90).contains(raid.transportBonusPercent ?? 0),
+                  (0...110).contains(raid.transportBonusPercent ?? 0),
                   (60...270).contains(raid.lootLimit ?? 60) else { return false }
             if let levels = raid.weaponLevels {
                 guard Set(levels.keys) == Set(raid.units.keys),
@@ -66,8 +66,8 @@ extension VillageState {
     var trainableUnits: [ArmyUnit] { ArmyUnit.allCases.filter { peopleUnits.contains($0) || unlockedUnits.contains($0) } }
     var raidDuration: TimeInterval { people == .roseaux ? 90 : 120 }
     func raidDuration(to bot: BotFaction) -> TimeInterval {
-        if location == .home { return bot.id < 3 ? raidDuration : raidDuration + TimeInterval(bot.distanceFromHome * 2) }
-        return raidDuration + TimeInterval(location.distance(to: bot.capital) * 2)
+        let distance = location == .home ? (bot.id < 3 ? 0 : bot.distanceFromHome) : location.distance(to: bot.capital)
+        return raidDuration + ceil(TimeInterval(distance * 2) * distantRaidDurationMultiplier)
     }
     var victoryLossRate: Double { victoryLossRate(for: availableArmy) }
     func victoryLossRate(for units: [ArmyUnit: Int]) -> Double {
@@ -76,7 +76,7 @@ extension VillageState {
         return max(0.01, 0.1 - 0.005 * Double(buildingLevel(.infirmary) - 1) - (mage ? 0.05 : 0))
     }
     var defeatLossRate: Double { hasBuilding(.infirmary) ? 0.35 - 0.01 * Double(buildingLevel(.infirmary) - 1) : 0.5 }
-    var transportBonusPercent: Int { (people == .sauniers ? 20 : 0) + (hasBuilding(.expeditionQuay) ? 25 + 5 * (buildingLevel(.expeditionQuay) - 1) : 0) }
+    var transportBonusPercent: Int { (people == .sauniers ? 20 : 0) + (hasBuilding(.expeditionQuay) ? 25 + 5 * (buildingLevel(.expeditionQuay) - 1) : 0) + specialtyTransportBonus }
     var raidLootLimit: Int { hasBuilding(.expeditionQuay) ? 90 + 20 * (buildingLevel(.expeditionQuay) - 1) : 60 }
     func attackStrength(of unit: ArmyUnit) -> Int { unit.attack + weaponLevel(for: unit) }
     func defenseStrength(of unit: ArmyUnit) -> Int { unit.defense + weaponLevel(for: unit) }

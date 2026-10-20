@@ -363,7 +363,7 @@ struct VillageState: Codable, Equatable {
     }
 
     var automaticDefense: Int {
-        buildings.values.reduce(0) { $0 + $1.defenseStrength * buildingLevel($1) } + (people?.baseDefenseBonus ?? 0) + (settlementRole == .outpost ? 20 : 0)
+        buildings.values.reduce(0) { $0 + $1.defenseStrength * buildingLevel($1) } + (people?.baseDefenseBonus ?? 0) + (settlementRole == .outpost ? 20 : 0) + specialtyDefenseBonus
     }
 
     mutating func updateInRealTime(now: Date = .now, on world: WorldMap, protectedLocations: [TileCoordinate] = [.home], advanceBots: Bool = true) -> Int {

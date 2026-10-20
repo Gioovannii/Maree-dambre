@@ -64,7 +64,8 @@ extension DomainChecks {
         var simultaneous = start
         simultaneous.army = ArmyState(units: [.tideguard: 4], unlockedUnits: [.tideguard])
         precondition(simultaneous.sendConvoy(on: .crossing, units: [.tideguard: 3]))
-        precondition(simultaneous.convoyCapacity(for: [.tideguard: 3]) == 54)
+        precondition(simultaneous.convoyCapacity(for: [.tideguard: 3]) == 56,
+            "The human Market adds five carrying bonus points")
         precondition(simultaneous.advanceCoastalTide() && simultaneous.advanceCoastalTide())
         precondition(simultaneous.coastalCampaign?.report?.garrisonPower == 10)
         precondition(simultaneous.coastalCampaign?.report?.won == false)

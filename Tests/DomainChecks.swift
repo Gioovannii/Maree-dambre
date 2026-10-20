@@ -161,7 +161,7 @@ struct DomainChecks {
         precondition(nacre.automaticDefense == 1)
         precondition(nacre.build(.watchtower, at: 13))
         nacre.updateConstruction(now: nacre.construction!.endsAt.addingTimeInterval(1))
-        precondition(nacre.automaticDefense == 21)
+        precondition(nacre.automaticDefense == 26, "Reef towers include their five-point specialty bonus")
         var military = VillageState(seed: seed)
         precondition(!military.canTrain(.tideguard, count: 1))
         precondition(!military.research(.tideguard, now: epoch))

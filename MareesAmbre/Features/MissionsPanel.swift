@@ -7,6 +7,7 @@ struct MissionsPanel: View {
             Text(String(localized: "screen.missions.subtitle", defaultValue: "Préparez vos expéditions et suivez le retour de vos troupes."))
                 .font(.subheadline).foregroundStyle(Palette.muted)
             HeroPanel()
+            PeopleSpecialtyPanel()
             BeginnerProtectionPanel()
             if session.state.nextDomainBotAttackDate != nil { CoastalDefensePanel() }
             FoundingMissionStatus()
