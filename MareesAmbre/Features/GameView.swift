@@ -229,8 +229,9 @@ struct GameView: View {
                                  preservesMapProportions: true,
                                  showsTownShortcut: false)
                         .frame(width: geometry.size.width, height: geometry.size.width / 0.5)
-                        .padding(.bottom, 16)
+
                 }
+                .contentMargins(.bottom, 100, for: .scrollContent)
                 .scrollIndicators(.hidden)
                 .id(villageMap)
 
@@ -245,6 +246,7 @@ struct GameView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .clipped()
+            .ignoresSafeArea(.container, edges: .bottom)
             }
             .task {
                 if ProcessInfo.processInfo.arguments.contains("--snapshot-center") {

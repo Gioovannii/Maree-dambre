@@ -45,7 +45,6 @@ struct GameNavigationBar: View {
             }
         }
         .padding(4)
-        .background(Palette.ocean.opacity(0.88), in: .capsule)
         .glassEffect(.regular, in: .capsule)
 
     }
