@@ -31,7 +31,7 @@ struct GameView: View {
                     .badge(section == .mailbox ? session.state.unreadMailCount : 0)
                 }
             }
-            .tint(Palette.amber)
+            .tint(Palette.navigationAccent)
             .preferredColorScheme(.dark)
         }
     }
