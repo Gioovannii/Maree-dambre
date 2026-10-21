@@ -40,13 +40,14 @@ struct GameView: View {
         .background(Palette.ocean.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if session.state.people != nil {
-                VStack(spacing: 4) {
+                GlassEffectContainer {
                     navigation
+                        .frame(maxWidth: 540)
                 }
-                    .frame(maxWidth: 560)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
-                    .frame(maxWidth: .infinity)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 12)
+                .frame(maxWidth: .infinity)
             }
         }
         .sheet(isPresented: $showsShipment) { ShipmentView() }

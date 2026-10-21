@@ -50,8 +50,9 @@ struct GameNavigationBar: View {
                 .accessibilityIdentifier("navigation.\(String(describing: section))")
             }
         }
-        .padding(5)
-        .glassEffect(.regular.tint(Palette.ocean.opacity(0.4)), in: .capsule)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 7)
+        .glassEffect(.regular.tint(Palette.ocean.opacity(0.4)), in: .rect(cornerRadius: 32))
 
     }
     private var layout: AnyLayout {
