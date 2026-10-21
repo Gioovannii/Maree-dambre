@@ -1,6 +1,312 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "raid.selection.all_count": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Sélectionner toute l’armée · %@"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Select the whole army · %@"
+        }
+      }
+    }
+  },
+  "raid.preview.win": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Victoire prévue · %@ perte(s) sur %@ troupes."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Expected victory · %@ losses from %@ troops."
+        }
+      }
+    }
+  },
+  "raid.preview.loss": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Défaite prévue · %@ perte(s) sur %@ troupes. Aucun butin."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Expected defeat · %@ losses from %@ troops. No loot."
+        }
+      }
+    }
+  },
+  "raid.preview.loot": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Butin : jusqu’à %@ de chaque ressource, selon le transport des survivants et la place en réserve."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Loot: up to %@ of each resource, depending on survivor carrying capacity and available storage."
+        }
+      }
+    }
+  },
+  "raid.preview.rounding": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les pertes sont calculées sur toute l’armée, pas arrondies séparément pour chaque type d’unité."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Losses are calculated across the whole army, rather than rounded separately for each unit type."
+        }
+      }
+    }
+  },
+  "hero.raid.onboard": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Héros à bord"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Hero aboard"
+        }
+      }
+    }
+  },
+  "hero.raid.join": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Envoyer le héros en soutien"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Send the hero in support"
+        }
+      }
+    }
+  },
+  "hero.raid.rules": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Le héros accompagne l’armée jusqu’à son retour. Il gagne 20 XP en victoire ou 5 XP en défaite, au plus une fois par voisin et par jour."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The hero accompanies the army until it returns. Earns 20 XP on victory or 5 XP on defeat, at most once per neighbor per day."
+        }
+      }
+    }
+  },
+  "hero.raid.bonus": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Soutien : +%@ en attaque."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Support: +%@ attack."
+        }
+      }
+    }
+  },
+  "hero.raid.unavailable": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Choisissez un héros disponible : il ne peut pas participer à deux voyages en même temps."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Choose an available hero: they cannot join two voyages at the same time."
+        }
+      }
+    }
+  },
+  "hero.raid.participated": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Le héros a accompagné cette expédition."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The hero accompanied this expedition."
+        }
+      }
+    }
+  },
+  "hero.raid.busy": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "En raid"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Raiding"
+        }
+      }
+    }
+  },
+  "hero.raid.busy_help": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Le héros accompagne un raid. Ses missions seront disponibles à son retour."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The hero is accompanying a raid. Personal missions will be available on return."
+        }
+      }
+    }
+  },
+  "hero.command_support": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Envoyez votre héros avec un raid pour lui faire gagner de l’XP au retour. Son soutien ajoute 2 points d’attaque par niveau, jusqu’à 20 points. Il reste indisponible jusqu’au retour de l’armée."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Send your hero with a raid to earn XP on return. Support adds 2 attack points per level, up to 20 points. The hero stays unavailable until the army returns."
+        }
+      }
+    }
+  },
+  "world.travel.return": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Retour vers le village"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Returning to the village"
+        }
+      }
+    }
+  },
+  "world.travel.attack": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Raid en route vers la cible"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Raid heading to the target"
+        }
+      }
+    }
+  },
+  "world.travel.hero": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Héros en route vers sa mission"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Hero heading to the mission"
+        }
+      }
+    }
+  },
+  "world.travel.locate": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Voir sur la carte"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Show on map"
+        }
+      }
+    }
+  },
   "recon.normal": {
     "extractionState": "manual",
     "localizations": {
@@ -1304,9 +1610,6 @@
           }
         }
       }
-    },
-    "Butin : jusqu’à %@ de chaque ressource, selon le transport des survivants et la place en réserve." : {
-
     },
     "domain.army_state.combat_report" : {
       "extractionState" : "manual",
@@ -5438,9 +5741,6 @@
           }
         }
       }
-    },
-    "Les pertes sont calculées sur toute l’armée, pas arrondies séparément pour chaque type d’unité." : {
-
     },
     "mail.colony.body" : {
       "extractionState" : "manual",
@@ -13414,9 +13714,6 @@
           }
         }
       }
-    },
-    "Sélectionner toute l’armée · %@" : {
-
     },
     "shipment.arrives_in" : {
       "extractionState" : "manual",

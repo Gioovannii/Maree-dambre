@@ -37,6 +37,7 @@ extension VillageState {
     private func heroReward(for mail: GameMail) -> (key: String, points: Int)? {
         switch mail.content {
         case .raid(let report):
+            guard report.includesHero != false else { return nil }
             // Shared across all villages: one rewarded result per neighbor per UTC day.
             return ("raid.\(report.targetName)", report.won ? HeroProgression.battleVictoryExperience : HeroProgression.battleDefeatExperience)
         case .defense(let report):

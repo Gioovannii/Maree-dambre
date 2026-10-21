@@ -33,7 +33,7 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     districts=("${(@s:,:)SNAPSHOT_SCREEN}")
     for district in "${districts[@]}"; do
         case "$district" in
-            absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
+            worldTravel|heroSupport|absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
             *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
         esac
     done
@@ -90,6 +90,8 @@ for district in "${districts[@]}"; do
         centre) snapshot_args+=(--snapshot-center) ;;
         upgrade) snapshot_args+=(--snapshot-upgrade) ;;
         world) snapshot_args+=(--snapshot-world) ;;
+        worldTravel) snapshot_args+=(--snapshot-developed --snapshot-world --snapshot-world-travel) ;;
+        heroSupport) snapshot_args+=(--snapshot-developed --snapshot-world --snapshot-hero-support) ;;
         commerce) snapshot_args+=(--snapshot-world --snapshot-commerce) ;;
         heroEnhancedMission) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment --snapshot-hero-enhanced-mission) ;;
         heroEquipment) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment) ;;
@@ -116,7 +118,10 @@ for district in "${districts[@]}"; do
             ;;
     esac
     simctl launch "$simulator_id" "$bundle_id" "${snapshot_args[@]}" >/dev/null
-    sleep "$capture_delay"
+    case "$district" in
+        worldTravel|heroSupport) sleep 8 ;;
+        *) sleep "$capture_delay" ;;
+    esac
     # Make hardware cutouts deterministic when Device Hub is shown or hidden.
     simctl io "$simulator_id" screenshot --mask=black "$output_dir/$district.png" >/dev/null 2>&1
 

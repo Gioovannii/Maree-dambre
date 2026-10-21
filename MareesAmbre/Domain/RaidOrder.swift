@@ -52,7 +52,7 @@ struct RaidOrder: Codable, Equatable {
         targetName
     }
     var attackPower: Int {
-        units.reduce(0) { $0 + ($1.key.attack + (weaponLevels?[$1.key] ?? attackUpgrade ?? 0)) * $1.value }
+        units.reduce(heroAttackBonus ?? 0) { $0 + ($1.key.attack + (weaponLevels?[$1.key] ?? attackUpgrade ?? 0)) * $1.value }
     }
 
     let targetID: Int
@@ -68,6 +68,9 @@ struct RaidOrder: Codable, Equatable {
     var weaponLevels: [ArmyUnit: Int]? = nil
     var enemyUnits: [ArmyUnit: Int]? = nil
     var enemyFortifications: Int? = nil
+    var includesHero: Bool? = nil
+    var heroAttackBonus: Int? = nil
+    var departedAt: Date? = nil
 
     static func validEnemySnapshot(units: [ArmyUnit: Int]?, fortifications: Int?, defense: Int) -> Bool {
         guard let units else { return fortifications == nil }

@@ -68,6 +68,10 @@ struct VillageStorage {
         guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
         let all = [state] + (state.otherVillages ?? [])
+        let heroRaids = all.filter { $0.army?.raid?.includesHero == true }
+        guard heroRaids.count <= 1, heroRaids.isEmpty || (state.hero != nil && state.hero?.missions?.voyage == nil) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
         guard all.count <= VillageState.maximumSettlements,
               Set(all.map(\.location)).count == all.count,
               all.filter({ $0.location == .home }).count == 1,

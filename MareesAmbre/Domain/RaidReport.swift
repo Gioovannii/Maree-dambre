@@ -11,6 +11,7 @@ struct RaidReport: Codable, Equatable {
     var stolen: Resources
     var enemyUnits: [ArmyUnit: Int]? = nil
     var enemyFortifications: Int? = nil
+    var includesHero: Bool? = nil
 
     var won: Bool { attackPower > defensePower }
     var lossCount: Int { losses.values.reduce(0, +) }

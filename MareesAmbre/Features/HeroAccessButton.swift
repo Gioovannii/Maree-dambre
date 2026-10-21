@@ -13,7 +13,10 @@ struct HeroAccessButton: View {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(String(localized: "hero.short_title", defaultValue: "Héros"))
                         .font(.caption.bold())
-                    if let hero = session.state.hero {
+                    if session.state.heroIsOnRaid {
+                        Text(String(localized: "hero.raid.busy", defaultValue: "En raid"))
+                            .font(.caption2).foregroundStyle(Palette.amber)
+                    } else if let hero = session.state.hero {
                         Text(String(localized: "hero.level", defaultValue: "Niveau \(String(hero.level))"))
                             .font(.caption2).foregroundStyle(Palette.amber)
                     } else {

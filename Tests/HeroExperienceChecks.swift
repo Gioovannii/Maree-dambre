@@ -67,9 +67,26 @@ func checkHeroExperience() throws {
     // A real returning expedition awards XP once through the shared domain clock.
     var real = shipmentFixture(now: now)
     precondition(real.customizeHero(portrait: .captainWoman, name: "Élyne", now: now))
-    precondition(real.raid(targetID: 0, units: [.tideguard: 5], now: now))
+    precondition(real.raid(targetID: 0, units: [.tideguard: 5], withHero: true, now: now))
+    precondition(real.heroIsOnRaid && !real.heroCanJoinRaid)
+    precondition(real.army?.raid?.attackPower == 42)
+    precondition(!real.startHeroMission(.discoverWreck, now: now))
+    let trip = real.worldExpeditions.first!
+    precondition(trip.includesHero && trip.progress(at: now) == 0)
+    precondition(trip.isReturning(at: trip.endsAt))
+    var switched = real
+    precondition(switched.switchSettlement(to: switched.otherVillages![0].location))
+    precondition(switched.heroIsOnRaid && !switched.canRaid(switched.bots[1], withHero: true, now: now))
+    let transitSuite = "HeroTransit.\(UUID().uuidString)"
+    let transitDefaults = UserDefaults(suiteName: transitSuite)!
+    defer { transitDefaults.removePersistentDomain(forName: transitSuite) }
+    let transitStorage = VillageStorage(defaults: transitDefaults)
+    try transitStorage.save(real)
+    let restoredTransit = try transitStorage.load(seed: 42, world: world, now: now)!
+    precondition(restoredTransit.heroIsOnRaid && restoredTransit.worldExpeditions == real.worldExpeditions)
     real.updateDomain(now: now.addingTimeInterval(3600), on: world)
     precondition(real.hero?.totalExperience == 20)
+    precondition(!real.heroIsOnRaid && real.heroCanJoinRaid && real.worldExpeditions.isEmpty)
     real.updateDomain(now: now.addingTimeInterval(3600), on: world)
     precondition(real.hero?.totalExperience == 20)
     let suite = "MareesAmbre.HeroXP.\(UUID().uuidString)"
@@ -80,6 +97,16 @@ func checkHeroExperience() throws {
     var loaded = try storage.load(seed: 42, world: world, now: now.addingTimeInterval(3600))!
     loaded.awardHeroExperience()
     precondition(loaded.hero?.totalExperience == 20 && loaded.hero == real.hero)
+
+    var alone = shipmentFixture(now: now)
+    precondition(alone.customizeHero(portrait: .captainWoman, name: "Élyne", now: now))
+    precondition(alone.raid(targetID: 0, units: [.tideguard: 5], now: now))
+    alone.updateDomain(now: now.addingTimeInterval(3600), on: world)
+    precondition(alone.hero?.totalExperience == 0, "New raids without the hero must not grant combat XP")
+    precondition(alone.startHeroMission(.discoverWreck, now: now.addingTimeInterval(3600)))
+    precondition(!alone.heroCanJoinRaid && !alone.canRaid(alone.bots[1], withHero: true, now: now.addingTimeInterval(3600)))
+    precondition(alone.worldExpeditions.count == 1 && !alone.worldExpeditions[0].isRaid)
+    precondition(trip.progress(at: trip.startedAt.addingTimeInterval(trip.endsAt.timeIntervalSince(trip.startedAt) / 4)) == 0.25)
 
     // A legacy portrait has no retroactive XP from previously stored reports.
     let legacyData = Data(#"{"portrait":"captainWoman","name":"Élyne"}"#.utf8)

@@ -11,6 +11,7 @@ struct WorldCanvas: View {
 
     var body: some View {
         VStack(spacing: 12) {
+            WorldExpeditionsPanel()
             SpriteView(scene: scene, isPaused: scenePhase == .background, preferredFramesPerSecond: 30)
                 .frame(height: mapHeight)
                 .contentShape(.rect)
@@ -95,11 +96,13 @@ struct WorldCanvas: View {
             scene.reducedMotion = reduceMotion
             scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile, homes: session.state.ownedLocations, origin: session.state.location)
             scene.overview()
+            scene.setExpeditions(session.state.worldExpeditions)
         }
         .onChange(of: session.selectedTile) { scene.select(session.selectedTile) }
         .onChange(of: session.state.bots) { scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile, homes: session.state.ownedLocations, origin: session.state.location) }
         .onChange(of: session.state.ownedLocations) { scene.configure(world: session.world, bots: session.state.bots, selected: session.selectedTile, homes: session.state.ownedLocations, origin: session.state.location) }
         .onChange(of: reduceMotion) { scene.reducedMotion = reduceMotion }
+        .onChange(of: session.state.worldExpeditions) { scene.setExpeditions($1) }
     }
 
     private var legendLayout: AnyLayout {

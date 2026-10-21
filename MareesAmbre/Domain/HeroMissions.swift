@@ -28,7 +28,7 @@ struct HeroMissions: Codable, Equatable {
 
 extension VillageState {
     func canStartHeroMission(_ mission: HeroMissionKind) -> Bool {
-        guard let hero else { return false }
+        guard let hero, !heroIsOnRaid else { return false }
         let missions = hero.missions ?? HeroMissions()
         return missions.voyage == nil && missions.available.contains(mission)
             && missions.materials >= mission.materialCost

@@ -32,7 +32,7 @@ struct HeroSheet: View {
                         }
                         if showsEquipment { HeroEquipmentPanel() } else { HeroMissionsPanel() }
                         Text(String(localized: "hero.shared", defaultValue: "Un même personnage vous accompagne dans tous vos villages."))
-                        Text(String(localized: "hero.command_experience", defaultValue: "Votre capitaine gagne de l’expérience de commandement grâce aux actions de vos villages. Les niveaux ne donnent pas encore de bonus de combat."))
+                        Text(String(localized: "hero.command_support", defaultValue: "Envoyez votre héros avec un raid pour lui faire gagner de l’XP au retour. Son soutien ajoute 2 points d’attaque par niveau, jusqu’à 20 points. Il reste indisponible jusqu’au retour de l’armée."))
                             .font(.footnote).foregroundStyle(Palette.muted)
                         Text(String(localized: "hero.xp_rules", defaultValue: "Combat gagné : 20 XP · Défaite : 5 XP · Colonie fondée : 75 XP. Un seul raid récompensé par voisin et par jour, et une défense par village et par jour (jours UTC). Les anciens rapports ne donnent pas d’XP."))
                             .font(.footnote).foregroundStyle(Palette.muted)

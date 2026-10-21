@@ -7,6 +7,9 @@ final class ArchipelagoScene: SKScene {
     private let markers = SKNode()
     private let selection = SKShapeNode(ellipseOf: CGSize(width: 48, height: 30))
     private let route = SKShapeNode()
+    private let expeditionLayer = SKNode()
+    private var expeditions: [WorldExpedition] = []
+    private var lastExpeditionUpdate: TimeInterval = -1
     private var currentSeed: Int?
     private var terrainTask: Task<Void, Never>?
     private let loading = SKLabelNode(fontNamed: "AvenirNext-DemiBold")
@@ -70,6 +73,71 @@ final class ArchipelagoScene: SKScene {
         route.lineWidth = 1.8
         route.zPosition = 4
         addChild(route)
+        expeditionLayer.zPosition = 6
+        addChild(expeditionLayer)
+    }
+
+    func setExpeditions(_ values: [WorldExpedition]) {
+        expeditions = values
+        expeditionLayer.removeAllChildren()
+        for voyage in values {
+            let color: UIColor = voyage.isRaid ? .systemOrange : .systemTeal
+            let container = SKNode()
+            container.name = voyage.id
+            let path = CGMutablePath()
+            path.move(to: point(voyage.origin))
+            path.addLine(to: point(voyage.destination))
+            let line = SKShapeNode(path: path.copy(dashingWithPhase: 0, lengths: [10, 7]))
+            line.name = "line"
+            line.strokeColor = color.withAlphaComponent(0.8)
+            container.addChild(line)
+            let marker = SKShapeNode(circleOfRadius: 16)
+            marker.name = "traveler"
+            marker.fillColor = WorldMapStyle.factionColor(voyage.isRaid ? 0 : 1).withAlphaComponent(0.95)
+            marker.strokeColor = color
+            marker.lineWidth = 2
+            let symbol = voyage.isRaid ? "flag.fill" : "person.fill"
+            if let image = UIImage(systemName: symbol)?.withTintColor(.white, renderingMode: .alwaysOriginal) {
+                let icon = SKSpriteNode(texture: SKTexture(image: image))
+                icon.size = CGSize(width: 18, height: 18)
+                marker.addChild(icon)
+            }
+            if voyage.includesHero && voyage.isRaid {
+                let badge = SKLabelNode(text: "H")
+                badge.fontName = "AvenirNext-Bold"
+                badge.fontSize = 11
+                badge.position = CGPoint(x: 15, y: 10)
+                badge.fontColor = .white
+                marker.addChild(badge)
+            }
+            container.addChild(marker)
+            expeditionLayer.addChild(container)
+        }
+        updateExpeditions()
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        guard currentTime - lastExpeditionUpdate >= (reducedMotion ? 1 : 0.25) else { return }
+        lastExpeditionUpdate = currentTime
+        updateExpeditions()
+    }
+
+    private func updateExpeditions() {
+        let now = Date.now
+        let frozen = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
+            && !ProcessInfo.processInfo.arguments.contains("--snapshot-animate")
+        for voyage in expeditions {
+            guard let container = expeditionLayer.childNode(withName: voyage.id),
+                  let marker = container.childNode(withName: "traveler") else { continue }
+            let progress = frozen ? 0.25 : voyage.progress(at: now)
+            let fraction = progress <= 0.5 ? progress * 2 : (1 - progress) * 2
+            let start = point(voyage.origin), end = point(voyage.destination)
+            marker.position = CGPoint(x: start.x + (end.x - start.x) * fraction,
+                                      y: start.y + (end.y - start.y) * fraction)
+            marker.setScale(viewpoint.xScale)
+            (container.childNode(withName: "line") as? SKShapeNode)?.lineWidth = viewpoint.xScale * 1.5
+            container.isHidden = progress >= 1
+        }
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }

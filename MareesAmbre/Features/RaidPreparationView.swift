@@ -6,6 +6,7 @@ struct RaidPreparationView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var selections = ArmyUnit.allCases.map { RaidTroopSelection(unit: $0) }
     @State private var departureFailed = false
+    @State private var withHero = false
 
     private var currentTarget: BotFaction {
         session.state.bots.first(where: { $0.id == target.id }) ?? target
@@ -21,7 +22,8 @@ struct RaidPreparationView: View {
             result[entry.key] = max(0, entry.value - deployed[entry.key, default: 0])
         }
     }
-    private var power: Int { session.state.armyPower(for: deployed) }
+    private var heroBonus: Int { withHero && session.state.heroCanJoinRaid ? session.state.heroRaidAttackBonus : 0 }
+    private var power: Int { session.state.armyPower(for: deployed) + heroBonus }
     private var defense: Int { currentTarget.defensePower }
 
     var body: some View {
@@ -36,10 +38,24 @@ struct RaidPreparationView: View {
                 .listRowBackground(Palette.panel)
                 Section { ReconnaissancePanel(target: currentTarget) }
                     .listRowBackground(Palette.panel)
+                Section {
+                    Toggle(String(localized: "hero.raid.join", defaultValue: "Envoyer le héros en soutien"), isOn: $withHero)
+                        .disabled(!session.state.heroCanJoinRaid && !withHero)
+                    Text(String(localized: "hero.raid.rules", defaultValue: "Le héros accompagne l’armée jusqu’à son retour. Il gagne 20 XP en victoire ou 5 XP en défaite, au plus une fois par voisin et par jour."))
+                        .font(.footnote).foregroundStyle(Palette.muted)
+                    if session.state.heroCanJoinRaid {
+                        Text(String(localized: "hero.raid.bonus", defaultValue: "Soutien : +\(String(session.state.heroRaidAttackBonus)) en attaque."))
+                            .font(.footnote)
+                    } else {
+                        Text(String(localized: "hero.raid.unavailable", defaultValue: "Choisissez un héros disponible : il ne peut pas participer à deux voyages en même temps."))
+                            .font(.footnote).foregroundStyle(Palette.amber)
+                    }
+                }
+                .listRowBackground(Palette.panel)
                 Section(String(localized: "screen.raid.choose_units", defaultValue: "Choisir les troupes")) {
                     Button(action: selectAll) {
                         Label {
-                            Text("Sélectionner toute l’armée · \(totalAvailableCount)")
+                            Text(String(localized: "raid.selection.all_count", defaultValue: "Sélectionner toute l’armée · \(String(totalAvailableCount))"))
                         } icon: {
                             Image(systemName: "checkmark.circle")
                         }
@@ -70,7 +86,7 @@ struct RaidPreparationView: View {
                     Text(String(localized: "screen.raid.remaining_help", defaultValue: "Les troupes gardées au village restent disponibles. Les troupes envoyées sont mobilisées jusqu’au retour."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                     if deployedCount > 0 {
-                        RaidOutcomePreview(units: deployed, defense: defense)
+                        RaidOutcomePreview(units: deployed, defense: defense, heroAttackBonus: heroBonus)
                     } else {
                         Text(String(localized: "screen.raid.empty_selection", defaultValue: "Choisissez au moins une unité pour préparer le départ."))
                             .font(.footnote)
@@ -81,7 +97,7 @@ struct RaidPreparationView: View {
                     }
                     Button(String(localized: "screen.raid.send_selection", defaultValue: "Envoyer les troupes choisies"), systemImage: "sailboat.fill", action: send)
                         .buttonStyle(.borderedProminent).foregroundStyle(Palette.ocean)
-                        .disabled(!session.state.canRaid(currentTarget, units: deployed))
+                        .disabled(!session.state.canRaid(currentTarget, units: deployed, withHero: withHero))
                         .accessibilityIdentifier("raid.send")
                         .modifier(GuidedActionModifier(step: .raid, anchor: "send"))
                 }
@@ -124,7 +140,7 @@ struct RaidPreparationView: View {
     }
 
     private func send() {
-        if session.raid(target.id, units: deployed) { dismiss() }
+        if session.raid(target.id, units: deployed, withHero: withHero) { dismiss() }
         else { departureFailed = true }
     }
 }

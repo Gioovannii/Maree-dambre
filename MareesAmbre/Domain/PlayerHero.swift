@@ -30,6 +30,12 @@ struct PlayerHero: Codable, Equatable {
 }
 
 extension VillageState {
+    var heroIsOnRaid: Bool {
+        ([self] + (otherVillages ?? [])).contains { $0.army?.raid?.includesHero == true }
+    }
+    var heroCanJoinRaid: Bool { hero != nil && hero?.missions?.voyage == nil && !heroIsOnRaid }
+    var heroRaidAttackBonus: Int { min(20, (hero?.level ?? 0) * 2) }
+
     @discardableResult
     mutating func customizeHero(portrait: HeroPortrait, name: String, now: Date = .now) -> Bool {
         guard people != nil, let name = PlayerHero.normalizedName(name) else { return false }

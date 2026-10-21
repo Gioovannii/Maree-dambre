@@ -3,12 +3,14 @@ import SwiftUI
 struct RaidOutcomePreview: View {
     let units: [ArmyUnit: Int]
     let defense: Int
+    var heroAttackBonus = 0
     @Environment(VillageSession.self) private var session
 
     var body: some View {
-        let won = session.state.armyPower(for: units) > defense
+        let power = session.state.armyPower(for: units) + heroAttackBonus
+        let won = power > defense
         let rate = RaidOrder.casualtyRate(
-            attackPower: session.state.armyPower(for: units),
+            attackPower: power,
             defense: defense,
             won: won,
             supportMultiplier: won
@@ -17,11 +19,13 @@ struct RaidOutcomePreview: View {
         )
         let losses = RaidOrder.casualties(units: units, rate: rate, roundUp: !won).values.reduce(0, +)
         VStack(alignment: .leading, spacing: 4) {
-            Text(won ? "Victoire prévue · \(losses) perte(s) sur \(units.values.reduce(0, +)) troupes." : "Défaite prévue · \(losses) perte(s) sur \(units.values.reduce(0, +)) troupes. Aucun butin.")
+            Text(won
+                 ? String(localized: "raid.preview.win", defaultValue: "Victoire prévue · \(String(losses)) perte(s) sur \(String(units.values.reduce(0, +))) troupes.")
+                 : String(localized: "raid.preview.loss", defaultValue: "Défaite prévue · \(String(losses)) perte(s) sur \(String(units.values.reduce(0, +))) troupes. Aucun butin."))
             if won {
-                Text("Butin : jusqu’à \(session.state.raidLootLimit) de chaque ressource, selon le transport des survivants et la place en réserve.")
+                Text(String(localized: "raid.preview.loot", defaultValue: "Butin : jusqu’à \(String(session.state.raidLootLimit)) de chaque ressource, selon le transport des survivants et la place en réserve."))
             }
-            Text("Les pertes sont calculées sur toute l’armée, pas arrondies séparément pour chaque type d’unité.")
+            Text(String(localized: "raid.preview.rounding", defaultValue: "Les pertes sont calculées sur toute l’armée, pas arrondies séparément pour chaque type d’unité."))
                 .foregroundStyle(Palette.muted)
         }
         .font(.footnote)

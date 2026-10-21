@@ -184,6 +184,14 @@ final class VillageSession {
                 state.updateDomain(now: start.addingTimeInterval(4 * 3600), on: world)
                 absenceSummary = AbsenceSummary.between(before, and: state, now: start.addingTimeInterval(4 * 3600))
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-world-travel") || ProcessInfo.processInfo.arguments.contains("--snapshot-hero-support") {
+                let date = Date.now
+                _ = state.customizeHero(portrait: .captainWoman, name: "Élyne", now: date)
+                state.army = ArmyState(units: [.tideguard: 20], unlockedUnits: [.tideguard])
+                let support = ProcessInfo.processInfo.arguments.contains("--snapshot-hero-support")
+                _ = state.raid(targetID: 6, units: [.tideguard: 10], withHero: support, now: date)
+                if !support { _ = state.startHeroMission(.discoverWreck, now: date) }
+            }
             return
         }
         do {
@@ -324,9 +332,9 @@ final class VillageSession {
     }
 
     @discardableResult
-    func raid(_ targetID: Int, units: [ArmyUnit: Int]? = nil) -> Bool {
+    func raid(_ targetID: Int, units: [ArmyUnit: Int]? = nil, withHero: Bool = false) -> Bool {
         refreshWorld()
-        guard state.raid(targetID: targetID, units: units) else { return false }
+        guard state.raid(targetID: targetID, units: units, withHero: withHero) else { return false }
         let duration = state.bots.first(where: { $0.id == targetID }).map { state.raidDuration(to: $0) } ?? state.raidDuration
         persist(String(localized: "screen.village_session.expedition_departed_returns_in_value_seconds", defaultValue: "Expédition partie. Retour dans \(String(Int(duration))) secondes."))
         return true

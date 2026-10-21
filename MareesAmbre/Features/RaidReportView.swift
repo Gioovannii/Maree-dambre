@@ -29,6 +29,10 @@ struct RaidReportView: View {
                 }
             }
             section(String(localized: "battle.report.forces", defaultValue: "Forces en présence"), symbol: "flag.fill")
+            if report.includesHero == true {
+                Label(String(localized: "hero.raid.participated", defaultValue: "Le héros a accompagné cette expédition."), systemImage: "person.crop.circle.badge.checkmark")
+                    .font(.footnote).foregroundStyle(Palette.amber)
+            }
             LazyVGrid(columns: columns, spacing: 10) {
                 BattleMetricView(title: String(localized: "unit.stats.attack", defaultValue: "Attaque"), value: report.attackPower,
                                  symbol: "burst.fill", color: Palette.amber)

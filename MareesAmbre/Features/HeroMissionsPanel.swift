@@ -8,6 +8,10 @@ struct HeroMissionsPanel: View {
         VStack(alignment: .leading, spacing: 16) {
             Label(String(localized: "hero.mission.title", defaultValue: "Missions personnelles"), systemImage: "safari.fill")
                 .font(.title3.bold()).foregroundStyle(Palette.amber)
+            if session.state.heroIsOnRaid {
+                Label(String(localized: "hero.raid.busy_help", defaultValue: "Le héros accompagne un raid. Ses missions seront disponibles à son retour."), systemImage: "flag.fill")
+                    .font(.subheadline).foregroundStyle(Palette.amber)
+            }
             if missions.hasBoat {
                 Label(String(localized: "hero.mission.boat_owned", defaultValue: "Barque personnelle"), systemImage: "sailboat.fill")
                     .font(.headline)
