@@ -97,7 +97,12 @@ final class ArchipelagoScene: SKScene {
             marker.strokeColor = color
             marker.lineWidth = 2
             let symbol = voyage.isRaid ? "flag.fill" : "person.fill"
-            if let image = UIImage(systemName: symbol)?.withTintColor(.white, renderingMode: .alwaysOriginal) {
+            if let symbolImage = UIImage(systemName: symbol) {
+                // Rasterize the symbol: SpriteKit cannot reliably resolve a UIKit template image's tint.
+                let image = UIGraphicsImageRenderer(size: CGSize(width: 36, height: 36)).image { _ in
+                    symbolImage.withTintColor(.white, renderingMode: .alwaysOriginal)
+                        .draw(in: CGRect(x: 2, y: 2, width: 32, height: 32))
+                }
                 let icon = SKSpriteNode(texture: SKTexture(image: image))
                 icon.size = CGSize(width: 12, height: 12)
                 icon.zPosition = 2
