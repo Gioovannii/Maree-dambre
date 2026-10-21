@@ -37,6 +37,7 @@ struct GameView: View {
                 villageScreen
             }
         }
+        .background(Palette.ocean.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if session.state.people != nil {
                 navigation
@@ -358,6 +359,7 @@ struct GameView: View {
                         }
                         .labelStyle(.iconOnly)
                         .frame(minWidth: 44, minHeight: 44)
+                        .tint(Palette.amber)
                     }
                 }
                 backupButton

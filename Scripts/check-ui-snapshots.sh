@@ -39,8 +39,8 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     done
 fi
 
-if [[ "$mode" != verify && "$mode" != record ]]; then
-    print -u2 "Usage: $0 [verify|record]"
+if [[ "$mode" != verify && "$mode" != record && "$mode" != capture ]]; then
+    print -u2 "Usage: $0 [verify|record|capture]"
     exit 2
 fi
 
@@ -124,6 +124,8 @@ for district in "${districts[@]}"; do
         mkdir -p "$reference_dir"
         cp "$output_dir/$district.png" "$reference_dir/$district.png"
         print "RECORDED: $district"
+    elif [[ "$mode" == capture ]]; then
+        print "CAPTURED: $output_dir/$district.png"
     elif "$output_dir/compare-snapshot" "$reference_dir/$district.png" "$output_dir/$district.png"; then
         print "PASS: $district matches its $device_name snapshot"
     else
