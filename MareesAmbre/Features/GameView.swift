@@ -212,8 +212,12 @@ struct GameView: View {
 
     private var villageScreen: some View {
         GeometryReader { geometry in
+            let isCompactPhone = horizontalSizeClass == .compact
             VStack(spacing: 0) {
-                topControls.padding(.horizontal, 12).padding(.top, 7).padding(.bottom, 6)
+                topControls
+                    .padding(.horizontal, 12)
+                    .padding(.top, isCompactPhone ? 0 : 7)
+                    .padding(.bottom, isCompactPhone ? 0 : 6)
             ZStack {
                 Palette.ocean.ignoresSafeArea()
                 VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
@@ -233,7 +237,7 @@ struct GameView: View {
                     }
                 }
                 .padding(.horizontal, 12)
-                .padding(.top, 7)
+                .padding(.top, isCompactPhone ? 0 : 7)
                 .padding(.bottom, 6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
