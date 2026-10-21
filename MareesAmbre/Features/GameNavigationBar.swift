@@ -13,7 +13,7 @@ struct GameNavigationBar: View {
                     VStack(spacing: 4) {
                         Image(systemName: section.symbol)
                             .font(.system(size: 17, weight: .semibold))
-                            .frame(width: 25, height: 23)
+                            .frame(width: 42, height: 28)
                             .overlay(alignment: .topTrailing) {
                                 if section == .mailbox && unreadCount > 0 {
                                     Text(unreadCount > 99 ? "99+" : unreadCount.formatted())
@@ -21,7 +21,7 @@ struct GameNavigationBar: View {
                                         .foregroundStyle(Palette.ocean)
                                         .padding(.horizontal, 4).frame(minWidth: 17, minHeight: 17)
                                         .background(Palette.amber, in: .capsule)
-                                        .offset(x: 11, y: -6)
+                                        .offset(x: 2, y: -1)
                                 }
                             }
                         Text(section.title).font(.caption.bold())
