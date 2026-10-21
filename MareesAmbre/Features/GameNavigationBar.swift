@@ -24,15 +24,15 @@ struct GameNavigationBar: View {
                                         .offset(x: 11, y: -6)
                                 }
                             }
-                        Text(section.title).font(.caption2.bold())
+                        Text(section.title).font(.caption.bold())
                             .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                             .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
                     }
                     .frame(maxWidth: .infinity, minHeight: 54)
                     .padding(.vertical, 3)
-                    .foregroundStyle(selected == section ? Palette.amber : Palette.muted)
+                    .foregroundStyle(selected == section ? Palette.amber : Color.white)
                     .background {
-                        if selected == section { Capsule().fill(.white.opacity(0.12)) }
+                        if selected == section { Capsule().fill(Palette.ocean.opacity(0.65)) }
                     }
                     .contentShape(.rect)
                 }
@@ -45,7 +45,7 @@ struct GameNavigationBar: View {
             }
         }
         .padding(4)
-        .glassEffect(.clear.interactive(), in: .capsule)
+        .glassEffect(.regular.interactive(), in: .capsule)
 
     }
     private var layout: AnyLayout {
