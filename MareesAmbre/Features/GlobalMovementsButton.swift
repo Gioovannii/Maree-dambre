@@ -8,20 +8,18 @@ struct GlobalMovementsButton: View {
         Button { showsMovements = true } label: {
             HStack(spacing: 8) {
                 Image(systemName: "arrow.up.arrow.down")
-                Text(String(localized: "movements.title", defaultValue: "Mouvements"))
-                Text(session.state.worldExpeditions.count, format: .number)
-                    .monospacedDigit().bold()
-                Spacer()
-                if let next = session.state.nextDomainBotAttackDate {
-                    Image(systemName: "shield.lefthalf.filled")
-                    Text(next, style: .relative).monospacedDigit()
+                if !session.state.worldExpeditions.isEmpty {
+                    Text(session.state.worldExpeditions.count, format: .number)
+                        .monospacedDigit().bold()
                 }
-                Image(systemName: "chevron.up")
+
             }
             .font(.caption).foregroundStyle(Palette.paper)
-            .padding(.horizontal, 14).frame(minHeight: 44)
+            .padding(.horizontal, 10).frame(minWidth: 44, minHeight: 44)
             .background(Palette.panel, in: .capsule)
         }
+        .accessibilityLabel(String(localized: "movements.title", defaultValue: "Mouvements"))
+        .accessibilityValue(String(session.state.worldExpeditions.count))
         .buttonStyle(.plain)
         .sheet(isPresented: $showsMovements) {
             NavigationStack {

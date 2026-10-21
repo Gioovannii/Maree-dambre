@@ -41,7 +41,6 @@ struct GameView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if session.state.people != nil {
                 VStack(spacing: 4) {
-                    GlobalMovementsButton()
                     navigation
                 }
                     .frame(maxWidth: 560)
@@ -230,7 +229,7 @@ struct GameView: View {
                                  preservesMapProportions: true,
                                  showsTownShortcut: false)
                         .frame(width: geometry.size.width, height: geometry.size.width / 0.5)
-                        .padding(.bottom, 72)
+                        .padding(.bottom, 16)
                 }
                 .scrollIndicators(.hidden)
                 .id(villageMap)
@@ -239,9 +238,6 @@ struct GameView: View {
                     Spacer(minLength: 4)
                     constructionStatus
                         .frame(maxWidth: 560)
-                    if villageMap == .resourceFields {
-                        TownShortcutButton { selectVillageMap(.townCenter) }
-                    }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, isCompactPhone ? 0 : 7)
@@ -355,6 +351,7 @@ struct GameView: View {
             HStack(spacing: 8) {
                 if !showsMailbox { header } else { Spacer(minLength: 0) }
                 HeroAccessButton()
+                GlobalMovementsButton()
                 if horizontalSizeClass == .compact {
                     if let summary = session.absenceSummary {
                         AbsenceSummaryBanner(summary: summary, onShowMessages: {
