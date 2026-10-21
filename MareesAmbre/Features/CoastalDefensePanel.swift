@@ -29,7 +29,9 @@ struct CoastalDefensePanel: View {
             Button {
                 showsDefense = true
             } label: {
-                AdaptiveActionLabel(title: String(localized: "screen.defense.organize", defaultValue: "Organiser la défense"), systemImage: "shield.fill")
+                Label(String(localized: "screen.defense.organize", defaultValue: "Organiser la défense"), systemImage: "shield.fill")
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.roundedRectangle(radius: 14))
