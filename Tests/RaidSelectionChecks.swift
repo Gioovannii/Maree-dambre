@@ -36,6 +36,34 @@ extension DomainChecks {
         base.army = ArmyState(units: [.tideguard: 20, .tideMage: 2, .pillager: 4],
             unlockedUnits: [.tideguard, .tideMage, .pillager])
 
+        var observed = base
+        observed.resources.provisions = 20
+        precondition(!observed.observeNeighbor(0, now: now), "Observation requires an Academy")
+        observed.buildings[10] = .academy
+        precondition(observed.observeNeighbor(0, now: now))
+        precondition(observed.resources.provisions == 0 && observed.army?.reconnaissance?[0]?.isValid == true)
+        precondition(observed.army?.reconnaissance?[0]?.units == observed.bots[0].garrison)
+        observed.resources.provisions = 20
+        precondition(!observed.observeNeighbor(0, now: now.addingTimeInterval(599)))
+        precondition(observed.observeNeighbor(0, now: now.addingTimeInterval(600)))
+        precondition(observed.resources.provisions == 0)
+        observed.resources.provisions = 40
+        precondition(!observed.observeNeighbor(0, detail: .detailed, now: now.addingTimeInterval(600)))
+        precondition(observed.resources.provisions == 40, "Locked detailed observations must not consume food")
+        observed.buildingLevels = [.academy: 3]
+        precondition(observed.observeNeighbor(0, detail: .detailed, now: now.addingTimeInterval(600)),
+            "A recent normal observation can be upgraded to a detailed report")
+        precondition(observed.resources.provisions == 0 && observed.army?.reconnaissance?[0]?.effectiveDetail == .detailed)
+        observed.resources.provisions = 20
+        precondition(!observed.observeNeighbor(0, now: now.addingTimeInterval(600)),
+            "A recent detailed report already contains the normal information")
+        for target in observed.bots {
+            precondition(target.defensePower == target.garrison.reduce(target.fortificationPower) { $0 + $1.key.defense * $1.value })
+        }
+        try storage.save(observed)
+        let observedReloaded = try storage.load(seed: 42, world: world, now: now.addingTimeInterval(600))
+        precondition(observedReloaded?.army?.reconnaissance == observed.army?.reconnaissance)
+
         let backup = try storage.exportBackup(base, now: now)
         var previousDevice = VillageState(seed: 43)
         previousDevice.people = .nacre
@@ -127,7 +155,7 @@ extension DomainChecks {
                 let selection: [ArmyUnit: Int] = sendsMage ? [.tideguard: 10, .tideMage: 1] : [.tideguard: 10]
                 let supportRate = infirmary ? (sendsMage ? 0.05 : 0.1) : (sendsMage ? 0.15 : 0.2)
                 let expected = RaidOrder.casualtyRate(attackPower: supported.armyPower(for: selection),
-                    defense: 50, won: true, supportMultiplier: supportRate / 0.2)
+                    defense: 54, won: true, supportMultiplier: supportRate / 0.2)
                 supported.bots[0].level = 10
                 precondition(supported.victoryLossRate(for: selection) == supportRate)
                 precondition(supported.raid(targetID: 0, units: selection, now: now))

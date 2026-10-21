@@ -66,4 +66,13 @@ struct RaidOrder: Codable, Equatable {
     var transportBonusPercent: Int? = nil
     var lootLimit: Int? = nil
     var weaponLevels: [ArmyUnit: Int]? = nil
+    var enemyUnits: [ArmyUnit: Int]? = nil
+    var enemyFortifications: Int? = nil
+
+    static func validEnemySnapshot(units: [ArmyUnit: Int]?, fortifications: Int?, defense: Int) -> Bool {
+        guard let units else { return fortifications == nil }
+        guard let fortifications, (1...5).contains(fortifications), !units.isEmpty,
+              units.values.allSatisfy({ (1...4).contains($0) }) else { return false }
+        return units.reduce(fortifications) { $0 + $1.key.defense * $1.value } == defense
+    }
 }

@@ -9,6 +9,8 @@ struct RaidReport: Codable, Equatable {
     var unitsSent: [ArmyUnit: Int]
     var losses: [ArmyUnit: Int]
     var stolen: Resources
+    var enemyUnits: [ArmyUnit: Int]? = nil
+    var enemyFortifications: Int? = nil
 
     var won: Bool { attackPower > defensePower }
     var lossCount: Int { losses.values.reduce(0, +) }
@@ -16,6 +18,7 @@ struct RaidReport: Codable, Equatable {
 
     var isValid: Bool {
         (1...80).contains(targetName.count)
+            && RaidOrder.validEnemySnapshot(units: enemyUnits, fortifications: enemyFortifications, defense: defensePower)
             && (0...3_000).contains(attackPower)
             && (0...3_000).contains(defensePower)
             && !unitsSent.isEmpty

@@ -35,6 +35,16 @@ struct RaidReportView: View {
                 BattleMetricView(title: String(localized: "battle.report.enemy_defense", defaultValue: "Défense adverse"), value: report.defensePower,
                                  symbol: "shield.fill", color: defense)
             }
+            if let enemies = report.enemyUnits {
+                section(String(localized: "recon.enemy_troops", defaultValue: "Garnison adverse au départ"), symbol: "shield")
+                ForEach(ArmyUnit.allCases.filter { enemies[$0, default: 0] > 0 }) { unit in
+                    LabeledContent(unit.name, value: enemies[unit, default: 0].formatted())
+                }
+                if let fortifications = report.enemyFortifications {
+                    Text(String(localized: "recon.fortifications", defaultValue: "Fortifications : \(String(fortifications)) points de défense"))
+                        .font(.footnote).foregroundStyle(Palette.muted)
+                }
+            }
             section(String(localized: "battle.report.troops", defaultValue: "Tes troupes"), symbol: "person.3.fill")
             LazyVGrid(columns: compactColumns, spacing: 10) {
                 BattleMetricView(title: String(localized: "battle.report.sent", defaultValue: "Envoyées"), value: report.unitsSent.values.reduce(0, +),

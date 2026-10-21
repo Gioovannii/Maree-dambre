@@ -10,8 +10,11 @@ struct ArmyState: Codable, Equatable {
     var unlockedUnits: Set<ArmyUnit>?
     var research: TrainingOrder?
     var convoy: ConvoyOrder?
+    var reconnaissance: [Int: ReconnaissanceReport]? = nil
 
     var isValid: Bool {
+        guard (reconnaissance?.count ?? 0) <= BotFaction.starting.count,
+              (reconnaissance ?? [:]).allSatisfy({ $0.key == $0.value.targetID && $0.value.isValid }) else { return false }
         guard units.values.allSatisfy({ (0...100).contains($0) }),
               raidedUntil.allSatisfy({ (0...BotFaction.maximumStartingID).contains($0.key) && $0.value.timeIntervalSince1970.isFinite }) else { return false }
         guard convoy?.isValid ?? true else { return false }
@@ -23,6 +26,8 @@ struct ArmyState: Codable, Equatable {
         }
         if let raidReport, !raidReport.isValid { return false }
         if let raid {
+            guard RaidOrder.validEnemySnapshot(units: raid.enemyUnits,
+                fortifications: raid.enemyFortifications, defense: raid.defense) else { return false }
             guard (0...BotFaction.maximumStartingID).contains(raid.targetID), (14...92).contains(raid.defense),
                   raid.returnsAt.timeIntervalSince1970.isFinite,
                   raid.units.values.allSatisfy({ (0...100).contains($0) }),
@@ -160,7 +165,7 @@ extension VillageState {
         var troops = army ?? ArmyState()
         let duration = raidDuration(to: bot)
         let attackPower = armyPower(for: deployed)
-        let defense = 10 + min(10, bot.level) * 4
+        let defense = bot.defensePower
         let victorySupport = victoryLossRate(for: deployed) / 0.2
         let defeatSupport = defeatLossRate / 0.5
         troops.raid = RaidOrder(targetID: bot.id, targetName: bot.pseudonym(seed: seed), units: deployed,
@@ -171,7 +176,8 @@ extension VillageState {
                                defeatLossRate: RaidOrder.casualtyRate(attackPower: attackPower, defense: defense,
                                                                      won: false, supportMultiplier: defeatSupport),
                                transportBonusPercent: transportBonusPercent, lootLimit: raidLootLimit,
-                               weaponLevels: Dictionary(uniqueKeysWithValues: deployed.keys.map { ($0, weaponLevel(for: $0)) }))
+                               weaponLevels: Dictionary(uniqueKeysWithValues: deployed.keys.map { ($0, weaponLevel(for: $0)) }),
+                               enemyUnits: bot.garrison, enemyFortifications: bot.fortificationPower)
         for (unit, count) in deployed {
             let remaining = troops.units[unit, default: 0] - count
             if remaining == 0 { troops.units.removeValue(forKey: unit) }
@@ -225,7 +231,8 @@ extension VillageState {
             troops.raidReport = RaidReport(targetName: raid.targetDisplayName, attackPower: power,
                                            defensePower: raid.defense, unitsSent: raid.units,
                                            losses: lossesByUnit,
-                                           stolen: Resources(wood: wood, amber: amber, provisions: provisions))
+                                           stolen: Resources(wood: wood, amber: amber, provisions: provisions),
+                                           enemyUnits: raid.enemyUnits, enemyFortifications: raid.enemyFortifications)
             troops.report = String(localized: "domain.army_state.combat_report", defaultValue: "\(String(won ? String(localized: "domain.army_state.victory", defaultValue: "Victoire") : String(localized: "domain.army_state.defeat", defaultValue: "Défaite"))) contre \(String(raid.targetDisplayName)). Forces : \(String(power)) en attaque contre \(String(raid.defense)) en défense. \(String(losses)) perte(s). Butin stocké : \(String(wood)) bois, \(String(amber)) ambre, \(String(provisions)) vivres.")
             if let report = troops.raidReport {
                 receiveMail(.raid(report), key: "raid.\(raid.targetID).\(raid.returnsAt.timeIntervalSinceReferenceDate)", at: raid.returnsAt)

@@ -205,8 +205,8 @@ extension DomainChecks {
             && offline.weaponUpgrade == online.weaponUpgrade)
         // Fractional accrual can differ by floating point rounding after 120 updates.
         precondition(abs(offline.productionRemainder!.wood - online.productionRemainder!.wood) < 1e-8)
-        precondition(offline.availableArmy[.reedrunner] == 2,
-            "An even-power raid applies the ratio-based defeat loss without changing its saved weapon level")
+        precondition(offline.availableArmy[.reedrunner] == 3 && offline.army?.raidReport?.attackPower == 15,
+            "Research completed during travel must not change the raid's saved attack strength")
 
         var legacy = VillageState(seed: 42)
         legacy.version = 9

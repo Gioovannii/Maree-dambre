@@ -5,6 +5,19 @@ struct BotFaction: Identifiable, Codable, Equatable {
     var territory: [TileCoordinate]
     var level = 1
 
+    var garrison: [ArmyUnit: Int] {
+        let tier = min(10, max(1, level))
+        let front = max(1, (tier + 2) / 3)
+        let support = max(1, (tier + 3) / 4)
+        switch id % 3 {
+        case 0: return [.tideguard: front, .pillager: support]
+        case 1: return [.amberSentry: front, .tideMage: support]
+        default: return [.reedrunner: front, .marshArcher: support]
+        }
+    }
+    var fortificationPower: Int { max(1, min(10, level) / 2) }
+    var defensePower: Int { garrison.reduce(fortificationPower) { $0 + $1.key.defense * $1.value } }
+
     var displayName: String {
         switch id % 3 {
         case 0: String(localized: "domain.bot_faction.the_salt_traders", defaultValue: "Les Sauniers")

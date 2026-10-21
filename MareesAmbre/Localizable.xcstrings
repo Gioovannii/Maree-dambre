@@ -1,6 +1,227 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "recon.normal": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Normal"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Normal"
+        }
+      }
+    }
+  },
+  "recon.advanced": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Avancé"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Advanced"
+        }
+      }
+    }
+  },
+  "recon.mode": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Niveau de reconnaissance"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Reconnaissance level"
+        }
+      }
+    }
+  },
+  "recon.normal_help": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Effectif total observé. Académie niveau 1 requise."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Total observed troops. Requires Academy level 1."
+        }
+      }
+    }
+  },
+  "recon.advanced_help": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Effectifs par type, caractéristiques de combat et fortifications. Académie niveau 3 requise."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Troops by type, combat stats and fortifications. Requires Academy level 3."
+        }
+      }
+    }
+  },
+  "recon.total": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Effectif observé"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Observed troops"
+        }
+      }
+    }
+  },
+  "recon.unit_stats": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Par unité : attaque %@ · défense %@"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Per unit: attack %@ · defense %@"
+        }
+      }
+    }
+  },
+  "recon.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Reconnaissance"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Reconnaissance"
+        }
+      }
+    }
+  },
+  "recon.fortifications": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Fortifications : %@ points de défense"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Fortifications: %@ defense points"
+        }
+      }
+    }
+  },
+  "recon.stale": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Renseignement ancien : les effectifs peuvent avoir changé. Actualisez avant de vous y fier."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Old intelligence: troop numbers may have changed. Refresh before relying on it."
+        }
+      }
+    }
+  },
+  "recon.rules": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Observation immédiate depuis les routes, sans envoyer de soldats. Académie requise. Le renseignement reste récent pendant dix minutes."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Immediate observation from nearby routes, without sending soldiers. Requires an Academy. Intelligence stays recent for ten minutes."
+        }
+      }
+    }
+  },
+  "recon.observe": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Observer · %@ vivres"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Observe · %@ food"
+        }
+      }
+    }
+  },
+  "recon.enemy_troops": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Garnison adverse au départ"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Enemy garrison at departure"
+        }
+      }
+    }
+  },
   "people.specialty.transport_value": {
     "extractionState": "manual",
     "localizations": {

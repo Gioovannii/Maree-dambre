@@ -22,7 +22,7 @@ struct RaidPreparationView: View {
         }
     }
     private var power: Int { session.state.armyPower(for: deployed) }
-    private var defense: Int { 10 + min(10, currentTarget.level) * 4 }
+    private var defense: Int { currentTarget.defensePower }
 
     var body: some View {
         NavigationStack {
@@ -34,6 +34,8 @@ struct RaidPreparationView: View {
                     Text(String(localized: "screen.raid.duration", defaultValue: "Aller-retour : \(String(Int(session.state.raidDuration(to: currentTarget)))) secondes."))
                 }
                 .listRowBackground(Palette.panel)
+                Section { ReconnaissancePanel(target: currentTarget) }
+                    .listRowBackground(Palette.panel)
                 Section(String(localized: "screen.raid.choose_units", defaultValue: "Choisir les troupes")) {
                     Button(action: selectAll) {
                         Label {

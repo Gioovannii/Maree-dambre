@@ -535,6 +535,12 @@ final class VillageSession {
 
     func dismissAbsenceSummary() { absenceSummary = nil }
 
+    func observeNeighbor(_ id: Int, detail: ReconnaissanceDetail = .standard) {
+        guard !hasUnreadableSave else { return }
+        refreshWorld()
+        if state.observeNeighbor(id, detail: detail) { save() }
+    }
+
     func exportBackup() throws -> Data {
         guard !hasUnreadableSave else { throw CocoaError(.coderReadCorrupt) }
         refreshWorld()

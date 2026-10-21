@@ -90,7 +90,7 @@ struct ArmyPanel: View {
                     Text(WorldNeighbor.name(for: bot, seed: session.world.seed)).font(.headline)
                     Text(String(localized: "world.neighbor.tribe", defaultValue: "\(String(bot.displayName)) · Voisin simulé (IA)"))
                         .font(.caption).foregroundStyle(Palette.muted)
-                    Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(10 + min(10, bot.level) * 4))"))
+                    Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(bot.defensePower))"))
                     Text(String(localized: "screen.army.target_distance_and_roundtrip", defaultValue: "Niveau \(String(bot.level)) · Distance : \(String(bot.distanceFromHome)) cases · Aller-retour : \(String(Int(session.state.raidDuration(to: bot)))) s"))
                         .font(.caption).foregroundStyle(Palette.muted)
                     Button(String(localized: "screen.army.prepare_attack", defaultValue: "Préparer l’attaque")) { target = bot }
