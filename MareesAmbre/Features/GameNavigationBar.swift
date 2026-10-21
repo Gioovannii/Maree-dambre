@@ -10,7 +10,7 @@ struct GameNavigationBar: View {
         layout {
             ForEach(GameSection.allCases) { section in
                 Button { onSelect(section) } label: {
-                    VStack(spacing: 5) {
+                    VStack(spacing: 4) {
                         Image(systemName: section.symbol)
                             .font(.system(size: 17, weight: .semibold))
                             .frame(width: 25, height: 23)
@@ -28,11 +28,17 @@ struct GameNavigationBar: View {
                             .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                             .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
                     }
-                    .frame(maxWidth: .infinity, minHeight: 54)
-                    .padding(.vertical, 3)
+                    .frame(maxWidth: .infinity, minHeight: 50)
+                    .padding(.vertical, 4)
                     .foregroundStyle(selected == section ? Palette.amber : Color.white)
                     .background {
-                        if selected == section { Capsule().fill(Palette.amber.opacity(0.16)) }
+                        if selected == section {
+                            Capsule()
+                                .fill(Palette.amber.opacity(0.22))
+                                .overlay {
+                                    Capsule().strokeBorder(Palette.amber.opacity(0.65), lineWidth: 1)
+                                }
+                        }
                     }
                     .contentShape(.rect)
                 }
@@ -44,8 +50,8 @@ struct GameNavigationBar: View {
                 .accessibilityIdentifier("navigation.\(String(describing: section))")
             }
         }
-        .padding(4)
-        .glassEffect(.regular, in: .capsule)
+        .padding(5)
+        .glassEffect(.regular.tint(Palette.ocean.opacity(0.4)), in: .capsule)
 
     }
     private var layout: AnyLayout {
