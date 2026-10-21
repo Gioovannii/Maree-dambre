@@ -29,14 +29,13 @@ struct VillageBoard: View {
         } else {
             GeometryReader { viewport in
                 let viewSize = viewport.size
-                let fittedWidth = min(viewSize.width, viewSize.height * 0.52)
-                let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.52) : CGSize(
-                    width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.52) : viewSize.width,
-                    height: viewSize.height
-                )
+                // The artwork is 887×1774. Fit the entire estate inside the
+                // available viewport so portrait screens never crop the outer fields.
+                let scale = min(viewSize.width / 887, viewSize.height / 1774)
+                let mapSize = CGSize(width: 887 * scale, height: 1774 * scale)
 
                 ZStack {
-                    if preservesMapProportions || viewSize.width > viewSize.height {
+                    if viewSize.width > viewSize.height {
                         Image(mode.assetName)
                             .resizable()
                             .scaledToFill()
