@@ -37,21 +37,7 @@ struct GameView: View {
                 villageScreen
             }
         }
-        .background {
-            if session.state.people != nil && !showsWorld && !showsMissions && !showsMailbox {
-                Palette.ocean.ignoresSafeArea()
-                    .overlay(alignment: .bottom) {
-                        Image(villageMap.assetName)
-                            .resizable().scaledToFill()
-                            .frame(height: 110, alignment: .bottom)
-                            .clipped()
-                            .overlay(Palette.ocean.opacity(0.12))
-                    }
-                    .ignoresSafeArea(edges: .bottom)
-            } else {
-                Palette.ocean.ignoresSafeArea()
-            }
-        }
+        .background(Palette.ocean.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if session.state.people != nil {
                 VStack(spacing: 4) {
