@@ -32,7 +32,7 @@ struct GameNavigationBar: View {
                     .padding(.vertical, 3)
                     .foregroundStyle(selected == section ? Palette.amber : Color.white)
                     .background {
-                        if selected == section { Capsule().fill(Palette.ocean.opacity(0.65)) }
+                        if selected == section { Capsule().fill(Palette.amber.opacity(0.16)) }
                     }
                     .contentShape(.rect)
                 }
@@ -45,7 +45,8 @@ struct GameNavigationBar: View {
             }
         }
         .padding(4)
-        .glassEffect(.regular.interactive(), in: .capsule)
+        .background(Palette.ocean.opacity(0.88), in: .capsule)
+        .glassEffect(.regular, in: .capsule)
 
     }
     private var layout: AnyLayout {
