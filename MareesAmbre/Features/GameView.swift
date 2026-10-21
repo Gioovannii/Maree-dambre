@@ -19,6 +19,24 @@ struct GameView: View {
     @State private var selectedTownPlot = VillageSession.snapshotTownPlot
 
     var body: some View {
+        if session.state.people == nil {
+            gameContent
+        } else {
+            TabView(selection: Binding(get: { currentSection }, set: { selectSection($0) })) {
+                ForEach(GameSection.allCases) { section in
+                    Tab(section.title, systemImage: section.symbol, value: section) {
+                        if section == currentSection { gameContent }
+                        else { Palette.ocean.ignoresSafeArea() }
+                    }
+                    .badge(section == .mailbox ? session.state.unreadMailCount : 0)
+                }
+            }
+            .tint(Palette.amber)
+            .preferredColorScheme(.dark)
+        }
+    }
+
+    private var gameContent: some View {
         GeometryReader { viewport in
             if session.state.people == nil {
                 PrologueView(saveRecoveryMessage: session.saveRecoveryMessage, onChoose: session.choosePeople)
@@ -38,18 +56,6 @@ struct GameView: View {
             }
         }
         .background(Palette.ocean.ignoresSafeArea())
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if session.state.people != nil {
-                GlassEffectContainer {
-                    navigation
-                        .frame(maxWidth: 540)
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 12)
-                .frame(maxWidth: .infinity)
-            }
-        }
         .sheet(isPresented: $showsShipment) { ShipmentView() }
         .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
@@ -445,21 +451,19 @@ struct GameView: View {
         .accessibilityIdentifier("backup.open")
     }
 
-    private var navigation: some View {
-        GameNavigationBar(selected: currentSection, unreadCount: session.state.unreadMailCount) { section in
-            switch section {
-            case .resources: selectVillageMap(.resourceFields)
-            case .town: selectVillageMap(.townCenter)
-            case .missions: showMissions()
-            case .world:
-                showsWorld = true
-                showsMissions = false
-                showsMailbox = false
-            case .mailbox:
-                showsWorld = false
-                showsMissions = false
-                showsMailbox = true
-            }
+    private func selectSection(_ section: GameSection) {
+        switch section {
+        case .resources: selectVillageMap(.resourceFields)
+        case .town: selectVillageMap(.townCenter)
+        case .missions: showMissions()
+        case .world:
+            showsWorld = true
+            showsMissions = false
+            showsMailbox = false
+        case .mailbox:
+            showsWorld = false
+            showsMissions = false
+            showsMailbox = true
         }
     }
 
