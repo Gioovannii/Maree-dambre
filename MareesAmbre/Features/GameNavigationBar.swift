@@ -32,7 +32,7 @@ struct GameNavigationBar: View {
                     .padding(.vertical, 3)
                     .foregroundStyle(selected == section ? Palette.amber : Palette.muted)
                     .background {
-                        if selected == section { Capsule().fill(Palette.amber.opacity(0.13)) }
+                        if selected == section { Capsule().fill(.white.opacity(0.12)) }
                     }
                     .contentShape(.rect)
                 }
@@ -45,10 +45,8 @@ struct GameNavigationBar: View {
             }
         }
         .padding(4)
-        .background {
-            Color.clear
-                .glassEffect(.regular.tint(Palette.amber.opacity(0.08)), in: .capsule)
-        }
+        .glassEffect(.clear.interactive(), in: .capsule)
+
     }
     private var layout: AnyLayout {
         typeSize.isAccessibilitySize ? AnyLayout(VStackLayout(spacing: 5)) : AnyLayout(HStackLayout(spacing: 2))
