@@ -29,9 +29,9 @@ struct VillageBoard: View {
         } else {
             GeometryReader { viewport in
                 let viewSize = viewport.size
-                let fittedWidth = min(viewSize.width, viewSize.height * 0.52)
-                let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.52) : CGSize(
-                    width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.52) : viewSize.width,
+                let fittedWidth = min(viewSize.width, viewSize.height * 0.5)
+                let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.5) : CGSize(
+                    width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.5) : viewSize.width,
                     height: viewSize.height
                 )
 

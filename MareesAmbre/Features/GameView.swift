@@ -40,7 +40,10 @@ struct GameView: View {
         .background(Palette.ocean.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
             if session.state.people != nil {
-                navigation
+                VStack(spacing: 4) {
+                    GlobalMovementsButton()
+                    navigation
+                }
                     .frame(maxWidth: 560)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
@@ -220,13 +223,17 @@ struct GameView: View {
                     .padding(.bottom, isCompactPhone ? 0 : 6)
             ZStack {
                 Palette.ocean.ignoresSafeArea()
-                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
-                             onPlotSelected: { showsVillageDetails = true },
-                             onTownSelected: { selectVillageMap(.townCenter) },
-                             preservesMapProportions: true,
-                             showsTownShortcut: false)
+                ScrollView(.vertical) {
+                    VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                                 onPlotSelected: { showsVillageDetails = true },
+                                 onTownSelected: { selectVillageMap(.townCenter) },
+                                 preservesMapProportions: true,
+                                 showsTownShortcut: false)
+                        .frame(width: geometry.size.width, height: geometry.size.width / 0.5)
+                        .padding(.bottom, 72)
+                }
+                .scrollIndicators(.hidden)
                 .id(villageMap)
-                .ignoresSafeArea()
 
                 VStack(spacing: 8) {
                     Spacer(minLength: 4)

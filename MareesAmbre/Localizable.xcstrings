@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "movements.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Mouvements"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Movements"
+        }
+      }
+    }
+  },
+  "movements.incoming": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Prochain assaut prévu"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Next scheduled attack"
+        }
+      }
+    }
+  },
   "world.travel.active": {
     "extractionState": "manual",
     "localizations": {

@@ -5,6 +5,10 @@ struct WorldExpeditionsPanel: View {
 
     @State private var expanded = false
 
+    init(initiallyExpanded: Bool = false) {
+        _expanded = State(initialValue: initiallyExpanded)
+    }
+
     var body: some View {
         if !session.state.worldExpeditions.isEmpty {
             TimelineView(.periodic(from: .now, by: 1)) { timeline in
