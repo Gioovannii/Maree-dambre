@@ -114,6 +114,9 @@ struct ArmyPanel: View {
             }
         }
         .onAppear {
+            if !isTraining, ProcessInfo.processInfo.arguments.contains("--snapshot-raid-preparation") {
+                target = session.state.bots.first
+            }
             if !isTraining, ProcessInfo.processInfo.arguments.contains("--snapshot-raid-report"),
                let report = session.state.army?.raidReport {
                 var snapshotTransaction = Transaction(animation: nil)

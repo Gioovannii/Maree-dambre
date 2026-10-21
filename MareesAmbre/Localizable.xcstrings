@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "world.travel.active": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Voyages en cours"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Active voyages"
+        }
+      }
+    }
+  },
+  "hero.raid.details": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Soutien et expérience"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Support and experience"
+        }
+      }
+    }
+  },
   "raid.selection.all_count": {
     "extractionState": "manual",
     "localizations": {

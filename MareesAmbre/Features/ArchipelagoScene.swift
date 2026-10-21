@@ -91,22 +91,25 @@ final class ArchipelagoScene: SKScene {
             line.name = "line"
             line.strokeColor = color.withAlphaComponent(0.8)
             container.addChild(line)
-            let marker = SKShapeNode(circleOfRadius: 16)
+            let marker = SKShapeNode(circleOfRadius: 11)
             marker.name = "traveler"
-            marker.fillColor = WorldMapStyle.factionColor(voyage.isRaid ? 0 : 1).withAlphaComponent(0.95)
+            marker.fillColor = UIColor(red: 0.035, green: 0.14, blue: 0.19, alpha: 0.96)
             marker.strokeColor = color
             marker.lineWidth = 2
             let symbol = voyage.isRaid ? "flag.fill" : "person.fill"
             if let image = UIImage(systemName: symbol)?.withTintColor(.white, renderingMode: .alwaysOriginal) {
                 let icon = SKSpriteNode(texture: SKTexture(image: image))
-                icon.size = CGSize(width: 18, height: 18)
+                icon.size = CGSize(width: 12, height: 12)
+                icon.zPosition = 2
+                icon.color = .white
+                icon.colorBlendFactor = 1
                 marker.addChild(icon)
             }
             if voyage.includesHero && voyage.isRaid {
                 let badge = SKLabelNode(text: "H")
                 badge.fontName = "AvenirNext-Bold"
-                badge.fontSize = 11
-                badge.position = CGPoint(x: 15, y: 10)
+                badge.fontSize = 8
+                badge.position = CGPoint(x: 10, y: 8)
                 badge.fontColor = .white
                 marker.addChild(badge)
             }

@@ -30,28 +30,65 @@ struct RaidPreparationView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text(WorldNeighbor.name(for: currentTarget, seed: session.world.seed)).font(.headline)
-                    Text(String(localized: "world.neighbor.tribe", defaultValue: "\(String(currentTarget.displayName)) · Voisin simulé (IA)"))
-                    Text(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(defense))"))
-                    Text(String(localized: "screen.raid.duration", defaultValue: "Aller-retour : \(String(Int(session.state.raidDuration(to: currentTarget)))) secondes."))
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(WorldNeighbor.name(for: currentTarget, seed: session.world.seed))
+                            .font(.title3.bold())
+                        Text(currentTarget.displayName)
+                            .font(.caption).foregroundStyle(Palette.muted)
+                        HStack(spacing: 16) {
+                            Label(String(localized: "screen.army.defense_value", defaultValue: "Défense : \(String(defense))"), systemImage: "shield.lefthalf.filled")
+                            Spacer(minLength: 0)
+                            Label(GameProgression.durationText(session.state.raidDuration(to: currentTarget)), systemImage: "arrow.left.arrow.right")
+                        }
+                        .font(.caption.weight(.medium)).foregroundStyle(Palette.amber)
+                    }
+                    .padding(.vertical, 6)
+
+                }
+                .listRowBackground(Palette.panel)
+                Section {
+                    Button { withHero.toggle() } label: {
+                        HStack(spacing: 14) {
+                            Image(session.state.hero?.portrait.assetName ?? HeroPortrait.captainWoman.assetName)
+                                .resizable().scaledToFill()
+                                .frame(width: 56, height: 64)
+                                .clipShape(.rect(cornerRadius: 12))
+                                .accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(session.state.hero?.name ?? String(localized: "hero.short_title", defaultValue: "Héros"))
+                                    .font(.headline).foregroundStyle(Palette.paper)
+                                Text(String(localized: "hero.raid.join", defaultValue: "Envoyer le héros en soutien"))
+                                    .font(.caption).foregroundStyle(Palette.muted)
+                                if session.state.heroCanJoinRaid {
+                                    Text(String(localized: "hero.raid.bonus", defaultValue: "Soutien : +\(String(session.state.heroRaidAttackBonus)) en attaque."))
+                                        .font(.caption.weight(.semibold)).foregroundStyle(Palette.amber)
+                                }
+                            }
+                            Spacer(minLength: 4)
+                            Image(systemName: withHero ? "checkmark.circle.fill" : "circle")
+                                .font(.title2).foregroundStyle(withHero ? Palette.amber : Palette.muted)
+                        }
+                        .padding(.vertical, 6)
+                        .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(!session.state.heroCanJoinRaid && !withHero)
+                    .accessibilityValue(withHero ? String(localized: "hero.raid.onboard", defaultValue: "Héros à bord") : "")
+                    .accessibilityAddTraits(withHero ? .isSelected : [])
+                    if !session.state.heroCanJoinRaid {
+                        Text(String(localized: "hero.raid.unavailable", defaultValue: "Choisissez un héros disponible : il ne peut pas participer à deux voyages en même temps."))
+                            .font(.caption).foregroundStyle(Palette.muted)
+                    }
+                    DisclosureGroup(String(localized: "hero.raid.details", defaultValue: "Soutien et expérience")) {
+                        Text(String(localized: "hero.raid.rules", defaultValue: "Le héros accompagne l’armée jusqu’à son retour. Il gagne 20 XP en victoire ou 5 XP en défaite, au plus une fois par voisin et par jour."))
+                            .font(.footnote).foregroundStyle(Palette.muted)
+                    }
+                    .font(.caption)
+
                 }
                 .listRowBackground(Palette.panel)
                 Section { ReconnaissancePanel(target: currentTarget) }
                     .listRowBackground(Palette.panel)
-                Section {
-                    Toggle(String(localized: "hero.raid.join", defaultValue: "Envoyer le héros en soutien"), isOn: $withHero)
-                        .disabled(!session.state.heroCanJoinRaid && !withHero)
-                    Text(String(localized: "hero.raid.rules", defaultValue: "Le héros accompagne l’armée jusqu’à son retour. Il gagne 20 XP en victoire ou 5 XP en défaite, au plus une fois par voisin et par jour."))
-                        .font(.footnote).foregroundStyle(Palette.muted)
-                    if session.state.heroCanJoinRaid {
-                        Text(String(localized: "hero.raid.bonus", defaultValue: "Soutien : +\(String(session.state.heroRaidAttackBonus)) en attaque."))
-                            .font(.footnote)
-                    } else {
-                        Text(String(localized: "hero.raid.unavailable", defaultValue: "Choisissez un héros disponible : il ne peut pas participer à deux voyages en même temps."))
-                            .font(.footnote).foregroundStyle(Palette.amber)
-                    }
-                }
-                .listRowBackground(Palette.panel)
                 Section(String(localized: "screen.raid.choose_units", defaultValue: "Choisir les troupes")) {
                     Button(action: selectAll) {
                         Label {
