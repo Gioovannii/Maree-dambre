@@ -1,6 +1,57 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "people.specialty.transport_value": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "+%@ points de bonus de transport · plafond : 20"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "+%@ carrying bonus points · cap: 20"
+        }
+      }
+    }
+  },
+  "people.specialty.defense_value": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "+%@ de défense automatique supplémentaire"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "+%@ extra automatic defense"
+        }
+      }
+    }
+  },
+  "people.specialty.travel_value": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Temps supplémentaire des raids lointains réduit de %@ · plafond : %@"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Extra travel time for distant raids reduced by %@ · cap: %@"
+        }
+      }
+    }
+  },
   "cloud.signin": {
     "extractionState": "manual",
     "localizations": {

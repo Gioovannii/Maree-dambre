@@ -10,6 +10,12 @@ extension DomainChecks {
         precondition(specialty.transportBonusPercent == carryingBefore + 5)
         specialty.buildingLevels = [.market: 10]
         precondition(specialty.specialtyTransportBonus == 20)
+        precondition(People.sauniers.specialtyBonus(at: 4) == People.sauniers.specialtyBonus(at: 10))
+        precondition(People.roseaux.specialtyBonus(at: 0) == 0)
+        precondition(People.roseaux.specialtyBonus(at: 10) == 20)
+        precondition(People.nacre.specialtyBonus(at: 10) == 50)
+        precondition(specialty.buildingEffect(.market, level: 4).contains(People.sauniers.specialtyEffect(at: 4)),
+            "Building previews must describe the same capped bonus used by the simulation")
         specialty.people = .nacre
         specialty.buildings[11] = .watchtower
         precondition(specialty.specialtyDefenseBonus == 5)

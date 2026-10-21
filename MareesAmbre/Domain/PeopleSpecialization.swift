@@ -1,6 +1,28 @@
 import Foundation
 
 extension People {
+    func specialtyBonus(at level: Int) -> Int {
+        let bounded = min(GameProgression.maximumBuildingLevel, max(0, level))
+        switch self {
+        case .sauniers: return min(20, 5 * bounded)
+        case .nacre: return 5 * bounded
+        case .roseaux: return min(20, 2 * bounded)
+        }
+    }
+
+    func specialtyEffect(at level: Int) -> String {
+        let value = specialtyBonus(at: level)
+        switch self {
+        case .sauniers:
+            return String(localized: "people.specialty.transport_value", defaultValue: "+\(String(value)) points de bonus de transport · plafond : 20")
+        case .nacre:
+            return String(localized: "people.specialty.defense_value", defaultValue: "+\(String(value)) de défense automatique supplémentaire")
+        case .roseaux:
+            let percent = (Double(value) / 100).formatted(.percent.precision(.fractionLength(0)))
+            return String(localized: "people.specialty.travel_value", defaultValue: "Temps supplémentaire des raids lointains réduit de \(percent) · plafond : \((0.2).formatted(.percent.precision(.fractionLength(0))))")
+        }
+    }
+
     var specialtyBuilding: BuildingKind {
         switch self {
         case .sauniers: .market
@@ -27,9 +49,9 @@ extension People {
 }
 
 extension VillageState {
-    var specialtyTransportBonus: Int { people == .sauniers ? min(20, 5 * buildingLevel(.market)) : 0 }
-    var specialtyDefenseBonus: Int { people == .nacre ? 5 * buildingLevel(.watchtower) : 0 }
+    var specialtyTransportBonus: Int { people == .sauniers ? People.sauniers.specialtyBonus(at: buildingLevel(.market)) : 0 }
+    var specialtyDefenseBonus: Int { people == .nacre ? People.nacre.specialtyBonus(at: buildingLevel(.watchtower)) : 0 }
     var distantRaidDurationMultiplier: Double {
-        people == .roseaux ? 1 - Double(min(20, 2 * buildingLevel(.academy))) / 100 : 1
+        people == .roseaux ? 1 - Double(People.roseaux.specialtyBonus(at: buildingLevel(.academy))) / 100 : 1
     }
 }

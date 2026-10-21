@@ -2,6 +2,12 @@ import Foundation
 
 extension VillageState {
     func buildingEffect(_ kind: BuildingKind, level: Int) -> String {
+        let base = baseBuildingEffect(kind, level: level)
+        guard let people, people.specialtyBuilding == kind else { return base }
+        return base + "\n" + people.specialtyTitle + " : " + people.specialtyEffect(at: level)
+    }
+
+    private func baseBuildingEffect(_ kind: BuildingKind, level: Int) -> String {
         switch kind {
         case .hall:
             return String(localized: "progression.effect.hall", defaultValue: "+\(String(level * 2)) bois · +\(String(level)) ambre · +\(String(level * 2)) vivres / h · Durée des chantiers : \(pow(0.97, Double(level - 1)).formatted(.percent.precision(.fractionLength(0))))")

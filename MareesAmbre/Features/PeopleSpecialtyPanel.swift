@@ -11,6 +11,13 @@ struct PeopleSpecialtyPanel: View {
                 Text(people.specialtyDescription)
                     .font(.subheadline)
                     .foregroundStyle(Palette.muted)
+                Label(people.specialtyBuilding.name, systemImage: people.specialtyBuilding.symbol)
+                    .font(.subheadline.bold())
+                if session.state.hasBuilding(people.specialtyBuilding) {
+                    Text(people.specialtyEffect(at: session.state.buildingLevel(people.specialtyBuilding)))
+                        .font(.footnote)
+                        .foregroundStyle(Palette.amber)
+                }
                 Label(session.state.hasBuilding(people.specialtyBuilding)
                       ? String(localized: "people.specialty.active", defaultValue: "Spécialité active dans ce village")
                       : String(localized: "people.specialty.locked", defaultValue: "Construisez le bâtiment associé pour activer cette spécialité"),

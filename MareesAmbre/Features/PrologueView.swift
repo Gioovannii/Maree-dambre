@@ -123,6 +123,10 @@ struct PrologueView: View {
                 Text(people.description).font(.subheadline).foregroundStyle(Palette.muted)
                     .fixedSize(horizontal: false, vertical: true)
                 trait(title: String(localized: "screen.prologue.strength", defaultValue: "ATOUT"), text: people.strength, symbol: "sparkle", tint: Color(red: 0.55, green: 0.87, blue: 0.67))
+                if isSelected {
+                    trait(title: people.specialtyTitle, text: people.specialtyDescription,
+                          symbol: people.specialtyBuilding.symbol, tint: Palette.amber)
+                }
             }
             .padding(15)
             .background(isSelected ? Palette.panel : .white.opacity(0.035), in: .rect(cornerRadius: 20))
