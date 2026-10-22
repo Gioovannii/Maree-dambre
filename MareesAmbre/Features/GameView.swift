@@ -108,7 +108,7 @@ struct GameView: View {
     private var accessibilityScreen: some View {
         ScrollView {
             VStack(spacing: 16) {
-                topControls
+                topControls(showsResources: !showsWorld && !showsMissions && !showsMailbox)
                 constructionStatus
                 if showsWorld {
                     WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 320)
@@ -187,7 +187,7 @@ struct GameView: View {
 
     private var tabletInspector: some View {
         VStack(spacing: 12) {
-            topControls.padding(.horizontal, 12)
+            topControls(showsResources: !showsWorld && !showsMissions && !showsMailbox).padding(.horizontal, 12)
             constructionStatus.padding(.horizontal, 12)
             if showsWorld {
                 ScrollView {
@@ -226,7 +226,7 @@ struct GameView: View {
         GeometryReader { geometry in
             let isCompactPhone = horizontalSizeClass == .compact
             VStack(spacing: 0) {
-                topControls
+                topControls(showsResources: true)
                     .padding(.horizontal, 12)
                     .padding(.top, isCompactPhone ? 0 : 7)
                     .padding(.bottom, isCompactPhone ? 0 : 6)
@@ -302,7 +302,7 @@ struct GameView: View {
     private var worldScreen: some View {
         GeometryReader { geometry in
             VStack(spacing: 10) {
-                topControls
+                topControls(showsResources: false)
                     .frame(maxWidth: 560)
                 ScrollView {
                     WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: min(480, max(280, geometry.size.height - 350)))
@@ -322,7 +322,7 @@ struct GameView: View {
     private var missionsScreen: some View {
         GeometryReader { geometry in
             VStack(spacing: 10) {
-                topControls
+                topControls(showsResources: false)
                     .frame(maxWidth: 560)
                 ScrollView {
                     MissionsPanel()
@@ -339,7 +339,7 @@ struct GameView: View {
         }
     }
 
-    private var topControls: some View {
+    private func topControls(showsResources: Bool) -> some View {
         VStack(spacing: 6) {
             if let summary = session.absenceSummary, horizontalSizeClass != .compact {
                 AbsenceSummaryBanner(summary: summary) {
@@ -349,14 +349,14 @@ struct GameView: View {
                     showsMailbox = true
                 }
             }
-            if currentSection == .resources || currentSection == .town {
+            if showsResources {
                 ResourcesView(
                     resources: session.state.resources,
                     hourlyProduction: session.state.production,
                     storageCapacity: session.state.storageCapacity
                 )
             }
-            if let people = session.state.people, session.state.settlementCount < 2 {
+            if showsResources, let people = session.state.people, session.state.settlementCount < 2 {
                 Button { showsGuide = true } label: {
                     HStack(spacing: 10) {
                         Image(VillageGuideView.portrait(for: people))
@@ -480,7 +480,7 @@ struct GameView: View {
 
     private var mailboxScreen: some View {
         VStack(spacing: 10) {
-            topControls.frame(maxWidth: 720)
+            topControls(showsResources: false).frame(maxWidth: 720)
             ScrollView {
                 MailboxPanel().padding(.vertical, 12)
                     .frame(maxWidth: 720).frame(maxWidth: .infinity)
