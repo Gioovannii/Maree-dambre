@@ -349,11 +349,13 @@ struct GameView: View {
                     showsMailbox = true
                 }
             }
-            ResourcesView(
-                resources: session.state.resources,
-                hourlyProduction: session.state.production,
-                storageCapacity: session.state.storageCapacity
-            )
+            if currentSection == .resources || currentSection == .town {
+                ResourcesView(
+                    resources: session.state.resources,
+                    hourlyProduction: session.state.production,
+                    storageCapacity: session.state.storageCapacity
+                )
+            }
             if let people = session.state.people, session.state.settlementCount < 2 {
                 Button { showsGuide = true } label: {
                     HStack(spacing: 10) {
