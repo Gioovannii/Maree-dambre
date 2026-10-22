@@ -230,33 +230,23 @@ struct GameView: View {
 
     private var villageScreen: some View {
         GeometryReader { geometry in
-            let isCompactPhone = horizontalSizeClass == .compact
-            VStack(spacing: 0) {
-                topControls(showsResources: true)
-                    .padding(.horizontal, 12)
-                    .padding(.top, isCompactPhone ? 0 : 7)
-                    .padding(.bottom, isCompactPhone ? 0 : 6)
-            ZStack {
-                Palette.ocean.ignoresSafeArea()
+            ZStack(alignment: .top) {
                 VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
                              onPlotSelected: { showsVillageDetails = true },
                              onTownSelected: { selectVillageMap(.townCenter) },
                              preservesMapProportions: false,
                              showsTownShortcut: false)
                     .id(villageMap)
-
-                VStack(spacing: 8) {
-                    Spacer(minLength: 4)
-                    constructionStatus
-                        .frame(maxWidth: 560)
+                    .ignoresSafeArea(.container)
+                topControls(showsResources: true)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 4)
+                VStack {
+                    Spacer()
+                    constructionStatus.frame(maxWidth: 560)
                 }
                 .padding(.horizontal, 12)
-                .padding(.top, isCompactPhone ? 0 : 7)
-                .padding(.bottom, 6)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .clipped()
-            .ignoresSafeArea(.container, edges: .bottom)
+                .padding(.bottom, 80)
             }
             .task {
                 if ProcessInfo.processInfo.arguments.contains("--snapshot-center") {
