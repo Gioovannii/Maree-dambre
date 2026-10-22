@@ -12,14 +12,9 @@ struct VillagePedestrians: View {
     private let snapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
         && !ProcessInfo.processInfo.arguments.contains("--snapshot-animate")
     private static let townRoutes: [[CGPoint]] = [
-        [CGPoint(x: 0.49, y: 0.43), CGPoint(x: 0.49, y: 0.51),
-         CGPoint(x: 0.50, y: 0.61), CGPoint(x: 0.49, y: 0.74)],
-        [CGPoint(x: 0.08, y: 0.40), CGPoint(x: 0.11, y: 0.49),
-         CGPoint(x: 0.12, y: 0.60), CGPoint(x: 0.12, y: 0.68)],
-        [CGPoint(x: 0.89, y: 0.42), CGPoint(x: 0.88, y: 0.50),
-         CGPoint(x: 0.88, y: 0.60), CGPoint(x: 0.86, y: 0.68)],
-        [CGPoint(x: 0.17, y: 0.61), CGPoint(x: 0.37, y: 0.61),
-         CGPoint(x: 0.50, y: 0.61), CGPoint(x: 0.78, y: 0.61)]
+        [.init(x: 0.08, y: 0.31), .init(x: 0.50, y: 0.31), .init(x: 0.92, y: 0.31)],
+        [.init(x: 0.08, y: 0.395), .init(x: 0.50, y: 0.395), .init(x: 0.92, y: 0.395)],
+        [.init(x: 0.08, y: 0.595), .init(x: 0.50, y: 0.595), .init(x: 0.92, y: 0.595)]
     ]
     // Feet positions registered to the 887 × 1774 background. Follow the dirt
     // corridors outside fences; never take a straight shortcut across a plot.

@@ -119,6 +119,13 @@ struct VillageBoard: View {
                     }
             } else {
                 ZStack {
+                    if mode == .townCenter && plot == 11 {
+                        Ellipse()
+                            .fill(Color(red: 0.70, green: 0.50, blue: 0.29))
+                            .overlay { Ellipse().strokeBorder(Palette.paper.opacity(0.8), lineWidth: 2) }
+                            .frame(width: size * 0.9, height: size * 0.42)
+                            .offset(y: size * 0.12)
+                    }
                     if site == nil && canReceiveMovingBuilding {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color(red: 0.62, green: 0.49, blue: 0.30).opacity(0.65))

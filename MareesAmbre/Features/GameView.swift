@@ -60,19 +60,12 @@ struct GameView: View {
         .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
-        .overlay(alignment: .bottomLeading) {
-            if session.state.people != nil && !showsVillageDetails {
-                floatingControls
-                    .padding(.leading, 12)
-                    .padding(.bottom, 12)
-            }
-        }
         .overlay(alignment: .bottomTrailing) {
-            if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2 {
+            if let people = session.state.people, !showsVillageDetails {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
                                             maximumHeight: max(160, min(420, viewport.size.height - 160)),
-                                            isExpanded: $showsGuide) {
+                                            isExpanded: $showsGuide, onShowBackup: { showsBackup = true }, allowsTutorial: session.state.settlementCount < 2) {
                         showsGuide = false
                         let step = VillageGuideStep.next(in: session.state)
                         if step == .complete {
@@ -240,7 +233,10 @@ struct GameView: View {
                     .ignoresSafeArea(.container)
                 VStack(spacing: 8) {
                     topControls(showsResources: true)
-                    ActiveRaidsStrip()
+                    HStack {
+                        ActiveRaidsStrip()
+                        GlobalMovementsButton()
+                    }
                 }
                     .padding(.horizontal, 12)
                     .padding(.top, 4)
@@ -378,33 +374,6 @@ struct GameView: View {
                 .accessibilityIdentifier("settlement.switch")
             }
         }
-    }
-
-    private var floatingControls: some View {
-            HStack(spacing: 8) {
-                HeroAccessButton()
-                GlobalMovementsButton()
-                if horizontalSizeClass == .compact {
-                    if let summary = session.absenceSummary {
-                        AbsenceSummaryBanner(summary: summary, onShowMessages: {
-                            showsVillageDetails = false
-                            showsWorld = false
-                            showsMissions = false
-                            showsMailbox = true
-                        }, compact: true)
-                    }
-
-                }
-                Menu {
-                    Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive") { showsBackup = true }
-                } label: {
-                    Label(String(localized: "settings.title", defaultValue: "Réglages"), systemImage: "gearshape")
-                        .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44)
-                }
-                .tint(Palette.amber)
-            }
-            .padding(6)
-            .background(Palette.ocean.opacity(0.85), in: .capsule)
     }
 
     @ViewBuilder

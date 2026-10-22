@@ -6,10 +6,21 @@ struct ActiveRaidsStrip: View {
 
     var body: some View {
         let raids = session.state.worldExpeditions.filter(\.isRaid)
-        if !raids.isEmpty {
+        if !raids.isEmpty || session.state.nextDomainBotAttackDate != nil {
             TimelineView(.periodic(from: .now, by: 1)) { timeline in
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
+                        if let next = session.state.nextDomainBotAttackDate {
+                            HStack(spacing: 8) {
+                                Image(systemName: "shield.lefthalf.filled").foregroundStyle(Palette.amber)
+                                Text(String(localized: "movements.incoming", defaultValue: "Prochain assaut prévu"))
+                                Text(GameProgression.durationText(max(0, next.timeIntervalSince(timeline.date))))
+                                    .monospacedDigit().bold()
+                            }
+                            .font(.caption).foregroundStyle(Palette.paper)
+                            .padding(10)
+                            .background(Palette.ocean.opacity(0.92), in: .rect(cornerRadius: 14))
+                        }
                         ForEach(raids) { raid in
                             HStack(spacing: 8) {
                                 Image(systemName: raid.isReturning(at: timeline.date) ? "arrow.uturn.backward" : "flag.fill")

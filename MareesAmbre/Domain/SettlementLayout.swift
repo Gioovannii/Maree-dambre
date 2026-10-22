@@ -43,7 +43,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     // Legacy lots remain addressable so existing buildings and jobs are preserved.
     var defaultVisibleSlots: [Int] {
-        self == .townCenter ? slots : slots
+        self == .townCenter ? Array(10..<20) + [SettlementLayout.expeditionQuayPlot] : slots
     }
 
     func mapPoint(for plot: Int) -> CGPoint {
@@ -59,15 +59,15 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
             guard clearings.indices.contains(plot) else { return CGPoint(x: 0.5, y: 0.5) }
             return clearings[plot]
         }
-        if plot == 12 { return CGPoint(x: 0.50, y: 0.345) }
-        if plot == SettlementLayout.expeditionQuayPlot { return CGPoint(x: 0.69, y: 0.785) }
+        if plot == 12 { return CGPoint(x: 0.50, y: 0.45) }
+        if plot == SettlementLayout.expeditionQuayPlot { return CGPoint(x: 0.72, y: 0.76) }
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19, 22, 23]
         guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
         let points: [CGPoint] = [
-            CGPoint(x: 0.25, y: 0.268), CGPoint(x: 0.50, y: 0.232), CGPoint(x: 0.75, y: 0.268),
-            CGPoint(x: 0.16, y: 0.355), CGPoint(x: 0.84, y: 0.355), CGPoint(x: 0.28, y: 0.452),
-            CGPoint(x: 0.73, y: 0.452), CGPoint(x: 0.31, y: 0.56), CGPoint(x: 0.69, y: 0.56),
-            CGPoint(x: 0.30, y: 0.665), CGPoint(x: 0.70, y: 0.665)
+            CGPoint(x: 0.35, y: 0.28), CGPoint(x: 0.75, y: 0.635), CGPoint(x: 0.65, y: 0.28),
+            CGPoint(x: 0.26, y: 0.355), CGPoint(x: 0.74, y: 0.355), CGPoint(x: 0.17, y: 0.45),
+            CGPoint(x: 0.83, y: 0.45), CGPoint(x: 0.26, y: 0.55), CGPoint(x: 0.74, y: 0.55),
+            CGPoint(x: 0.50, y: 0.635), CGPoint(x: 0.75, y: 0.635)
         ]
         return points[index]
     }
