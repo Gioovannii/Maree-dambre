@@ -10,7 +10,7 @@ struct VillageCompanionOverlay: View {
     @AppStorage("companion.hintDismissed") private var hintDismissed = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .trailing, spacing: 10) {
             if isExpanded {
                 VillageGuideView(people: people, step: step, messages: $messages, onClose: { isExpanded = false },
                                  onShowDestination: onShowDestination)
@@ -35,7 +35,7 @@ struct VillageCompanionOverlay: View {
                 .accessibilityLabel(String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon"))
             }
         }
-        .frame(maxWidth: 350, alignment: .leading)
+        .frame(maxWidth: 350, alignment: .trailing)
         .shadow(color: .black.opacity(0.3), radius: 10, y: 4)
     }
 }

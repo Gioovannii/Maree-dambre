@@ -60,7 +60,7 @@ struct GameView: View {
         .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
-        .overlay(alignment: .bottomLeading) {
+        .overlay(alignment: .bottomTrailing) {
             if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2 {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
@@ -96,7 +96,7 @@ struct GameView: View {
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                     .padding(.horizontal, 12)
                     .padding(.bottom, typeSize.isAccessibilitySize ? 12 : 88)
                 }
