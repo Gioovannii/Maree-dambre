@@ -21,7 +21,7 @@ struct VillageCompanionOverlay: View {
             }
 
             if !isExpanded {
-                HStack(spacing: 10) {
+                HStack(alignment: .top, spacing: 0) {
                 Menu {
                     Button(String(localized: "hero.open_accessibility", defaultValue: "Ouvrir la fiche de votre héros"), systemImage: "person.crop.circle") { showsHero = true }
                     Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive", action: onShowBackup)
@@ -35,6 +35,7 @@ struct VillageCompanionOverlay: View {
                         .frame(width: 44, height: 44)
                         .contentShape(.rect)
                 }
+                .offset(y: -6)
                 Button {
                     if allowsTutorial { isExpanded = true }
                     else { showsHero = true }
