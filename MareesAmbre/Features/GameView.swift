@@ -238,7 +238,10 @@ struct GameView: View {
                              showsTownShortcut: false)
                     .id(villageMap)
                     .ignoresSafeArea(.container)
-                topControls(showsResources: true)
+                VStack(spacing: 8) {
+                    topControls(showsResources: true)
+                    ActiveRaidsStrip()
+                }
                     .padding(.horizontal, 12)
                     .padding(.top, 4)
                 VStack {
