@@ -525,6 +525,37 @@ final class VillageSession {
         message = text
         save()
     }
+    #if DEBUG
+    /// Simulate an absence, then rebase all dates so subsequent actions still use real time.
+    func advanceTestTime(by seconds: TimeInterval) {
+        guard seconds > 0, !hasUnreadableSave else { return }
+        do {
+            var simulated = state
+            simulated.updateDomain(now: Date.now.addingTimeInterval(seconds), on: world)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let formatter = ISO8601DateFormatter()
+            func rebase(_ value: Any) -> Any {
+                if let dictionary = value as? [String: Any] { return dictionary.mapValues { rebase($0) } }
+                if let array = value as? [Any] { return array.map { rebase($0) } }
+                if let string = value as? String, let date = formatter.date(from: string) {
+                    return formatter.string(from: date.addingTimeInterval(-seconds))
+                }
+                return value
+            }
+            let object = try JSONSerialization.jsonObject(with: encoder.encode(simulated))
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let rebased = try decoder.decode(VillageState.self, from: JSONSerialization.data(withJSONObject: rebase(object)))
+            state = rebased
+            ConstructionActivityController.end()
+            save()
+        } catch {
+            message = error.localizedDescription
+        }
+    }
+    #endif
+
     private func save() {
         guard !isUISnapshot, !hasUnreadableSave else { return }
         state.recordGuideProgress()

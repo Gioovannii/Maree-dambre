@@ -1,6 +1,91 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "debug.time.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Mode test — avancer le temps"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Test mode — advance time"
+        }
+      }
+    }
+  },
+  "debug.time.minute": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Avancer d’une minute"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Advance one minute"
+        }
+      }
+    }
+  },
+  "debug.time.hour": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Avancer d’une heure"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Advance one hour"
+        }
+      }
+    }
+  },
+  "debug.time.day": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Avancer d’un jour"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Advance one day"
+        }
+      }
+    }
+  },
+  "debug.time.help": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Fait avancer la partie actuelle : production, travaux, voyages et attaques. Réservé au développement."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Advances the current game: production, jobs, journeys and attacks. Development only."
+        }
+      }
+    }
+  },
   "village.enter_town": {
     "extractionState": "manual",
     "localizations": {
