@@ -63,8 +63,12 @@ struct VillageBoard: View {
                         }
 
                         if mode == .resourceFields && showsTownShortcut {
-                            TownShortcutButton(action: onTownSelected)
-                                .position(x: mapSize.width * 0.50, y: mapSize.height * 0.86)
+                            Button(String(localized: "village.enter_town", defaultValue: "Ville"), systemImage: "building.2.fill", action: onTownSelected)
+                                .font(.caption.bold())
+                                .buttonStyle(.borderedProminent)
+                                .tint(Palette.ocean).foregroundStyle(Palette.paper)
+                                .controlSize(.large)
+                                .position(x: mapSize.width * 0.82, y: mapSize.height * 0.79)
                                 .zIndex(100)
                         }
                     }

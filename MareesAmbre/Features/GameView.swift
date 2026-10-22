@@ -228,7 +228,7 @@ struct GameView: View {
                              onPlotSelected: { showsVillageDetails = true },
                              onTownSelected: { selectVillageMap(.townCenter) },
                              preservesMapProportions: false,
-                             showsTownShortcut: false)
+                             showsTownShortcut: true)
                     .id(villageMap)
                     .ignoresSafeArea(.container)
                 VStack(spacing: 8) {

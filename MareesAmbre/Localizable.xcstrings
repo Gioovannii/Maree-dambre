@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "village.enter_town": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Ville"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Town"
+        }
+      }
+    }
+  },
   "storage.header.full_in": {
     "extractionState": "manual",
     "localizations": {
