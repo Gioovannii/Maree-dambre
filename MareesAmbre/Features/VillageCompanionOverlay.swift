@@ -26,9 +26,14 @@ struct VillageCompanionOverlay: View {
                     Button(String(localized: "hero.open_accessibility", defaultValue: "Ouvrir la fiche de votre héros"), systemImage: "person.crop.circle") { showsHero = true }
                     Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive", action: onShowBackup)
                 } label: {
-                    Image(systemName: "gearshape").font(.title3)
-                        .foregroundStyle(Palette.amber).frame(width: 44, height: 44)
-                        .background(Palette.ocean.opacity(0.9), in: .circle)
+                    Label(String(localized: "settings.title", defaultValue: "Réglages"), systemImage: "gearshape")
+                        .labelStyle(.iconOnly)
+                        .font(.caption.bold())
+                        .foregroundStyle(Palette.amber)
+                        .frame(width: 28, height: 28)
+                        .background(Palette.ocean.opacity(0.85), in: .circle)
+                        .frame(width: 44, height: 44)
+                        .contentShape(.rect)
                 }
                 Button {
                     if allowsTutorial { isExpanded = true }
