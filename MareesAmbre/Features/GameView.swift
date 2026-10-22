@@ -60,6 +60,13 @@ struct GameView: View {
         .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
+        .overlay(alignment: .bottomLeading) {
+            if session.state.people != nil && !showsVillageDetails {
+                floatingControls
+                    .padding(.leading, 12)
+                    .padding(.bottom, 12)
+            }
+        }
         .overlay(alignment: .bottomTrailing) {
             if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2 {
                 GeometryReader { viewport in
@@ -98,7 +105,7 @@ struct GameView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                     .padding(.horizontal, 12)
-                    .padding(.bottom, typeSize.isAccessibilitySize ? 12 : 88)
+                    .padding(.bottom, 12)
                 }
             }
         }
@@ -355,29 +362,7 @@ struct GameView: View {
                     storageCapacity: session.state.storageCapacity
                 )
             }
-            HStack(spacing: 8) {
-                if !showsMailbox { header } else { Spacer(minLength: 0) }
-                HeroAccessButton()
-                GlobalMovementsButton()
-                if horizontalSizeClass == .compact {
-                    if let summary = session.absenceSummary {
-                        AbsenceSummaryBanner(summary: summary, onShowMessages: {
-                            showsVillageDetails = false
-                            showsWorld = false
-                            showsMissions = false
-                            showsMailbox = true
-                        }, compact: true)
-                    }
-
-                }
-                Menu {
-                    Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive") { showsBackup = true }
-                } label: {
-                    Label(String(localized: "settings.title", defaultValue: "Réglages"), systemImage: "gearshape")
-                        .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44)
-                }
-                .tint(Palette.amber)
-            }
+            if !showsResources && !showsMailbox { header }
             if session.state.settlementCount > 1 {
                 Menu {
                     ForEach(session.state.ownedLocations, id: \.self) { location in
@@ -400,6 +385,33 @@ struct GameView: View {
                 .accessibilityIdentifier("settlement.switch")
             }
         }
+    }
+
+    private var floatingControls: some View {
+            HStack(spacing: 8) {
+                HeroAccessButton()
+                GlobalMovementsButton()
+                if horizontalSizeClass == .compact {
+                    if let summary = session.absenceSummary {
+                        AbsenceSummaryBanner(summary: summary, onShowMessages: {
+                            showsVillageDetails = false
+                            showsWorld = false
+                            showsMissions = false
+                            showsMailbox = true
+                        }, compact: true)
+                    }
+
+                }
+                Menu {
+                    Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive") { showsBackup = true }
+                } label: {
+                    Label(String(localized: "settings.title", defaultValue: "Réglages"), systemImage: "gearshape")
+                        .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44)
+                }
+                .tint(Palette.amber)
+            }
+            .padding(6)
+            .background(Palette.ocean.opacity(0.85), in: .capsule)
     }
 
     @ViewBuilder
