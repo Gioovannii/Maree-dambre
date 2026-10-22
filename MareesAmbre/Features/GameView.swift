@@ -250,6 +250,7 @@ struct GameView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .clipped()
+            .ignoresSafeArea(.container, edges: .bottom)
             }
             .task {
                 if ProcessInfo.processInfo.arguments.contains("--snapshot-center") {
