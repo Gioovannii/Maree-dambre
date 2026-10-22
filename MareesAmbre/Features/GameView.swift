@@ -60,9 +60,8 @@ struct GameView: View {
         .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
-        .overlay(alignment: .bottomTrailing) {
-            if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2,
-               showsGuide {
+        .overlay(alignment: .bottomLeading) {
+            if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2 {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
                                             maximumHeight: max(160, min(420, viewport.size.height - 160)),
@@ -97,7 +96,7 @@ struct GameView: View {
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
                     .padding(.horizontal, 12)
                     .padding(.bottom, typeSize.isAccessibilitySize ? 12 : 88)
                 }
@@ -356,25 +355,6 @@ struct GameView: View {
                     storageCapacity: session.state.storageCapacity
                 )
             }
-            if showsResources, let people = session.state.people, session.state.settlementCount < 2 {
-                Button { showsGuide = true } label: {
-                    HStack(spacing: 10) {
-                        Image(VillageGuideView.portrait(for: people))
-                            .resizable().scaledToFill()
-                            .frame(width: 38, height: 38, alignment: .top)
-                            .clipShape(.circle)
-                        Text(String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon"))
-                            .font(.caption).foregroundStyle(Palette.paper)
-                            .multilineTextAlignment(.leading)
-                        Spacer(minLength: 0)
-                        Image(systemName: "bubble.left.fill").foregroundStyle(Palette.amber)
-                    }
-                    .padding(.horizontal, 10).padding(.vertical, 4)
-                    .frame(minHeight: 44)
-                    .background(Palette.panel, in: .rect(cornerRadius: 14))
-                }
-                .buttonStyle(.plain)
-            }
             HStack(spacing: 8) {
                 if !showsMailbox { header } else { Spacer(minLength: 0) }
                 HeroAccessButton()
@@ -390,7 +370,13 @@ struct GameView: View {
                     }
 
                 }
-                backupButton
+                Menu {
+                    Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive") { showsBackup = true }
+                } label: {
+                    Label(String(localized: "settings.title", defaultValue: "Réglages"), systemImage: "gearshape")
+                        .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44)
+                }
+                .tint(Palette.amber)
             }
             if session.state.settlementCount > 1 {
                 Menu {

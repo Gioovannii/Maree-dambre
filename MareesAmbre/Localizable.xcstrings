@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "settings.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Réglages"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Settings"
+        }
+      }
+    }
+  },
   "movements.title": {
     "extractionState": "manual",
     "localizations": {

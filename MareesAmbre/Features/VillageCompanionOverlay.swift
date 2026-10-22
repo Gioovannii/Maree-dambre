@@ -10,30 +10,13 @@ struct VillageCompanionOverlay: View {
     @AppStorage("companion.hintDismissed") private var hintDismissed = false
 
     var body: some View {
-        VStack(alignment: .trailing, spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             if isExpanded {
                 VillageGuideView(people: people, step: step, messages: $messages, onClose: { isExpanded = false },
                                  onShowDestination: onShowDestination)
                     .frame(maxHeight: maximumHeight)
-            } else if !hintDismissed && !ProcessInfo.processInfo.arguments.contains("--ui-snapshot") {
-                HStack(alignment: .top, spacing: 8) {
-                    Button {
-                        hintDismissed = true
-                        isExpanded = true
-                    } label: {
-                        Text(String(localized: "guide.hint", defaultValue: "Besoin d’un cap ? Je peux te guider."))
-                            .font(.subheadline).multilineTextAlignment(.leading).padding(12)
-                    }
-                    .buttonStyle(.plain)
-                    Button { hintDismissed = true } label: {
-                        Image(systemName: "xmark").frame(minWidth: 44, minHeight: 44)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(String(localized: "guide.hide_hint", defaultValue: "Masquer le conseil"))
-                }
-                .foregroundStyle(Palette.paper)
-                .background(Palette.panel, in: .rect(cornerRadius: 18))
             }
+
             if !isExpanded {
                 Button {
                     hintDismissed = true
@@ -52,7 +35,7 @@ struct VillageCompanionOverlay: View {
                 .accessibilityLabel(String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon"))
             }
         }
-        .frame(maxWidth: 350, alignment: .trailing)
+        .frame(maxWidth: 350, alignment: .leading)
         .shadow(color: .black.opacity(0.3), radius: 10, y: 4)
     }
 }
