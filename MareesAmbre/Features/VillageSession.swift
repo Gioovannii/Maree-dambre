@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import StoreKit
 
 @MainActor @Observable
 final class VillageSession {
@@ -526,9 +527,25 @@ final class VillageSession {
         save()
     }
     #if DEBUG
+    private(set) var allowsTestTimeControls = true
+    #else
+    private(set) var allowsTestTimeControls = false
+    #endif
+
+    func refreshTestBuildAccess() async {
+        #if !DEBUG
+        guard let result = try? await AppTransaction.shared,
+              case .verified(let transaction) = result else {
+            allowsTestTimeControls = false
+            return
+        }
+        allowsTestTimeControls = transaction.environment == .sandbox || transaction.environment == .xcode
+        #endif
+    }
+
     /// Simulate an absence, then rebase all dates so subsequent actions still use real time.
     func advanceTestTime(by seconds: TimeInterval) {
-        guard seconds > 0, !hasUnreadableSave else { return }
+        guard allowsTestTimeControls, seconds > 0, !hasUnreadableSave else { return }
         do {
             var simulated = state
             simulated.updateDomain(now: Date.now.addingTimeInterval(seconds), on: world)
@@ -554,7 +571,6 @@ final class VillageSession {
             message = error.localizedDescription
         }
     }
-    #endif
 
     private func save() {
         guard !isUISnapshot, !hasUnreadableSave else { return }

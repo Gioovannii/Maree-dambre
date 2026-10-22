@@ -16,7 +16,7 @@ struct BackupSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                #if DEBUG
+                if session.allowsTestTimeControls {
                 Section(String(localized: "debug.time.title", defaultValue: "Mode test — avancer le temps")) {
                     Button(String(localized: "debug.time.minute", defaultValue: "Avancer d’une minute")) { session.advanceTestTime(by: 60) }
                     Button(String(localized: "debug.time.hour", defaultValue: "Avancer d’une heure")) { session.advanceTestTime(by: 3600) }
@@ -24,7 +24,7 @@ struct BackupSheet: View {
                     Text(String(localized: "debug.time.help", defaultValue: "Fait avancer la partie actuelle : production, travaux, voyages et attaques. Réservé au développement."))
                         .font(.footnote)
                 }
-                #endif
+                }
                 Section("iCloud") {
                     if cloud.isBusy { ProgressView() }
                     if let date = cloud.savedAt {
@@ -68,7 +68,10 @@ struct BackupSheet: View {
                 }
             }
             .navigationTitle(String(localized: "backup.title", defaultValue: "Sauvegarde"))
-            .task { await cloud.refresh() }
+            .task {
+                await session.refreshTestBuildAccess()
+                await cloud.refresh()
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(String(localized: "backup.close", defaultValue: "Fermer")) { dismiss() }
