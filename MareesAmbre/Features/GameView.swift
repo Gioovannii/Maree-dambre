@@ -62,7 +62,7 @@ struct GameView: View {
         .preferredColorScheme(.dark)
         .overlay(alignment: .bottomTrailing) {
             if let people = session.state.people, !showsVillageDetails, !showsMailbox, session.state.settlementCount < 2,
-               horizontalSizeClass != .compact || showsGuide {
+               showsGuide {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
                                             maximumHeight: max(160, min(420, viewport.size.height - 160)),
@@ -354,6 +354,25 @@ struct GameView: View {
                 hourlyProduction: session.state.production,
                 storageCapacity: session.state.storageCapacity
             )
+            if let people = session.state.people, session.state.settlementCount < 2 {
+                Button { showsGuide = true } label: {
+                    HStack(spacing: 10) {
+                        Image(VillageGuideView.portrait(for: people))
+                            .resizable().scaledToFill()
+                            .frame(width: 38, height: 38, alignment: .top)
+                            .clipShape(.circle)
+                        Text(String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon"))
+                            .font(.caption).foregroundStyle(Palette.paper)
+                            .multilineTextAlignment(.leading)
+                        Spacer(minLength: 0)
+                        Image(systemName: "bubble.left.fill").foregroundStyle(Palette.amber)
+                    }
+                    .padding(.horizontal, 10).padding(.vertical, 4)
+                    .frame(minHeight: 44)
+                    .background(Palette.panel, in: .rect(cornerRadius: 14))
+                }
+                .buttonStyle(.plain)
+            }
             HStack(spacing: 8) {
                 if !showsMailbox { header } else { Spacer(minLength: 0) }
                 HeroAccessButton()
@@ -367,14 +386,7 @@ struct GameView: View {
                             showsMailbox = true
                         }, compact: true)
                     }
-                    if session.state.settlementCount < 2 {
-                        Button(String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon"), systemImage: "bubble.left") {
-                            showsGuide = true
-                        }
-                        .labelStyle(.iconOnly)
-                        .frame(minWidth: 44, minHeight: 44)
-                        .tint(Palette.amber)
-                    }
+
                 }
                 backupButton
             }
