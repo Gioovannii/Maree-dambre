@@ -60,8 +60,12 @@ struct GameView: View {
         .sheet(isPresented: $showsBackup) { BackupSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
+        .onChange(of: currentSection) { _, section in
+            if section != .resources && section != .town { showsGuide = false }
+        }
         .overlay(alignment: .bottomTrailing) {
-            if let people = session.state.people, !showsVillageDetails {
+            if let people = session.state.people, !showsVillageDetails,
+               currentSection == .resources || currentSection == .town {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
                                             maximumHeight: max(160, min(420, viewport.size.height - 160)),
