@@ -233,10 +233,7 @@ struct GameView: View {
                     .ignoresSafeArea(.container)
                 VStack(spacing: 8) {
                     topControls(showsResources: true)
-                    HStack {
-                        ActiveRaidsStrip()
-                        GlobalMovementsButton()
-                    }
+                    ActiveRaidsStrip()
                 }
                     .padding(.horizontal, 12)
                     .padding(.top, 4)
