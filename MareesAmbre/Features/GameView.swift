@@ -229,18 +229,12 @@ struct GameView: View {
                     .padding(.bottom, isCompactPhone ? 0 : 6)
             ZStack {
                 Palette.ocean.ignoresSafeArea()
-                ScrollView(.vertical) {
-                    VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
-                                 onPlotSelected: { showsVillageDetails = true },
-                                 onTownSelected: { selectVillageMap(.townCenter) },
-                                 preservesMapProportions: true,
-                                 showsTownShortcut: false)
-                        .frame(width: geometry.size.width, height: geometry.size.width / 0.5)
-
-                }
-                .contentMargins(.bottom, 100, for: .scrollContent)
-                .scrollIndicators(.hidden)
-                .id(villageMap)
+                VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
+                             onPlotSelected: { showsVillageDetails = true },
+                             onTownSelected: { selectVillageMap(.townCenter) },
+                             preservesMapProportions: false,
+                             showsTownShortcut: false)
+                    .id(villageMap)
 
                 VStack(spacing: 8) {
                     Spacer(minLength: 4)
@@ -253,7 +247,6 @@ struct GameView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .clipped()
-            .ignoresSafeArea(.container, edges: .bottom)
             }
             .task {
                 if ProcessInfo.processInfo.arguments.contains("--snapshot-center") {
