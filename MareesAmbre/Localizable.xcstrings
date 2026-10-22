@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "storage.header.full_in": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Plein dans %@"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Full in %@"
+        }
+      }
+    }
+  },
   "settings.title": {
     "extractionState": "manual",
     "localizations": {

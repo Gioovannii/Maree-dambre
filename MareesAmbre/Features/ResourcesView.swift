@@ -2,31 +2,17 @@ import SwiftUI
 
 struct ResourcesView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
-    @State private var showsForecast = ProcessInfo.processInfo.arguments.contains("--snapshot-storage")
     let resources: Resources
     let hourlyProduction: Resources
     let storageCapacity: Int
 
     var body: some View {
-        Button {
-            showsForecast = true
-        } label: {
-            VStack(spacing: 4) {
-                resourceLayout {
-                    resource(String(localized: "screen.resources.wood", defaultValue: "Bois"), value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
-                    separator
-                    resource(String(localized: "screen.resources.amber", defaultValue: "Ambre"), value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
-                    separator
-                    resource(String(localized: "screen.resources.food", defaultValue: "Vivres"), value: resources.provisions, rate: hourlyProduction.provisions, icon: "basket.fill")
-                }
-                Label(String(localized: "storage.forecast.open", defaultValue: "Prévoir mes réserves"), systemImage: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(Palette.muted)
-            }
-        }
-        .buttonStyle(.plain)
-        .sheet(isPresented: $showsForecast) {
-            StorageForecastSheet(resources: resources, hourlyProduction: hourlyProduction, capacity: storageCapacity)
+        resourceLayout {
+            resource(String(localized: "screen.resources.wood", defaultValue: "Bois"), value: resources.wood, rate: hourlyProduction.wood, icon: "tree.fill")
+            separator
+            resource(String(localized: "screen.resources.amber", defaultValue: "Ambre"), value: resources.amber, rate: hourlyProduction.amber, icon: "sparkles")
+            separator
+            resource(String(localized: "screen.resources.food", defaultValue: "Vivres"), value: resources.provisions, rate: hourlyProduction.provisions, icon: "basket.fill")
         }
         .padding(.horizontal, 7)
         .padding(.vertical, 6)
@@ -63,16 +49,31 @@ struct ResourcesView: View {
                     .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                     .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(value >= storageCapacity ? String(localized: "screen.resources.full", defaultValue: "Plein") : "+\(rate)/h")
+                Text("+\(rate)/h")
                     .font(.caption2.bold())
                     .monospacedDigit()
                     .foregroundStyle(Color(red: 0.49, green: 0.82, blue: 0.63))
                     .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                     .fixedSize(horizontal: false, vertical: true)
+                Text(fullStatus(value: value, rate: rate))
+                    .font(.caption2).foregroundStyle(Palette.muted)
+                    .lineLimit(typeSize.isAccessibilitySize ? nil : 2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 34, alignment: typeSize.isAccessibilitySize ? .leading : .center)
         .accessibilityElement(children: .ignore)
+        .accessibilityValue(fullStatus(value: value, rate: rate))
         .accessibilityLabel(String(localized: "screen.resources.value_value_of_value_plus_value_per_hour", defaultValue: "\(String(name)), \(String(value)) sur \(String(storageCapacity)), plus \(String(rate)) par heure"))
     }
+    private func fullStatus(value: Int, rate: Int) -> String {
+        guard let seconds = StorageForecast.timeUntilFull(stock: value, capacity: storageCapacity, hourlyRate: rate) else {
+            return String(localized: "storage.forecast.no_production", defaultValue: "Aucune production pour le moment")
+        }
+        guard seconds > 0 else { return String(localized: "screen.resources.full", defaultValue: "Plein") }
+        let duration = Duration.seconds(max(60, ceil(seconds / 60) * 60))
+            .formatted(.units(allowed: [.days, .hours, .minutes], width: .narrow))
+        return String(localized: "storage.header.full_in", defaultValue: "Plein dans \(duration)")
+    }
+
 }
