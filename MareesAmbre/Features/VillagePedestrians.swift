@@ -24,17 +24,10 @@ struct VillagePedestrians: View {
     // Feet positions registered to the 887 × 1774 background. Follow the dirt
     // corridors outside fences; never take a straight shortcut across a plot.
     private static let resourceRoutes: [[CGPoint]] = [
-        [(472, 286), (439, 310), (407, 336), (376, 365), (367, 394),
-         (375, 425), (405, 461), (435, 495), (449, 526), (433, 557), (416, 583)],
-        [(117, 399), (167, 419), (222, 441), (280, 455), (337, 456), (375, 425)],
-        [(239, 729), (280, 750), (326, 777), (376, 804), (422, 823),
-         (469, 811), (514, 788), (558, 764), (602, 741)],
-        [(475, 864), (525, 899), (568, 935), (570, 966), (552, 994),
-         (526, 1022), (516, 1055), (518, 1095), (506, 1132)],
-        [(449, 1197), (414, 1214), (376, 1234), (337, 1254)]
-    ].map { points in
-        points.map { CGPoint(x: CGFloat($0.0) / 887, y: CGFloat($0.1) / 1774) }
-    }
+        [.init(x: 0.08, y: 0.39), .init(x: 0.48, y: 0.39), .init(x: 0.92, y: 0.39)],
+        [.init(x: 0.08, y: 0.52), .init(x: 0.48, y: 0.52), .init(x: 0.92, y: 0.52)],
+        [.init(x: 0.08, y: 0.66), .init(x: 0.48, y: 0.66), .init(x: 0.92, y: 0.66)]
+    ]
     private static let coats: [Color] = [
         Color(red: 0.18, green: 0.43, blue: 0.44),
         Color(red: 0.70, green: 0.32, blue: 0.20),

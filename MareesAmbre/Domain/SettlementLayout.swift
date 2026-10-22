@@ -50,11 +50,11 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
         if self == .resourceFields {
             // Follow the estate's clearings rather than imposing a grid on the terrain.
             let clearings: [CGPoint] = [
-                CGPoint(x: 0.245, y: 0.205), CGPoint(x: 0.69, y: 0.217),
-                CGPoint(x: 0.78, y: 0.335), CGPoint(x: 0.225, y: 0.325),
-                CGPoint(x: 0.825, y: 0.485), CGPoint(x: 0.175, y: 0.465),
-                CGPoint(x: 0.50, y: 0.405), CGPoint(x: 0.75, y: 0.61),
-                CGPoint(x: 0.245, y: 0.63), CGPoint(x: 0.84, y: 0.71)
+                CGPoint(x: 0.20, y: 0.34), CGPoint(x: 0.50, y: 0.34),
+                CGPoint(x: 0.82, y: 0.34), CGPoint(x: 0.19, y: 0.48),
+                CGPoint(x: 0.83, y: 0.48), CGPoint(x: 0.13, y: 0.62),
+                CGPoint(x: 0.50, y: 0.48), CGPoint(x: 0.60, y: 0.62),
+                CGPoint(x: 0.37, y: 0.62), CGPoint(x: 0.86, y: 0.62)
             ]
             guard clearings.indices.contains(plot) else { return CGPoint(x: 0.5, y: 0.5) }
             return clearings[plot]
