@@ -3,6 +3,8 @@ import SwiftUI
 /// Native rendering of the approved concept. Gameplay and UI remain outside this layer.
 struct CoastalDomainScene: View {
     var mode: VillageMapMode = .resourceFields
+    var tabletEstate = false
+    private var artwork: String { tabletEstate ? "DomaineAmbreTablette" : mode.assetName }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
@@ -15,7 +17,7 @@ struct CoastalDomainScene: View {
         GeometryReader { geometry in
             let size = geometry.size
             ZStack {
-                Image(mode.assetName)
+                Image(artwork)
                     .resizable().interpolation(.high)
                 if !reduceMotion {
                     TimelineView(.animation(minimumInterval: 1.0 / 24, paused: snapshot || scenePhase != .active)) { timeline in
@@ -42,8 +44,12 @@ struct CoastalDomainScene: View {
 
     private func drawWater(context: GraphicsContext, size: CGSize, time: Double) {
         var sea = context
-        sea.clip(to: CoastalSeaMask(mode: mode).path(in: CGRect(origin: .zero, size: size)))
-        let image = sea.resolve(Image(mode.assetName))
+        if tabletEstate {
+            sea.clip(to: Path(CGRect(x: 0, y: size.height * 0.9, width: size.width, height: size.height * 0.1)))
+        } else {
+            sea.clip(to: CoastalSeaMask(mode: mode).path(in: CGRect(origin: .zero, size: size)))
+        }
+        let image = sea.resolve(Image(artwork))
         let phase = time * .pi / 3
         // Thin resampling bands bend the existing water texture without a custom
         // shader/toolchain. Skip the entire inland region to bound per-frame work.
@@ -60,7 +66,11 @@ struct CoastalDomainScene: View {
 
     private func drawFoam(context: GraphicsContext, size: CGSize, time: Double) {
         var sea = context
-        sea.clip(to: CoastalSeaMask(mode: mode).path(in: CGRect(origin: .zero, size: size)))
+        if tabletEstate {
+            sea.clip(to: Path(CGRect(x: 0, y: size.height * 0.9, width: size.width, height: size.height * 0.1)))
+        } else {
+            sea.clip(to: CoastalSeaMask(mode: mode).path(in: CGRect(origin: .zero, size: size)))
+        }
         let phase = time * .pi / 3
         let glints: [CGPoint] = mode == .townCenter
             ? [CGPoint(x: 600, y: 120), CGPoint(x: 720, y: 190), CGPoint(x: 430, y: 1450),

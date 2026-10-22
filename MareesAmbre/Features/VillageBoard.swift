@@ -7,6 +7,7 @@ struct VillageBoard: View {
     let onTownSelected: () -> Void
     var preservesMapProportions = false
     var showsTownShortcut = true
+    var tabletEstate = false
     @Environment(VillageSession.self) private var session
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -29,14 +30,16 @@ struct VillageBoard: View {
         } else {
             GeometryReader { viewport in
                 let viewSize = viewport.size
-                let fittedWidth = min(viewSize.width, viewSize.height * 0.5)
-                let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / 0.5) : CGSize(
-                    width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * 0.5) : viewSize.width,
+                let tablet = tabletEstate && mode == .resourceFields
+                let ratio: CGFloat = tablet ? 1 : 0.5
+                let fittedWidth = min(viewSize.width, viewSize.height * ratio)
+                let mapSize = preservesMapProportions ? CGSize(width: fittedWidth, height: fittedWidth / ratio) : CGSize(
+                    width: viewSize.width > viewSize.height ? min(viewSize.width, viewSize.height * ratio) : viewSize.width,
                     height: viewSize.height
                 )
 
                 ZStack {
-                    if preservesMapProportions || viewSize.width > viewSize.height {
+                    if !tablet && (preservesMapProportions || viewSize.width > viewSize.height) {
                         Image(mode.assetName)
                             .resizable()
                             .scaledToFill()
@@ -48,10 +51,10 @@ struct VillageBoard: View {
                     }
 
                     ZStack {
-                        CoastalDomainScene(mode: mode)
+                        CoastalDomainScene(mode: mode, tabletEstate: tablet)
                             .frame(width: mapSize.width, height: mapSize.height)
 
-                        VillagePedestrians(mode: mode)
+                        VillagePedestrians(mode: mode, tabletEstate: tablet)
 
                         ForEach(visibleSlots, id: \.self) { plot in
                             plotButton(plot, mapWidth: mapSize.width, mapHeight: mapSize.height)
@@ -271,7 +274,7 @@ struct VillageBoard: View {
     }
 
     private func position(for plot: Int, in size: CGSize) -> CGPoint {
-        let point = mode.mapPoint(for: plot)
+        let point = tabletEstate && mode == .resourceFields ? TabletEstateLayout.point(for: plot) : mode.mapPoint(for: plot)
         return CGPoint(x: size.width * point.x, y: size.height * point.y)
     }
 

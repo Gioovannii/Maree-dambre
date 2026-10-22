@@ -4,6 +4,7 @@ import SwiftUI
 /// One canvas and one clock keep this independent of the village simulation.
 struct VillagePedestrians: View {
     var mode: VillageMapMode = .townCenter
+    var tabletEstate = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var startedAt = Date.now
@@ -62,14 +63,14 @@ struct VillagePedestrians: View {
     }
 
     private func drawResident(_ index: Int, time: Double, size: CGSize, context: GraphicsContext) {
-        let routes = mode == .resourceFields ? Self.resourceRoutes : Self.townRoutes
+        let routes = tabletEstate ? TabletEstateLayout.routes : mode == .resourceFields ? Self.resourceRoutes : Self.townRoutes
         let route = routes[index % routes.count]
         let lengths = zip(route, route.dropFirst()).map { start, end in
             hypot((end.x - start.x) * size.width, (end.y - start.y) * size.height)
         }
         let distance = lengths.reduce(0, +)
         guard distance > 0 else { return }
-        let scale = max(0.65, size.width / 390)
+        let scale = tabletEstate ? min(1.2, max(0.65, size.width / 700)) : max(0.65, size.width / 390)
         let travelTime = distance / ((7 + Double(index % 3)) * scale)
         let pause = 2.5
         let halfCycle = travelTime + pause

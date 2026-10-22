@@ -139,11 +139,14 @@ struct GameView: View {
 
     private var tabletScreen: some View {
         GeometryReader { geometry in
-            HStack(spacing: 0) {
+            let portrait = geometry.size.height > geometry.size.width
+            let layout = portrait ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
+            layout {
                 tabletPrimaryContent(size: geometry.size)
+                    .frame(height: portrait ? min(geometry.size.width, geometry.size.height * 0.64) : nil)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 tabletInspector
-                    .frame(width: tabletSidebarWidth(in: geometry.size))
+                    .frame(width: portrait ? geometry.size.width : tabletSidebarWidth(in: geometry.size))
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .background(Palette.ocean.ignoresSafeArea())
@@ -175,7 +178,7 @@ struct GameView: View {
             VillageBoard(mode: villageMap, selectedPlot: selectedPlotBinding,
                          onPlotSelected: {},
                          onTownSelected: { selectVillageMap(.townCenter) },
-                         preservesMapProportions: true)
+                         preservesMapProportions: true, showsTownShortcut: false, tabletEstate: true)
                 .id(villageMap)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .clipped()
