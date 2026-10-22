@@ -130,7 +130,7 @@ struct VillageBoard: View {
                     }
                     if let site {
                         ResourcePlotMarker(
-                            site: site, level: siteLevel, selected: selected,
+                            site: site, level: siteLevel,
                             size: size,
                             upgrade: session.state.resourceUpgrade.flatMap { $0.plot == plot ? $0 : nil }
                         )

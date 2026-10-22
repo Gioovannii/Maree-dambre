@@ -1,10 +1,9 @@
 import SwiftUI
 
-/// Only levels and selection change; the resource sites are painted into the map.
+/// Production and level badges for resource sites painted into the map.
 struct ResourcePlotMarker: View {
     let site: ResourceSiteKind
     let level: Int
-    let selected: Bool
     let size: CGFloat
     let upgrade: ResourceUpgrade?
 
@@ -14,11 +13,10 @@ struct ResourcePlotMarker: View {
                 HStack(spacing: 5) {
                     Image(systemName: site.symbol).font(.caption)
                     Text(level, format: .number).font(.subheadline.bold()).monospacedDigit()
-                    if selected { Image(systemName: "checkmark").font(.caption.bold()) }
                 }
-                .foregroundStyle(selected ? Palette.ocean : Palette.paper)
+                .foregroundStyle(Palette.paper)
                 .padding(.horizontal, 9).frame(minHeight: 32)
-                .background(selected ? Palette.amber : Palette.ocean, in: .capsule)
+                .background(Palette.ocean, in: .capsule)
                 .overlay { Capsule().strokeBorder(Palette.paper.opacity(0.65), lineWidth: 1) }
 
                 if let upgrade {
