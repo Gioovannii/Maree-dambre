@@ -64,10 +64,10 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19, 22, 23]
         guard let index = lots.firstIndex(of: plot) else { return CGPoint(x: 0.5, y: 0.5) }
         let points: [CGPoint] = [
-            CGPoint(x: 0.35, y: 0.28), CGPoint(x: 0.75, y: 0.635), CGPoint(x: 0.65, y: 0.28),
+            CGPoint(x: 0.35, y: 0.28), CGPoint(x: 0.50, y: 0.635), CGPoint(x: 0.65, y: 0.28),
             CGPoint(x: 0.26, y: 0.355), CGPoint(x: 0.74, y: 0.355), CGPoint(x: 0.17, y: 0.45),
             CGPoint(x: 0.83, y: 0.45), CGPoint(x: 0.26, y: 0.55), CGPoint(x: 0.74, y: 0.55),
-            CGPoint(x: 0.50, y: 0.635), CGPoint(x: 0.75, y: 0.635)
+            CGPoint(x: 0.75, y: 0.635), CGPoint(x: 0.75, y: 0.635)
         ]
         return points[index]
     }

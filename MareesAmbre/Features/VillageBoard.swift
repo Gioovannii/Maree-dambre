@@ -123,7 +123,7 @@ struct VillageBoard: View {
                     }
             } else {
                 ZStack {
-                    if mode == .townCenter && plot == 11 {
+                    if mode == .townCenter && plot == 22 {
                         Ellipse()
                             .fill(Color(red: 0.70, green: 0.50, blue: 0.29))
                             .overlay { Ellipse().strokeBorder(Palette.paper.opacity(0.8), lineWidth: 2) }
