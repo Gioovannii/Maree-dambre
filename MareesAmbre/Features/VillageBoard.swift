@@ -163,7 +163,7 @@ struct VillageBoard: View {
                         Ellipse()
                             .fill(.black.opacity(0.20))
                             .frame(width: footprintWidth, height: footprintHeight)
-                            .offset(y: size * 0.30)
+                            .offset(y: building == .watchtower ? 0 : size * 0.30)
                         BuildingArt(kind: building)
                             .frame(width: size, height: size)
                             .overlay(alignment: .bottom) {
@@ -171,7 +171,8 @@ struct VillageBoard: View {
                                     .offset(x: size * (plot == 13 ? -0.22 : 0.22), y: size * 0.05)
                                     .accessibilityHidden(true)
                             }
-                            .offset(y: -size * 0.13)
+                            .offset(x: building == .watchtower ? -size * 0.06 : 0,
+                                    y: -size * (building == .watchtower ? 0.40 : 0.13))
                             .accessibilityHidden(true)
                     } else if building == nil && site == nil && canReceiveMovingBuilding {
                         Ellipse()
