@@ -90,7 +90,7 @@ struct VillageStorage {
                   village.shipment?.isValid ?? true,
                   village.availableArmy.values.reduce(0, +) + (village.army?.training?.count ?? 0)
                     + (village.army?.raid?.units.values.reduce(0, +) ?? 0)
-                    + (village.army?.convoy?.units.values.reduce(0, +) ?? 0) + village.foundingEscortCount + village.shipmentEscortCount <= 100 else { return false }
+                    + (village.army?.convoy?.units.values.reduce(0, +) ?? 0) + village.foundingEscortCount + village.shipmentEscortCount <= ArmyState.maximumTroops else { return false }
             if village.location == .home { return village.settlementRole == nil && !village.isRefuge }
             return village.settlementRole != nil && village.expansion == nil
                 && village.isRefuge == village.isRefugeSite(village.location)

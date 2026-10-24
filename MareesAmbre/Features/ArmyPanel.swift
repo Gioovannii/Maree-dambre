@@ -10,7 +10,7 @@ struct ArmyPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(isTraining ? String(localized: "screen.army.training", defaultValue: "Entraînement") : String(localized: "screen.army.troops_and_expeditions", defaultValue: "Troupes et expéditions")).font(.title2.bold())
-            Text(isTraining ? String(localized: "screen.army.unlock_units_at_the_academy_capacity_100_units", defaultValue: "Débloquez vos unités à la Maison des savoirs. Capacité : 100 unités.") : String(localized: "screen.army.train_units_at_the_training_grounds_in_town_neighboring_factions_are_simulated_offlin", defaultValue: "Entraînez vos unités à la Cour des armes, dans le Centre. Les factions voisines sont gérées par le jeu hors ligne."))
+            Text(isTraining ? String(localized: "army.capacity.summary", defaultValue: "Effectif : \(String(session.state.mobilizedTroopCount)) / \(String(session.state.armyCapacity)). Améliorez la Cour des armes pour augmenter la capacité.") : String(localized: "screen.army.train_units_at_the_training_grounds_in_town_neighboring_factions_are_simulated_offlin", defaultValue: "Entraînez vos unités à la Cour des armes, dans le Centre. Les factions voisines sont gérées par le jeu hors ligne."))
                 .font(.footnote).foregroundStyle(Palette.muted)
             if isTraining {
             Stepper(String(localized: "screen.army.recruit", defaultValue: "Recruter : \(String(count))"), value: $count, in: 1...20)

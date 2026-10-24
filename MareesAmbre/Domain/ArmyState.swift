@@ -1,6 +1,7 @@
 import Foundation
 
 struct ArmyState: Codable, Equatable {
+    static let maximumTroops = 1_000
     var units: [ArmyUnit: Int] = [:]
     var training: TrainingOrder?
     var raid: RaidOrder?
@@ -15,7 +16,7 @@ struct ArmyState: Codable, Equatable {
     var isValid: Bool {
         guard (reconnaissance?.count ?? 0) <= BotFaction.starting.count,
               (reconnaissance ?? [:]).allSatisfy({ $0.key == $0.value.targetID && $0.value.isValid }) else { return false }
-        guard units.values.allSatisfy({ (0...100).contains($0) }),
+        guard units.values.allSatisfy({ (0...ArmyState.maximumTroops).contains($0) }),
               raidedUntil.allSatisfy({ (0...BotFaction.maximumStartingID).contains($0.key) && $0.value.timeIntervalSince1970.isFinite }) else { return false }
         guard convoy?.isValid ?? true else { return false }
         if let training {
@@ -33,7 +34,7 @@ struct ArmyState: Codable, Equatable {
                 fortifications: raid.enemyFortifications, defense: raid.defense) else { return false }
             guard (0...BotFaction.maximumStartingID).contains(raid.targetID), (14...92).contains(raid.defense),
                   raid.returnsAt.timeIntervalSince1970.isFinite,
-                  raid.units.values.allSatisfy({ (0...100).contains($0) }),
+                  raid.units.values.allSatisfy({ (0...ArmyState.maximumTroops).contains($0) }),
                   raid.units.values.reduce(0, +) > 0 else { return false }
             guard (0...3).contains(raid.attackUpgrade ?? 0),
                   (0...0.2).contains(raid.victoryLossRate ?? 0.2),
@@ -46,7 +47,7 @@ struct ArmyState: Codable, Equatable {
             }
         }
         return units.values.reduce(0, +) + (training?.count ?? 0)
-            + (raid?.units.values.reduce(0, +) ?? 0) + (convoy?.units.values.reduce(0, +) ?? 0) <= 100
+            + (raid?.units.values.reduce(0, +) ?? 0) + (convoy?.units.values.reduce(0, +) ?? 0) <= ArmyState.maximumTroops
     }
 }
 
@@ -120,6 +121,15 @@ extension VillageState {
         army = troops
         return true
     }
+    var armyCapacity: Int {
+        min(ArmyState.maximumTroops, max(1, buildingLevel(.warCourt)) * 100)
+    }
+    var mobilizedTroopCount: Int {
+        availableArmy.values.reduce(0, +) + (army?.training?.count ?? 0)
+            + (army?.raid?.units.values.reduce(0, +) ?? 0)
+            + (army?.convoy?.units.values.reduce(0, +) ?? 0)
+            + foundingEscortCount + shipmentEscortCount
+    }
     var availableArmy: [ArmyUnit: Int] { army?.units ?? [:] }
     var armyPower: Int { armyPower(for: availableArmy) }
     func armyPower(for units: [ArmyUnit: Int]) -> Int {
@@ -131,7 +141,7 @@ extension VillageState {
               (1...20).contains(count), army?.training == nil else { return false }
         let total = availableArmy.values.reduce(0, +) + (army?.raid?.units.values.reduce(0, +) ?? 0)
             + (army?.convoy?.units.values.reduce(0, +) ?? 0)
-        return total + foundingEscortCount + shipmentEscortCount + count <= 100 && resources.wood >= unit.cost.wood * count
+        return total + foundingEscortCount + shipmentEscortCount + count <= armyCapacity && resources.wood >= unit.cost.wood * count
             && resources.amber >= unit.cost.amber * count && resources.provisions >= unit.cost.provisions * count
     }
 

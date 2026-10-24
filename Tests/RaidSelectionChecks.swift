@@ -192,6 +192,22 @@ extension DomainChecks {
         precondition(all.raid(targetID: 0, now: now))
         precondition(all.availableArmy.isEmpty && all.army?.raid?.units == base.availableArmy,
             "Existing callers still send all available troops")
+        capacity.buildingLevels = [.warCourt: 2]
+        precondition(capacity.armyCapacity == 200 && capacity.canTrain(.tideguard, count: 20))
+        precondition(capacity.train(.tideguard, count: 20, now: now.addingTimeInterval(120)))
+        precondition(capacity.mobilizedTroopCount == 120)
+        capacity.updateArmy(now: now.addingTimeInterval(3600))
+        precondition(capacity.availableArmy[.tideguard] == 120 && capacity.army?.isValid == true)
+        try storage.save(capacity)
+        let expandedArmy = try storage.load(seed: 42, world: world, now: now.addingTimeInterval(3600))
+        precondition(expandedArmy?.availableArmy[.tideguard] == 120,
+            "An army above the old limit must survive saving and loading")
+        capacity.buildingLevels = [.warCourt: 10]
+        capacity.army = ArmyState(units: [.tideguard: 1000], unlockedUnits: [.tideguard])
+        precondition(capacity.armyCapacity == 1000 && !capacity.canTrain(.tideguard, count: 1))
+        precondition(capacity.army?.isValid == true)
+        precondition(!ArmyState(units: [.tideguard: 1001], unlockedUnits: [.tideguard]).isValid)
+
         print("PASS: selected raid troops, saved garrison, mage support, invalid selections, losses, carrying and shared army cap")
     }
 }

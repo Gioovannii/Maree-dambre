@@ -17,8 +17,8 @@ struct ConvoyOrder: Codable, Equatable {
         guard (0...(1_000_000 - route.duration)).contains(departedAtTide),
               (0...3).contains(attackUpgrade), (0...110).contains(transportBonusPercent),
               (0.01...0.2).contains(victoryLossRate), (0.2...0.5).contains(defeatLossRate),
-              units.values.allSatisfy({ (1...100).contains($0) }),
-              (1...100).contains(units.values.reduce(0, +)) else { return false }
+              units.values.allSatisfy({ (1...ArmyState.maximumTroops).contains($0) }),
+              (1...ArmyState.maximumTroops).contains(units.values.reduce(0, +)) else { return false }
         if let weaponLevels {
             guard Set(weaponLevels.keys) == Set(units.keys),
                   weaponLevels.values.allSatisfy({ (0...GameProgression.maximumWeaponLevel).contains($0) }) else { return false }

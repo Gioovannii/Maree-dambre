@@ -27,8 +27,8 @@ struct SettlementShipment: Codable, Equatable {
               arrivesAt > departedAt, returnsAt > arrivesAt,
               returnsAt.timeIntervalSince(departedAt) <= 86_400,
               (0...110).contains(transportBonusPercent),
-              !units.isEmpty, units.values.allSatisfy({ (1...100).contains($0) }),
-              units.values.reduce(0, +) <= 100,
+              !units.isEmpty, units.values.allSatisfy({ (1...ArmyState.maximumTroops).contains($0) }),
+              units.values.reduce(0, +) <= ArmyState.maximumTroops,
               [cargo.wood, cargo.amber, cargo.provisions].allSatisfy({ (0...999_999).contains($0) }),
               (1...capacity).contains(cargoCount) else { return false }
         return (0...cargo.wood).contains(unloaded.wood) && (0...cargo.amber).contains(unloaded.amber)

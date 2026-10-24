@@ -20,12 +20,12 @@ struct RaidReport: Codable, Equatable {
     var isValid: Bool {
         (1...80).contains(targetName.count)
             && RaidOrder.validEnemySnapshot(units: enemyUnits, fortifications: enemyFortifications, defense: defensePower)
-            && (0...3_000).contains(attackPower)
-            && (0...3_000).contains(defensePower)
+            && (0...(ArmyState.maximumTroops * 30)).contains(attackPower)
+            && (0...(ArmyState.maximumTroops * 30)).contains(defensePower)
             && !unitsSent.isEmpty
-            && unitsSent.values.allSatisfy { (1...100).contains($0) }
-            && unitsSent.values.reduce(0, +) <= 100
-            && losses.allSatisfy { unitsSent[$0.key, default: 0] >= $0.value && (0...100).contains($0.value) }
+            && unitsSent.values.allSatisfy { (1...ArmyState.maximumTroops).contains($0) }
+            && unitsSent.values.reduce(0, +) <= ArmyState.maximumTroops
+            && losses.allSatisfy { unitsSent[$0.key, default: 0] >= $0.value && (0...ArmyState.maximumTroops).contains($0.value) }
             && lossCount <= unitsSent.values.reduce(0, +)
             && [stolen.wood, stolen.amber, stolen.provisions].allSatisfy { (0...270).contains($0) }
             && (won || stolen == Resources(wood: 0, amber: 0, provisions: 0))

@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "army.capacity.summary": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Effectif : %@ / %@. Améliorez la Cour des armes pour augmenter la capacité."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Troops: %@ / %@. Upgrade the Training Grounds to increase capacity."
+        }
+      }
+    }
+  },
+  "army.capacity.training_effect": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Entraînement : %@ par unité · Capacité : %@ troupes"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Training: %@ per unit · Capacity: %@ troops"
+        }
+      }
+    }
+  },
   "debug.time.title": {
     "extractionState": "manual",
     "localizations": {

@@ -21,7 +21,7 @@ extension VillageState {
             return String(localized: "progression.effect.defense", defaultValue: "+\(String(20 * level)) de défense du port")
         case .warCourt:
             let duration = GameProgression.durationText(ceil(30 / (1 + 0.08 * Double(level - 1))))
-            return String(localized: "progression.effect.training", defaultValue: "Entraînement : \(String(duration)) par unité")
+            return String(localized: "army.capacity.training_effect", defaultValue: "Entraînement : \(String(duration)) par unité · Capacité : \(String(min(ArmyState.maximumTroops, level * 100))) troupes")
         case .academy:
             let duration = GameProgression.durationText(ceil(60 / (1 + 0.08 * Double(level - 1))))
             return String(localized: "progression.effect.academy", defaultValue: "Débloquer une unité : \(String(duration)) · Durée des recherches d’armes : \((1 / (1 + 0.04 * Double(level - 1))).formatted(.percent.precision(.fractionLength(0))))")
