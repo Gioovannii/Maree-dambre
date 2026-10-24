@@ -47,7 +47,7 @@ sh Scripts/check-worldmap.sh
 sh Scripts/check-coastline.sh
 ```
 
-These cover resources, construction, progression, save migration and validation, recruitment, troop selection, raids, losses, loot, defense, commerce, world generation, and offline recovery. The campaign check follows all three peoples from a fresh village through a first raid, a second village, an army above 100 troops, and advanced buildings and weapons, paying every cost from actual production. See [Campaign progression audit](Docs/CAMPAIGN-AUDIT.md) for its scope and measured timings. Session checks use isolated preferences and do not modify an existing game.
+These cover resources, construction, progression, save migration and validation, recruitment, troop selection, raids, losses, loot, defense, commerce, world generation, and offline recovery. The campaign check follows all three peoples from a fresh village through a first raid, a second village, an army above 100 troops, and advanced buildings and weapons, paying every cost from actual production. See [Campaign progression audit](docs/CAMPAIGN-AUDIT.md) for its scope and measured timings. Session checks use isolated preferences and do not modify an existing game.
 
 Save validation rejects out-of-range dates, invalid production fractions, and construction jobs that overwrite a building or use an invalid plot. An unreadable save stays intact until the player explicitly starts a new village. That action preserves a diagnostic copy under `village.unreadable.<seed>.<identifier>`; restoring that copy is not yet available in the app.
 
