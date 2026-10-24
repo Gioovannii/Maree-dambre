@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "resources.hourly_rate": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "+%@/h"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "+%@/h"
+        }
+      }
+    }
+  },
   "guide.fields.economy": {
     "extractionState": "manual",
     "localizations": {

@@ -49,7 +49,7 @@ struct ResourcesView: View {
                     .lineLimit(typeSize.isAccessibilitySize ? nil : 1)
                     .minimumScaleFactor(typeSize.isAccessibilitySize ? 1 : 0.8)
                     .fixedSize(horizontal: false, vertical: true)
-                Text("+\(rate)/h")
+                Text(String(localized: "resources.hourly_rate", defaultValue: "+\(String(rate.formatted()))/h"))
                     .font(.caption2.bold())
                     .monospacedDigit()
                     .foregroundStyle(Color(red: 0.49, green: 0.82, blue: 0.63))
