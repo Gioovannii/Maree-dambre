@@ -3,6 +3,7 @@ import Foundation
 struct VillageState: Codable, Equatable {
     static let currentVersion = 19
     var version: Int
+    var progressionOrigin: ProgressionOrigin?
     let seed: Int
     var resources: Resources
     var buildings: [Int: BuildingKind]
@@ -37,7 +38,7 @@ struct VillageState: Codable, Equatable {
     var hero: PlayerHero?
 
     private enum CodingKeys: String, CodingKey {
-        case version, seed, resources, buildings, resourceLevels, bots, people, hero
+        case version, seed, resources, buildings, resourceLevels, bots, people, hero, progressionOrigin
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
         case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
         case buildingLevels, unitWeaponLevels, guideObjectives
@@ -47,6 +48,7 @@ struct VillageState: Codable, Equatable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         version = try values.decode(Int.self, forKey: .version)
+        progressionOrigin = try values.decodeIfPresent(ProgressionOrigin.self, forKey: .progressionOrigin)
         seed = try values.decode(Int.self, forKey: .seed)
         resources = try values.decode(Resources.self, forKey: .resources)
         buildings = try values.decode([Int: BuildingKind].self, forKey: .buildings)

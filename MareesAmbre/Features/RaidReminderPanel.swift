@@ -26,7 +26,7 @@ struct RaidReminderPanel: View {
                     .buttonStyle(.bordered)
             } else {
                 Button {
-                    Task { await reminders.enable(attack: session.state.nextDomainBotAttackDate) }
+                    Task { await reminders.enable(attack: session.reminderAttackDate) }
                 } label: {
                     Label(String(localized: "raid.reminder.enable", defaultValue: "Activer un rappel discret"), systemImage: "bell")
                 }
@@ -39,7 +39,7 @@ struct RaidReminderPanel: View {
             }
             if reminders.schedulingFailed && reminders.isEnabled {
                 Button(String(localized: "raid.reminder.retry", defaultValue: "Réessayer le rappel")) {
-                    Task { await reminders.synchronize(attack: session.state.nextDomainBotAttackDate) }
+                    Task { await reminders.synchronize(attack: session.reminderAttackDate) }
                 }.buttonStyle(.bordered)
             }
             if reminders.schedulingFailed {
@@ -47,5 +47,6 @@ struct RaidReminderPanel: View {
                     .font(.caption).foregroundStyle(Palette.muted)
             }
         }
+        .disabled(session.isTestMode)
     }
 }

@@ -1,7 +1,17 @@
 import Foundation
 
 struct VillageStorage {
+    enum Scope { case standard, testing }
+    enum BackupSource { case file, iCloud }
     var defaults: UserDefaults = .standard
+    var scope: Scope = .standard
+
+    private func key(_ name: String) -> String { scope == .testing ? "testMode." + name : name }
+    var testingCopy: VillageStorage { VillageStorage(defaults: defaults, scope: .testing) }
+    var hasSavedGame: Bool {
+        guard defaults.object(forKey: key("village.activeSeed")) != nil else { return false }
+        return defaults.data(forKey: key("village.v2.\(defaults.integer(forKey: key("village.activeSeed")))")) != nil
+    }
 
     private struct Transfer: Codable {
         let format: Int
@@ -10,13 +20,14 @@ struct VillageStorage {
     }
 
     func exportBackup(_ state: VillageState, now: Date = .now) throws -> Data {
-        try JSONEncoder().encode(Transfer(format: 1, savedAt: now, village: state))
+        guard scope == .standard, state.progressionOrigin != .test else { throw CocoaError(.featureUnsupported) }
+        return try JSONEncoder().encode(Transfer(format: 1, savedAt: now, village: state))
     }
 
     func validateBackup(_ data: Data, now: Date = .now) throws -> VillageState {
         guard data.count <= 8_000_000 else { throw CocoaError(.fileReadTooLarge) }
         let transfer = try JSONDecoder().decode(Transfer.self, from: data)
-        guard transfer.format == 1 else { throw CocoaError(.coderReadCorrupt) }
+        guard scope == .standard, transfer.format == 1, transfer.village.progressionOrigin != .test else { throw CocoaError(.coderReadCorrupt) }
         // Run the complete existing migration and validation in isolated storage.
         // A rejected file must never modify the player's live defaults.
         let suite = "backup.validation.\(UUID().uuidString)"
@@ -31,42 +42,44 @@ struct VillageStorage {
         return validated
     }
 
-    func restoreBackup(_ data: Data, now: Date = .now) throws -> VillageState {
-        let validated = try validateBackup(data, now: now)
+    func restoreBackup(_ data: Data, now: Date = .now, source: BackupSource = .file) throws -> VillageState {
+        var validated = try validateBackup(data, now: now)
+        if source == .file { validated.progressionOrigin = .importedFile }
         let encoded = try JSONEncoder().encode(validated)
         let active = activeSeed(now: now)
         for seed in Set([active, validated.seed]) {
-            if let previous = defaults.data(forKey: "village.v2.\(seed)") {
-                let recovery = "village.beforeRestore.\(UUID().uuidString)"
+            if let previous = defaults.data(forKey: key("village.v2.\(seed)")) {
+                let recovery = key("village.beforeRestore.\(UUID().uuidString)")
                 defaults.set(previous, forKey: recovery)
                 guard defaults.data(forKey: recovery) == previous else { throw CocoaError(.fileWriteUnknown) }
             }
         }
-        defaults.set(encoded, forKey: "village.v2.\(validated.seed)")
-        defaults.set(validated.seed, forKey: "village.activeSeed")
+        defaults.set(encoded, forKey: key("village.v2.\(validated.seed)"))
+        defaults.set(validated.seed, forKey: key("village.activeSeed"))
         return validated
     }
 
     func activeSeed(now: Date = .now) -> Int {
-        if defaults.object(forKey: "village.activeSeed") != nil {
-            return defaults.integer(forKey: "village.activeSeed")
+        if defaults.object(forKey: key("village.activeSeed")) != nil {
+            return defaults.integer(forKey: key("village.activeSeed"))
         }
         // Adopt the most recently played legacy village without deleting any save.
         let latest = defaults.dictionaryRepresentation().keys
-            .filter { $0.hasPrefix("village.v2.") }
+            .filter { $0.hasPrefix(key("village.v2.")) }
             .compactMap { key -> VillageState? in
                 guard let data = defaults.data(forKey: key) else { return nil }
                 return try? JSONDecoder().decode(VillageState.self, from: data)
             }
             .max { ($0.lastProductionAt ?? .distantPast) < ($1.lastProductionAt ?? .distantPast) }
         let seed = latest?.seed ?? WeeklyChallenge.seed(for: now)
-        defaults.set(seed, forKey: "village.activeSeed")
+        defaults.set(seed, forKey: key("village.activeSeed"))
         return seed
     }
 
     func load(seed: Int, world: WorldMap, now: Date = .now) throws -> VillageState? {
-        guard let data = defaults.data(forKey: "village.v2.\(seed)") else { return nil }
+        guard let data = defaults.data(forKey: key("village.v2.\(seed)")) else { return nil }
         let state = try JSONDecoder().decode(VillageState.self, from: data)
+        guard scope == .testing || state.progressionOrigin != .test else { throw CocoaError(.coderReadCorrupt) }
         let all = [state] + (state.otherVillages ?? [])
         let heroRaids = all.filter { $0.army?.raid?.includesHero == true }
         guard heroRaids.count <= 1, heroRaids.isEmpty || (state.hero != nil && state.hero?.missions?.voyage == nil) else {
@@ -75,7 +88,7 @@ struct VillageStorage {
         guard all.count <= VillageState.maximumSettlements,
               Set(all.map(\.location)).count == all.count,
               all.filter({ $0.location == .home }).count == 1,
-              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.hero == nil && $0.seed == seed && $0.people == state.people }) else {
+              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.hero == nil && $0.seed == seed && $0.people == state.people && $0.progressionOrigin == nil }) else {
             throw CocoaError(.coderReadCorrupt)
         }
         if let voyage = state.hero?.missions?.voyage {
@@ -205,15 +218,16 @@ struct VillageStorage {
         return migrated
     }
     func save(_ state: VillageState) throws {
-        defaults.set(try JSONEncoder().encode(state), forKey: "village.v2.\(state.seed)")
-        defaults.set(state.seed, forKey: "village.activeSeed")
+        guard scope == .testing || state.progressionOrigin != .test else { throw CocoaError(.featureUnsupported) }
+        defaults.set(try JSONEncoder().encode(state), forKey: key("village.v2.\(state.seed)"))
+        defaults.set(state.seed, forKey: key("village.activeSeed"))
     }
 
     func preserveUnreadableSave(seed: Int) throws {
-        guard let data = defaults.data(forKey: "village.v2.\(seed)") else {
+        guard let data = defaults.data(forKey: key("village.v2.\(seed)")) else {
             throw CocoaError(.fileReadNoSuchFile)
         }
-        let backupKey = "village.unreadable.\(seed).\(UUID().uuidString)"
+        let backupKey = key("village.unreadable.\(seed).\(UUID().uuidString)")
         defaults.set(data, forKey: backupKey)
         guard defaults.data(forKey: backupKey) == data else {
             throw CocoaError(.fileWriteUnknown)

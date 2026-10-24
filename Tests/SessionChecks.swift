@@ -12,6 +12,7 @@ struct SessionChecks {
         invalidClock.lastProductionAt = Date(timeIntervalSince1970: -1e100)
         try await checkUnreadableSave(JSONEncoder().encode(invalidClock))
         try checkBackupFailure()
+        try checkIsolatedTestGame()
         try checkAbsenceSummaryAfterRelaunch()
         try checkOfflineResume()
         try checkCompletedActionsAfterRelaunch()

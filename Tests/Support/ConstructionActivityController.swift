@@ -2,7 +2,9 @@
 // The real iOS controller is compiled by the app build.
 @MainActor
 enum ConstructionActivityController {
-    static func start(for job: ResourceUpgrade) {}
-    static func start(for job: ConstructionJob) {}
-    static func end() {}
+    private(set) static var starts = 0
+    private(set) static var ends = 0
+    static func start(for job: ResourceUpgrade) { starts += 1 }
+    static func start(for job: ConstructionJob) { starts += 1 }
+    static func end() { ends += 1 }
 }

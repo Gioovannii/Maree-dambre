@@ -13,14 +13,14 @@ struct MareesAmbreApp: App {
                 .environment(raidReminders)
                 .task {
                     try? Tips.configure()
-                    await raidReminders.synchronize(attack: session.state.nextDomainBotAttackDate)
+                    await raidReminders.synchronize(attack: session.reminderAttackDate)
                 }
-                .onChange(of: session.state.nextDomainBotAttackDate) { _, date in
+                .onChange(of: session.reminderAttackDate) { _, date in
                     Task { await raidReminders.synchronize(attack: date) }
                 }
                 .onChange(of: scenePhase) { _, _ in
                     session.refreshAfterSceneChange()
-                    Task { await raidReminders.synchronize(attack: session.state.nextDomainBotAttackDate) }
+                    Task { await raidReminders.synchronize(attack: session.reminderAttackDate) }
                 }
         }
     }

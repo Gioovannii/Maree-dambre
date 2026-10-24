@@ -27,12 +27,19 @@ final class VillageSession {
     private(set) var elapsedSeconds = 0
     private(set) var hasUnreadableSave = false
     var saveRecoveryMessage: String? { hasUnreadableSave ? message : nil }
-    private let storage: VillageStorage
+    private var storage: VillageStorage
+    private let normalStorage: VillageStorage
+    private(set) var hasSavedTestGame = false
+    private var normalReminderAttackDate: Date?
+    var isTestMode: Bool { storage.scope == .testing }
+    var reminderAttackDate: Date? { isTestMode ? normalReminderAttackDate : state.nextDomainBotAttackDate }
     private var productionTask: Task<Void, Never>?
     private let isUISnapshot: Bool
 
     init(storage: VillageStorage = VillageStorage()) {
         self.storage = storage
+        normalStorage = storage
+        hasSavedTestGame = storage.testingCopy.hasSavedGame
         isUISnapshot = ProcessInfo.processInfo.arguments.contains("--ui-snapshot")
         let seed = isUISnapshot ? 42 : storage.activeSeed()
         world = WorldMap(seed: seed)
@@ -192,6 +199,10 @@ final class VillageSession {
                 let support = ProcessInfo.processInfo.arguments.contains("--snapshot-hero-support")
                 _ = state.raid(targetID: 6, units: [.tideguard: 10], withHero: support, now: date)
                 if !support { _ = state.startHeroMission(.discoverWreck, now: date) }
+            }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-test-mode") {
+                self.storage = normalStorage.testingCopy
+                state.progressionOrigin = .test
             }
             return
         }
@@ -393,35 +404,35 @@ final class VillageSession {
     func upgradeSelectedBuilding() {
         refreshWorld()
         guard state.upgradeBuilding(at: plot), let job = state.construction else { return }
-        ConstructionActivityController.start(for: job)
+        if !isTestMode { ConstructionActivityController.start(for: job) }
         persist(String(localized: "progression.building.started", defaultValue: "\(String(job.kind.name)) : niveau \(String(job.level)) en chantier · \(String(GameProgression.durationText(job.duration)))."))
     }
 
     func developSelectedResource() {
         refreshWorld()
         guard state.developResource(at: plot), let kind = ResourceSiteKind.at(plot) else { return }
-        if let job = state.resourceUpgrade { ConstructionActivityController.start(for: job) }
+        if !isTestMode, let job = state.resourceUpgrade { ConstructionActivityController.start(for: job) }
         persist(String(localized: "progression.resource.started", defaultValue: "\(String(kind.name)) : amélioration lancée · \(String(GameProgression.durationText(state.resourceUpgrade?.effectiveDuration ?? 60)))."))
     }
 
     func cancelResourceUpgrade() {
         refreshWorld()
         guard state.cancelResourceUpgrade() else { return }
-        ConstructionActivityController.end()
+        if !isTestMode { ConstructionActivityController.end() }
         persist(String(localized: "screen.village_session.upgrade_canceled_half_the_resources_were_refunded", defaultValue: "Amélioration annulée. La moitié des ressources a été récupérée."))
     }
 
     func build(_ kind: BuildingKind) {
         refreshWorld()
         guard state.build(kind, at: plot) else { return }
-        if let job = state.construction { ConstructionActivityController.start(for: job) }
+        if !isTestMode, let job = state.construction { ConstructionActivityController.start(for: job) }
         persist(String(localized: "progression.construction.started", defaultValue: "\(String(kind.name)) : chantier lancé · \(String(GameProgression.durationText(state.construction?.duration ?? 60)))."))
     }
 
     func cancelConstruction() {
         refreshWorld()
         guard let job = state.cancelConstruction() else { return }
-        ConstructionActivityController.end()
+        if !isTestMode { ConstructionActivityController.end() }
         persist(String(localized: "screen.village_session.construction_canceled_half_the_resources_were_refunded", defaultValue: "Chantier annulé. La moitié des ressources a été récupérée."))
         _ = job
     }
@@ -491,12 +502,12 @@ final class VillageSession {
            state.construction == nil,
            state.buildings[finished.plot] == finished.kind {
             message = String(localized: "screen.village_session.value_completed_the_building_is_ready", defaultValue: "\(String(finished.kind.name)) terminé. Le bâtiment est prêt.")
-            ConstructionActivityController.end()
+            if !isTestMode { ConstructionActivityController.end() }
         } else if let finished = previous.resourceUpgrade, state.resourceUpgrade == nil {
             message = String(localized: "screen.village_session.resource_site_upgraded_to_level_value", defaultValue: "Terrain amélioré au niveau \(String(finished.targetLevel)).")
-            ConstructionActivityController.end()
+            if !isTestMode { ConstructionActivityController.end() }
         } else if state.construction == nil && state.resourceUpgrade == nil {
-            ConstructionActivityController.end()
+            if !isTestMode { ConstructionActivityController.end() }
         }
         if state.settlementCount > previous.settlementCount {
             message = String(localized: "expansion.founded", defaultValue: "Votre colonie est fondée ! Retrouvez-la dans le sélecteur d’implantations ou sur la carte.")
@@ -543,9 +554,64 @@ final class VillageSession {
         #endif
     }
 
+    /// A disposable copy, persisted under separate keys. Relaunch always opens normal play.
+    func startTestGame() throws {
+        guard allowsTestTimeControls, !isTestMode, !isUISnapshot, !hasUnreadableSave,
+              state.people != nil else { throw CocoaError(.featureUnsupported) }
+        refreshWorld()
+        var copy = state
+        copy.progressionOrigin = .test
+        let target = normalStorage.testingCopy
+        try target.save(copy)
+        normalReminderAttackDate = state.nextDomainBotAttackDate
+        storage = target
+        hasSavedTestGame = true
+        replaceCurrentGame(with: copy)
+    }
+
+    func resumeTestGame() throws {
+        guard allowsTestTimeControls, !isTestMode, !isUISnapshot, !hasUnreadableSave,
+              normalStorage.testingCopy.hasSavedGame else { throw CocoaError(.featureUnsupported) }
+        let target = normalStorage.testingCopy
+        let seed = target.activeSeed()
+        guard var copy = try target.load(seed: seed, world: WorldMap(seed: seed)) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        copy.progressionOrigin = .test
+        refreshWorld()
+        normalReminderAttackDate = state.nextDomainBotAttackDate
+        storage = target
+        replaceCurrentGame(with: copy)
+        refreshWorld()
+    }
+
+    func leaveTestGame() throws {
+        guard isTestMode, !isUISnapshot else { return }
+        let seed = normalStorage.activeSeed()
+        guard let normal = try normalStorage.load(seed: seed, world: WorldMap(seed: seed)) else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        save()
+        storage = normalStorage
+        normalReminderAttackDate = nil
+        replaceCurrentGame(with: normal)
+        refreshWorld()
+    }
+
+    private func replaceCurrentGame(with village: VillageState) {
+        world = WorldMap(seed: village.seed)
+        state = village
+        absenceSummary = nil
+        guidedStep = nil
+        pendingBuilding = nil
+        moveSourcePlot = nil
+        plot = VillageMapMode.resourceFields.initialPlot
+        selectedTile = village.location
+    }
+
     /// Simulate an absence, then rebase all dates so subsequent actions still use real time.
     func advanceTestTime(by seconds: TimeInterval) {
-        guard allowsTestTimeControls, seconds > 0, !hasUnreadableSave else { return }
+        guard allowsTestTimeControls, isTestMode, seconds.isFinite, seconds > 0, seconds <= 86_400, !hasUnreadableSave else { return }
         do {
             var simulated = state
             simulated.updateDomain(now: Date.now.addingTimeInterval(seconds), on: world)
@@ -565,7 +631,6 @@ final class VillageSession {
             decoder.dateDecodingStrategy = .iso8601
             let rebased = try decoder.decode(VillageState.self, from: JSONSerialization.data(withJSONObject: rebase(object)))
             state = rebased
-            ConstructionActivityController.end()
             save()
         } catch {
             message = error.localizedDescription
@@ -574,6 +639,7 @@ final class VillageSession {
 
     private func save() {
         guard !isUISnapshot, !hasUnreadableSave else { return }
+        if isTestMode { state.progressionOrigin = .test }
         state.recordGuideProgress()
         if let guidedStep, VillageGuideStep.next(in: state) != guidedStep { self.guidedStep = nil }
         do {
@@ -597,17 +663,19 @@ final class VillageSession {
     }
 
     func exportBackup() throws -> Data {
-        guard !hasUnreadableSave else { throw CocoaError(.coderReadCorrupt) }
+        guard !hasUnreadableSave, !isTestMode else { throw CocoaError(.featureUnsupported) }
         refreshWorld()
         return try storage.exportBackup(state)
     }
 
     func validateBackup(_ data: Data) throws -> VillageState {
-        try storage.validateBackup(data)
+        guard !isTestMode else { throw CocoaError(.featureUnsupported) }
+        return try storage.validateBackup(data)
     }
 
-    func restoreBackup(_ data: Data) throws {
-        let restored = try storage.restoreBackup(data)
+    func restoreBackup(_ data: Data, source: VillageStorage.BackupSource = .file) throws {
+        guard !isTestMode else { throw CocoaError(.featureUnsupported) }
+        let restored = try storage.restoreBackup(data, source: source)
         ConstructionActivityController.end()
         world = WorldMap(seed: restored.seed)
         state = restored
