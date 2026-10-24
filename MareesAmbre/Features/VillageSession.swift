@@ -13,7 +13,7 @@ final class VillageSession {
         guard let kind = snapshotBuilding, let index = BuildingKind.constructible.firstIndex(of: kind) else {
             return VillageMapMode.townCenter.initialPlot
         }
-        return VillageMapMode.townCenter.slots.filter { $0 != 12 }[index]
+        return VillageMapMode.townCenter.defaultVisibleSlots.filter { $0 != 12 }[index]
     }
     private(set) var absenceSummary: AbsenceSummary?
     private(set) var state: VillageState
@@ -58,7 +58,7 @@ final class VillageSession {
                 || ProcessInfo.processInfo.arguments.contains("--snapshot-raid")
                 || ProcessInfo.processInfo.arguments.contains("--snapshot-commerce")
                 || ProcessInfo.processInfo.arguments.contains("--snapshot-defense") || Self.snapshotBuilding != nil {
-                let plots = VillageMapMode.townCenter.slots.filter { $0 != 12 }
+                let plots = VillageMapMode.townCenter.defaultVisibleSlots.filter { $0 != 12 }
                 state.buildings = Dictionary(uniqueKeysWithValues: zip(plots, BuildingKind.constructible))
                 state.buildings[12] = .hall
                 state.resources = Resources(wood: 400, amber: 200, provisions: 350)

@@ -30,7 +30,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
     var slots: [Int] {
         switch self {
         case .resourceFields: Array(0..<10)
-        case .townCenter: Array(10..<20) + [22, 23]
+        case .townCenter: defaultVisibleSlots + [SettlementLayout.legacyTownPlot]
         }
     }
 
@@ -43,7 +43,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
 
     // Legacy lots remain addressable so existing buildings and jobs are preserved.
     var defaultVisibleSlots: [Int] {
-        self == .townCenter ? Array(10..<20) + [SettlementLayout.expeditionQuayPlot] : slots
+        self == .townCenter ? Array(10...20) + [SettlementLayout.expeditionQuayPlot] : slots
     }
 
     func mapPoint(for plot: Int) -> CGPoint {
@@ -59,6 +59,7 @@ enum VillageMapMode: String, CaseIterable, Identifiable, Sendable {
             guard clearings.indices.contains(plot) else { return CGPoint(x: 0.5, y: 0.5) }
             return clearings[plot]
         }
+        if plot == SettlementLayout.additionalTownPlot { return CGPoint(x: 0.23, y: 0.67) }
         if plot == 12 { return CGPoint(x: 0.50, y: 0.45) }
         if plot == SettlementLayout.expeditionQuayPlot { return CGPoint(x: 0.72, y: 0.76) }
         let lots = [10, 11, 13, 14, 15, 16, 17, 18, 19, 22, 23]
@@ -94,6 +95,8 @@ struct SettlementPosition: Equatable, Sendable {
 }
 
 enum SettlementLayout {
+    static let additionalTownPlot = 20
+    static let legacyTownPlot = 22
     static let expeditionQuayPlot = 23
     static func position(for plot: Int) -> SettlementPosition {
         let column = plot % 5

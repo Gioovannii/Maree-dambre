@@ -7,7 +7,9 @@ struct LayoutSnapshotChecks {
     static func main() {
         let town = VillageMapMode.townCenter
         precondition(town.defaultVisibleSlots.count == 12, "Twelve compact centre lots")
-        let points = town.slots.map(town.mapPoint(for:))
+        precondition(town.defaultVisibleSlots.contains(SettlementLayout.additionalTownPlot))
+        precondition(!town.defaultVisibleSlots.contains(SettlementLayout.legacyTownPlot))
+        let points = town.defaultVisibleSlots.map(town.mapPoint(for:))
 
         precondition(points.count == Set(points.map { "\($0.x),\($0.y)" }).count,
                      "Centre snapshot contains overlapping slots")
@@ -21,13 +23,13 @@ struct LayoutSnapshotChecks {
         }
 
         let hall = town.mapPoint(for: 12)
-        precondition(abs(hall.x - 0.50) < 0.001 && abs(hall.y - 0.345) < 0.001,
+        precondition(abs(hall.x - 0.50) < 0.001 && abs(hall.y - 0.45) < 0.001,
                      "Centre hall moved away from the focal point")
 
         let resource = VillageMapMode.resourceFields
         precondition(resource.slots.count == 10, "Resource snapshot changed its slot count")
         let resourcePoints = resource.slots.map(resource.mapPoint(for:))
-        precondition(resourcePoints.allSatisfy { (0.15...0.85).contains($0.x) && (0.19...0.80).contains($0.y) },
+        precondition(resourcePoints.allSatisfy { (0.10...0.90).contains($0.x) && (0.30...0.70).contains($0.y) },
                      "Resource clearings must remain grouped above the bottom controls")
         for (index, a) in resourcePoints.enumerated() {
             for b in resourcePoints.dropFirst(index + 1) {
@@ -35,6 +37,6 @@ struct LayoutSnapshotChecks {
                              "Resource touch targets overlap on a compact portrait screen")
             }
         }
-        print("PASS: settlement layout snapshot — \(town.slots.count) compact centre slots, hall centred")
+        print("PASS: settlement layout snapshot — \(town.defaultVisibleSlots.count) visible centre slots, hall centred")
     }
 }

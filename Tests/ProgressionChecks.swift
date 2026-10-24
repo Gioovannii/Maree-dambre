@@ -15,7 +15,7 @@ extension DomainChecks {
         city.people = .sauniers
         city.resources = Resources(wood: 100_000, amber: 100_000, provisions: 100_000)
         city.resourceLevels = [0: 10, 2: 10, 4: 10]
-        let plots = VillageMapMode.townCenter.slots.filter { $0 != 12 }
+        let plots = VillageMapMode.townCenter.defaultVisibleSlots.filter { $0 != 12 }
         city.buildings = Dictionary(uniqueKeysWithValues: zip(plots, BuildingKind.constructible))
         city.buildings[12] = .hall
         city.army = ArmyState(units: [.tideguard: 3, .pillager: 3], unlockedUnits: [.tideguard, .pillager])

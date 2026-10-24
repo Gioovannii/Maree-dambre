@@ -211,7 +211,7 @@ struct VillageState: Codable, Equatable {
         switch plot {
         case 0, 1, 5: .forest
         case 4, 9: .amber
-        case 20, 21, 23, 24: .sea
+        case 21, 23, 24: .sea
         default: .meadow
         }
     }
@@ -233,7 +233,7 @@ struct VillageState: Codable, Equatable {
     }
 
     static func canPlace(_ kind: BuildingKind, at plot: Int) -> Bool {
-        guard kind != .hall, kind.area.contains(plot), (0..<25).contains(plot) else { return false }
+        guard plot != SettlementLayout.legacyTownPlot, kind != .hall, kind.area.contains(plot), (0..<25).contains(plot) else { return false }
         if kind == .expeditionQuay { return plot == SettlementLayout.expeditionQuayPlot }
         guard plot != SettlementLayout.expeditionQuayPlot else { return false }
         return kind.suits(ground(at: plot))
@@ -256,7 +256,10 @@ struct VillageState: Codable, Equatable {
     }
 
     static func canLoad(_ kind: BuildingKind, at plot: Int) -> Bool {
-        canPlace(kind, at: plot)
+        if plot == SettlementLayout.legacyTownPlot {
+            return kind != .hall && kind != .expeditionQuay && kind.suits(ground(at: plot))
+        }
+        return canPlace(kind, at: plot)
     }
 
     func resourceLevel(at plot: Int) -> Int { resourceLevels?[plot] ?? 0 }

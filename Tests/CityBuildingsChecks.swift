@@ -12,7 +12,7 @@ extension DomainChecks {
         var city = VillageState(seed: 42)
         city.resources = Resources(wood: 10_000, amber: 10_000, provisions: 10_000)
         city.resourceLevels = [0: 10, 2: 10, 4: 10]
-        let plots = VillageMapMode.townCenter.slots.filter { $0 != 12 }
+        let plots = VillageMapMode.townCenter.defaultVisibleSlots.filter { $0 != 12 }
         precondition(BuildingKind.allCases.count == 12 && BuildingKind.constructible.count == plots.count)
         for (kind, plot) in zip(BuildingKind.constructible, plots) {
             let before = city.resources
@@ -23,9 +23,38 @@ extension DomainChecks {
             precondition(city.hasBuilding(kind) && !city.canBuild(kind, at: plot))
         }
         precondition(city.buildings.count == 12)
+        precondition(city.buildings.keys.allSatisfy { VillageMapMode.townCenter.defaultVisibleSlots.contains($0) },
+            "Every building must be constructible using only lots the player can see")
         try storage.save(city)
         let loadedCity = try storage.load(seed: 42, world: world, now: now)
         precondition(loadedCity == city)
+
+        // Retired plots load and upgrade normally, but cannot receive new buildings.
+        let legacyPlot = SettlementLayout.legacyTownPlot
+        precondition(!VillageState.canPlace(.market, at: legacyPlot))
+        precondition(!city.canMoveBuilding(from: 10, to: legacyPlot))
+        var legacyLot = VillageState(seed: 42)
+        legacyLot.resources = Resources(wood: 1000, amber: 1000, provisions: 1000)
+        precondition(!legacyLot.build(.market, at: legacyPlot, now: now))
+        legacyLot.buildings[legacyPlot] = .market
+        try storage.save(legacyLot)
+        var loadedLegacyLot = try storage.load(seed: 42, world: world, now: now)!
+        precondition(loadedLegacyLot.buildings[legacyPlot] == .market)
+        precondition(loadedLegacyLot.upgradeBuilding(at: legacyPlot, now: now))
+        try storage.save(loadedLegacyLot)
+        loadedLegacyLot = try storage.load(seed: 42, world: world, now: now)!
+        loadedLegacyLot.updateConstruction(now: loadedLegacyLot.construction!.endsAt)
+        precondition(loadedLegacyLot.buildingLevel(.market) == 2)
+        precondition(loadedLegacyLot.moveBuilding(from: legacyPlot, to: SettlementLayout.additionalTownPlot))
+        precondition(loadedLegacyLot.buildings[legacyPlot] == nil)
+        precondition(!loadedLegacyLot.canMoveBuilding(from: SettlementLayout.additionalTownPlot, to: legacyPlot))
+        var legacyJob = VillageState(seed: 42)
+        legacyJob.construction = ConstructionJob(plot: legacyPlot, kind: .market, startedAt: now, duration: 60)
+        try storage.save(legacyJob)
+        var restoredLegacyJob = try storage.load(seed: 42, world: world, now: now)!
+        restoredLegacyJob.updateConstruction(now: now.addingTimeInterval(60))
+        precondition(restoredLegacyJob.buildings[legacyPlot] == .market,
+            "Paid legacy construction must complete instead of invalidating the save")
 
         // Version 10 allowed the quay on any urban lot. Preserve full villages by swapping.
         var inlandQuay = city

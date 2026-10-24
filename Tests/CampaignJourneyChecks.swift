@@ -58,7 +58,7 @@ private struct Journey {
 
     mutating func building(_ kind: BuildingKind, level: Int = 1) throws {
         if !state.hasBuilding(kind) {
-            guard let plot = VillageMapMode.townCenter.slots.first(where: {
+            guard let plot = VillageMapMode.townCenter.defaultVisibleSlots.first(where: {
                 state.buildings[$0] == nil && VillageState.canPlace(kind, at: $0)
             }) else { throw JourneyFailure.blocked("No plot available for \(kind)") }
             try afford(kind.cost, label: "build \(kind)")

@@ -199,7 +199,7 @@ struct VillageStorage {
         }
         if let job = migrated.construction, state.version >= 8,
            !(job.kind == .hall && job.plot == 12 && job.level > 1),
-           !VillageState.canPlace(job.kind, at: job.plot) {
+           !VillageState.canLoad(job.kind, at: job.plot) {
             throw CocoaError(.coderReadCorrupt)
         }
         return migrated
