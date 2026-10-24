@@ -2,7 +2,7 @@ import SwiftUI
 import TipKit
 
 struct GameView: View {
-    @State private var showsBackup = false
+    @State private var showsBackup = ProcessInfo.processInfo.arguments.contains("--snapshot-backup")
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var showsMailbox = ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail")
     @State private var showsShipment = ProcessInfo.processInfo.arguments.contains("--snapshot-shipment")
@@ -337,6 +337,16 @@ struct GameView: View {
 
     private func topControls(showsResources: Bool) -> some View {
         VStack(spacing: 6) {
+            if session.isTestMode {
+                Button { showsBackup = true } label: {
+                    Label(String(localized: "test.mode.banner", defaultValue: "Mode test · Gérer ma copie"), systemImage: "flask.fill")
+                        .font(.caption.bold())
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .tint(Palette.navigationAccent)
+                .background(Palette.panel, in: .rect(cornerRadius: 14))
+                .accessibilityIdentifier("test.mode.banner")
+            }
             if let summary = session.absenceSummary, horizontalSizeClass != .compact {
                 AbsenceSummaryBanner(summary: summary) {
                     showsVillageDetails = false

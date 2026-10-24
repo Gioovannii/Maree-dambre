@@ -10,12 +10,13 @@ final class CloudBackupController {
     private(set) var data: Data?
     private(set) var savedAt: Date?
     private(set) var message: String?
-    @ObservationIgnored private let container = CKContainer(identifier: "iCloud.com.giovanni.mareesambre")
+    @ObservationIgnored private lazy var container = CKContainer(identifier: "iCloud.com.giovanni.mareesambre")
     @ObservationIgnored private var record: CKRecord?
     @ObservationIgnored private var account: CKRecord.ID?
     private let identifier = CKRecord.ID(recordName: "current-domain")
 
     func refresh() async {
+        guard !ProcessInfo.processInfo.arguments.contains("--ui-snapshot") else { return }
         guard !isBusy else { return }
         isBusy = true
         isReady = false

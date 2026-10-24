@@ -96,6 +96,8 @@ Add `--snapshot-actions` to frame a panel's lower actions. Demo arguments are fo
 
 ## TestFlight beta
 
+Development and verified TestFlight builds offer an isolated **Test copy** under Settings → Backup. Time controls affect only that local copy; restarting the app returns to normal play. Test copies cannot be exported or uploaded to iCloud. File imports retain unverified provenance. See [Isolated test games](docs/TEST-MODE.md).
+
 This build is intended to test the first solo loop, visual clarity, waiting times, and balance with a small initial tester group. It does not require an online game server.
 
 Before wider distribution, play from a fresh installation through the first raid on a physical iPhone. Close and reopen the app during construction, research, training, and an expedition. Verify the return of troops and resources, construction Live Activities while the app is suspended, the town shortcut, and water motion. Repeat the important navigation paths on iPad and at the largest text size. Longer sessions are still needed to assess high-level progression and storage growth.

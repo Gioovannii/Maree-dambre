@@ -8,6 +8,7 @@ struct BackupSheet: View {
     @State private var showsExport = false
     @State private var showsImport = false
     @State private var pendingData: Data?
+    @State private var pendingSource: VillageStorage.BackupSource = .file
     @State private var showsConfirmation = false
     @State private var showsError = false
     @State private var cloud = CloudBackupController()
@@ -16,61 +17,63 @@ struct BackupSheet: View {
     var body: some View {
         NavigationStack {
             Form {
-                if session.allowsTestTimeControls {
-                Section(String(localized: "debug.time.title", defaultValue: "Mode test — avancer le temps")) {
-                    Button(String(localized: "debug.time.minute", defaultValue: "Avancer d’une minute")) { session.advanceTestTime(by: 60) }
-                    Button(String(localized: "debug.time.hour", defaultValue: "Avancer d’une heure")) { session.advanceTestTime(by: 3600) }
-                    Button(String(localized: "debug.time.day", defaultValue: "Avancer d’un jour")) { session.advanceTestTime(by: 86400) }
-                    Text(String(localized: "debug.time.help", defaultValue: "Fait avancer la partie actuelle : production, travaux, voyages et attaques. Réservé au développement."))
-                        .font(.footnote)
-                }
-                }
-                Section("iCloud") {
-                    if cloud.isBusy { ProgressView() }
-                    if let date = cloud.savedAt {
-                        Text(date, format: .dateTime.day().month().year().hour().minute())
+                if session.allowsTestTimeControls || session.isTestMode { TestModeControls() }
+                if session.state.progressionOrigin == .importedFile {
+                    Section {
+                        Label(String(localized: "backup.imported_origin", defaultValue: "Partie importée depuis un fichier : son intégrité n’est pas vérifiée."), systemImage: "doc.badge.ellipsis")
+                            .font(.footnote)
                     }
-                    if let message = cloud.message { Text(message).font(.footnote) }
-                    Button(String(localized: "cloud.refresh", defaultValue: "Actualiser iCloud")) {
-                        Task { await cloud.refresh() }
-                    }
-                    .disabled(cloud.isBusy)
-                    Button(String(localized: "cloud.upload", defaultValue: "Sauvegarder cette partie dans iCloud")) {
-                        showsCloudConfirmation = true
-                    }
-                    .disabled(!cloud.isReady || cloud.isBusy || session.state.people == nil || session.hasUnreadableSave)
-                    Button(String(localized: "cloud.restore", defaultValue: "Restaurer la partie iCloud")) {
-                        guard let data = cloud.data else { return }
-                        do {
-                            _ = try session.validateBackup(data)
-                            pendingData = data
-                            showsConfirmation = true
-                        } catch { showsError = true }
-                    }
-                    .disabled(!cloud.isReady || cloud.isBusy || cloud.data == nil)
-                    Text(String(localized: "cloud.explanation", defaultValue: "L’envoi et la restauration sont manuels. Sur l’appareil où se trouve votre progression, envoyez-la dans iCloud. Sur l’autre appareil, actualisez puis restaurez-la. Les parties ne sont pas fusionnées."))
-                        .font(.footnote)
                 }
-                Section {
-                    Text(String(localized: "backup.explanation", defaultValue: "La partie est enregistrée sur cet appareil. Exportez-la vers Fichiers ou AirDrop, puis importez le fichier sur votre autre appareil. Le compte Apple ne synchronise pas encore la partie automatiquement."))
-                    Button(String(localized: "backup.export", defaultValue: "Exporter ma partie"), systemImage: "square.and.arrow.up") {
-                        do {
-                            document = GameBackupDocument(data: try session.exportBackup())
-                            showsExport = true
-                        } catch { showsError = true }
+                Group {
+                    Section("iCloud") {
+                        if cloud.isBusy { ProgressView() }
+                        if let date = cloud.savedAt {
+                            Text(date, format: .dateTime.day().month().year().hour().minute())
+                        }
+                        if let message = cloud.message { Text(message).font(.footnote) }
+                        Button(String(localized: "cloud.refresh", defaultValue: "Actualiser iCloud")) {
+                            Task { await cloud.refresh() }
+                        }
+                        .disabled(cloud.isBusy)
+                        Button(String(localized: "cloud.upload", defaultValue: "Sauvegarder cette partie dans iCloud")) {
+                            showsCloudConfirmation = true
+                        }
+                        .disabled(!cloud.isReady || cloud.isBusy || session.state.people == nil || session.hasUnreadableSave)
+                        Button(String(localized: "cloud.restore", defaultValue: "Restaurer la partie iCloud")) {
+                            guard let data = cloud.data else { return }
+                            do {
+                                _ = try session.validateBackup(data)
+                                pendingData = data
+                                pendingSource = .iCloud
+                                showsConfirmation = true
+                            } catch { showsError = true }
+                        }
+                        .disabled(!cloud.isReady || cloud.isBusy || cloud.data == nil)
+                        Text(String(localized: "cloud.explanation", defaultValue: "L’envoi et la restauration sont manuels. Sur l’appareil où se trouve votre progression, envoyez-la dans iCloud. Sur l’autre appareil, actualisez puis restaurez-la. Les parties ne sont pas fusionnées."))
+                            .font(.footnote)
                     }
-                    .disabled(session.state.people == nil || session.hasUnreadableSave)
+                    Section {
+                        Text(String(localized: "backup.explanation", defaultValue: "La partie est enregistrée sur cet appareil. Exportez-la vers Fichiers ou AirDrop, puis importez le fichier sur votre autre appareil. Le compte Apple ne synchronise pas encore la partie automatiquement."))
+                        Button(String(localized: "backup.export", defaultValue: "Exporter ma partie"), systemImage: "square.and.arrow.up") {
+                            do {
+                                document = GameBackupDocument(data: try session.exportBackup())
+                                showsExport = true
+                            } catch { showsError = true }
+                        }
+                        .disabled(session.state.people == nil || session.hasUnreadableSave)
+                    }
+                    Section {
+                        Button(String(localized: "backup.import", defaultValue: "Importer une partie"), systemImage: "square.and.arrow.down") { showsImport = true }
+                        Text(String(localized: "backup.warning", defaultValue: "L’import remplace la partie de cet appareil après confirmation. Une copie locale de la sauvegarde précédente sera conservée. Les parties ne sont pas fusionnées."))
+                            .font(.footnote)
+                    }
                 }
-                Section {
-                    Button(String(localized: "backup.import", defaultValue: "Importer une partie"), systemImage: "square.and.arrow.down") { showsImport = true }
-                    Text(String(localized: "backup.warning", defaultValue: "L’import remplace la partie de cet appareil après confirmation. Une copie locale de la sauvegarde précédente sera conservée. Les parties ne sont pas fusionnées."))
-                        .font(.footnote)
-                }
+                .disabled(session.isTestMode)
             }
             .navigationTitle(String(localized: "backup.title", defaultValue: "Sauvegarde"))
             .task {
                 await session.refreshTestBuildAccess()
-                await cloud.refresh()
+                if !session.isTestMode { await cloud.refresh() }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -90,13 +93,14 @@ struct BackupSheet: View {
                     let data = try file.read(upToCount: 8_000_001) ?? Data()
                     _ = try session.validateBackup(data)
                     pendingData = data
+                    pendingSource = .file
                     showsConfirmation = true
                 } catch { showsError = true }
             }
             .alert(String(localized: "backup.confirm", defaultValue: "Remplacer la partie de cet appareil ?"), isPresented: $showsConfirmation) {
                 Button(String(localized: "backup.restore", defaultValue: "Restaurer"), role: .destructive) {
                     guard let data = pendingData else { return }
-                    do { try session.restoreBackup(data); dismiss() }
+                    do { try session.restoreBackup(data, source: pendingSource); dismiss() }
                     catch { showsError = true }
                     pendingData = nil
                 }

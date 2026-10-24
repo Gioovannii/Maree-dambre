@@ -1,6 +1,227 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "test.mode.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Copie de test"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Test copy"
+        }
+      }
+    }
+  },
+  "test.mode.active": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Vous jouez sur une copie de test"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "You are playing a test copy"
+        }
+      }
+    }
+  },
+  "test.mode.leave": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Revenir à ma partie normale"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Return to my normal game"
+        }
+      }
+    }
+  },
+  "test.mode.isolated": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Cette copie reste sur cet appareil. Ses ressources et ses progrès ne sont pas transférables. La partie normale continue à son rythme habituel."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "This copy stays on this device. Its resources and progress cannot be transferred. Your normal game continues at its usual pace."
+        }
+      }
+    }
+  },
+  "test.mode.resume": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Reprendre ma copie de test"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Resume my test copy"
+        }
+      }
+    }
+  },
+  "test.mode.create": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Créer une copie de test de cette partie"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Create a test copy of this game"
+        }
+      }
+    }
+  },
+  "test.mode.help": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Essayez les améliorations et avancez le temps sur une copie séparée. Vous retrouverez votre partie normale en quittant le test ou en relançant l’app."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Try upgrades and advance time in a separate copy. Return to your normal game by leaving the test or restarting the app."
+        }
+      }
+    }
+  },
+  "test.mode.confirm": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Créer une nouvelle copie de test ?"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Create a new test copy?"
+        }
+      }
+    }
+  },
+  "test.mode.create_short": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Créer la copie"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Create copy"
+        }
+      }
+    }
+  },
+  "test.mode.replace": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Votre partie normale est conservée. Si une ancienne copie de test existe, elle sera remplacée."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Your normal game is preserved. Any existing test copy will be replaced."
+        }
+      }
+    }
+  },
+  "test.mode.error": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Impossible de changer de partie. Les sauvegardes existantes sont conservées."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Unable to switch games. Existing saves are preserved."
+        }
+      }
+    }
+  },
+  "test.mode.banner": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Mode test · Gérer ma copie"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Test mode · Manage my copy"
+        }
+      }
+    }
+  },
+  "backup.imported_origin": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Partie importée depuis un fichier : son intégrité n’est pas vérifiée."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Game imported from a file: its integrity has not been verified."
+        }
+      }
+    }
+  },
   "resources.hourly_rate": {
     "extractionState": "manual",
     "localizations": {
