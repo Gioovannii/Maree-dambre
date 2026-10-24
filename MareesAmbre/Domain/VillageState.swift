@@ -176,6 +176,23 @@ struct VillageState: Codable, Equatable {
         if version < 17 { version = 17 }
         if version < 18 { importLegacyMail(now: now); version = 18 }
         if version < 19 { version = 19 }
+        relocateLegacyTownLot()
+    }
+
+    private mutating func relocateLegacyTownLot() {
+        let legacy = SettlementLayout.legacyTownPlot
+        let job = construction.flatMap { $0.plot == legacy ? $0 : nil }
+        guard let kind = buildings[legacy] ?? job?.kind else { return }
+        let candidates = [SettlementLayout.additionalTownPlot]
+            + VillageMapMode.townCenter.defaultVisibleSlots.filter { $0 != SettlementLayout.additionalTownPlot }
+        guard let destination = candidates.first(where: {
+            buildings[$0] == nil && construction?.plot != $0 && Self.canPlace(kind, at: $0)
+        }) else { return }
+        if buildings[legacy] != nil { buildings[destination] = buildings.removeValue(forKey: legacy) }
+        if let job {
+            construction = ConstructionJob(plot: destination, kind: job.kind, startedAt: job.startedAt,
+                duration: job.duration, targetLevel: job.targetLevel, paidCost: job.paidCost)
+        }
     }
 
     private mutating func relocateQuayToWaterfront() {

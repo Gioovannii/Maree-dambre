@@ -29,7 +29,7 @@ extension DomainChecks {
         let loadedCity = try storage.load(seed: 42, world: world, now: now)
         precondition(loadedCity == city)
 
-        // Retired plots load and upgrade normally, but cannot receive new buildings.
+        // Retired occupants move to visible land without losing levels, paid work or resources.
         let legacyPlot = SettlementLayout.legacyTownPlot
         precondition(!VillageState.canPlace(.market, at: legacyPlot))
         precondition(!city.canMoveBuilding(from: 10, to: legacyPlot))
@@ -39,21 +39,44 @@ extension DomainChecks {
         legacyLot.buildings[legacyPlot] = .market
         try storage.save(legacyLot)
         var loadedLegacyLot = try storage.load(seed: 42, world: world, now: now)!
-        precondition(loadedLegacyLot.buildings[legacyPlot] == .market)
-        precondition(loadedLegacyLot.upgradeBuilding(at: legacyPlot, now: now))
+        let replacement = SettlementLayout.additionalTownPlot
+        precondition(loadedLegacyLot.buildings[legacyPlot] == nil && loadedLegacyLot.buildings[replacement] == .market)
+        precondition(loadedLegacyLot.resources == legacyLot.resources)
+        precondition(loadedLegacyLot.upgradeBuilding(at: replacement, now: now))
         try storage.save(loadedLegacyLot)
         loadedLegacyLot = try storage.load(seed: 42, world: world, now: now)!
         loadedLegacyLot.updateConstruction(now: loadedLegacyLot.construction!.endsAt)
         precondition(loadedLegacyLot.buildingLevel(.market) == 2)
-        precondition(loadedLegacyLot.moveBuilding(from: legacyPlot, to: SettlementLayout.additionalTownPlot))
-        precondition(loadedLegacyLot.buildings[legacyPlot] == nil)
-        precondition(!loadedLegacyLot.canMoveBuilding(from: SettlementLayout.additionalTownPlot, to: legacyPlot))
+        precondition(!loadedLegacyLot.canMoveBuilding(from: replacement, to: legacyPlot))
+        var upgradedLegacy = legacyLot
+        upgradedLegacy.buildingLevels = [.market: 3]
+        upgradedLegacy.construction = ConstructionJob(plot: legacyPlot, kind: .market, startedAt: now,
+            duration: 120, targetLevel: 4, paidCost: BuildingKind.market.cost(for: 4))
+        try storage.save(upgradedLegacy)
+        let relocatedUpgrade = try storage.load(seed: 42, world: world, now: now)!
+        precondition(relocatedUpgrade.buildingLevel(.market) == 3)
+        precondition(relocatedUpgrade.construction?.plot == replacement)
+        precondition(relocatedUpgrade.construction?.endsAt == upgradedLegacy.construction?.endsAt)
+        precondition(relocatedUpgrade.construction?.paidCost == upgradedLegacy.construction?.paidCost)
+        precondition(relocatedUpgrade.construction?.targetLevel == 4)
+        var occupiedReplacement = legacyLot
+        occupiedReplacement.buildings[replacement] = .warehouse
+        try storage.save(occupiedReplacement)
+        let relocatedElsewhere = try storage.load(seed: 42, world: world, now: now)!
+        precondition(relocatedElsewhere.buildings[replacement] == .warehouse)
+        precondition(relocatedElsewhere.buildings[10] == .market && relocatedElsewhere.buildings[legacyPlot] == nil)
+        var fullLegacyTown = city
+        fullLegacyTown.buildings[legacyPlot] = fullLegacyTown.buildings.removeValue(forKey: replacement)
+        try storage.save(fullLegacyTown)
+        let restoredFullTown = try storage.load(seed: 42, world: world, now: now)!
+        precondition(restoredFullTown == city,
+            "Even a full legacy town must keep all twelve buildings and their resources")
         var legacyJob = VillageState(seed: 42)
         legacyJob.construction = ConstructionJob(plot: legacyPlot, kind: .market, startedAt: now, duration: 60)
         try storage.save(legacyJob)
         var restoredLegacyJob = try storage.load(seed: 42, world: world, now: now)!
         restoredLegacyJob.updateConstruction(now: now.addingTimeInterval(60))
-        precondition(restoredLegacyJob.buildings[legacyPlot] == .market,
+        precondition(restoredLegacyJob.buildings[replacement] == .market,
             "Paid legacy construction must complete instead of invalidating the save")
 
         // Version 10 allowed the quay on any urban lot. Preserve full villages by swapping.
