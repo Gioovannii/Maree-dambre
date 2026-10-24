@@ -88,7 +88,7 @@ struct GameView: View {
                             let mode: VillageMapMode = step == .fields ? .resourceFields : .townCenter
                             let kind: BuildingKind = (step == .academy || step == .research) ? .academy : .warCourt
                             let target: Int? = step == .fields
-                                ? mode.slots.first(where: { session.state.canDevelopResource(at: $0) }) ?? mode.slots.first
+                                ? session.state.recommendedGuideResourcePlot ?? mode.slots.first
                                 : session.state.buildings.first(where: { $0.value == kind })?.key
                                     ?? mode.slots.first(where: { session.state.canBuild(kind, at: $0) })
                                     ?? mode.slots.first(where: { session.state.buildings[$0] == nil && VillageState.canPlace(kind, at: $0) })

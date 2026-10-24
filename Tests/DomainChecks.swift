@@ -385,7 +385,15 @@ extension DomainChecks {
     static func checkGuideProgress() throws {
         var village = VillageState(seed: 42)
         precondition(VillageGuideStep.next(in: village) == .fields && !village.hasCompletedGuide)
+        precondition(village.recommendedGuideResourcePlot == 0)
         village.resourceLevels = [0: 1]
+        precondition(VillageGuideStep.next(in: village) == .fields,
+            "Wood alone must not send new players into an amber-starved military loop")
+        precondition(village.recommendedGuideResourcePlot == 2)
+        village.resourceLevels = [0: 1, 2: 1]
+        precondition(village.recommendedGuideResourcePlot == 4)
+        village.resourceLevels = [0: 1, 2: 1, 4: 1]
+        precondition(village.recommendedGuideResourcePlot == nil)
         village.buildings[10] = .academy
         village.buildings[11] = .warCourt
         village.army = ArmyState(units: [.tideguard: 3], unlockedUnits: [.tideguard])
@@ -405,6 +413,10 @@ extension DomainChecks {
         legacyJSON.removeValue(forKey: "guideObjectives")
         let legacy = try JSONDecoder().decode(VillageState.self, from: JSONSerialization.data(withJSONObject: legacyJSON))
         precondition(!legacy.hasCompletedGuide && legacy.guideObjectives == nil)
+        var previouslyGuided = VillageState(seed: 42)
+        previouslyGuided.guideObjectives = [.fields]
+        precondition(VillageGuideStep.next(in: previouslyGuided) == .academy,
+            "The expanded economy objective must not undo an already completed tutorial step")
         var oldReport = village
         oldReport.guideObjectives = nil
         oldReport.army = ArmyState(report: "Legacy battle report")

@@ -1,6 +1,23 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "guide.fields.economy": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Lançons la production de bois, de vivres et d’ambre. Dans Ressources, améliore au moins une parcelle de chaque type au niveau 1 avant de préparer ton armée. Un seul chantier avance à la fois."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Start producing wood, food and amber. In Resources, upgrade at least one plot of each type to level 1 before preparing your army. Only one construction project can run at a time."
+        }
+      }
+    }
+  },
   "army.capacity.summary": {
     "extractionState": "manual",
     "localizations": {
