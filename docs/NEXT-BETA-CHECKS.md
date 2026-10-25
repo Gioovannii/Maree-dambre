@@ -1,6 +1,6 @@
 # Next beta device checks
 
-The current checkout remains version 1.0, build 20. These changes are committed on main; this document does not indicate that an archive was uploaded to TestFlight.
+The current checkout is version 1.0, build 21. These changes are committed on main; this document does not indicate that an archive was uploaded to TestFlight.
 
 ## Physical transfer verification
 
