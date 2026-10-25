@@ -2042,13 +2042,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Next regular assault"
+            "value" : "Next raid expected"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prochain assaut régulier"
+            "value" : "Prochain raid prévu"
           }
         }
       }
@@ -2076,13 +2076,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "One assault every 24 hours, starting 24 hours after your protection ends. After time away, at most one assault per village on return. Find the report in Messages."
+            "value" : "One raid targets one of your villages at an unpredictable time, every 8 to 15 days. Missed raids do not accumulate while you are away. Find the report in Messages."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un assaut toutes les 24 h, à partir de 24 h après votre protection. Après une absence, au plus un assaut par village au retour. Le rapport arrive dans Messages."
+            "value" : "Un raid vise un de vos villages à un moment imprévisible, entre 8 et 15 jours après le précédent. Aucun rattrapage pendant votre absence. Le rapport arrive dans Messages."
           }
         }
       }
@@ -2093,13 +2093,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "At most one automatic raid per 24 hours per village, after your protection. Missed raids do not accumulate while you are away. The garrison defends automatically; reports await in Messages."
+            "value" : "After your protection, one raid targets a single village at an unpredictable time, every 8 to 15 days. No catch-up raids while you are away. Your garrison defends automatically; reports await in Messages."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Au plus un raid automatique par 24 h et par village, après votre protection. Aucune accumulation pendant votre absence. La garnison défend automatiquement ; les rapports attendent dans Messages."
+            "value" : "Après votre protection, un raid vise un seul de vos villages à un moment imprévisible, entre 8 et 15 jours après le précédent. Pas de rattrapage pendant votre absence. La garnison défend automatiquement ; les rapports vous attendent dans Messages."
           }
         }
       }

@@ -9,7 +9,7 @@ struct ScheduledBotAttackPanel: View {
                 .foregroundStyle(Palette.amber)
         } else if let date = session.state.scheduledBotAttackDate {
             VStack(alignment: .leading, spacing: 8) {
-                Label(String(localized: "bots.next", defaultValue: "Prochain assaut régulier"), systemImage: "clock.badge.exclamationmark")
+                Label(String(localized: "bots.next", defaultValue: "Prochain raid prévu"), systemImage: "clock.badge.exclamationmark")
                     .font(.subheadline.bold()).foregroundStyle(Palette.amber)
                 if ProcessInfo.processInfo.arguments.contains("--ui-snapshot"), let now = session.state.lastProductionAt {
                     Text(GameProgression.durationText(max(0, date.timeIntervalSince(now)))).monospacedDigit()
@@ -19,7 +19,7 @@ struct ScheduledBotAttackPanel: View {
                 }
                 Text(date, format: .dateTime.day().month().hour().minute())
                     .font(.caption).foregroundStyle(Palette.muted)
-                Text(String(localized: "bots.rules_rest", defaultValue: "Au plus un raid automatique par 24 h et par village, après votre protection. Aucune accumulation pendant votre absence. La garnison défend automatiquement ; les rapports attendent dans Messages."))
+                Text(String(localized: "bots.rules_rest", defaultValue: "Après votre protection, un raid vise un seul de vos villages à un moment imprévisible, entre 8 et 15 jours après le précédent. Pas de rattrapage pendant votre absence. La garnison défend automatiquement ; les rapports vous attendent dans Messages."))
                     .font(.footnote).foregroundStyle(Palette.muted)
             }
         }

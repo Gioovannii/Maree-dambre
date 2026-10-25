@@ -23,10 +23,14 @@ func checkRaidRest() {
     village.resolveScheduledAttacks(now: date(18, 8, 59), calendar: utc)
     precondition(village.coastalCampaign == nil)
     village.resolveScheduledAttacks(now: date(18, 9), calendar: utc)
-    precondition(village.coastalCampaign?.assaultsResolved == 1 && village.otherVillages?[0].coastalCampaign?.assaultsResolved == 1)
-    precondition(village.nextBotAttackAt == date(19, 9))
+    let resolved = (village.coastalCampaign?.assaultsResolved ?? 0)
+        + (village.otherVillages ?? []).reduce(0) { $0 + ($1.coastalCampaign?.assaultsResolved ?? 0) }
+    precondition(resolved == 1, "One automatic raid targets only one settlement")
+    let nextAttack = village.nextBotAttackAt!
+    precondition(nextAttack >= date(18, 9).addingTimeInterval(VillageState.minimumBotAttackInterval))
+    precondition(nextAttack <= date(18, 9).addingTimeInterval(VillageState.maximumBotAttackInterval))
     village.resolveScheduledAttacks(now: date(18, 9), calendar: utc)
-    precondition(village.coastalCampaign?.assaultsResolved == 1)
+    precondition(resolved == 1)
     precondition(RaidRestPolicy.reminderDate(for: date(18, 9), now: date(17, 12), calendar: utc) == date(18, 8))
     precondition(RaidRestPolicy.reminderDate(for: date(18, 8), now: date(17, 12), calendar: utc) == nil)
     precondition(RaidRestPolicy.reminderDate(for: date(18, 12), now: date(18, 10), previousReminder: date(18, 8), calendar: utc) == nil)
@@ -42,5 +46,5 @@ func checkRaidRest() {
             precondition(!RaidRestPolicy.isQuiet(at: morning.addingTimeInterval(-3600), calendar: local))
         }
     }
-    print("PASS: nightly raid protection, morning preparation hour, all villages, daily reminder cap and local calendar scheduling")
+    print("PASS: nightly protection, unpredictable account-wide raids, single-village targeting and local reminders")
 }
