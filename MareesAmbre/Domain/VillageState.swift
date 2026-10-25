@@ -34,6 +34,7 @@ struct VillageState: Codable, Equatable {
     var shipment: SettlementShipment?
     var mailbox: [GameMail]?
     var beginnerProtection: BeginnerProtection?
+    var botRaidTarget: TileCoordinate?
     var nextBotAttackAt: Date?
     var hero: PlayerHero?
 
@@ -42,7 +43,7 @@ struct VillageState: Codable, Equatable {
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
         case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
         case buildingLevels, unitWeaponLevels, guideObjectives
-        case settlementLocation, settlementRole, settlementRefuge, otherVillages, expansion, shipment, mailbox, beginnerProtection, nextBotAttackAt
+        case botRaidTarget, settlementLocation, settlementRole, settlementRefuge, otherVillages, expansion, shipment, mailbox, beginnerProtection, nextBotAttackAt
     }
 
     init(from decoder: Decoder) throws {
@@ -76,6 +77,7 @@ struct VillageState: Codable, Equatable {
         shipment = try values.decodeIfPresent(SettlementShipment.self, forKey: .shipment)
         mailbox = try values.decodeIfPresent([GameMail].self, forKey: .mailbox)
         beginnerProtection = try values.decodeIfPresent(BeginnerProtection.self, forKey: .beginnerProtection)
+        botRaidTarget = try values.decodeIfPresent(TileCoordinate.self, forKey: .botRaidTarget)
         nextBotAttackAt = try values.decodeIfPresent(Date.self, forKey: .nextBotAttackAt)
         hero = try values.decodeIfPresent(PlayerHero.self, forKey: .hero)
     }

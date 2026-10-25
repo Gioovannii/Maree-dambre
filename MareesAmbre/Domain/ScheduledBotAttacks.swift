@@ -14,6 +14,7 @@ extension VillageState {
         let first = existing ?? RaidRestPolicy.attackDate(
             for: anchor.addingTimeInterval(botAttackDelay(anchor: anchor, salt: 0)), calendar: calendar)
         setDomainBotAttackDate(first)
+        botRaidTarget = selectedBotRaidTarget(at: first)?.location
     }
 
     var scheduledBotAttackDate: Date? { botAttackDate(protection: beginnerProtection) }
@@ -26,14 +27,18 @@ extension VillageState {
 
     var nextBotRaidTargetName: String? {
         guard let due = nextDomainBotAttackDate else { return nil }
-        let settlements = [self] + (otherVillages ?? [])
-        let eligible = settlements.filter { !$0.isRefuge }.sorted {
+        return selectedBotRaidTarget(at: due)?.settlementName
+    }
+
+    private func selectedBotRaidTarget(at due: Date) -> VillageState? {
+        let eligible = ([self] + (otherVillages ?? [])).filter { !$0.isRefuge }.sorted {
             let lhs = $0.location
             let rhs = $1.location
             return lhs.x == rhs.x ? lhs.y < rhs.y : lhs.x < rhs.x
         }
+        if let target = eligible.first(where: { $0.location == botRaidTarget }) { return target }
         guard !eligible.isEmpty else { return nil }
-        return eligible[randomIndex(anchor: due, count: eligible.count, salt: 0x4f1bbcdc)].settlementName
+        return eligible[randomIndex(anchor: due, count: eligible.count, salt: 0x4f1bbcdc)]
     }
 
     private func botAttackDate(protection: BeginnerProtection?, calendar: Calendar = .current) -> Date? {
@@ -53,6 +58,7 @@ extension VillageState {
             for: max(pending, beginnerProtection.map {
                 $0.endsAt.addingTimeInterval(botAttackDelay(anchor: $0.endsAt, salt: 0))
             } ?? pending), calendar: calendar)
+        botRaidTarget = selectedBotRaidTarget(at: due)?.location
         guard now >= due else {
             setDomainBotAttackDate(due)
             return
@@ -62,16 +68,11 @@ extension VillageState {
             return
         }
 
-        let eligible = settlements.indices.filter { !settlements[$0].isRefuge }.sorted {
-            let lhs = settlements[$0].location
-            let rhs = settlements[$1].location
-            return lhs.x == rhs.x ? lhs.y < rhs.y : lhs.x < rhs.x
-        }
-        guard !eligible.isEmpty else {
+        guard let targetIndex = settlements.firstIndex(where: { $0.location == botRaidTarget && !$0.isRefuge }) else {
             setDomainBotAttackDate(nil)
+            botRaidTarget = nil
             return
         }
-        let targetIndex = eligible[randomIndex(anchor: due, count: eligible.count, salt: 0x4f1bbcdc)]
         if targetIndex == 0 {
             Self.resolveAutomaticAttack(in: &self, now: now, protection: beginnerProtection, bots: bots,
                                         attackerIndex: randomIndex(anchor: due, count: max(1, bots.count), salt: 0x71a5))
@@ -85,7 +86,10 @@ extension VillageState {
         }
 
         let delay = botAttackDelay(anchor: due, salt: 0xa31d)
-        setDomainBotAttackDate(RaidRestPolicy.attackDate(for: now.addingTimeInterval(delay), calendar: calendar))
+        let nextDue = RaidRestPolicy.attackDate(for: now.addingTimeInterval(delay), calendar: calendar)
+        setDomainBotAttackDate(nextDue)
+        botRaidTarget = nil
+        botRaidTarget = selectedBotRaidTarget(at: nextDue)?.location
     }
 
     private mutating func setDomainBotAttackDate(_ date: Date?) {

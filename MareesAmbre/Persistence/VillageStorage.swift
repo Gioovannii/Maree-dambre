@@ -141,6 +141,7 @@ struct VillageStorage {
               (state.mailbox?.count ?? 0) <= VillageState.maximumMailPerVillage,
               Set((state.mailbox ?? []).map(\.id)).count == (state.mailbox?.count ?? 0),
               (state.mailbox ?? []).allSatisfy({ $0.isValid && $0.village == state.location }),
+              state.botRaidTarget.map({ $0.isValid }) ?? true,
               state.nextBotAttackAt.map({ $0 >= .distantPast && $0 <= .distantFuture }) ?? true,
               state.beginnerProtection?.isValid ?? true,
               state.hero?.isValid ?? true,

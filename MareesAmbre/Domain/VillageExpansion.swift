@@ -174,11 +174,13 @@ extension VillageState {
         current.beginnerProtection = nil
         current.hero = nil
         current.progressionOrigin = nil
+        current.botRaidTarget = nil
         others.append(current)
         next.otherVillages = others
         next.beginnerProtection = beginnerProtection
         next.hero = hero
         next.progressionOrigin = progressionOrigin
+        next.botRaidTarget = botRaidTarget
         next.bots = bots
         self = next
         return true
