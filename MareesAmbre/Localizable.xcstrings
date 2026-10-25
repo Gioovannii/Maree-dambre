@@ -1,6 +1,211 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "journey.colony.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Faire grandir la colonie"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Develop your colony"
+        }
+      }
+    }
+  },
+  "journey.forge.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Renforcer votre arsenal"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Strengthen your arsenal"
+        }
+      }
+    }
+  },
+  "journey.capital.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Préparer le troisième rivage"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Prepare a third shore"
+        }
+      }
+    }
+  },
+  "journey.third.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Étendre votre domaine"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Expand your domain"
+        }
+      }
+    }
+  },
+  "journey.established.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Un domaine établi"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "An established domain"
+        }
+      }
+    }
+  },
+  "journey.colony.body": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Dans votre première colonie, développez au niveau 3 un champ de chaque ressource. Une économie locale solide vous permettra de soutenir vos prochains projets."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Develop one field of each resource to level 3 in your colony. A strong local economy will support your next projects."
+        }
+      }
+    }
+  },
+  "journey.forge.body": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Améliorez la forge de la capitale au niveau 3 pour préparer l’amélioration des armes de vos unités."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Upgrade the capital’s forge to level 3 to prepare weapon upgrades for your units."
+        }
+      }
+    }
+  },
+  "journey.capital.body": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Préparez la capitale : cœur du village niveau 8, académie niveau 5, quai niveau 3 et entrepôt niveau 7."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Prepare the capital: village heart level 8, academy level 5, quay level 3 and warehouse level 7."
+        }
+      }
+    }
+  },
+  "journey.third.body": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Préparez de nouveaux colons, rassemblez les ressources de fondation et choisissez votre troisième implantation. Un refuge offre une expansion à l’abri des raids."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Prepare new settlers, gather the founding resources and choose your third settlement. A refuge offers expansion sheltered from raids."
+        }
+      }
+    }
+  },
+  "journey.established.body": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Vos trois implantations sont établies. Vous pouvez poursuivre leur développement, améliorer vos armes et explorer les expéditions voisines."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Your three settlements are established. Keep developing them, upgrading weapons and exploring nearby expeditions."
+        }
+      }
+    }
+  },
+  "journey.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "L’essor du domaine"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Growing your domain"
+        }
+      }
+    }
+  },
+  "journey.continue": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Poursuivre cet objectif"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Continue this objective"
+        }
+      }
+    }
+  },
+
   "test.mode.title": {
     "extractionState": "manual",
     "localizations": {

@@ -1,6 +1,7 @@
 import Foundation
 
 func checkExpansion() throws {
+    checkDomainObjectives()
     let now = Date(timeIntervalSince1970: 1_900_000_000)
     let world = WorldMap(seed: 42)
     var capital = VillageState(seed: 42)
@@ -100,4 +101,30 @@ func checkExpansion() throws {
         preconditionFailure("Nested domains must be rejected")
     } catch { }
     print("PASS: founding prerequisites, costs, escort capacity, refuge, offline arrival, separate economies, switching, three-settlement cap and save validation")
+}
+
+private func checkDomainObjectives() {
+    precondition(VillageState(seed: 42).nextDomainObjective == nil)
+    var state = shipmentFixture(now: .now)
+    state.otherVillages![0].resourceLevels = [:]
+    precondition(state.nextDomainObjective?.kind == .colony)
+    for plot in [0, 2, 4] { state.otherVillages![0].resourceLevels![plot] = 3 }
+    precondition(state.nextDomainObjective?.kind == .forge)
+    state.buildings[14] = .forge
+    state.buildingLevels = [.forge: 3]
+    precondition(state.nextDomainObjective?.kind == .capital)
+    state.buildings[10] = .academy
+    state.buildings[23] = .expeditionQuay
+    state.buildings[16] = .warehouse
+    state.buildingLevels = [.forge: 3, .hall: 8, .academy: 5, .warehouse: 7, .expeditionQuay: 3]
+    precondition(state.nextDomainObjective?.kind == .thirdVillage)
+    let expected = state.nextDomainObjective
+    let colony = state.otherVillages![0].location
+    precondition(state.switchSettlement(to: colony))
+    precondition(state.nextDomainObjective == expected, "The objective follows the domain when switching villages")
+    var third = VillageState(seed: state.seed)
+    third.settlementLocation = TileCoordinate(x: 1, y: 1)
+    state.otherVillages!.append(third)
+    precondition(state.nextDomainObjective?.kind == .established)
+    print("PASS: post-colony goals, live progress, capital requirements, third settlement and domain-wide navigation targets")
 }

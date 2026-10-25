@@ -116,7 +116,7 @@ struct GameView: View {
                 if showsWorld {
                     WorldPanel(onShowVillage: { selectVillageMap(.resourceFields) }, onShowMissions: showMissions, mapHeight: 320)
                 } else if showsMissions {
-                    MissionsPanel()
+                    MissionsPanel(onOpenDomainObjective: openDomainObjective)
                 } else if showsMailbox {
                     MailboxPanel()
                 } else {
@@ -173,7 +173,7 @@ struct GameView: View {
             .scrollIndicators(.hidden)
         } else if showsMissions {
             ScrollView {
-                MissionsPanel()
+                MissionsPanel(onOpenDomainObjective: openDomainObjective)
                     .padding(20)
             }
             .scrollIndicators(.hidden)
@@ -321,7 +321,7 @@ struct GameView: View {
                 topControls(showsResources: false)
                     .frame(maxWidth: 560)
                 ScrollView {
-                    MissionsPanel()
+                    MissionsPanel(onOpenDomainObjective: openDomainObjective)
                         .frame(maxWidth: 720)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 16)
@@ -469,6 +469,26 @@ struct GameView: View {
         guard villageMap != mode else { return }
         villageMap = mode
         session.plot = mode == .resourceFields ? selectedResourcePlot : selectedTownPlot
+    }
+
+    private func openDomainObjective(_ objective: DomainObjective) {
+        if session.state.location != objective.location { session.switchSettlement(to: objective.location) }
+        if objective.kind == .thirdVillage {
+            showsExpansion = true
+            return
+        }
+        let mode: VillageMapMode = objective.resourcePlot == nil ? .townCenter : .resourceFields
+        selectVillageMap(mode)
+        let target = objective.resourcePlot ?? objective.building.flatMap { kind in
+            session.state.buildings.first(where: { $0.value == kind })?.key
+                ?? mode.slots.first(where: { session.state.buildings[$0] == nil && VillageState.canPlace(kind, at: $0) })
+        }
+        if let target {
+            session.plot = target
+            if mode == .resourceFields { selectedResourcePlot = target }
+            else { selectedTownPlot = target }
+            showsVillageDetails = true
+        }
     }
 
     private func showMissions() {

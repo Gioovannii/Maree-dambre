@@ -33,7 +33,7 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     districts=("${(@s:,:)SNAPSHOT_SCREEN}")
     for district in "${districts[@]}"; do
         case "$district" in
-            backup|testMode|testModeMap|raidPreparation|worldTravel|heroSupport|absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
+            domainJourney|backup|testMode|testModeMap|raidPreparation|worldTravel|heroSupport|absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
             *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
         esac
     done
@@ -113,6 +113,7 @@ for district in "${districts[@]}"; do
         mailDetail) snapshot_args+=(--snapshot-developed --snapshot-mail-detail) ;;
         shipmentDeparture) snapshot_args+=(--snapshot-expansion --snapshot-shipment --snapshot-shipment-departure) ;;
         shipment) snapshot_args+=(--snapshot-expansion --snapshot-shipment) ;;
+        domainJourney) snapshot_args+=(--snapshot-expansion --snapshot-colony --snapshot-missions) ;;
         colony) snapshot_args+=(--snapshot-expansion --snapshot-colony) ;;
         expansionDeparture) snapshot_args+=(--snapshot-expansion --snapshot-expansion-departure) ;;
         expansion) snapshot_args+=(--snapshot-expansion) ;;
