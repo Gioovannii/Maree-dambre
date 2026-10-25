@@ -96,7 +96,7 @@ Add `--snapshot-actions` to frame a panel's lower actions. Demo arguments are fo
 
 ## TestFlight beta
 
-Development and verified TestFlight builds offer an isolated **Test copy** under Settings → Backup. Time controls affect only that local copy; restarting the app returns to normal play. Test copies cannot be exported or uploaded to iCloud. File imports retain unverified provenance. See [Isolated test games](docs/TEST-MODE.md).
+Development and verified TestFlight builds offer an isolated **Test copy** under Settings → Backup. Time controls affect only that local copy; restarting the app returns to normal play. Test copies cannot be exported or uploaded to iCloud. File imports retain their provenance. New backups use HMAC-authenticated payloads and a synchronizable Keychain key; unsigned or modified files are rejected. See [Backup integrity and migration](docs/BACKUP-INTEGRITY.md) before transferring an older backup. See [Isolated test games](docs/TEST-MODE.md).
 
 This build is intended to test the first solo loop, visual clarity, waiting times, and balance with a small initial tester group. It does not require an online game server.
 

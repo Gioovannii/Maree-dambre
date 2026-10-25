@@ -29,7 +29,7 @@ extension DomainChecks {
         let suite = "RaidSelectionChecks.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
-        let storage = VillageStorage(defaults: defaults)
+        let storage = VillageStorage(defaults: defaults, backupAuthenticationKey: Data(repeating: 0x42, count: 32))
         var base = VillageState(seed: 42)
         base.people = .sauniers
         base.resources = Resources(wood: 0, amber: 0, provisions: 0)

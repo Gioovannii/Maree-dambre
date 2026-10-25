@@ -21,3 +21,7 @@ Capture the controls with `SNAPSHOT_SCREEN=testMode zsh Scripts/check-ui-snapsho
 This isolates accelerated play and distinguishes file imports. It is not server-authoritative anti-cheat: local metadata can be edited by someone controlling the client. Game Center rankings are not implemented, and any future score publication needs its own eligibility and integrity checks. No score is submitted by this feature.
 
 The previous time buttons modified the normal game without keeping an original copy. This change cannot reconstruct or reliably identify earlier accelerated progress; it preserves the existing game rather than silently resetting it. Future accelerated progress is isolated from the moment a new test copy is created.
+
+## Authenticated transfers
+
+New file and iCloud imports must also pass the format-2 HMAC verifier described in [Backup integrity](BACKUP-INTEGRITY.md). The provenance marker describes progression history; successful file authentication does not establish server-verified gameplay. Legacy unsigned transfers are refused, while existing local games remain playable and can be exported again.

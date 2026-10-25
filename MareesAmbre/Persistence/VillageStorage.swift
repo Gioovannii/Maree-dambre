@@ -1,13 +1,16 @@
 import Foundation
+import CryptoKit
+import Security
 
 struct VillageStorage {
     enum Scope { case standard, testing }
     enum BackupSource { case file, iCloud }
     var defaults: UserDefaults = .standard
     var scope: Scope = .standard
+    var backupAuthenticationKey: Data? = nil
 
     private func key(_ name: String) -> String { scope == .testing ? "testMode." + name : name }
-    var testingCopy: VillageStorage { VillageStorage(defaults: defaults, scope: .testing) }
+    var testingCopy: VillageStorage { VillageStorage(defaults: defaults, scope: .testing, backupAuthenticationKey: backupAuthenticationKey) }
     var hasSavedGame: Bool {
         guard defaults.object(forKey: key("village.activeSeed")) != nil else { return false }
         return defaults.data(forKey: key("village.v2.\(defaults.integer(forKey: key("village.activeSeed")))")) != nil
@@ -19,15 +22,59 @@ struct VillageStorage {
         let village: VillageState
     }
 
+    private struct AuthenticatedTransfer: Codable {
+        let keyID: String
+        let payload: Data
+        let authentication: Data
+    }
+
+    private func backupKey(id: String) throws -> Data {
+        if let backupAuthenticationKey { return backupAuthenticationKey }
+        return try BackupKeychain.read(id: id)
+    }
+
+    private func authenticatedBytes(id: String, payload: Data) -> Data {
+        Data(("MareesAmbre.backup.v2:" + id + ":").utf8) + payload
+    }
+
     func exportBackup(_ state: VillageState, now: Date = .now) throws -> Data {
         guard scope == .standard, state.progressionOrigin != .test else { throw CocoaError(.featureUnsupported) }
-        return try JSONEncoder().encode(Transfer(format: 1, savedAt: now, village: state))
+        let id: String
+        let keyData: Data
+        if let backupAuthenticationKey {
+            id = "isolated-test-key"
+            keyData = backupAuthenticationKey
+        } else if let existing = defaults.string(forKey: "backup.authenticationKeyID"),
+                  let existingKey = try? BackupKeychain.read(id: existing) {
+            id = existing
+            keyData = existingKey
+        } else {
+            id = UUID().uuidString
+            keyData = try BackupKeychain.create(id: id)
+            defaults.set(id, forKey: "backup.authenticationKeyID")
+        }
+        let payload = try JSONEncoder().encode(Transfer(format: 2, savedAt: now, village: state))
+        let tag = HMAC<SHA256>.authenticationCode(for: authenticatedBytes(id: id, payload: payload),
+                                                using: SymmetricKey(data: keyData))
+        return try JSONEncoder().encode(AuthenticatedTransfer(keyID: id, payload: payload, authentication: Data(tag)))
+    }
+
+    private func authenticatedTransfer(_ data: Data) throws -> Transfer {
+        guard data.count <= 8_000_000 else { throw CocoaError(.fileReadTooLarge) }
+        let envelope = try JSONDecoder().decode(AuthenticatedTransfer.self, from: data)
+        guard !envelope.keyID.isEmpty, envelope.keyID.count <= 64, envelope.authentication.count == 32 else { throw CocoaError(.coderReadCorrupt) }
+        let key = try backupKey(id: envelope.keyID)
+        guard HMAC<SHA256>.isValidAuthenticationCode(envelope.authentication,
+            authenticating: authenticatedBytes(id: envelope.keyID, payload: envelope.payload),
+            using: SymmetricKey(data: key)) else { throw CocoaError(.coderReadCorrupt) }
+        return try JSONDecoder().decode(Transfer.self, from: envelope.payload)
     }
 
     func validateBackup(_ data: Data, now: Date = .now) throws -> VillageState {
+        guard scope == .standard else { throw CocoaError(.featureUnsupported) }
         guard data.count <= 8_000_000 else { throw CocoaError(.fileReadTooLarge) }
-        let transfer = try JSONDecoder().decode(Transfer.self, from: data)
-        guard scope == .standard, transfer.format == 1, transfer.village.progressionOrigin != .test,
+        let transfer = try authenticatedTransfer(data)
+        guard scope == .standard, transfer.format == 2, transfer.village.progressionOrigin != .test,
               transfer.savedAt >= .distantPast, transfer.savedAt <= .distantFuture else { throw CocoaError(.coderReadCorrupt) }
         // Run the complete existing migration and validation in isolated storage.
         // A rejected file must never modify the player's live defaults.
@@ -51,7 +98,7 @@ struct VillageStorage {
 
     func previewBackup(_ data: Data, now: Date = .now) throws -> BackupPreview {
         let village = try validateBackup(data, now: now)
-        let transfer = try JSONDecoder().decode(Transfer.self, from: data)
+        let transfer = try authenticatedTransfer(data)
         guard transfer.savedAt >= .distantPast, transfer.savedAt <= .distantFuture else {
             throw CocoaError(.coderReadCorrupt)
         }
@@ -266,5 +313,37 @@ struct VillageStorage {
         return [remainder.wood, remainder.amber, remainder.provisions].allSatisfy {
             $0.isFinite && $0 >= 0 && $0 < 1
         }
+    }
+}
+
+private enum BackupKeychain {
+    static func query(id: String) -> [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: "com.giovanni.mareesambre.backup-authentication.v2",
+         kSecAttrAccount as String: id,
+         kSecAttrSynchronizable as String: true]
+    }
+
+    static func read(id: String) throws -> Data {
+        var request = query(id: id)
+        request[kSecReturnData as String] = true
+        request[kSecMatchLimit as String] = kSecMatchLimitOne
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(request as CFDictionary, &result)
+        guard status == errSecSuccess, let data = result as? Data, data.count == 32 else {
+            throw CocoaError(.fileReadNoPermission)
+        }
+        return data
+    }
+
+    static func create(id: String) throws -> Data {
+        let key = SymmetricKey(size: .bits256).withUnsafeBytes { Data($0) }
+        var request = query(id: id)
+        request[kSecValueData as String] = key
+        request[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+        guard SecItemAdd(request as CFDictionary, nil) == errSecSuccess else {
+            throw CocoaError(.fileWriteNoPermission)
+        }
+        return key
     }
 }

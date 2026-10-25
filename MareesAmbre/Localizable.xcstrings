@@ -1,6 +1,58 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "backup.imported_source": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Partie issue d’un import de fichier."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Game restored from a file import."
+        }
+      }
+    }
+  },
+  "backup.auth.notice": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Seuls les exports authentifiés par l’app sont acceptés. Les fichiers modifiés et les anciens exports non authentifiés sont refusés : réexportez votre partie depuis l’appareil d’origine. Sur l’autre appareil, activez le même compte Apple et le Trousseau iCloud pour retrouver la clé de vérification."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Only exports authenticated by the app are accepted. Modified files and older unauthenticated exports are rejected: export your game again from the original device. On the receiving device, use the same Apple Account and enable iCloud Keychain to obtain the verification key."
+        }
+      }
+    }
+  },
+  "backup.auth.error": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Impossible de vérifier ou de restaurer cette sauvegarde. Utilisez un nouvel export de l’app, sans le modifier. Pour un transfert, vérifiez la synchronisation du Trousseau iCloud. Votre partie locale est conservée."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "This backup could not be verified or restored. Use a new, unmodified export from the app. For transfers, check iCloud Keychain synchronization. Your local game is preserved."
+        }
+      }
+    }
+  },
+
   "backup.review.building_levels": {
     "extractionState": "manual",
     "localizations": {

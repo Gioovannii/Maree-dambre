@@ -21,7 +21,7 @@ struct BackupSheet: View {
                 if session.allowsTestTimeControls || session.isTestMode { TestModeControls() }
                 if session.state.progressionOrigin == .importedFile {
                     Section {
-                        Label(String(localized: "backup.imported_origin", defaultValue: "Partie importée depuis un fichier : son intégrité n’est pas vérifiée."), systemImage: "doc.badge.ellipsis")
+                        Label(String(localized: "backup.imported_source", defaultValue: "Partie issue d’un import de fichier."), systemImage: "doc.badge.ellipsis")
                             .font(.footnote)
                     }
                 }
@@ -63,6 +63,8 @@ struct BackupSheet: View {
                         .disabled(session.state.people == nil || session.hasUnreadableSave)
                     }
                     Section {
+                        Text(String(localized: "backup.auth.notice", defaultValue: "Seuls les exports authentifiés par l’app sont acceptés. Les fichiers modifiés et les anciens exports non authentifiés sont refusés : réexportez votre partie depuis l’appareil d’origine. Sur l’autre appareil, activez le même compte Apple et le Trousseau iCloud pour retrouver la clé de vérification."))
+                            .font(.footnote)
                         Button(String(localized: "backup.import", defaultValue: "Importer une partie"), systemImage: "square.and.arrow.down") { showsImport = true }
                         Text(String(localized: "backup.warning", defaultValue: "L’import remplace la partie de cet appareil après confirmation. Une copie locale de la sauvegarde précédente sera conservée. Les parties ne sont pas fusionnées."))
                             .font(.footnote)
@@ -124,7 +126,7 @@ struct BackupSheet: View {
                     }
                 }
             }
-            .alert(String(localized: "backup.error", defaultValue: "Impossible de lire, enregistrer ou restaurer ce fichier. Vérifiez qu’il s’agit d’une sauvegarde compatible de Marées d’Ambre."), isPresented: $showsError) {
+            .alert(String(localized: "backup.auth.error", defaultValue: "Impossible de vérifier ou de restaurer cette sauvegarde. Utilisez un nouvel export de l’app, sans le modifier. Pour un transfert, vérifiez la synchronisation du Trousseau iCloud. Votre partie locale est conservée."), isPresented: $showsError) {
                 Button("OK", role: .cancel) {}
             }
             .alert(String(localized: "cloud.confirm", defaultValue: "Enregistrer cette partie dans iCloud ?"), isPresented: $showsCloudConfirmation) {

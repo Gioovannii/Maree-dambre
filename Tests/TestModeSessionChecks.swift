@@ -6,7 +6,7 @@ extension SessionChecks {
         let suite = "MareesAmbre.TestMode.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
-        let storage = VillageStorage(defaults: defaults)
+        let storage = VillageStorage(defaults: defaults, backupAuthenticationKey: Data(repeating: 0x42, count: 32))
         let now = Date.now
         var initial = shipmentFixture(now: now)
         let hallLevel = initial.buildingLevel(.hall)
@@ -78,9 +78,12 @@ extension SessionChecks {
         precondition(session.state.progressionOrigin == nil,
             "The iCloud restore path preserves the snapshot's provenance")
         var object = try JSONSerialization.jsonObject(with: normalBackup) as! [String: Any]
-        var village = object["village"] as! [String: Any]
+        let payload = Data(base64Encoded: object["payload"] as! String)!
+        var contents = try JSONSerialization.jsonObject(with: payload) as! [String: Any]
+        var village = contents["village"] as! [String: Any]
         village["progressionOrigin"] = "test"
-        object["village"] = village
+        contents["village"] = village
+        object["payload"] = try JSONSerialization.data(withJSONObject: contents).base64EncodedString()
         let testBackup = try JSONSerialization.data(withJSONObject: object)
         let beforeRejectedImport = session.state
         do { try session.restoreBackup(testBackup); preconditionFailure("Test provenance cannot enter normal play") } catch { }
