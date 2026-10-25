@@ -460,6 +460,23 @@
       }
     }
   },
+  "movements.target": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Cible : %@"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Target: %@"
+        }
+      }
+    }
+  },
   "world.travel.active": {
     "extractionState": "manual",
     "localizations": {

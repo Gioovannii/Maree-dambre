@@ -30,6 +30,10 @@ struct GlobalMovementsButton: View {
                                 .foregroundStyle(Palette.amber)
                             Text(next, style: .date)
                             Text(next, style: .time)
+                            if let target = session.state.nextBotRaidTargetName {
+                                Label(String(localized: "movements.target", defaultValue: "Cible : \(target)"),
+                                      systemImage: "mappin.and.ellipse")
+                            }
                         }
                         WorldExpeditionsPanel(initiallyExpanded: true)
                     }

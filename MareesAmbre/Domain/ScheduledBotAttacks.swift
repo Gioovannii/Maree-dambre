@@ -24,6 +24,18 @@ extension VillageState {
         }.min()
     }
 
+    var nextBotRaidTargetName: String? {
+        guard let due = nextDomainBotAttackDate else { return nil }
+        let settlements = [self] + (otherVillages ?? [])
+        let eligible = settlements.filter { !$0.isRefuge }.sorted {
+            let lhs = $0.location
+            let rhs = $1.location
+            return lhs.x == rhs.x ? lhs.y < rhs.y : lhs.x < rhs.x
+        }
+        guard !eligible.isEmpty else { return nil }
+        return eligible[randomIndex(anchor: due, count: eligible.count, salt: 0x4f1bbcdc)].settlementName
+    }
+
     private func botAttackDate(protection: BeginnerProtection?, calendar: Calendar = .current) -> Date? {
         guard !isRefuge, let due = nextBotAttackAt else { return nil }
         let protectionDeadline = protection.map { $0.endsAt.addingTimeInterval(botAttackDelay(anchor: $0.endsAt, salt: 0)) }

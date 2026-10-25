@@ -13,7 +13,13 @@ struct ActiveRaidsStrip: View {
                         if let next = session.state.nextDomainBotAttackDate {
                             HStack(spacing: 8) {
                                 Image(systemName: "shield.lefthalf.filled").foregroundStyle(Palette.amber)
-                                Text(String(localized: "movements.incoming", defaultValue: "Prochain assaut prévu"))
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(String(localized: "movements.incoming", defaultValue: "Prochain assaut prévu"))
+                                    if let target = session.state.nextBotRaidTargetName {
+                                        Text(String(localized: "movements.target", defaultValue: "Cible : \(target)"))
+                                            .font(.caption2).foregroundStyle(Palette.muted)
+                                    }
+                                }
                                 Text(GameProgression.durationText(max(0, next.timeIntervalSince(timeline.date))))
                                     .monospacedDigit().bold()
                             }
