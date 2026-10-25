@@ -64,6 +64,20 @@ extension DomainChecks {
         _ = restored.updateInRealTime(now: now.addingTimeInterval(120), on: world)
         precondition(restored.buildings[10] == .academy && restored.buildings[12] == .hall)
         precondition(restored.construction == nil)
+        var exported = restored
+        exported.people = .nacre
+        let bytes = try storage.exportBackup(exported, now: now)
+        let before = defaults.data(forKey: "village.v2.42")
+        let preview = try storage.previewBackup(bytes, now: now)
+        precondition(preview.savedAt == now && preview.village.people == .nacre)
+        precondition(preview.village.buildings == exported.buildings)
+        precondition(defaults.data(forKey: "village.v2.42") == before, "Preview must not replace the local game")
+        let invalidDate = try storage.exportBackup(exported, now: Date(timeIntervalSince1970: 1e100))
+        do {
+            _ = try storage.previewBackup(invalidDate, now: now)
+            preconditionFailure("An invalid export date must not reach the restore review")
+        } catch CocoaError.coderReadCorrupt {}
+        print("PASS: read-only backup preview, preserved export date and invalid timestamp rejection")
         print("PASS: corrupt clocks, production fractions, legacy levels and construction jobs rejected without replacing saves")
     }
 }

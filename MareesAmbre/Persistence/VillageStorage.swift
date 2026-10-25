@@ -27,7 +27,8 @@ struct VillageStorage {
     func validateBackup(_ data: Data, now: Date = .now) throws -> VillageState {
         guard data.count <= 8_000_000 else { throw CocoaError(.fileReadTooLarge) }
         let transfer = try JSONDecoder().decode(Transfer.self, from: data)
-        guard scope == .standard, transfer.format == 1, transfer.village.progressionOrigin != .test else { throw CocoaError(.coderReadCorrupt) }
+        guard scope == .standard, transfer.format == 1, transfer.village.progressionOrigin != .test,
+              transfer.savedAt >= .distantPast, transfer.savedAt <= .distantFuture else { throw CocoaError(.coderReadCorrupt) }
         // Run the complete existing migration and validation in isolated storage.
         // A rejected file must never modify the player's live defaults.
         let suite = "backup.validation.\(UUID().uuidString)"
@@ -40,6 +41,21 @@ struct VillageStorage {
             throw CocoaError(.coderReadCorrupt)
         }
         return validated
+    }
+
+    struct BackupPreview: Identifiable {
+        let id = UUID()
+        let village: VillageState
+        let savedAt: Date
+    }
+
+    func previewBackup(_ data: Data, now: Date = .now) throws -> BackupPreview {
+        let village = try validateBackup(data, now: now)
+        let transfer = try JSONDecoder().decode(Transfer.self, from: data)
+        guard transfer.savedAt >= .distantPast, transfer.savedAt <= .distantFuture else {
+            throw CocoaError(.coderReadCorrupt)
+        }
+        return BackupPreview(village: village, savedAt: transfer.savedAt)
     }
 
     func restoreBackup(_ data: Data, now: Date = .now, source: BackupSource = .file) throws -> VillageState {

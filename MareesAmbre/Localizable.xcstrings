@@ -1,6 +1,228 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "backup.review.building_levels": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Niveaux de bâtiments cumulés"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Total building levels"
+        }
+      }
+    }
+  },
+  "backup.review.field_levels": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Niveaux de champs cumulés"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Total field levels"
+        }
+      }
+    }
+  },
+  "backup.review.local": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Sur cet appareil"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "On this device"
+        }
+      }
+    }
+  },
+  "backup.review.incoming": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Partie à restaurer"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Game to restore"
+        }
+      }
+    }
+  },
+  "backup.review.exported": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Exportée le"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Exported on"
+        }
+      }
+    }
+  },
+  "backup.review.replace": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Remplacer par cette partie"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Replace with this game"
+        }
+      }
+    }
+  },
+  "backup.review.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Vérifier la sauvegarde"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Review backup"
+        }
+      }
+    }
+  },
+  "backup.review.people": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Peuple"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "People"
+        }
+      }
+    }
+  },
+  "backup.review.villages": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Villages"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Villages"
+        }
+      }
+    }
+  },
+  "backup.review.buildings": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Bâtiments construits"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Buildings built"
+        }
+      }
+    }
+  },
+  "backup.review.fields": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Champs développés"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Developed fields"
+        }
+      }
+    }
+  },
+  "backup.review.hero": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Niveau du héros"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Hero level"
+        }
+      }
+    }
+  },
+  "backup.review.empty": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Aucune partie commencée"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "No game started"
+        }
+      }
+    }
+  },
+
   "people.strength.transport": {
     "extractionState": "manual",
     "localizations": {

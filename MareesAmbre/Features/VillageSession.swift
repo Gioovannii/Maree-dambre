@@ -673,6 +673,11 @@ final class VillageSession {
         return try storage.validateBackup(data)
     }
 
+    func previewBackup(_ data: Data) throws -> VillageStorage.BackupPreview {
+        guard !isTestMode else { throw CocoaError(.featureUnsupported) }
+        return try storage.previewBackup(data)
+    }
+
     func restoreBackup(_ data: Data, source: VillageStorage.BackupSource = .file) throws {
         guard !isTestMode else { throw CocoaError(.featureUnsupported) }
         let restored = try storage.restoreBackup(data, source: source)

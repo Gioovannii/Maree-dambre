@@ -7,10 +7,11 @@ struct BackupSheet: View {
     @State private var document = GameBackupDocument()
     @State private var showsExport = false
     @State private var showsImport = false
+    @State private var pendingPreview: VillageStorage.BackupPreview?
     @State private var pendingData: Data?
     @State private var pendingSource: VillageStorage.BackupSource = .file
-    @State private var showsConfirmation = false
     @State private var showsError = false
+    @State private var restoreFailed = false
     @State private var cloud = CloudBackupController()
     @State private var showsCloudConfirmation = false
 
@@ -42,10 +43,9 @@ struct BackupSheet: View {
                         Button(String(localized: "cloud.restore", defaultValue: "Restaurer la partie iCloud")) {
                             guard let data = cloud.data else { return }
                             do {
-                                _ = try session.validateBackup(data)
+                                pendingPreview = try session.previewBackup(data)
                                 pendingData = data
                                 pendingSource = .iCloud
-                                showsConfirmation = true
                             } catch { showsError = true }
                         }
                         .disabled(!cloud.isReady || cloud.isBusy || cloud.data == nil)
@@ -74,6 +74,14 @@ struct BackupSheet: View {
             .task {
                 await session.refreshTestBuildAccess()
                 if !session.isTestMode { await cloud.refresh() }
+                if ProcessInfo.processInfo.arguments.contains("--ui-snapshot"),
+                   ProcessInfo.processInfo.arguments.contains("--snapshot-backup-review") {
+                    var incoming = session.state
+                    incoming.people = .nacre
+                    incoming.resourceLevels = [0: 3, 2: 3, 4: 3]
+                    pendingPreview = VillageStorage.BackupPreview(village: incoming,
+                        savedAt: Date(timeIntervalSince1970: 1_800_000_000))
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -91,20 +99,30 @@ struct BackupSheet: View {
                     let file = try FileHandle(forReadingFrom: url)
                     defer { try? file.close() }
                     let data = try file.read(upToCount: 8_000_001) ?? Data()
-                    _ = try session.validateBackup(data)
+                    pendingPreview = try session.previewBackup(data)
                     pendingData = data
                     pendingSource = .file
-                    showsConfirmation = true
                 } catch { showsError = true }
             }
-            .alert(String(localized: "backup.confirm", defaultValue: "Remplacer la partie de cet appareil ?"), isPresented: $showsConfirmation) {
-                Button(String(localized: "backup.restore", defaultValue: "Restaurer"), role: .destructive) {
-                    guard let data = pendingData else { return }
-                    do { try session.restoreBackup(data, source: pendingSource); dismiss() }
-                    catch { showsError = true }
-                    pendingData = nil
+            .sheet(item: $pendingPreview, onDismiss: {
+                pendingData = nil
+                pendingPreview = nil
+                if restoreFailed {
+                    restoreFailed = false
+                    showsError = true
                 }
-                Button(String(localized: "backup.cancel", defaultValue: "Annuler"), role: .cancel) { pendingData = nil }
+            }) { preview in
+                BackupRestoreReview(local: session.state, incoming: preview) {
+                    guard let data = pendingData else { return }
+                    do {
+                        try session.restoreBackup(data, source: pendingSource)
+                        pendingPreview = nil
+                        dismiss()
+                    } catch {
+                        restoreFailed = true
+                        pendingPreview = nil
+                    }
+                }
             }
             .alert(String(localized: "backup.error", defaultValue: "Impossible de lire, enregistrer ou restaurer ce fichier. Vérifiez qu’il s’agit d’une sauvegarde compatible de Marées d’Ambre."), isPresented: $showsError) {
                 Button("OK", role: .cancel) {}
