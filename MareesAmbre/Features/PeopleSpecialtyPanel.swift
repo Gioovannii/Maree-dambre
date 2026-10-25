@@ -8,6 +8,7 @@ struct PeopleSpecialtyPanel: View {
             VStack(alignment: .leading, spacing: 8) {
                 Label(people.specialtyTitle, systemImage: people.emblem)
                     .font(.headline)
+                Text(people.playStyle).font(.caption.bold()).foregroundStyle(Palette.amber)
                 Text(people.specialtyDescription)
                     .font(.subheadline)
                     .foregroundStyle(Palette.muted)
@@ -23,6 +24,10 @@ struct PeopleSpecialtyPanel: View {
                       : String(localized: "people.specialty.locked", defaultValue: "Construisez le bâtiment associé pour activer cette spécialité"),
                       systemImage: session.state.hasBuilding(people.specialtyBuilding) ? "checkmark.circle" : "lock")
                     .font(.footnote)
+                DisclosureGroup(String(localized: "people.tactics.title", defaultValue: "Comment jouer ce peuple")) {
+                    Text(people.tacticalAdvice).font(.subheadline).foregroundStyle(Palette.muted)
+                        .padding(.top, 8)
+                }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)

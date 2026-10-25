@@ -1,6 +1,177 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "people.strength.transport": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Capacité de transport des expéditions augmentée de 20 pour cent"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Expedition carrying capacity increased by 20 percent"
+        }
+      }
+    }
+  },
+  "people.strength.travel": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Trajet de base des expéditions : 90 s au lieu de 120 s"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Base expedition travel time: 90 s instead of 120 s"
+        }
+      }
+    }
+  },
+  "people.style.human": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Polyvalence et transport"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Versatility and transport"
+        }
+      }
+    }
+  },
+  "people.style.reef": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Défense et protection"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Defense and protection"
+        }
+      }
+    }
+  },
+  "people.style.elf": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Raids rapides et troupes abordables"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Fast raids and affordable troops"
+        }
+      }
+    }
+  },
+  "people.tactics.human": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les lanciers assurent les combats et la défense. Ajoutez des pillards pour rapporter plus de butin ; leur défense est plus faible. Le marché renforce le transport des raids et des ravitaillements."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Spearmen handle combat and defense. Add raiders to bring back more loot; their defense is weaker. The market strengthens transport for raids and supplies."
+        }
+      }
+    }
+  },
+  "people.tactics.reef": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Gardez des gardiens en garnison et développez la tour de garde : sa défense reste au village quand les troupes partent. Un mage dans une expédition réduit les pertes en cas de victoire ; plusieurs mages ne cumulent pas cet effet."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Keep guardians in your garrison and develop the watchtower: its defense stays in the village when troops leave. A mage in an expedition reduces losses on victory; multiple mages do not stack this effect."
+        }
+      }
+    }
+  },
+  "people.tactics.elf": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les guerriers coûtent peu de ressources et transportent davantage que les archers. Les archers apportent plus de puissance de combat et de défense. L’académie raccourcit le supplément de trajet des raids lointains."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Warriors cost few resources and carry more than archers. Archers provide greater combat strength and defense. The academy shortens the additional travel time of distant raids."
+        }
+      }
+    }
+  },
+  "people.tactics.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Comment jouer ce peuple"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "How to play this people"
+        }
+      }
+    }
+  },
+  "people.recommended": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Conseillé pour débuter"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Recommended for beginners"
+        }
+      }
+    }
+  },
+
   "journey.colony.title": {
     "extractionState": "manual",
     "localizations": {

@@ -372,6 +372,10 @@ struct DomainChecks {
         human.army?.unlockedUnits = [.reedrunner]
         precondition(human.trainableUnits.contains(.reedrunner), "Preserve legacy foreign troops")
         precondition(human.canTrain(.reedrunner, count: 1))
+        for people in People.allCases {
+            let base = Resources(wood: 100, amber: 100, provisions: 100)
+            precondition(people.adjustedProduction(base) == base, "People advantages must not inflate resource production")
+        }
         print("PASS: two units per people, restricted research, legacy troops, reef protection and human transport")
         print("PASS: field timer, shared construction slot, 50% refund, save/resume and delayed production")
         print("PASS: training costs, offline completion, raid losses, loot, cooldown, save/resume and no duplicate rewards")

@@ -33,25 +33,29 @@ enum People: String, Codable, CaseIterable, Identifiable {
 
     var strength: String {
         switch self {
-        case .sauniers: String(localized: "domain.people.20_carrying_capacity_10_wood", defaultValue: "+\((0.2).formatted(.percent.precision(.fractionLength(0)))) de capacité de transport · +\((0.1).formatted(.percent.precision(.fractionLength(0)))) de bois")
+        case .sauniers: String(localized: "people.strength.transport", defaultValue: "Capacité de transport des expéditions augmentée de 20 pour cent")
         case .nacre: String(localized: "domain.people.mages_reduce_losses_in_victorious_battles", defaultValue: "Les mages réduisent les pertes lors des victoires")
-        case .roseaux: String(localized: "domain.people.90_second_expeditions_instead_of_120_10_amber", defaultValue: "Expéditions de 90 s au lieu de 120 s · +\((0.1).formatted(.percent.precision(.fractionLength(0)))) d’ambre")
+        case .roseaux: String(localized: "people.strength.travel", defaultValue: "Trajet de base des expéditions : 90 s au lieu de 120 s")
         }
     }
 
     var baseDefenseBonus: Int { self == .nacre ? 1 : 0 }
 
-    func adjustedProduction(_ base: Resources) -> Resources {
-        func adjusted(_ amount: Int, by factor: Double) -> Int {
-            Int((Double(amount) * factor).rounded())
-        }
+    func adjustedProduction(_ base: Resources) -> Resources { base }
+
+    var playStyle: String {
         switch self {
-        case .sauniers:
-            return Resources(wood: adjusted(base.wood, by: 1.1), amber: base.amber, provisions: base.provisions)
-        case .nacre:
-            return base
-        case .roseaux:
-            return Resources(wood: base.wood, amber: adjusted(base.amber, by: 1.1), provisions: base.provisions)
+        case .sauniers: String(localized: "people.style.human", defaultValue: "Polyvalence et transport")
+        case .nacre: String(localized: "people.style.reef", defaultValue: "Défense et protection")
+        case .roseaux: String(localized: "people.style.elf", defaultValue: "Raids rapides et troupes abordables")
+        }
+    }
+
+    var tacticalAdvice: String {
+        switch self {
+        case .sauniers: String(localized: "people.tactics.human", defaultValue: "Les lanciers assurent les combats et la défense. Ajoutez des pillards pour rapporter plus de butin ; leur défense est plus faible. Le marché renforce le transport des raids et des ravitaillements.")
+        case .nacre: String(localized: "people.tactics.reef", defaultValue: "Gardez des gardiens en garnison et développez la tour de garde : sa défense reste au village quand les troupes partent. Un mage dans une expédition réduit les pertes en cas de victoire ; plusieurs mages ne cumulent pas cet effet.")
+        case .roseaux: String(localized: "people.tactics.elf", defaultValue: "Les guerriers coûtent peu de ressources et transportent davantage que les archers. Les archers apportent plus de puissance de combat et de défense. L’académie raccourcit le supplément de trajet des raids lointains.")
         }
     }
 }

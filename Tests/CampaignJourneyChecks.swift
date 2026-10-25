@@ -167,6 +167,11 @@ private struct Journey {
             advance(to: state.weaponUpgrade!.endsAt)
         }
         try checkpoint("advanced buildings and weapons")
+        if !state.allMail.contains(where: { if case .defense = $0.content { true } else { false } }),
+           let due = state.nextDomainBotAttackDate {
+            advance(to: due)
+            try checkpoint("first scheduled defense after development")
+        }
         guard state.allMail.contains(where: { if case .defense = $0.content { true } else { false } }) else {
             throw JourneyFailure.blocked("Journey did not exercise automatic attacks")
         }

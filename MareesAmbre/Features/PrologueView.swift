@@ -107,6 +107,12 @@ struct PrologueView: View {
                     Spacer()
                     if isSelected { Image(systemName: "checkmark.circle.fill").foregroundStyle(Palette.amber) }
                 }
+                Label(people.playStyle, systemImage: people.emblem)
+                    .font(.caption.bold()).foregroundStyle(Palette.amber)
+                if people == .nacre {
+                    Label(String(localized: "people.recommended", defaultValue: "Conseillé pour débuter"), systemImage: "checkmark.seal.fill")
+                        .font(.caption.bold()).foregroundStyle(Palette.paper)
+                }
                 HStack(alignment: .top, spacing: 10) {
                     ForEach(ArmyUnit.allCases.filter { $0.people == people }) { unit in
                         VStack(spacing: 5) {

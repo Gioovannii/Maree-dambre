@@ -1,4 +1,4 @@
-# Campaign progression audit — 24 October 2026
+# Campaign progression audit — 25 October 2026
 
 ## Reproduce
 
@@ -12,11 +12,13 @@ The route activates one field of each type, builds the academy and training grou
 
 | Milestone, elapsed simulated time | Humans | Reef folk | Marsh elves |
 | --- | ---: | ---: | ---: |
-| First raid returns | 15 min | 52 min | 10 min |
-| Second village founded | 73.49 h | 77.86 h | 71.80 h |
-| Army above 100 | 90.40 h | 94.57 h | 87.50 h |
-| Advanced buildings and level-10 weapons | 188.28 h | 198.04 h | 184.46 h |
-| Longest uninterrupted resource wait | 29.80 h | 29.25 h | 23.18 h |
+| First raid returns | 16 min | 52 min | 10 min |
+| Second village founded | 75.64 h | 77.86 h | 77.00 h |
+| Army above 100 | 94.48 h | 94.57 h | 92.70 h |
+| Advanced buildings and level-10 weapons | 191.53 h | 198.04 h | 191.53 h |
+| Longest uninterrupted resource wait | 27.83 h | 29.25 h | 28.38 h |
+
+This run removes the former human wood and elven amber production bonuses. People retain their transport, defense and travel specialties. Automatic raids now use a shared 8–15-day interval; the simulation explicitly waits for the scheduled defense after development, at 289 hours for this seed, rather than requiring an attack during the earlier milestones.
 
 These are measurements of a scripted route, not predictions of player retention or typical completion times. The script does not repeatedly farm neighbors, trade, use hero rewards, extend protection, or optimize every investment. It also cannot validate whether the interface makes each action discoverable.
 
