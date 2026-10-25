@@ -144,12 +144,29 @@ struct GameView: View {
         GeometryReader { geometry in
             let portrait = geometry.size.height > geometry.size.width
             let layout = portrait ? AnyLayout(VStackLayout(spacing: 0)) : AnyLayout(HStackLayout(spacing: 0))
-            layout {
-                tabletPrimaryContent(size: geometry.size)
-                    .frame(height: portrait ? min(geometry.size.width, geometry.size.height * 0.64) : nil)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                tabletInspector
-                    .frame(width: portrait ? geometry.size.width : tabletSidebarWidth(in: geometry.size))
+            Group {
+                if showsMissions {
+                    VStack(spacing: 12) {
+                        topControls(showsResources: false)
+                            .padding(.horizontal, 20)
+                        constructionStatus.padding(.horizontal, 20)
+                        ScrollView {
+                            MissionsPanel(onOpenDomainObjective: openDomainObjective)
+                                .padding(20)
+                                .frame(maxWidth: 900)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                    .padding(.top, 12)
+                } else {
+                    layout {
+                        tabletPrimaryContent(size: geometry.size)
+                            .frame(height: portrait ? min(geometry.size.width, geometry.size.height * 0.64) : nil)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        tabletInspector
+                            .frame(width: portrait ? geometry.size.width : tabletSidebarWidth(in: geometry.size))
+                    }
+                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .background(Palette.ocean.ignoresSafeArea())
