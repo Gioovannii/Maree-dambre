@@ -2,6 +2,7 @@ import SwiftUI
 import TipKit
 
 struct GameView: View {
+    @State private var showsHero = false
     @State private var showsBackup = ProcessInfo.processInfo.arguments.contains("--snapshot-backup")
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var showsMailbox = ProcessInfo.processInfo.arguments.contains("--snapshot-mailbox") || ProcessInfo.processInfo.arguments.contains("--snapshot-mail-detail")
@@ -58,6 +59,7 @@ struct GameView: View {
         .background(Palette.ocean.ignoresSafeArea())
         .sheet(isPresented: $showsShipment) { ShipmentView() }
         .sheet(isPresented: $showsBackup) { BackupSheet() }
+        .sheet(isPresented: $showsHero) { HeroSheet() }
         .sheet(isPresented: $showsExpansion) { ExpansionView() }
         .preferredColorScheme(.dark)
         .onChange(of: currentSection) { _, section in
@@ -69,7 +71,7 @@ struct GameView: View {
                 GeometryReader { viewport in
                     VillageCompanionOverlay(people: people, step: VillageGuideStep.next(in: session.state),
                                             maximumHeight: max(160, min(420, viewport.size.height - 160)),
-                                            isExpanded: $showsGuide, onShowBackup: { showsBackup = true }, allowsTutorial: session.state.settlementCount < 2) {
+                                            isExpanded: $showsGuide, allowsTutorial: session.state.settlementCount < 2) {
                         showsGuide = false
                         let step = VillageGuideStep.next(in: session.state)
                         if step == .complete {
@@ -380,8 +382,8 @@ struct GameView: View {
                 )
             }
             if !showsResources && !showsMailbox { header }
-            if session.state.settlementCount > 1 {
-                Menu {
+            Menu {
+                if session.state.settlementCount > 1 {
                     ForEach(session.state.ownedLocations, id: \.self) { location in
                         Button {
                             session.switchSettlement(to: location)
@@ -390,17 +392,22 @@ struct GameView: View {
                             Label(name + " · \(location.x), \(location.y)", systemImage: location == session.state.location ? "checkmark.circle.fill" : "house.fill")
                         }
                     }
-                } label: {
-                    HStack(spacing: 8) {
-                        Label(session.state.settlementName, systemImage: session.state.isRefuge ? "shield.fill" : "building.2.crop.circle.fill")
-                        Image(systemName: "chevron.down").font(.caption.bold())
-                    }
-                    .font(.subheadline.bold()).padding(.horizontal, 12).frame(minHeight: 44)
-                    .background(Palette.panel, in: .capsule)
                 }
-                .tint(Palette.amber)
-                .accessibilityIdentifier("settlement.switch")
+                Section(String(localized: "settings.title", defaultValue: "Réglages")) {
+                    Button(String(localized: "hero.open_accessibility", defaultValue: "Ouvrir la fiche de votre héros"), systemImage: "person.crop.circle") { showsHero = true }
+                    Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive") { showsBackup = true }
+                        .accessibilityIdentifier("backup.open")
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Label(session.state.settlementName, systemImage: session.state.isRefuge ? "shield.fill" : "building.2.crop.circle.fill")
+                    Image(systemName: "chevron.down").font(.caption.bold())
+                }
+                .font(.subheadline.bold()).padding(.horizontal, 12).frame(minHeight: 44)
+                .background(Palette.panel, in: .capsule)
             }
+            .tint(Palette.amber)
+            .accessibilityIdentifier("settlement.switch")
         }
     }
 

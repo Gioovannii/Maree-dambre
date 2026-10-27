@@ -6,11 +6,9 @@ struct VillageCompanionOverlay: View {
     let maximumHeight: CGFloat
     @Binding var isExpanded: Bool
     @State private var messages: [VillageGuideMessage] = []
-    var onShowBackup: () -> Void = {}
     var allowsTutorial = true
     @State private var showsHero = false
     let onShowDestination: () -> Void
-    @AppStorage("companion.hintDismissed") private var hintDismissed = false
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 10) {
@@ -21,21 +19,6 @@ struct VillageCompanionOverlay: View {
             }
 
             if !isExpanded {
-                HStack(alignment: .top, spacing: 0) {
-                Menu {
-                    Button(String(localized: "hero.open_accessibility", defaultValue: "Ouvrir la fiche de votre héros"), systemImage: "person.crop.circle") { showsHero = true }
-                    Button(String(localized: "backup.title", defaultValue: "Sauvegarde"), systemImage: "externaldrive", action: onShowBackup)
-                } label: {
-                    Label(String(localized: "settings.title", defaultValue: "Réglages"), systemImage: "gearshape")
-                        .labelStyle(.iconOnly)
-                        .font(.caption.bold())
-                        .foregroundStyle(Palette.amber)
-                        .frame(width: 28, height: 28)
-                        .background(Palette.ocean.opacity(0.85), in: .circle)
-                        .frame(width: 44, height: 44)
-                        .contentShape(.rect)
-                }
-                .offset(y: -6)
                 Button {
                     if allowsTutorial { isExpanded = true }
                     else { showsHero = true }
@@ -50,10 +33,10 @@ struct VillageCompanionOverlay: View {
                         }
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("companion.open")
                 .accessibilityLabel(allowsTutorial
                     ? String(localized: "guide.open", defaultValue: "Demander conseil à ton compagnon")
                     : String(localized: "hero.open_accessibility", defaultValue: "Ouvrir la fiche de votre héros"))
-                }
             }
         }
         .frame(maxWidth: 350, alignment: .trailing)

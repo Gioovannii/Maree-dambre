@@ -63,13 +63,21 @@ struct VillageBoard: View {
                         }
 
                         if mode == .resourceFields && showsTownShortcut {
-                            Button(String(localized: "village.enter_town", defaultValue: "Ville"), systemImage: "building.2.fill", action: onTownSelected)
-                                .font(.caption.bold())
-                                .buttonStyle(.borderedProminent)
-                                .tint(Palette.ocean).foregroundStyle(Palette.paper)
-                                .controlSize(.large)
-                                .position(x: mapSize.width * 0.82, y: mapSize.height * 0.79)
-                                .zIndex(100)
+                            Button(action: onTownSelected) {
+                                VStack {
+                                    Spacer(minLength: 0)
+                                    Label(String(localized: "village.enter_town", defaultValue: "Ville"), systemImage: "chevron.right")
+                                        .font(.caption.bold())
+                                        .foregroundStyle(.white)
+                                        .shadow(color: .black, radius: 2, y: 1)
+                                }
+                                .frame(width: max(64, mapSize.width * 0.28), height: max(64, mapSize.height * 0.10))
+                                .contentShape(.rect)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityIdentifier("village.enterTown")
+                            .position(x: mapSize.width * 0.82, y: mapSize.height * 0.73)
+                            .zIndex(100)
                         }
                     }
                     .frame(width: mapSize.width, height: mapSize.height)
