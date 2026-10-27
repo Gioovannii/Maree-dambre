@@ -91,3 +91,45 @@ extension SessionChecks {
         print("PASS: isolated test saves, normal bytes and reminders preserved, acceleration guards, relaunch, resume, switching, blocked exports and persistent file-import provenance")
     }
 }
+
+@MainActor
+func checkLighthouseSession() throws {
+    let now = Date.now
+    let suite = "LighthouseSession.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let storage = VillageStorage(defaults: defaults, backupAuthenticationKey: Data(repeating: 0x42, count: 32))
+    var initial = shipmentFixture(now: now.addingTimeInterval(-7201))
+    let site = initial.suggestedSettlementSites(on: WorldMap(seed: initial.seed)).first!
+    var colony = VillageState(seed: initial.seed)
+    colony.people = initial.people
+    colony.settlementLocation = site
+    colony.settlementRole = .commerce
+    colony.settlementRefuge = initial.isRefugeSite(site)
+    colony.lastProductionAt = initial.lastProductionAt
+    colony.lastBotExpansionAt = initial.lastBotExpansionAt
+    initial.otherVillages!.append(colony)
+    initial.buildingLevels?[.warehouse] = 10
+    initial.resources = Resources(wood: 5300, amber: 5300, provisions: 5300)
+    precondition(initial.startLighthouseStage(now: now.addingTimeInterval(-7201)))
+    try storage.save(initial)
+    let session = VillageSession(storage: storage)
+    precondition(session.state.lighthouseProgress.completedStages == 1, "Offline work completes on actual session load")
+    session.startLighthouseStage()
+    let end = session.state.lighthouse!.finishesAt!
+    let reopened = VillageSession(storage: storage)
+    precondition(reopened.state.lighthouse?.finishesAt == end)
+    let authenticated = try reopened.exportBackup()
+    precondition(tryPreviewStage(storage, authenticated) == 1)
+    try reopened.startTestGame()
+    reopened.advanceTestTime(by: 86400)
+    precondition(reopened.state.lighthouseProgress.completedStages == 2)
+    precondition(reopened.state.lighthouse?.finishesAt == nil, "Advancing time cannot pay for or start another stage")
+    try reopened.leaveTestGame()
+    precondition(reopened.state.lighthouseProgress.completedStages == 1 && reopened.state.lighthouse?.finishesAt == end)
+    print("PASS: lighthouse offline session completion, running-work relaunch, authenticated backup and accelerated-copy isolation")
+}
+
+private func tryPreviewStage(_ storage: VillageStorage, _ data: Data) -> Int? {
+    try? storage.previewBackup(data).village.lighthouse?.completedStages
+}

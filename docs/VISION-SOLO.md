@@ -1,5 +1,10 @@
 # Direction recommandée — Le Grand Phare
 
+État au 27 octobre 2026 : une première reconstruction du Grand Phare en cinq
+étapes, financée par un domaine de trois villages, est jouable. Voir
+[MERVEILLE.md](MERVEILLE.md) pour les règles réalisées. Le siège final, les pièces
+uniques et les classements ci-dessous restent des propositions historiques.
+
 Proposition de conception du 14 octobre 2026 pour Les Marées d’Ambre.
 Le choix des troupes, un premier cycle de défense du port et deux contrats
 maritimes avec escortes sont implémentés. La campagne complète, les effets de

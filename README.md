@@ -2,7 +2,7 @@
 
 A native iOS strategy and village-building game set in a sunlit coastal archipelago. Build your village, grow its economy, train troops, and prepare expeditions from a living, illustrated domain.
 
-The current version is a **playable, offline, single-player beta**. Neighbors are simulated locally. Shared multiplayer, colonization, and the endgame Wonder are planned features.
+The current version is a **playable, offline, single-player beta**. Neighbors are simulated locally. Colonization, internal supply shipments and the five-stage Grand Lighthouse campaign objective are playable locally. Shared multiplayer and leaderboards remain planned.
 
 ## Run the project
 
@@ -18,7 +18,7 @@ The current release configuration is **1.0 (build 21)** for both the app and the
 4. Select a neighboring settlement on the world map, choose the troops to send, and launch a raid. Review the returning loot, survivors, and losses.
 5. Prepare the coastal defense campaign and use maritime contracts to trade with an escorted convoy.
 
-Production, construction, research, training, and raids are saved locally and catch up when the app resumes. The first raid returns after two minutes; distant expeditions take longer. Defense and trade use player-advanced campaign tides, so an absence does not trigger attacks or advance convoys.
+Production, construction, research, training, and raids are saved locally and catch up when the app resumes. The first raid returns after two minutes; distant expeditions take longer. The optional coastal defense and maritime contracts use player-advanced campaign tides. Separately, automatic enemy raids use spaced, randomized schedules and respect beginner and nighttime protection.
 
 ## Features
 
@@ -32,6 +32,7 @@ Production, construction, research, training, and raids are saved locally and ca
 - **World map:** a fictional 200 × 200 tile archipelago with illustrated terrain, twelve simulated neighbors across three tribes, and clan details in settlement panels. Neighbors range from nearby to 90 tiles away, with raid strength and return time scaling by distance. Their territories grow every six hours. Map movement and zoom are local. See [World map design](docs/WORLD_HARMONIZATION.md).
 - **Coastal defense:** opt in after building the training yard and recruiting a unit. The nearest neighbor leads the first attack after two campaign tides; tribes then take turns, with later waves growing stronger. The watchtower adds 20 defense per level. The player decides when each tide advances.
 - **Maritime contracts:** accessible through the market or world screen. Send wood and food along a safe or exposed route, choose an escort, and collect amber. Survivors return after combat; unclaimed payments remain available when storage is full.
+- **Grand Lighthouse:** after founding three villages, fund five construction stages from the capital, using colony supply shipments as needed. Work finishes offline; each new stage requires a separate payment. Lighting the beacon records campaign victory and ends automatic raids while keeping the domain playable. See [Lighthouse rules and costs](docs/MERVEILLE.md).
 - **Persistent village:** the initial world seed depends on the UTC week, but an existing village survives week changes. Save validation protects unreadable data and migrates older saves.
 - **Construction Live Activities:** remaining construction time appears on the Lock Screen and Dynamic Island.
 
@@ -116,10 +117,10 @@ See [Beta testing notes](docs/TESTFLIGHT.md) for the test scope and tester instr
 
 ## Current limits and direction
 
-Twelve neighboring settlements across three tribes are simulated opponents. Raids and defense resolve locally, without animated travel to the target or manual combat control. There are no player accounts, shared multiplayer, cross-device synchronization, additional player villages, map trade routes, alliances, outposts, or leaderboards yet. Balance is provisional.
+Twelve neighboring settlements across three tribes are simulated opponents. Raids and defense resolve locally, without animated travel to the target or manual combat control. There are no player accounts, shared multiplayer, alliances or leaderboards yet. A capital and two colonies, internal supplies and authenticated backup transfer are available. Physical-device cross-device recovery still needs verification. Balance is provisional.
 
-The endgame target is a **Wonder requiring at least ten villages and coordinated deliveries to one construction city**. The distribution of villages between players and the detailed project rules still need definition. See [Wonder design](docs/MERVEILLE.md).
+The current campaign ends by reconstructing the **Grand Lighthouse across five stages**, with three owned villages. A final siege and shared competition remain future design work. See [Lighthouse design](docs/MERVEILLE.md).
 
-The opening currently leads from the prologue and clan choice directly to the village. Contextual onboarding is planned. A fresh-player test should establish whether the next objective is clear without guidance.
+The opening currently leads from the prologue and clan choice directly to the village. Contextual onboarding accompanies early village development. A fresh-player test should establish whether the next objective is clear without guidance.
 
 Most detailed design documents are currently written in French.

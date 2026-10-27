@@ -13,6 +13,7 @@ struct SessionChecks {
         try await checkUnreadableSave(JSONEncoder().encode(invalidClock))
         try checkBackupFailure()
         try checkIsolatedTestGame()
+        try checkLighthouseSession()
         try checkAbsenceSummaryAfterRelaunch()
         try checkOfflineResume()
         try checkCompletedActionsAfterRelaunch()

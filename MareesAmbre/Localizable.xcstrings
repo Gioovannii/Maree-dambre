@@ -1,6 +1,296 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+  "lighthouse.jetties": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Restaurer les jetées"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Restore the jetties"
+        }
+      }
+    }
+  },
+  "lighthouse.tower": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Relever la tour"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Raise the tower"
+        }
+      }
+    }
+  },
+  "lighthouse.heart": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Réparer le cœur d’ambre"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Repair the amber heart"
+        }
+      }
+    }
+  },
+  "lighthouse.lens": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Poser la lentille"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Install the lens"
+        }
+      }
+    }
+  },
+  "lighthouse.light": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Allumer le Grand Phare"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Light the Grand Lighthouse"
+        }
+      }
+    }
+  },
+  "lighthouse.title": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Le Grand Phare"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The Grand Lighthouse"
+        }
+      }
+    }
+  },
+  "lighthouse.victory": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Le Grand Phare brille à nouveau. Campagne accomplie !"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The Grand Lighthouse shines again. Campaign complete!"
+        }
+      }
+    }
+  },
+  "lighthouse.after": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les raids automatiques cessent. Votre domaine reste jouable : développez vos villages et poursuivez vos expéditions à votre rythme."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Automatic raids stop. Your domain remains playable: develop your villages and continue expeditions at your own pace."
+        }
+      }
+    }
+  },
+  "lighthouse.unlock": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Fondez trois villages pour reconstruire le Grand Phare et rouvrir les routes de l’archipel. Cinq chantiers vous mèneront à son allumage."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Found three villages to rebuild the Grand Lighthouse and reopen the archipelago’s routes. Five construction stages lead to its lighting."
+        }
+      }
+    }
+  },
+  "lighthouse.progress": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Reconstruction du Grand Phare"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Grand Lighthouse reconstruction"
+        }
+      }
+    }
+  },
+  "lighthouse.running": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les travaux continuent pendant votre absence. L’étape suivante attendra votre décision."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Work continues while you are away. The next stage will wait for your decision."
+        }
+      }
+    }
+  },
+  "lighthouse.capital": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les ressources du chantier sont prises dans la capitale. Les convois de vos colonies permettent d’y réunir les matériaux."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Construction resources come from the capital. Supply shipments from your colonies let you gather the materials there."
+        }
+      }
+    }
+  },
+  "lighthouse.storage": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Améliorez l’entrepôt pour contenir le coût de cette étape."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Upgrade the warehouse to hold the cost of this stage."
+        }
+      }
+    }
+  },
+  "lighthouse.begin": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Lancer cette étape"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Start this stage"
+        }
+      }
+    }
+  },
+  "lighthouse.plan": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Les cinq chantiers"
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The five construction stages"
+        }
+      }
+    }
+  },
+  "lighthouse.confirm": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Engager les ressources de la capitale ? Le chantier ne peut pas être annulé."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Commit the capital’s resources? Construction cannot be cancelled."
+        }
+      }
+    }
+  },
+  "lighthouse.started": {
+    "extractionState": "manual",
+    "localizations": {
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Le chantier du Grand Phare a commencé."
+        }
+      },
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Work on the Grand Lighthouse has started."
+        }
+      }
+    }
+  },
+
   "backup.imported_source": {
     "extractionState": "manual",
     "localizations": {

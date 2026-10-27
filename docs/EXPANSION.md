@@ -36,7 +36,7 @@ Delivery, storage escrow and escort return persist through switching villages, a
 
 ## Remaining work
 
-Conquest chiefs, occupation, the Grand Lighthouse objective and Game Center seasons remain unimplemented. The historical ten-village Wonder requirement is superseded by the agreed small-domain direction; its replacement victory rules still need implementation.
+The Grand Lighthouse is now playable after founding three villages: five construction stages funded in the capital, offline completion and a persistent campaign victory that ends automatic raids. See [Grand Lighthouse](MERVEILLE.md) for costs, limits and verification. Conquest chiefs, occupation and Game Center seasons remain unimplemented. The historical ten-village Wonder requirement is superseded.
 
 ## Proposed conquest loop — not yet approved as final rules
 

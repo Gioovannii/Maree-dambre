@@ -200,6 +200,25 @@ final class VillageSession {
                 _ = state.raid(targetID: 6, units: [.tideguard: 10], withHero: support, now: date)
                 if !support { _ = state.startHeroMission(.discoverWreck, now: date) }
             }
+            if ProcessInfo.processInfo.arguments.contains("--snapshot-lighthouse") {
+                state.resources = Resources(wood: 5300, amber: 5300, provisions: 5300)
+                state.buildingLevels = [.hall: 8, .academy: 5, .forge: 3, .warehouse: 10, .expeditionQuay: 3]
+                state.resourceLevels = [0: 3, 2: 3, 4: 3]
+                for role in [SettlementRole.production, .commerce] {
+                    if let site = state.suggestedSettlementSites(on: world).first {
+                        var colony = VillageState(seed: seed)
+                        colony.people = state.people
+                        colony.settlementLocation = site
+                        colony.settlementRole = role
+                        colony.settlementRefuge = state.isRefugeSite(site)
+                        colony.resourceLevels = [0: 3, 2: 3, 4: 3]
+                        state.otherVillages = (state.otherVillages ?? []) + [colony]
+                    }
+                }
+                if ProcessInfo.processInfo.arguments.contains("--snapshot-lighthouse-victory") {
+                    state.lighthouse = LighthouseProgress(completedStages: 5, completedAt: Date(timeIntervalSince1970: 1_800_000_000))
+                }
+            }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-test-mode") {
                 self.storage = normalStorage.testingCopy
                 state.progressionOrigin = .test
@@ -271,6 +290,12 @@ final class VillageSession {
     func settlementName(at location: TileCoordinate) -> String {
         location == state.location ? state.settlementName
             : state.otherVillages?.first(where: { $0.location == location })?.settlementName ?? ""
+    }
+
+    func startLighthouseStage() {
+        refreshWorld()
+        guard state.startLighthouseStage() else { return }
+        persist(String(localized: "lighthouse.started", defaultValue: "Le chantier du Grand Phare a commencé."))
     }
 
     func researchNavigation() {
