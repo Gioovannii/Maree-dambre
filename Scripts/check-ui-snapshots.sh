@@ -33,7 +33,7 @@ if [[ -n "${SNAPSHOT_SCREEN:-}" ]]; then
     districts=("${(@s:,:)SNAPSHOT_SCREEN}")
     for district in "${districts[@]}"; do
         case "$district" in
-            lighthouse|lighthouseVictory|backupReview|domainJourney|backup|testMode|testModeMap|raidPreparation|worldTravel|heroSupport|absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
+            defense|lighthouse|lighthouseVictory|backupReview|domainJourney|backup|testMode|testModeMap|raidPreparation|worldTravel|heroSupport|absence|storage|resources|centre|upgrade|world|market|forge|infirmary|expeditionQuay|commerce|raidReport|expansion|expansionDeparture|colony|shipment|shipmentDeparture|mailbox|mailDetail|protection|botAttacks|hero|heroProfile|heroMission|heroActive|heroRepair|heroBoat|heroEquipment|heroEquipmentLocked|heroEquipmentMax|heroEnhancedMission) ;;
             *) print -u2 'Unknown SNAPSHOT_SCREEN'; exit 2 ;;
         esac
     done
@@ -99,7 +99,8 @@ for district in "${districts[@]}"; do
         raidPreparation) snapshot_args+=(--snapshot-developed --snapshot-raid --snapshot-hero-profile --snapshot-raid-preparation) ;;
         worldTravel) snapshot_args+=(--snapshot-developed --snapshot-world --snapshot-world-travel) ;;
         heroSupport) snapshot_args+=(--snapshot-developed --snapshot-world --snapshot-hero-support) ;;
-        commerce) snapshot_args+=(--snapshot-world --snapshot-commerce) ;;
+        commerce) snapshot_args+=(--snapshot-market --snapshot-commerce) ;;
+        defense) snapshot_args+=(--snapshot-missions --snapshot-defense) ;;
         heroEnhancedMission) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment --snapshot-hero-enhanced-mission) ;;
         heroEquipment) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment) ;;
         heroEquipmentLocked) snapshot_args+=(--snapshot-developed --snapshot-missions --snapshot-hero --snapshot-hero-profile --snapshot-hero-equipment --snapshot-equipment-locked) ;;

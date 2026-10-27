@@ -1,7 +1,7 @@
 import Foundation
 
 struct VillageState: Codable, Equatable {
-    static let currentVersion = 20
+    static let currentVersion = 21
     var version: Int
     var progressionOrigin: ProgressionOrigin?
     let seed: Int
@@ -183,6 +183,7 @@ struct VillageState: Codable, Equatable {
         if version < 18 { importLegacyMail(now: now); version = 18 }
         if version < 19 { version = 19 }
         if version < 20 { version = 20 }
+        if version < 21 { migrateCommerceClock(now: now); version = 21 }
         relocateLegacyTownLot()
     }
 

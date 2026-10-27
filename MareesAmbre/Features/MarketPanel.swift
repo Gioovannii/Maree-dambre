@@ -5,7 +5,7 @@ struct MarketPanel: View {
     @State private var source: ResourceKind = .wood
     @State private var destination: ResourceKind = .provisions
     @State private var lots = 1
-    @State private var showsContracts = false
+    @State private var showsContracts = ProcessInfo.processInfo.arguments.contains("--snapshot-commerce")
 
     private var received: Int { session.state.tradeReturn(from: source, to: destination, lots: lots) }
 

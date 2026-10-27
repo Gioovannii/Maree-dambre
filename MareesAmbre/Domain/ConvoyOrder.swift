@@ -10,6 +10,10 @@ struct ConvoyOrder: Codable, Equatable {
     var defeatLossRate: Double
     var weaponLevels: [ArmyUnit: Int]? = nil
 
+    var departedAt: Date? = nil
+    var returnsAt: Date? { departedAt?.addingTimeInterval(route.travelDuration) }
+    var returnTimeText: String { returnsAt?.formatted(date: .abbreviated, time: .shortened) ?? "—" }
+
     var returnsAtTide: Int { departedAtTide + route.duration }
     var power: Int { units.reduce(0) { $0 + ($1.key.attack + (weaponLevels?[$1.key] ?? attackUpgrade)) * $1.value } }
     var capacity: Int { units.reduce(0) { $0 + $1.key.carrying * $1.value } * (100 + transportBonusPercent) / 100 }
@@ -19,6 +23,7 @@ struct ConvoyOrder: Codable, Equatable {
               (0.01...0.2).contains(victoryLossRate), (0.2...0.5).contains(defeatLossRate),
               units.values.allSatisfy({ (1...ArmyState.maximumTroops).contains($0) }),
               (1...ArmyState.maximumTroops).contains(units.values.reduce(0, +)) else { return false }
+        if let departedAt, !(departedAt >= .distantPast && departedAt.addingTimeInterval(route.travelDuration) <= .distantFuture) { return false }
         if let weaponLevels {
             guard Set(weaponLevels.keys) == Set(units.keys),
                   weaponLevels.values.allSatisfy({ (0...GameProgression.maximumWeaponLevel).contains($0) }) else { return false }

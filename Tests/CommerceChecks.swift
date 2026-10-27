@@ -13,6 +13,7 @@ extension DomainChecks {
         start.lastProductionAt = now
         start.lastBotExpansionAt = now
         precondition(!start.canSendConvoy(on: .sheltered, units: [.pillager: 1]))
+        try checkTimedCommerce(start: start, now: now, world: world)
         precondition(start.startCoastalCampaign())
         let invalidSelections: [[ArmyUnit: Int]] = [[:], [.pillager: -1], [.pillager: 11], [.pillager: Int.max], [.pillager: Int.min], [.tideMage: 1]]
         for selection in invalidSelections {
@@ -139,4 +140,50 @@ extension DomainChecks {
         print("PASS: finite maritime offers, atomic cargo payment, capacity, separate escorts, route risks and same-tide battle ordering")
         print("PASS: convoy support snapshots, shared troop cap, offline pause, persisted payment, no duplicate rewards and corrupt-save rejection")
     }
+}
+
+private func checkTimedCommerce(start: VillageState, now: Date, world: WorldMap) throws {
+    var state = start
+    precondition(state.sendConvoy(on: .sheltered, units: [.pillager: 1], now: now))
+    precondition(state.coastalCampaign == nil && state.hasValidCommerce)
+    precondition(!state.sendConvoy(on: .crossing, units: [.pillager: 1], now: now))
+    let end = state.army!.convoy!.returnsAt!
+    state.settleConvoy(at: 999)
+    precondition(state.army?.convoy != nil, "Turns cannot advance a timed voyage")
+    state.updateDomain(now: end.addingTimeInterval(-1), on: world)
+    precondition(state.army?.convoy != nil)
+    state.updateDomain(now: end, on: world)
+    precondition(state.army?.convoy == nil && state.availableArmy[.pillager] == 10)
+    precondition(state.commerce?.report?.pendingAmber == 18 && state.hasValidCommerce)
+    let returned = state.availableArmy
+    state.updateDomain(now: end.addingTimeInterval(60), on: world)
+    precondition(state.availableArmy == returned)
+    state.resources.amber = 0
+    precondition(state.claimConvoyReward() && !state.claimConvoyReward())
+    precondition(!state.canSendConvoy(on: .sheltered, units: [.pillager: 1], now: end))
+    precondition(state.canSendConvoy(on: .sheltered, units: [.pillager: 1], now: now.addingTimeInterval(3600)))
+    var legacy = start
+    precondition(legacy.startCoastalCampaign())
+    precondition(legacy.sendConvoy(on: .sheltered, units: [.pillager: 1]))
+    precondition(legacy.advanceCoastalTide(now: now))
+    let remaining = legacy.army!.convoy!.returnsAtTide - legacy.coastalCampaign!.tide
+    legacy.migrateCommerceClock(now: now)
+    precondition(legacy.army?.convoy?.returnsAt == now.addingTimeInterval(Double(remaining) * 600))
+    let migrated = legacy
+    legacy.migrateCommerceClock(now: now.addingTimeInterval(100))
+    precondition(legacy == migrated && legacy.hasValidCommerce)
+    let suite = "TimedTrade.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let storage = VillageStorage(defaults: defaults)
+    try storage.save(legacy)
+    let loaded = try storage.load(seed: 42, world: world, now: now)!
+    precondition(loaded.army?.convoy == legacy.army?.convoy)
+    var old = start
+    old.version = 20
+    precondition(old.startCoastalCampaign() && old.sendConvoy(on: .sheltered, units: [.pillager: 1]))
+    try storage.save(old)
+    let upgraded = try storage.load(seed: 42, world: world, now: now)!
+    precondition(upgraded.version == 21 && upgraded.army?.convoy?.returnsAt == now.addingTimeInterval(1800))
+    print("PASS: timed commerce without manual defense, exact offline return, cooldown, single reward and legacy escort migration")
 }

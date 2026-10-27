@@ -73,7 +73,7 @@ struct ArmyPanel: View {
                 Text(report).font(.subheadline)
             }
             if let convoy = session.state.army?.convoy {
-                Text(String(localized: "screen.commerce.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour à la marée \(String(convoy.returnsAtTide))"))
+                Text(String(localized: "commerce.timed.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour : \(String(convoy.returnTimeText))"))
             }
             if let raid = session.state.army?.raid {
                 Text(String(localized: "screen.army.expedition_to_value_returning", defaultValue: "Expédition vers \(String(raid.targetDisplayName)) · Retour"))

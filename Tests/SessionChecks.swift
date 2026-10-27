@@ -35,7 +35,7 @@ struct SessionChecks {
         print("PASS: construction, research, training, weapons and raid resume together without duplicate loot")
         print("PASS: selected raid persists its garrison, accepts training and merges survivors after relaunch")
         print("PASS: coastal threat survives relaunch and offline ticks; defensive losses settle once through the actual session")
-        print("PASS: convoys and escrow survive relaunch, return after defense, preserve full-storage payments and never duplicate troops or rewards")
+        print("PASS: convoys and escrow survive relaunch, return by their real deadline, preserve full-storage payments and never duplicate troops or rewards")
     }
 
     @MainActor
@@ -466,26 +466,26 @@ struct SessionChecks {
         state.buildings[10] = .market
         state.buildings[11] = .warCourt
         state.buildings[13] = .forge
-        state.resources = Resources(wood: 300, amber: 300, provisions: 300)
+        state.resources = Resources(wood: 300, amber: 290, provisions: 300)
         state.army = ArmyState(units: [.tideguard: 4, .pillager: 2], unlockedUnits: [.tideguard, .pillager])
         try storage.save(state)
         let session = VillageSession(storage: storage)
-        precondition(session.startCoastalCampaign())
+        precondition(session.state.coastalCampaign == nil)
         precondition(session.sendConvoy(on: .crossing, units: [.tideguard: 3]))
         let active = session.state.army?.convoy
         let relaunched = VillageSession(storage: storage)
         precondition(relaunched.state.army?.convoy == active && relaunched.state.availableArmy[.tideguard] == 1)
-        relaunched.refreshWorld(now: .now.addingTimeInterval(3600))
-        precondition(relaunched.state.army?.convoy == active && relaunched.state.coastalCampaign?.tide == 0)
-        precondition(relaunched.advanceCoastalTide() && relaunched.advanceCoastalTide())
+        relaunched.refreshWorld(now: active!.returnsAt!.addingTimeInterval(-1))
+        precondition(relaunched.state.army?.convoy == active && relaunched.state.coastalCampaign == nil)
+        relaunched.refreshWorld(now: active!.returnsAt!)
         precondition(relaunched.state.army?.convoy == nil && relaunched.state.commerce?.report?.pendingAmber == 26)
-        precondition(relaunched.state.availableArmy[.tideguard] == 3 && relaunched.state.availableArmy[.pillager] == 1)
+        precondition(relaunched.state.availableArmy[.tideguard] == 4 && relaunched.state.availableArmy[.pillager] == 2)
         precondition(!relaunched.claimConvoyReward(), "No silent overflow into a full amber reserve")
         let awaitingPayment = VillageSession(storage: storage)
         precondition(awaitingPayment.state.commerce?.report?.pendingAmber == 26)
         awaitingPayment.upgradeWeapons(for: .tideguard)
         precondition(awaitingPayment.state.weaponUpgrade != nil)
-        precondition(awaitingPayment.claimConvoyReward() && awaitingPayment.state.resources.amber == 298)
+        precondition(awaitingPayment.claimConvoyReward() && awaitingPayment.state.resources.amber == 296)
         let settled = awaitingPayment.state
         let restored = VillageSession(storage: storage)
         precondition(restored.state.army == settled.army && restored.state.commerce == settled.commerce)

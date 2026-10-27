@@ -100,7 +100,7 @@ extension VillageState {
         let prior = lastProductionAt ?? now
         let villages = [self] + (otherVillages ?? [])
         let events = villages.flatMap { village -> [Date] in
-            var dates = [village.construction?.endsAt].compactMap { $0 }
+            var dates = [village.construction?.endsAt, village.army?.convoy?.returnsAt].compactMap { $0 }
             if let shipment = village.shipment, !shipment.isComplete {
                 dates += [shipment.arrivesAt, shipment.returnsAt]
             }
@@ -120,10 +120,12 @@ extension VillageState {
     private mutating func advanceDomain(now: Date, on world: WorldMap) {
         let protected = ownedLocations + pendingFoundingLocations
         _ = updateInRealTime(now: now, on: world, protectedLocations: protected)
+        settleTimedConvoy(now: now)
         var others = otherVillages ?? []
         for index in others.indices {
             others[index].bots = bots
             _ = others[index].updateInRealTime(now: now, on: world, protectedLocations: protected, advanceBots: false)
+            others[index].settleTimedConvoy(now: now)
             others[index].lastBotExpansionAt = lastBotExpansionAt
         }
         otherVillages = others.isEmpty ? nil : others

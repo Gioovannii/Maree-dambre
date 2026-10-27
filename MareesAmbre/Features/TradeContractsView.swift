@@ -4,7 +4,6 @@ struct TradeContractsView: View {
     @Environment(VillageSession.self) private var session
     @Environment(\.dismiss) private var dismiss
     @State private var selectedRoute: TradeRoute?
-    @State private var showsDefense = false
 
     var body: some View {
         NavigationStack {
@@ -12,22 +11,20 @@ struct TradeContractsView: View {
                 Section {
                     Text(TradeRoute.partner).font(.headline)
                     Text(String(localized: "screen.commerce.cargo", defaultValue: "Chaque contrat : 20 bois livrés et 5 vivres consommés au départ."))
-                    Text(String(localized: "screen.commerce.rules", defaultValue: "Une offre par route toutes les six marées. Un seul convoi commercial à la fois. Les escortes rentrent après les combats de leur marée ; elles ne défendent pas pendant le trajet."))
+                    Text(String(localized: "commerce.timed.rules", defaultValue: "Une offre par route toutes les heures. Un seul convoi à la fois. Le voyage continue pendant votre absence ; l’escorte ne défend pas le village pendant le trajet."))
                         .font(.footnote).foregroundStyle(Palette.muted)
                     if !session.state.hasBuilding(.market) {
                         Text(String(localized: "screen.commerce.needs_market", defaultValue: "Construisez le Marché pour accepter un contrat."))
                     }
-                    if session.state.coastalCampaign == nil {
-                        Text(String(localized: "screen.commerce.needs_campaign", defaultValue: "Ouvrez la campagne côtière depuis Défense du port pour faire progresser les voyages en marées."))
-                    }
+
                 }
                 .listRowBackground(Palette.panel)
                 if let convoy = session.state.army?.convoy {
                     Section(String(localized: "screen.commerce.in_transit", defaultValue: "Convoi en route")) {
                         Text(convoy.route.name).font(.headline)
-                        Text(String(localized: "screen.commerce.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour à la marée \(String(convoy.returnsAtTide))"))
+                        Text(String(localized: "commerce.timed.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour : \(String(convoy.returnTimeText))"))
                             .accessibilityIdentifier("commerce.active")
-                        Text(String(localized: "screen.commerce.cargo_reserved", defaultValue: "La cargaison est déjà réservée. Fermer l’app ne fait ni avancer ni échouer le contrat."))
+                        Text(String(localized: "commerce.timed.reserved", defaultValue: "La cargaison est déjà réservée. L’escorte revient automatiquement, même si l’app est fermée."))
                             .font(.footnote).foregroundStyle(Palette.muted)
                     }
                     .listRowBackground(Palette.panel)
@@ -57,33 +54,25 @@ struct TradeContractsView: View {
                 }
                 ForEach(TradeRoute.allCases) { route in
                     Section(route.name) {
-                        Text(String(localized: "screen.commerce.offer", defaultValue: "\(String(route.duration)) marée(s) · Paiement : \(String(route.amberReward)) ambre"))
+                        Text(String(localized: "commerce.timed.offer", defaultValue: "\(String(GameProgression.durationText(route.travelDuration))) · Paiement : \(String(route.amberReward)) ambre"))
                         Text(route == .sheltered
                              ? String(localized: "screen.commerce.safe_route", defaultValue: "Route protégée : aucune perte dans l’escorte.")
                              : String(localized: "screen.commerce.risky_route", defaultValue: "Pillards sur la route : force 24. Une escorte de force 24 ou plus livre la cargaison ; une escorte plus faible la perd."))
                             .font(.footnote)
-                        if let next = session.state.commerce?.nextDepartureTide[route],
-                           next > (session.state.coastalCampaign?.tide ?? 0) {
-                            Text(String(localized: "screen.commerce.restock", defaultValue: "Prochaine offre à la marée \(String(next))"))
+                        if let next = session.state.commerce?.nextDepartureAt?[route], next > .now {
+                            Text(String(localized: "commerce.timed.restock", defaultValue: "Prochaine offre : \(String(next.formatted(date: .abbreviated, time: .shortened)))"))
                                 .font(.footnote).foregroundStyle(Palette.muted)
                         }
                         Button { selectedRoute = route } label: {
                             AdaptiveActionLabel(title: String(localized: "screen.commerce.prepare", defaultValue: "Choisir l’escorte"), systemImage: "person.2.fill")
                         }
                         .buttonStyle(.bordered).buttonBorderShape(.roundedRectangle(radius: 14))
-                        .disabled(!session.state.canSendConvoy(on: route, units: session.state.availableArmy))
+                        .disabled(!session.state.canSendConvoy(on: route, units: session.state.availableArmy, now: .now))
                         .accessibilityIdentifier("commerce.prepare.\(route.rawValue)")
                     }
                     .listRowBackground(Palette.panel)
                 }
-                if let campaign = session.state.coastalCampaign {
-                    Section {
-                        Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
-                        Button { showsDefense = true } label: {
-                            AdaptiveActionLabel(title: String(localized: "screen.commerce.next_tide", defaultValue: "Préparer la prochaine marée"), systemImage: "water.waves")
-                        }
-                        .buttonStyle(.bordered).buttonBorderShape(.roundedRectangle(radius: 14))
-                        .accessibilityIdentifier("commerce.nextTide")
+                Section {
                         if session.state.resources.wood < TradeRoute.cargoWood || session.state.resources.provisions < TradeRoute.travelProvisions {
                             Text(String(localized: "screen.commerce.short_cargo", defaultValue: "Réunissez 20 bois et 5 vivres pour le prochain départ."))
                                 .font(.footnote)
@@ -94,7 +83,6 @@ struct TradeContractsView: View {
                         }
                     }
                     .listRowBackground(Palette.panel)
-                }
             }
             .scrollContentBackground(.hidden).background(Palette.ocean).foregroundStyle(Palette.paper)
             .navigationTitle(String(localized: "screen.commerce.title", defaultValue: "Contrats maritimes"))
@@ -103,7 +91,6 @@ struct TradeContractsView: View {
                 Button(String(localized: "screen.raid.close", defaultValue: "Fermer"), action: dismiss.callAsFunction)
             } }
             .sheet(item: $selectedRoute) { (route: TradeRoute) in TradeConvoyPreparationView(route: route) }
-            .sheet(isPresented: $showsDefense) { CoastalDefenseView() }
         }
         .tint(Palette.amber)
     }

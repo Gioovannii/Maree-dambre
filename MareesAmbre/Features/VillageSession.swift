@@ -85,6 +85,7 @@ final class VillageSession {
                 state.resources = Resources(wood: 900, amber: 600, provisions: 800)
             }
             if ProcessInfo.processInfo.arguments.contains("--snapshot-defense") {
+                state.scheduleBotAttacks()
                 // A small garrison makes sending troops out a meaningful defensive risk.
                 state.army = ArmyState(units: [.tideguard: 2, .pillager: 4], unlockedUnits: [.tideguard, .pillager])
                 state.weaponsLevel = 0
@@ -387,8 +388,8 @@ final class VillageSession {
     func sendConvoy(on route: TradeRoute, units: [ArmyUnit: Int]) -> Bool {
         guard !hasUnreadableSave else { return false }
         refreshWorld()
-        guard state.sendConvoy(on: route, units: units) else { return false }
-        persist(String(localized: "screen.commerce.departed", defaultValue: "Convoi parti. Son escorte rejoindra le village à la marée de retour annoncée."))
+        guard state.sendConvoy(on: route, units: units, now: .now) else { return false }
+        persist(String(localized: "commerce.timed.departed", defaultValue: "Convoi parti. L’escorte reviendra automatiquement à l’heure annoncée."))
         return true
     }
 

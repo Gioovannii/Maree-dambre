@@ -1,6 +1,126 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    "defense.scheduled.rules" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Les attaques annoncées se résolvent automatiquement avec les troupes présentes au village. Vous n’avez aucun tour à faire avancer. La protection nocturne et celle des débutants restent actives."
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Announced attacks resolve automatically with the troops in your village. There are no turns to advance. Nighttime and beginner protection remain active."
+      }
+    }
+  }
+},
+    "commerce.timed.departed" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Convoi parti. L’escorte reviendra automatiquement à l’heure annoncée."
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Convoy departed. The escort will return automatically at the announced time."
+      }
+    }
+  }
+},
+    "commerce.timed.active" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "%@ unités en escorte · Retour : %@"
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "%@ escort units · Returns: %@"
+      }
+    }
+  }
+},
+    "commerce.timed.rules" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Une offre par route toutes les heures. Un seul convoi à la fois. Le voyage continue pendant votre absence ; l’escorte ne défend pas le village pendant le trajet."
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "One offer per route every hour. One convoy at a time. Travel continues while you are away; the escort cannot defend the village during its journey."
+      }
+    }
+  }
+},
+    "commerce.timed.reserved" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "La cargaison est déjà réservée. L’escorte revient automatiquement, même si l’app est fermée."
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Cargo is already committed. The escort returns automatically, even when the app is closed."
+      }
+    }
+  }
+},
+    "commerce.timed.offer" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "%@ · Paiement : %@ ambre"
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "%@ · Payment: %@ amber"
+      }
+    }
+  }
+},
+    "commerce.timed.restock" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Prochaine offre : %@"
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Next offer: %@"
+      }
+    }
+  }
+},
+
     "screen.game.finishes_in_duration" : {
   "extractionState": "manual",
   "localizations": {

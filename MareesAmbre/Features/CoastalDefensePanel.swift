@@ -13,18 +13,8 @@ struct CoastalDefensePanel: View {
             if session.state.isUnderProtection() {
                 Label(String(localized: "protection.assaults_paused", defaultValue: "Assauts suspendus pendant votre protection"), systemImage: "shield.fill")
                     .font(.subheadline).foregroundStyle(Palette.amber)
-            } else if let campaign = session.state.coastalCampaign {
-                if let attackerID = campaign.attackerID,
-                   let attacker = session.state.bots.first(where: { $0.id == attackerID }) {
-                    Text(String(localized: "screen.defense.attacker", defaultValue: "Assaillant : \(String(WorldNeighbor.name(for: attacker, seed: session.world.seed))) · \(String(attacker.displayName))"))
-                        .font(.subheadline.bold())
-                }
-                Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
-                    .accessibilityIdentifier("defense.incoming")
-            } else if session.state.nextBotAttackAt == nil {
-                Text(String(localized: "screen.defense.intro", defaultValue: "Ouvrez la campagne quand votre garnison est prête. Les tribus voisines attaquent à tour de rôle."))
-                    .font(.footnote).foregroundStyle(Palette.muted)
             }
+
             RaidReminderPanel()
             Button {
                 showsDefense = true

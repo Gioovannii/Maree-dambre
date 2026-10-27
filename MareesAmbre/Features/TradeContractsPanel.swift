@@ -9,7 +9,7 @@ struct TradeContractsPanel: View {
             Label(String(localized: "screen.commerce.title", defaultValue: "Contrats maritimes"), systemImage: "shippingbox.fill")
                 .font(.headline)
             if let convoy = session.state.army?.convoy {
-                Text(String(localized: "screen.commerce.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour à la marée \(String(convoy.returnsAtTide))"))
+                Text(String(localized: "commerce.timed.active", defaultValue: "\(String(convoy.units.values.reduce(0, +))) unités en escorte · Retour : \(String(convoy.returnTimeText))"))
             } else if let reward = session.state.commerce?.report?.pendingAmber, reward > 0 {
                 Text(String(localized: "screen.commerce.pending", defaultValue: "Paiement à récupérer : \(String(reward)) ambre"))
             } else {

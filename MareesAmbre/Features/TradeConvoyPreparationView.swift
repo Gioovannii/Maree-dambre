@@ -24,9 +24,8 @@ struct TradeConvoyPreparationView: View {
                         Text(route.name).font(.headline)
                         Text(TradeRoute.partner)
                         Text(String(localized: "screen.commerce.cargo", defaultValue: "Chaque contrat : 20 bois livrés et 5 vivres consommés au départ."))
-                        if let tide = session.state.coastalCampaign?.tide {
-                            Text(String(localized: "screen.commerce.return_tide", defaultValue: "Retour à la marée \(String(tide + route.duration)), après les combats."))
-                        }
+                        Text(GameProgression.durationText(route.travelDuration)).font(.subheadline)
+
                         Text(route == .sheltered
                              ? String(localized: "screen.commerce.safe_route", defaultValue: "Route protégée : aucune perte dans l’escorte.")
                              : String(localized: "screen.commerce.risky_route", defaultValue: "Pillards sur la route : force 24. Une escorte de force 24 ou plus livre la cargaison ; une escorte plus faible la perd."))
@@ -52,11 +51,8 @@ struct TradeConvoyPreparationView: View {
                     Text(String(localized: "screen.commerce.transport", defaultValue: "Transport : \(String(session.state.convoyCapacity(for: selected))) / 20 nécessaires"))
                     Text(String(localized: "screen.raid.remaining_defense", defaultValue: "Défense du port après départ : \(String(session.state.defensePower(for: remaining)))"))
                         .accessibilityIdentifier("commerce.remainingDefense")
-                    if let campaign = session.state.coastalCampaign {
-                        Text(String(localized: "screen.defense.incoming", defaultValue: "Assaut dans \(String(campaign.tidesUntilAssault)) marée(s) · Force ennemie : \(String(campaign.enemyPower))"))
-                            .font(.footnote)
-                    }
-                    if let report = session.state.convoyPreview(on: route, units: selected) {
+
+                    if let report = session.state.convoyPreview(on: route, units: selected, now: .now) {
                         ConvoyReportView(report: report, isPreview: true)
                     } else {
                         Text(String(localized: "screen.commerce.selection_help", defaultValue: "Choisissez une escorte avec assez de transport. Vérifiez aussi la cargaison, le Marché et la disponibilité de l’offre."))
@@ -72,7 +68,7 @@ struct TradeConvoyPreparationView: View {
                     }
                     .buttonStyle(.borderedProminent).foregroundStyle(Palette.ocean)
                     .buttonBorderShape(.roundedRectangle(radius: 14))
-                    .disabled(!session.state.canSendConvoy(on: route, units: selected))
+                    .disabled(!session.state.canSendConvoy(on: route, units: selected, now: .now))
                     .accessibilityIdentifier("commerce.send")
                 }
                 .listRowBackground(Palette.panel)
