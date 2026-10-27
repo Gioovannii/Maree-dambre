@@ -93,6 +93,7 @@ func checkExpansion() throws {
     try storage.save(restored)
     let finalSave = try storage.load(seed: 42, world: world, now: secondArrival)
     precondition(finalSave == restored)
+    try checkLighthouseJourney(from: restored, now: secondArrival.addingTimeInterval(3600))
     var corrupt = restored
     corrupt.otherVillages![0].otherVillages = [VillageState(seed: 42)]
     try storage.save(corrupt)
@@ -127,4 +128,60 @@ private func checkDomainObjectives() {
     state.otherVillages!.append(third)
     precondition(state.nextDomainObjective?.kind == .established)
     print("PASS: post-colony goals, live progress, capital requirements, third settlement and domain-wide navigation targets")
+}
+
+private func checkLighthouseJourney(from initial: VillageState, now: Date) throws {
+    var state = initial
+    var clock = now
+    state.scheduleBotAttacks(now: now)
+    let world = WorldMap(seed: state.seed)
+    let colony = state.otherVillages![0].location
+    let suite = "LighthouseChecks.\(UUID().uuidString)"
+    let defaults = UserDefaults(suiteName: suite)!
+    defer { defaults.removePersistentDomain(forName: suite) }
+    let storage = VillageStorage(defaults: defaults)
+    var locked = shipmentFixture(now: now)
+    locked.resources = Resources(wood: 5300, amber: 5300, provisions: 5300)
+    precondition(!locked.startLighthouseStage(now: now), "Three villages are required")
+    state.buildingLevels?[.warehouse] = 1
+    state.resources = locked.resources
+    precondition(!state.canStartLighthouseStage, "Storage must contain the full stage price")
+    state.buildingLevels?[.warehouse] = 10
+    for stage in LighthouseStage.allCases {
+        precondition(state.lighthouseProgress.stage == stage)
+        precondition(max(stage.cost.wood, stage.cost.amber, stage.cost.provisions) <= state.storageCapacity)
+        state.resources = stage.cost
+        let colonyStocks = state.otherVillages!.map(\.resources)
+        precondition(state.startLighthouseStage(now: clock))
+        precondition(state.resources == Resources(wood: 0, amber: 0, provisions: 0))
+        precondition(state.otherVillages!.map(\.resources) == colonyStocks, "Only the capital pays")
+        precondition(!state.startLighthouseStage(now: clock), "A running stage cannot charge twice")
+        let end = state.lighthouse!.finishesAt!
+        try storage.save(state)
+        state = try storage.load(seed: state.seed, world: world, now: clock)!
+        precondition(state.switchSettlement(to: colony))
+        precondition(!state.canStartLighthouseStage, "The worksite belongs to the capital")
+        state.updateDomain(now: end.addingTimeInterval(-1), on: world)
+        precondition(state.lighthouseProgress.completedStages == stage.rawValue)
+        state.updateDomain(now: end, on: world)
+        precondition(state.lighthouseProgress.completedStages == stage.rawValue + 1)
+        state.updateDomain(now: end, on: world)
+        precondition(state.lighthouseProgress.completedStages == stage.rawValue + 1)
+        precondition(state.switchSettlement(to: .home))
+        clock = end
+    }
+    precondition(state.lighthouseProgress.isComplete && state.lighthouse?.completedAt == clock)
+    state.scheduleBotAttacks(now: clock)
+    precondition(state.nextDomainBotAttackDate == nil && !state.canStartLighthouseStage)
+    state.resolveScheduledAttacks(now: clock.addingTimeInterval(30 * 86400))
+    precondition(state.nextDomainBotAttackDate == nil)
+    try storage.save(state)
+    let restored = try storage.load(seed: state.seed, world: world, now: clock)!
+    precondition(restored.lighthouse == state.lighthouse)
+    var corrupt = state
+    corrupt.lighthouse?.completedStages = 6
+    try storage.save(corrupt)
+    do { _ = try storage.load(seed: state.seed, world: world, now: clock); preconditionFailure("Invalid lighthouse accepted") }
+    catch CocoaError.coderReadCorrupt { }
+    print("PASS: five lighthouse stages, capital-only payment, storage limits, persistent work, inactive-capital completion, no duplicate charges, victory and post-victory raid peace")
 }

@@ -110,6 +110,7 @@ extension VillageState {
             advanceDomain(now: date, on: world)
             settleShipments(now: date)
         }
+        updateLighthouse(now: now)
         resolveScheduledAttacks(now: now)
         notifyProtectionExpiry(now: now)
         settleHeroMission(now: now)
@@ -175,12 +176,14 @@ extension VillageState {
         current.hero = nil
         current.progressionOrigin = nil
         current.botRaidTarget = nil
+        current.lighthouse = nil
         others.append(current)
         next.otherVillages = others
         next.beginnerProtection = beginnerProtection
         next.hero = hero
         next.progressionOrigin = progressionOrigin
         next.botRaidTarget = botRaidTarget
+        next.lighthouse = lighthouse
         next.bots = bots
         self = next
         return true

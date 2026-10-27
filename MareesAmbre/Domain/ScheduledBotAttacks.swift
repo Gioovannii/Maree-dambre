@@ -5,7 +5,7 @@ extension VillageState {
     static let maximumBotAttackInterval: TimeInterval = 15 * 24 * 3600
 
     mutating func scheduleBotAttacks(now: Date = .now, calendar: Calendar = .current) {
-        guard people != nil else { return }
+        guard people != nil, !lighthouseProgress.isComplete else { return }
         let settlements = [self] + (otherVillages ?? [])
         guard settlements.contains(where: { !$0.isRefuge }) else { return }
 
@@ -17,10 +17,11 @@ extension VillageState {
         botRaidTarget = selectedBotRaidTarget(at: first)?.location
     }
 
-    var scheduledBotAttackDate: Date? { botAttackDate(protection: beginnerProtection) }
+    var scheduledBotAttackDate: Date? { lighthouseProgress.isComplete ? nil : botAttackDate(protection: beginnerProtection) }
 
     var nextDomainBotAttackDate: Date? {
-        ([self] + (otherVillages ?? [])).compactMap {
+        guard !lighthouseProgress.isComplete else { return nil }
+        return ([self] + (otherVillages ?? [])).compactMap {
             $0.botAttackDate(protection: beginnerProtection)
         }.min()
     }
@@ -49,7 +50,7 @@ extension VillageState {
 
     /// All settlements share one attack deadline. A single target is chosen when it arrives.
     mutating func resolveScheduledAttacks(now: Date, calendar: Calendar = .current) {
-        guard people != nil else { return }
+        guard people != nil, !lighthouseProgress.isComplete else { return }
         let settlements = [self] + (otherVillages ?? [])
         let pending = settlements.compactMap(\.nextBotAttackAt).min()
         guard let pending else { return }

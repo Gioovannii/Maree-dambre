@@ -1,7 +1,7 @@
 import Foundation
 
 struct VillageState: Codable, Equatable {
-    static let currentVersion = 19
+    static let currentVersion = 20
     var version: Int
     var progressionOrigin: ProgressionOrigin?
     let seed: Int
@@ -34,6 +34,7 @@ struct VillageState: Codable, Equatable {
     var shipment: SettlementShipment?
     var mailbox: [GameMail]?
     var beginnerProtection: BeginnerProtection?
+    var lighthouse: LighthouseProgress?
     var botRaidTarget: TileCoordinate?
     var nextBotAttackAt: Date?
     var hero: PlayerHero?
@@ -43,7 +44,7 @@ struct VillageState: Codable, Equatable {
         case lastProductionAt, productionRemainder, lastBotExpansionAt, construction, army, resourceUpgrade
         case weaponsLevel, weaponUpgrade, coastalCampaign, commerce
         case buildingLevels, unitWeaponLevels, guideObjectives
-        case botRaidTarget, settlementLocation, settlementRole, settlementRefuge, otherVillages, expansion, shipment, mailbox, beginnerProtection, nextBotAttackAt
+        case lighthouse, botRaidTarget, settlementLocation, settlementRole, settlementRefuge, otherVillages, expansion, shipment, mailbox, beginnerProtection, nextBotAttackAt
     }
 
     init(from decoder: Decoder) throws {
@@ -77,6 +78,7 @@ struct VillageState: Codable, Equatable {
         shipment = try values.decodeIfPresent(SettlementShipment.self, forKey: .shipment)
         mailbox = try values.decodeIfPresent([GameMail].self, forKey: .mailbox)
         beginnerProtection = try values.decodeIfPresent(BeginnerProtection.self, forKey: .beginnerProtection)
+        lighthouse = try values.decodeIfPresent(LighthouseProgress.self, forKey: .lighthouse)
         botRaidTarget = try values.decodeIfPresent(TileCoordinate.self, forKey: .botRaidTarget)
         nextBotAttackAt = try values.decodeIfPresent(Date.self, forKey: .nextBotAttackAt)
         hero = try values.decodeIfPresent(PlayerHero.self, forKey: .hero)
@@ -180,6 +182,7 @@ struct VillageState: Codable, Equatable {
         if version < 17 { version = 17 }
         if version < 18 { importLegacyMail(now: now); version = 18 }
         if version < 19 { version = 19 }
+        if version < 20 { version = 20 }
         relocateLegacyTownLot()
     }
 

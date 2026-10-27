@@ -151,7 +151,7 @@ struct VillageStorage {
         guard all.count <= VillageState.maximumSettlements,
               Set(all.map(\.location)).count == all.count,
               all.filter({ $0.location == .home }).count == 1,
-              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.hero == nil && $0.seed == seed && $0.people == state.people && $0.progressionOrigin == nil }) else {
+              (state.otherVillages ?? []).allSatisfy({ $0.otherVillages == nil && $0.beginnerProtection == nil && $0.hero == nil && $0.seed == seed && $0.people == state.people && $0.progressionOrigin == nil && $0.lighthouse == nil }) else {
             throw CocoaError(.coderReadCorrupt)
         }
         if let voyage = state.hero?.missions?.voyage {
@@ -204,6 +204,8 @@ struct VillageStorage {
               (state.mailbox?.count ?? 0) <= VillageState.maximumMailPerVillage,
               Set((state.mailbox ?? []).map(\.id)).count == (state.mailbox?.count ?? 0),
               (state.mailbox ?? []).allSatisfy({ $0.isValid && $0.village == state.location }),
+              state.lighthouse?.isValid ?? true,
+              state.lighthouse == nil || (state.people != nil && state.settlementCount == VillageState.maximumSettlements),
               state.botRaidTarget.map({ $0.isValid }) ?? true,
               state.nextBotAttackAt.map({ $0 >= .distantPast && $0 <= .distantFuture }) ?? true,
               state.beginnerProtection?.isValid ?? true,
