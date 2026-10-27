@@ -1,6 +1,58 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    "screen.game.finishes_in_duration" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Termine dans %@"
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Finishes in %@"
+      }
+    }
+  }
+},
+    "screen.game.construction_remaining_duration" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Chantier de %@, encore %@"
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Construction of %@, %@ remaining"
+      }
+    }
+  }
+},
+    "screen.construction.remaining_duration" : {
+  "extractionState": "manual",
+  "localizations": {
+    "fr": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "Encore %@"
+      }
+    },
+    "en": {
+      "stringUnit": {
+        "state": "translated",
+        "value": "%@ remaining"
+      }
+    }
+  }
+},
+
   "lighthouse.jetties": {
     "extractionState": "manual",
     "localizations": {

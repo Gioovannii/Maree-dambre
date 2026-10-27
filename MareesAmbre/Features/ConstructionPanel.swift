@@ -141,7 +141,7 @@ struct ConstructionPanel: View {
                 ProgressView(value: progress)
                     .tint(Palette.amber)
                 HStack {
-                    Label(progress >= 1 ? String(localized: "screen.construction.complete", defaultValue: "Terminé") : String(localized: "screen.construction.value_s_remaining", defaultValue: "Encore \(String(max(0, Int(ceil(job.endsAt.timeIntervalSince(timeline.date)))) )) s"), systemImage: "timer")
+                    Label(progress >= 1 ? String(localized: "screen.construction.complete", defaultValue: "Terminé") : String(localized: "screen.construction.remaining_duration", defaultValue: "Encore \(String(GameProgression.durationText(max(0, job.endsAt.timeIntervalSince(timeline.date)))))"), systemImage: "timer")
                     Spacer()
                     Text(String(localized: "screen.construction_panel.value", defaultValue: "\(progress.formatted(.percent.precision(.fractionLength(0))))")).bold().foregroundStyle(Palette.amber)
                 }

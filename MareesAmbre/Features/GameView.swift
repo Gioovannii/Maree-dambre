@@ -292,7 +292,7 @@ struct GameView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(String(localized: "progression.construction.status", defaultValue: "CHANTIER · \(String(job.kind.name.uppercased())) · N\(String(job.level))"))
                                 .font(.caption2.bold()).tracking(1.2)
-                            Text(remaining > 0 ? String(localized: "screen.game.finishes_in_value_s", defaultValue: "Termine dans \(String(remaining)) s") : String(localized: "screen.game.finishing_construction", defaultValue: "Achèvement en cours"))
+                            Text(remaining > 0 ? String(localized: "screen.game.finishes_in_duration", defaultValue: "Termine dans \(String(GameProgression.durationText(Double(remaining))))") : String(localized: "screen.game.finishing_construction", defaultValue: "Achèvement en cours"))
                                 .font(.caption.bold()).foregroundStyle(Palette.amber)
                         }
                         Spacer()
@@ -306,7 +306,7 @@ struct GameView: View {
                     .background(.ultraThinMaterial, in: .capsule)
                     .overlay { Capsule().strokeBorder(Palette.amber.opacity(0.45), lineWidth: 1) }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel(String(localized: "screen.game.construction_of_value_value_seconds_remaining", defaultValue: "Chantier de \(String(job.kind.name)), \(String(remaining)) secondes restantes"))
+                    .accessibilityLabel(String(localized: "screen.game.construction_remaining_duration", defaultValue: "Chantier de \(String(job.kind.name)), encore \(String(GameProgression.durationText(Double(remaining))))"))
                 }
             }
         }
